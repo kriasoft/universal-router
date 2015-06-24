@@ -12,7 +12,7 @@
 
 ### Getting Started
 
-Start by cloning this repo:
+Start by cloning this repo and installing project dependencies:
 
 ```
 $ git clone -o babel-starter-kit https://github.com/kriasoft/babel-starter-kit.git MyProject
@@ -28,8 +28,9 @@ format. Write documentation in markdown format in `docs` folder. Run
 
 ### How to Test
 
-```
-$ npm test
+```shell
+$ npm run lint          # Lint your code
+$ npm test              # Run unit tests
 ```
 
 ### How to Update
