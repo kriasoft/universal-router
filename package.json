@@ -1,0 +1,41 @@
+{
+  "name": "babel-starter-kit",
+  "version": "0.0.0",
+  "description": "A project template for authoring and publishing JavaScript libraries",
+  "repository": "https://github.com/kriasoft/babel-starter-kit",
+  "author": "Kriasoft",
+  "contributors": [
+    "Konstantin Tarkus <hello@tarkus.me>"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "autoprefixer-core": "^5.2.1",
+    "babel": "^5.6.4",
+    "babel-eslint": "^3.1.17",
+    "browser-sync": "^2.7.12",
+    "chai": "^3.0.0",
+    "cssnano": "^1.4.3",
+    "cssnext": "^1.7.1",
+    "del": "^1.2.0",
+    "eslint": "^0.23.0",
+    "eslint-plugin-react": "^2.5.2",
+    "front-matter": "^1.0.0",
+    "gaze": "^0.5.1",
+    "highlight.js": "^8.6.0",
+    "lodash.template": "^3.6.1",
+    "marked": "^0.3.3",
+    "mocha": "^2.2.5",
+    "normalize.css": "^3.0.3",
+    "postcss": "^4.1.12",
+    "postcss-nested": "^0.3.2",
+    "sinon": "^1.15.3"
+  },
+  "scripts": {
+    "lint": "eslint src docs/js tools",
+    "test": "mocha test --compilers js:babel/register",
+    "build": "babel-node tools/build",
+    "serve": "babel-node tools/serve"
+  }
+}

@@ -1,0 +1,42 @@
+<!doctype html>
+<html class="no-js" lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title><%- title %></title>
+    <meta name="description" content="Routing and navigation solution for single-page web applications">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="<%- root %>css/main.min.css">
+  </head>
+  <body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="main-nav">
+      <div class="container">
+        <a class="main-nav-logo" href="<%- root %>">
+          <svg class="main-nav-logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 442 442"><path d="M412.08 115.326c-.006-.322-.027-.643-.064-.96-.01-.1-.02-.202-.035-.3-.056-.39-.13-.774-.23-1.152-.014-.05-.033-.097-.047-.146-.094-.33-.206-.654-.333-.973-.04-.102-.085-.203-.13-.304-.125-.288-.265-.57-.42-.847-.038-.07-.072-.14-.112-.21-.203-.345-.426-.68-.672-1.003-.02-.025-.042-.05-.06-.074-.223-.285-.464-.558-.72-.82-.07-.072-.142-.142-.214-.212-.225-.217-.46-.424-.71-.622-.076-.062-.15-.126-.228-.185-.31-.234-.634-.457-.98-.657L226.035 1.36c-3.11-1.814-6.956-1.814-10.067 0L34.875 106.86c-.345.2-.668.422-.98.656-.078.06-.15.124-.228.185-.248.2-.484.406-.71.623-.072.07-.144.14-.214.212-.255.262-.496.535-.718.82-.02.025-.042.05-.06.074-.247.32-.47.657-.673 1.003-.04.068-.075.14-.113.21-.155.276-.295.558-.42.847-.045.1-.09.202-.13.304-.127.32-.24.643-.333.973-.014.05-.033.097-.046.146-.1.378-.174.763-.23 1.15-.015.1-.024.2-.036.3-.037.32-.058.64-.064.962 0 .058-.012.115-.012.174v211c0 3.558 1.89 6.848 4.966 8.64l181.092 105.5c.03.017.06.027.088.043.357.204.725.39 1.108.55l.014.005c.362.15.736.273 1.118.38.097.027.193.05.29.075.3.074.604.134.913.18.103.017.205.036.308.048.393.048.79.08 1.195.08s.803-.032 1.195-.08c.103-.01.205-.03.308-.046.31-.047.613-.107.912-.18.097-.025.194-.048.29-.076.383-.107.757-.23 1.12-.38l.013-.005c.383-.16.75-.346 1.108-.55.03-.016.06-.027.088-.043l181.092-105.5c3.075-1.792 4.966-5.082 4.966-8.64v-211c0-.06-.01-.115-.012-.174zM221 209.426l-70.68-41.176 161.226-93.927 70.68 41.177L221 209.427zm0-187.853l70.68 41.177-161.226 93.927-70.68-41.177L221 21.573zm171.092 299.18L231 414.6V374c0-5.523-4.477-10-10-10s-10 4.477-10 10v40.6L49.908 320.753V132.9l75.626 44.057.016.01 85.45 49.78V334c0 5.523 4.477 10 10 10s10-4.477 10-10V226.747L392.092 132.9V320.75z"/><path d="M284.613 247.88c1.858 3.19 5.208 4.968 8.65 4.968 1.71 0 3.44-.438 5.024-1.36l36.584-21.314c4.773-2.78 6.388-8.902 3.608-13.674s-8.903-6.386-13.674-3.607l-36.584 21.313c-4.772 2.78-6.387 8.902-3.607 13.674z"/></svg><br>
+          <span class="main-nav-logo-txt">Babel Starter Kit</span>
+        </a>
+        <a class="main-nav-item first" href="<%- root %>getting-started">Get Started</a>
+        <a class="main-nav-item" href="https://github.com/kriasoft/babel-starter-kit">GitHub</a>
+      </div>
+    </div>
+    <div class="hero">
+      <h1 class="hero-title">Babel Starter Kit</h1>
+      <p class="hero-desc">A project template for authoring and publishing JavaScript libraries</p>
+    </div>
+    <div class="container">
+<%= body %>
+    </div>
+    <script src="<%- root %>js/main.js"></script>
+    <script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X','auto');ga('send','pageview');
+    </script>
+  </body>
+</html>
