@@ -47,6 +47,13 @@ const html = async () => {
   }
 };
 
+// Bundle and optmize JavaScript code for the documentation site
+const javascript = async () => {
+  const output = await compile.js({debug: false});
+  await fs.makeDir('build/js');
+  await fs.writeFile('build/js/main.min.js', output);
+};
+
 // Run all build steps in sequence
 (async () => {
   try {
@@ -58,6 +65,8 @@ const html = async () => {
     await css();
     console.log('compile html');
     await html();
+    console.log('compile javascript');
+    await javascript();
   } catch (err) {
     console.error(err.message);
   }

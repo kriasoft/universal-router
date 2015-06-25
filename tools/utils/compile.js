@@ -3,6 +3,7 @@
  * Copyright (c) Konstantin Tarkus <hello@tarkus.me> | The MIT License
  */
 
+import browserify from 'browserify';
 import fm from 'front-matter';
 import template from 'lodash.template';
 import marked from 'marked';
@@ -48,4 +49,19 @@ const css = (source, options) => new Promise((resolve, reject) => {
   }
 });
 
-export default { md, css };
+const js = async (options) => new Promise((resolve, reject) => {
+  options = options || {};
+  browserify({
+    entry: 'docs/js/main.js',
+    debug: !!options.debug,
+    transform: [require('babelify')]
+  }).bundle((err, buffer) => {
+    if (err) {
+      reject(err);
+    } else {
+      resolve(buffer.toString('utf8'))
+    }
+  });
+});
+
+export default { md, css, js };
