@@ -4,6 +4,7 @@
  */
 
 import fs from 'fs';
+import mkdirp from 'mkdirp';
 
 const exists = path => new Promise(resolve => {
   fs.exists(path, resolve);
@@ -30,7 +31,7 @@ const readFile = filename => new Promise((resolve, reject) => {
 });
 
 const writeFile = (filename, contents) => new Promise((resolve, reject) => {
-  fs.writeFile(filename, contents, 'utf8', (err) => {
+  fs.writeFile(filename, contents, 'utf8', err => {
     if (err) {
       reject(err);
     } else {
@@ -39,4 +40,14 @@ const writeFile = (filename, contents) => new Promise((resolve, reject) => {
   });
 });
 
-export default { exists, getFiles, readFile, writeFile };
+const makeDir = path => new Promise((resolve, reject) => {
+  mkdirp(path, err => {
+    if (err) {
+      reject(err);
+    } else {
+      resolve();
+    }
+  });
+});
+
+export default { exists, getFiles, readFile, writeFile, makeDir };

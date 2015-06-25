@@ -36,6 +36,7 @@ const md = async (source, data) => {
 };
 
 const css = (source, options) => new Promise((resolve, reject) => {
+  options = options || {};
   try {
     postcss.process(source, {
       from: 'docs/css/main.css',
@@ -43,7 +44,7 @@ const css = (source, options) => new Promise((resolve, reject) => {
       map: !!options.map
     }).then(result => resolve(result.css)).catch(err => reject(err));
   } catch (err) {
-    resolve(err);
+    reject(err);
   }
 });
 

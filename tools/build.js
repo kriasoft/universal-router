@@ -5,13 +5,14 @@
 
 import del from 'del';
 import fs from './utils/fs';
+import compile from './utils/compile';
 
 const cleanup = async () => new Promise((resolve) => {
   console.log('Cleanup');
   del(['.tmp/*', 'lib/*'], resolve());
 });
 
-const compile = async () => {
+const src = async () => {
   console.log('Compile');
   const babel = require('babel');
   const files = await fs.getFiles('src');
@@ -24,10 +25,18 @@ const compile = async () => {
   }
 };
 
+const css = async () => {
+  const source = await fs.readFile('./docs/css/main.css');
+  const css = await compile.css(source);
+  await fs.makeDir('.tmp/css');
+  await fs.writeFile('.tmp/css/main.min.css', css);
+};
+
 (async () => {
   try {
     await cleanup();
-    await compile();
+    await src();
+    await css();
   } catch (err) {
     console.error(err.message);
   }

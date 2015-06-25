@@ -26,6 +26,7 @@
     "highlight.js": "^8.6.0",
     "lodash.template": "^3.6.1",
     "marked": "^0.3.3",
+    "mkdirp": "^0.5.1",
     "mocha": "^2.2.5",
     "normalize.css": "^3.0.3",
     "postcss": "^4.1.12",
