@@ -8,9 +8,9 @@ import fs from './utils/fs';
 import compile from './utils/compile';
 import { rootDir } from './config';
 
-// Clean output directory
+// Clean output directories
 const cleanup = async () => new Promise((resolve) => {
-  del(['.tmp/*', 'lib/*'], resolve());
+  del(['build/*', 'lib/*', '!build/.git'], {dot: true}, resolve);
 });
 
 // Compile the source code into a distributable format
@@ -30,8 +30,8 @@ const src = async () => {
 const css = async () => {
   const source = await fs.readFile('./docs/css/main.css');
   const css = await compile.css(source);
-  await fs.makeDir('.tmp/css');
-  await fs.writeFile('.tmp/css/main.min.css', css);
+  await fs.makeDir('build/css');
+  await fs.writeFile('build/css/main.min.css', css);
 };
 
 // Compile HTML pages for the documentation site
@@ -42,7 +42,7 @@ const html = async () => {
     if (file.endsWith('.md')) {
       source = await fs.readFile('docs/' + file);
       output = await compile.md(source, { root: rootDir });
-      await fs.writeFile('.tmp/' + file.substr(0, file.length - 3) + '.html', output);
+      await fs.writeFile('build/' + file.substr(0, file.length - 3) + '.html', output);
     }
   }
 };
@@ -50,13 +50,13 @@ const html = async () => {
 // Run all build steps in sequence
 (async () => {
   try {
-    console.log('clean lib and .tmp folders');
+    console.log('clean');
     await cleanup();
-    console.log('build src');
+    console.log('compile src');
     await src();
-    console.log('build css');
+    console.log('compile css');
     await css();
-    console.log('build html');
+    console.log('compile html');
     await html();
   } catch (err) {
     console.error(err.message);

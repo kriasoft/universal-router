@@ -6,6 +6,7 @@
 .gitignore
 .npmignore
 .travis.xml
+build
 docs
 src
 test
