@@ -39,6 +39,6 @@
     "lint": "eslint src docs/js tools",
     "test": "mocha test --compilers js:babel/register",
     "build": "babel-node tools/build",
-    "serve": "babel-node tools/serve"
+    "start": "babel-node tools/serve"
   }
 }

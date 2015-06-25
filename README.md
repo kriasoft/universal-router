@@ -24,7 +24,7 @@ Update your name in `LICENSE.txt` and project information in `package.json` and
 `README.md` files. Write your code in `src` folder, write tests in `test`
 folder. Run `npm run build` to compile the source code into a distributable
 format. Write documentation in markdown format in `docs` folder. Run
-`npm run serve` to launch a development server with the documentation site.
+`npm start` to launch a development server with the documentation site.
 
 ### How to Test
 
