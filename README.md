@@ -7,7 +7,7 @@
 &nbsp; &nbsp; ✓ Next generation JavaScript via [Babel](http://babeljs.io/)<br>
 &nbsp; &nbsp; ✓ Publish to [NPM](https://www.npmjs.com/) as ES5, ES6+ and UMD<br>
 &nbsp; &nbsp; ✓ Pre-configured tests with [Mocha](http://mochajs.org/), [Chai](http://chaijs.com/) and [Sinon](http://sinonjs.org/)<br>
-&nbsp; &nbsp; ✓ Project documentation boilerplate<br>
+&nbsp; &nbsp; ✓ Project documentation boilerplate ([demo](http://www.kriasoft.com/babel-starter-kit/))<br>
 &nbsp; &nbsp; ✓ Cross-platform, minimum dependencies<br>
 
 ### Getting Started
