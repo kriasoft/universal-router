@@ -6,6 +6,7 @@
 import fm from 'front-matter';
 import template from 'lodash.template';
 import marked from 'marked';
+import hljs from 'highlight.js';
 import fs from './fs';
 
 const postcss = require('postcss')([
@@ -23,6 +24,8 @@ const postcss = require('postcss')([
   ]),
   require('cssnano')()
 ]);
+
+marked.setOptions({ highlight: code => hljs.highlightAuto(code).value });
 
 const md = async (source, data) => {
   const layout = template(await fs.readFile('./docs/index.html'));

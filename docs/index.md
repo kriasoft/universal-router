@@ -4,4 +4,15 @@ title: Babel Starter Kit
 
 # Babel Starter Kit
 
-Coming soon
+Code sample:
+
+```js
+class MyComponent {
+  constructor(name = 'Guest') {
+    this.name = name;
+  }
+  render() {
+    return `Hello, ${this.name}!`;
+  }
+}
+```
