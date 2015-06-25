@@ -6,14 +6,15 @@
 import del from 'del';
 import fs from './utils/fs';
 import compile from './utils/compile';
+import { rootDir } from './config';
 
+// Clean output directory
 const cleanup = async () => new Promise((resolve) => {
-  console.log('Cleanup');
   del(['.tmp/*', 'lib/*'], resolve());
 });
 
+// Compile the source code into a distributable format
 const src = async () => {
-  console.log('Compile');
   const babel = require('babel');
   const files = await fs.getFiles('src');
 
@@ -25,6 +26,7 @@ const src = async () => {
   }
 };
 
+// Compile and optimize CSS for the documentation site
 const css = async () => {
   const source = await fs.readFile('./docs/css/main.css');
   const css = await compile.css(source);
@@ -32,11 +34,30 @@ const css = async () => {
   await fs.writeFile('.tmp/css/main.min.css', css);
 };
 
+// Compile HTML pages for the documentation site
+const html = async () => {
+  let source, output;
+  const files = await fs.getFiles('docs');
+  for (let file of files) {
+    if (file.endsWith('.md')) {
+      source = await fs.readFile('docs/' + file);
+      output = await compile.md(source, { root: rootDir });
+      await fs.writeFile('.tmp/' + file.substr(0, file.length - 3) + '.html', output);
+    }
+  }
+};
+
+// Run all build steps in sequence
 (async () => {
   try {
+    console.log('clean lib and .tmp folders');
     await cleanup();
+    console.log('build src');
     await src();
+    console.log('build css');
     await css();
+    console.log('build html');
+    await html();
   } catch (err) {
     console.error(err.message);
   }

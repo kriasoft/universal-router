@@ -7,8 +7,7 @@ import gaze from 'gaze';
 import browserSync from 'browser-sync';
 import fs from './utils/fs';
 import compile from './utils/compile';
-
-const rootDir = '/babel-starter-kit/';
+import { rootDir } from './config';
 
 browserSync({
   notify: false,
