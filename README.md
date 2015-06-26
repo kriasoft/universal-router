@@ -1,6 +1,10 @@
 # Babel Starter Kit
 
-> A project template for authoring and publishing JavaScript libraries
+> JavaScript library boilerplate, a project template for authoring and
+> publishing JavaScript libraries built with [ES6+](http://babeljs.io/docs/learn-es2015/),
+> [Babel](http://babeljs.io/), [Browserify](http://browserify.org/),
+> [BrowserSync](http://www.browsersync.io/), [Mocha](http://mochajs.org/),
+> [Chai](http://chaijs.com/), [Sinon](http://sinonjs.org/).
 
 ### Features
 
@@ -32,7 +36,7 @@ format. Write documentation in markdown format in `docs` folder. Run
 
 ```shell
 $ npm run lint          # Lint your code
-$ npm test              # Run unit tests
+$ npm test              # Run unit tests, or `npm test -- --watch`
 ```
 
 ### How to Update
