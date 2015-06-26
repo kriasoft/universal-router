@@ -45,7 +45,7 @@ const html = async () => {
   for (let file of files) {
     if (file.endsWith('.md')) {
       source = await fs.readFile('docs/' + file);
-      output = await compile.md(source, { root: rootDir });
+      output = await compile.md(source, { root: rootDir , url: '', fileName: ''});
       await fs.writeFile('build/' + file.substr(0, file.length - 3) + '.html', output);
     }
   }

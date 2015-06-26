@@ -47,7 +47,7 @@ browserSync({
             return next();
           }
           contents = await fs.readFile(filename);
-          output = await compile.md(contents, { root: rootDir });
+          output = await compile.md(contents, { root: rootDir, url: req.url, fileName: filename});
           res.end(output);
         }
       } catch (err) {
