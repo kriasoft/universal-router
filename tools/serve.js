@@ -54,7 +54,8 @@ browserSync({
         next(err);
       }
     }]
-  }
+  },
+  port: process.env.PORT || 3000
 });
 
 // Watch for modifications
