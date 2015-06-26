@@ -1,53 +1,109 @@
-# Babel Starter Kit
+# React.js Routing and Navigation ![status](https://img.shields.io/badge/status-early%20preview-orange.svg?style=flat-square)
 
-> A project template for authoring and publishing JavaScript libraries
+> Routing and navigation solution for React.js applications. For more information please visit
+> [How to implement routing from scratch](https://github.com/kriasoft/react-starter-kit/blob/master/docs/recipes/how-to-implement-routing.md)
+> in [React Starter Kit](https://github.com/kriasoft/react-starter-kit/blob/master/docs/recipes/how-to-implement-routing.md).
 
-### Features
+#### Table of Contents
 
-&nbsp; &nbsp; ✓ Next generation JavaScript via [Babel](http://babeljs.io/)<br>
-&nbsp; &nbsp; ✓ Publish to [NPM](https://www.npmjs.com/) as ES5, ES6+ and UMD<br>
-&nbsp; &nbsp; ✓ Pre-configured tests with [Mocha](http://mochajs.org/), [Chai](http://chaijs.com/) and [Sinon](http://sinonjs.org/)<br>
-&nbsp; &nbsp; ✓ Project documentation boilerplate ([demo](http://www.kriasoft.com/babel-starter-kit/))<br>
-&nbsp; &nbsp; ✓ [Yeoman](http://yeoman.io/) generator ([generator-javascript](https://github.com/kriasoft/babel-starter-kit/tree/yeoman-generator))<br>
-&nbsp; &nbsp; ✓ Cross-platform, minimum dependencies<br>
+ 1. [How to Install](#how-to-install)
+ 2. [Basic Routing](#basic-routing)
+ 3. [Async Routes](#async-routes)
+ 4. Nested Routes
+ 5. Integration with Flux
+ 6. Server-side Rendering
 
-### Getting Started
+## How to Install
 
-Start by cloning this repo and installing project dependencies:
-
-```
-$ git clone -o babel-starter-kit -b master --single-branch \
-      https://github.com/kriasoft/babel-starter-kit.git MyProject
-$ cd MyProject
-$ npm install
+```sh
+$ npm install react-routing --save
 ```
 
-Update your name in `LICENSE.txt` and project information in `package.json` and
-`README.md` files. Write your code in `src` folder, write tests in `test`
-folder. Run `npm run build` to compile the source code into a distributable
-format. Write documentation in markdown format in `docs` folder. Run
-`npm start` to launch a development server with the documentation site.
+## Basic Routing
 
-### How to Test
+```js
+// router.js
+import { Router } from 'react-routing';
+import Layout from './components/Layout';
+import HomePage from './components/HomePage';
+import AboutPage from './components/AboutPage';
 
-```shell
-$ npm run lint          # Lint your code
-$ npm test              # Run unit tests
+const router = new Router();
+
+router.use('/', <Layout />);
+router.route('/', <HomePage />);
+router.route('/about', <AboutPage />);
+
+export default router;
 ```
 
-### How to Update
+```js
+// app.js
+import router from './router.js';
+import NotFoundPage from './components/NotFoundPage';
+import ErrorPage from './components/ErrorPage';
 
-Down the road you can fetch and merge the recent changes from this repo back
-into your project:
+const container = document.getElementById('app');
 
+async function render() {
+  try {
+    const path = window.location.path.substr(1) || '/';
+    const action = router.match(path);
+    const component = action ? await action() || <NotFoundPage path={path} />;
+    React.render(component, container);
+  } catch (err) {
+    React.render(<ErrorPage path={path} error={err} />, container);
+  }
+}
+
+window.addEventListener('hashchange', () => render());
+render();
 ```
-$ git checkout master
-$ git fetch babel-starter-kit
-$ git merge babel-starter-kit/master
-$ npm install
+
+## Async Routes
+
+```js
+// router.js
+import { Router } from 'react-routing';
+import http from './core/http';
+import Layout from './components/Layout';
+import ProductListing from './components/ProductListing';
+import ProductInfo from './components/ProductInfo';
+
+const router = new Router();
+
+router.use('/', <Layout />);
+router.route('/products', async () => {
+  const data = await http.get('/api/products');
+  return <ProductListing {...data} />;
+});
+router.route('/about', async (ctx, id) => {
+  const data = await http.get(`/api/products/${id}`);
+  return <ProductInfo {...data} />;
+});
+
+export default router;
 ```
 
-### Copyright
+```js
+// app.js
+import router from './router.js';
+import NotFoundPage from './components/NotFoundPage';
+import ErrorPage from './components/ErrorPage';
 
-Copyright (c) 2015 Konstantin Tarkus ([@koistya](https://twitter.com/koistya))
-&nbsp;|&nbsp; The MIT License
+const container = document.getElementById('app');
+
+async function render() {
+  try {
+    const path = window.location.path.substr(1) || '/';
+    const action = router.match(path);
+    const component = action ? await action() || <NotFoundPage path={path} />;
+    React.render(component, container);
+  } catch (err) {
+    React.render(<ErrorPage path={path} error={err} />, container);
+  }
+}
+
+window.addEventListener('hashchange', () => render());
+render();
+```

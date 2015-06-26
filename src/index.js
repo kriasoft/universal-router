@@ -1,8 +1,8 @@
 /**
- * Babel Starter Kit | https://github.com/kriasoft/babel-starter-kit
+ * React Routing | https://www.kriasoft.com/react-routing
  * Copyright (c) Konstantin Tarkus <hello@tarkus.me> | The MIT License
  */
 
-import Greeting from './Greeting.js';
+import Router from './Router';
 
-export default { Greeting };
+export default { Router };

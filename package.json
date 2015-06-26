@@ -1,8 +1,18 @@
 {
-  "name": "babel-starter-kit",
-  "version": "0.0.0",
+  "name": "react-routing",
+  "version": "0.0.2",
   "description": "A project template for authoring and publishing JavaScript libraries",
-  "repository": "https://github.com/kriasoft/babel-starter-kit",
+  "keywords": [
+    "react",
+    "reactjs",
+    "react-component",
+    "route",
+    "routes",
+    "router",
+    "routing",
+    "flux"
+  ],
+  "repository": "https://github.com/kriasoft/react-routing",
   "author": "Kriasoft",
   "contributors": [
     "Konstantin Tarkus <hello@tarkus.me>"

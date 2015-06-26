@@ -1,5 +1,5 @@
 ---
-title: Getting Started ∙ Babel Starter Kit
+title: Getting Started ∙ React Routing
 ---
 
 # Getting Started
