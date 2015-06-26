@@ -10,7 +10,11 @@ import { rootDir } from './config';
 
 // Clean output directories
 const cleanup = async () => new Promise((resolve) => {
-  del(['build/*', 'lib/*', '!build/.git'], {dot: true}, resolve);
+  del(['build/*', 'lib/*', '!build/.git'], { dot: true }, async () => {
+    await fs.makeDir('build');
+    await fs.makeDir('lib');
+    resolve();
+  });
 });
 
 // Compile the source code into a distributable format
@@ -49,7 +53,7 @@ const html = async () => {
 
 // Bundle and optmize JavaScript code for the documentation site
 const javascript = async () => {
-  const output = await compile.js({debug: false});
+  const output = await compile.js({ debug: false });
   await fs.makeDir('build/js');
   await fs.writeFile('build/js/main.min.js', output);
 };
