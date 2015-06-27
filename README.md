@@ -19,11 +19,11 @@ import { Router } from 'react-routing';
 
 const router = new Router();
 
-router.on('/', require('./components/HomePage');
-router.on('/store', require('./components/Store'));
-router.on('/store/:item', async (item) => {
+router.use('/', require('./components/HomePage');
+router.route('/store', require('./components/Store'));
+router.route('/store/:item', async (item) => {
   const data = await http.get(`/api/products/${item}`);
-  return [require('./components/Product'), data];
+  this.render(require('./components/Product'), data);
 }
 
 router.run();
