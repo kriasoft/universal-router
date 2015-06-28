@@ -36,8 +36,10 @@ browserSync({
         if (pathname === '/css/main.min.css') {
           contents = await fs.readFile('./docs/css/main.css');
           output = await compile.css(contents, { map: true });
+          res.end(output);
         } else if (pathname === '/js/main.min.js') {
           output = await compile.js({debug: true});
+          res.end(output);
         } else {
           let filename = pathname === '/' ? './docs/index.md' : './docs' + pathname + '.md';
           let exists = await fs.exists(filename);
@@ -46,8 +48,8 @@ browserSync({
           }
           contents = await fs.readFile(filename);
           output = await compile.md(contents, { root: rootDir, url: req.url, fileName: filename.replace('.', '')});
+          res.end(output);
         }
-        res.end(output);
       } catch (err) {
         next(err);
       }
