@@ -1,0 +1,7 @@
+.left-side{
+  width: var(--left-side-width);
+  float:left;
+}
+.left-side ol{
+  margin-top: 30px;
+}
