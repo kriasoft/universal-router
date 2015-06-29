@@ -34,13 +34,13 @@
       <div class="container">
         <div class="left-side">
           <ol>
-            <li><a href="#how-to-install">How to Install</a></li>
-            <li><a href="#basic-routing">Basic Routing</a></li>
-            <li><a href="#async-routes">Async Routes</a></li>
-            <li>Nested Routes</li>
-            <li>Integration with Flux</li>
-            <li>Server-side Rendering</li>
-            <li><a href="home">Test-home-page</a></li>
+            <li class="<%=url === '/how-to-install' ? 'selected' : '' %>"><a href="#how-to-install">How to Install</a></li>
+            <li class="<%=url === '/basic-routing' ? 'selected' : '' %>"><a href="#basic-routing">Basic Routing</a></li>
+            <li class="<%=url === '/async-routes' ? 'selected' : '' %>"><a href="#async-routes">Async Routes</a></li>
+            <li class="<%=url === '/nested-routes' ? 'selected' : '' %>">Nested Routes</li>
+            <li class="<%=url === '/integration' ? 'selected' : '' %>">Integration with Flux</li>
+            <li class="<%=url === '/server-side-rendering' ? 'selected' : '' %>">Server-side Rendering</li>
+            <li class="<%=url === '/home' ? 'selected' : '' %>"><a href="home">Test-home-page</a></li>
           </ol>
         </div>
         <div class="content">
@@ -65,7 +65,7 @@
   <script type="text/javascript">
     window.disqus_shortname = 'kriasoft';
     window.disqus_identifier = 'react-routing<%- url %>';
-    window.disqus_title = '<%- tilte %>';
+    window.disqus_title = '<%- title %>';
     window.disqus_url = 'http://www.kriasoft.com/react-routing<%- url %>';
   </script>
   <script src="https://kriasoft.disqus.com/embed.js" async></script>
