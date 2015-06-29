@@ -4,6 +4,7 @@
  */
 
 import browserify from 'browserify';
+import babelify from 'babelify';
 import fm from 'front-matter';
 import template from 'lodash.template';
 import marked from 'marked';
@@ -53,7 +54,7 @@ const js = async (options) => new Promise((resolve, reject) => {
   options = options || {};
   browserify('docs/js/main.js', {
     debug: !!options.debug,
-    transform: [require('babelify')]
+    transform: [babelify]
   }).bundle((err, buffer) => {
     if (err) {
       reject(err);
