@@ -12,25 +12,44 @@
     <!--[if lt IE 8]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <div class="main-nav">
+    <div class="wrapper">
+      <div class="main-nav">
+        <div class="container">
+          <% if(url !== '/home') {%>
+            <a class="main-nav-logo" href="<%- root %>">
+              <svg class="main-nav-logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 311.495 311.495"><g fill="#231F20"><path d="M303.748 0H187.25c-4.14 0-7.5 3.358-7.5 7.5v20c0 4.142 3.36 7.5 7.5 7.5h64.247l-82.3 82.302c-1.408 1.406-2.198 3.314-2.198 5.303v181.39c0 4.142 3.357 7.5 7.5 7.5h20c4.14 0 7.5-3.358 7.5-7.5v-170l74.247-74.247v64.246c0 4.142 3.358 7.5 7.5 7.5h20c4.142 0 7.5-3.358 7.5-7.5V7.5c0-4.142-3.358-7.5-7.5-7.5zM59.998 35h64.246c4.142 0 7.5-3.358 7.5-7.5v-20c0-4.142-3.358-7.5-7.5-7.5H7.748c-4.142 0-7.5 3.358-7.5 7.5v116.494c0 4.142 3.358 7.5 7.5 7.5h20c4.142 0 7.5-3.358 7.5-7.5V59.748l74.248 74.248v170c0 4.14 3.358 7.5 7.5 7.5h20c4.142 0 7.5-3.36 7.5-7.5v-181.39c0-1.99-.79-3.898-2.197-5.304L59.997 35z"/></g></svg><br>
+              <span class="main-nav-logo-txt">React Routing</span>
+            </a>
+          <% } %>
+          <a class="main-nav-item first" href="<%- root %>getting-started">Get Started</a>
+          <a class="main-nav-item" href="https://github.com/kriasoft/react-routing">GitHub</a>
+        </div>
+      </div>
+      <% if(url !== '/home') {%>
+        <div class="hero">
+          <h1 class="hero-title">React Routing</h1>
+          <p class="hero-desc">Routing and navigation solutiong for React.js applications</p>
+        </div>
+       <% } %>
       <div class="container">
-        <a class="main-nav-logo" href="<%- root %>">
-          <svg class="main-nav-logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 311.495 311.495"><g fill="#231F20"><path d="M303.748 0H187.25c-4.14 0-7.5 3.358-7.5 7.5v20c0 4.142 3.36 7.5 7.5 7.5h64.247l-82.3 82.302c-1.408 1.406-2.198 3.314-2.198 5.303v181.39c0 4.142 3.357 7.5 7.5 7.5h20c4.14 0 7.5-3.358 7.5-7.5v-170l74.247-74.247v64.246c0 4.142 3.358 7.5 7.5 7.5h20c4.142 0 7.5-3.358 7.5-7.5V7.5c0-4.142-3.358-7.5-7.5-7.5zM59.998 35h64.246c4.142 0 7.5-3.358 7.5-7.5v-20c0-4.142-3.358-7.5-7.5-7.5H7.748c-4.142 0-7.5 3.358-7.5 7.5v116.494c0 4.142 3.358 7.5 7.5 7.5h20c4.142 0 7.5-3.358 7.5-7.5V59.748l74.248 74.248v170c0 4.14 3.358 7.5 7.5 7.5h20c4.142 0 7.5-3.36 7.5-7.5v-181.39c0-1.99-.79-3.898-2.197-5.304L59.997 35z"/></g></svg><br>
-          <span class="main-nav-logo-txt">React Routing</span>
-        </a>
-        <a class="main-nav-item first" href="<%- root %>getting-started">Get Started</a>
-        <a class="main-nav-item" href="https://github.com/kriasoft/react-routing">GitHub</a>
+        <div class="left-side">
+          <ol>
+            <li><a href="#how-to-install">How to Install</a></li>
+            <li><a href="#basic-routing">Basic Routing</a></li>
+            <li><a href="#async-routes">Async Routes</a></li>
+            <li>Nested Routes</li>
+            <li>Integration with Flux</li>
+            <li>Server-side Rendering</li>
+            <li><a href="home">Test-home-page</a></li>
+          </ol>
+        </div>
+        <div class="content">
+          <a class="github" target="_blank" href=<%= "https://github.com/kriasoft/react-routing/tree/master"+fileName %>>Edit on GitHub</a>
+          <%= body %>
+        </div>
       </div>
     </div>
-    <div class="hero">
-      <h1 class="hero-title">React Routing</h1>
-      <p class="hero-desc">Routing and navigation solutiong for React.js applications</p>
-    </div>
-    <div class="container">
-<%= body %>
-<%= url %>
-<%= fileName %>
-    </div>
+    <div class="footer">&copy; 2015 React routing</div>
     <script src="<%- root %>js/main.min.js"></script>
     <script>
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

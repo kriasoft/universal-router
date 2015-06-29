@@ -5,4 +5,5 @@
 @import './utils.css';
 @import './media.css';
 @import './print.css';
+@import './left-side.css';
 @import '../../node_modules/highlight.js/styles/default.css';

@@ -12,6 +12,7 @@ title: Routing and Navigation for React.js
  4. Nested Routes
  5. Integration with Flux
  6. Server-side Rendering
+ 7. [Test-home-page](home)
 
 ## How to Install
 
