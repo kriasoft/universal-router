@@ -46,6 +46,9 @@
         <div class="content">
           <a class="github" target="_blank" href=<%= "https://github.com/kriasoft/react-routing/tree/master"+fileName %>>Edit on GitHub</a>
           <%= body %>
+          <% if(url !== '/') {%>
+            <div id="disqus_thread"></div>
+          <% } %>
         </div>
       </div>
     </div>
@@ -59,5 +62,12 @@
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
       ga('create','UA-33821884-1','auto');ga('send','pageview');
     </script>
+  <script type="text/javascript">
+    window.disqus_shortname = 'kriasoft';
+    window.disqus_identifier = 'react-routing<%- url %>';
+    window.disqus_title = '<%- tilte %>';
+    window.disqus_url = 'http://www.kriasoft.com/react-routing<%- url %>';
+  </script>
+  <script src="https://kriasoft.disqus.com/embed.js" async></script>
   </body>
 </html>
