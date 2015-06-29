@@ -51,8 +51,7 @@ const css = (source, options) => new Promise((resolve, reject) => {
 
 const js = async (options) => new Promise((resolve, reject) => {
   options = options || {};
-  browserify({
-    entry: 'docs/js/main.js',
+  browserify('docs/js/main.js', {
     debug: !!options.debug,
     transform: [require('babelify')]
   }).bundle((err, buffer) => {

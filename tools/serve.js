@@ -36,9 +36,11 @@ browserSync({
         if (pathname === '/css/main.min.css') {
           contents = await fs.readFile('./docs/css/main.css');
           output = await compile.css(contents, { map: true });
+          res.setHeader('Content-Type', 'text/css');
           res.end(output);
         } else if (pathname === '/js/main.min.js') {
           output = await compile.js({debug: true});
+          res.setHeader('Content-Type', 'application/javascript');
           res.end(output);
         } else {
           let filename = pathname === '/' ? './docs/index.md' : './docs' + pathname + '.md';
