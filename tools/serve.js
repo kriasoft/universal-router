@@ -36,9 +36,11 @@ browserSync({
         if (pathname === '/css/main.min.css') {
           contents = await fs.readFile('./docs/css/main.css');
           output = await compile.css(contents, { map: true });
+          res.setHeader('Content-Type', 'text/css');
           res.end(output);
         } else if (pathname === '/js/main.min.js') {
           output = await compile.js({debug: true});
+          res.setHeader('Content-Type', 'application/javascript');
           res.end(output);
         } else {
           let filename = pathname === '/' ? './docs/index.md' : './docs' + pathname + '.md';
@@ -47,7 +49,11 @@ browserSync({
             return next();
           }
           contents = await fs.readFile(filename);
-          output = await compile.md(contents, { root: rootDir });
+          output = await compile.md(contents, {
+            root: rootDir,
+            url: req.url,
+            fileName: filename.substr(1)
+          });
           res.end(output);
         }
       } catch (err) {

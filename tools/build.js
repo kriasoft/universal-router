@@ -41,11 +41,17 @@ const css = async () => {
 // Compile HTML pages for the documentation site
 const html = async () => {
   let source, output;
+  const toUrl = filename => filename === 'index.md' ? '/' :
+    filename.substr(0, filename.length - (filename.endsWith('index.md') ? 8 : 3));
   const files = await fs.getFiles('docs');
   for (let file of files) {
     if (file.endsWith('.md')) {
       source = await fs.readFile('docs/' + file);
-      output = await compile.md(source, { root: rootDir });
+      output = await compile.md(source, {
+        root: rootDir,
+        url: toUrl(file),
+        fileName: '/docs/' + file
+      });
       await fs.writeFile('build/' + file.substr(0, file.length - 3) + '.html', output);
     }
   }
