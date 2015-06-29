@@ -1,6 +1,9 @@
 @import '../../node_modules/normalize.css/normalize.css';
+@import './variables.less';
 @import './base.css';
 @import './theme.css';
+@import './header.css';
+@import './footer.css';
 @import './nav.css';
 @import './utils.css';
 @import './media.css';

@@ -12,24 +12,37 @@
     <!--[if lt IE 8]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <div class="main-nav">
+    <div class="wrapper">
+      <div class="header<%- url === '/' ? ' header--full' : '' %>">
+        <div class="container">
+          <h1 class="header-title">React Routing</h1>
+          <% if (url === '/') { %><p class="header-desc">Routing and navigation solution for React.js applications</p><% } %>
+        </div>
+      </div>
       <div class="container">
-        <a class="main-nav-logo" href="<%- root %>">
-          <svg class="main-nav-logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 311.495 311.495"><g fill="#231F20"><path d="M303.748 0H187.25c-4.14 0-7.5 3.358-7.5 7.5v20c0 4.142 3.36 7.5 7.5 7.5h64.247l-82.3 82.302c-1.408 1.406-2.198 3.314-2.198 5.303v181.39c0 4.142 3.357 7.5 7.5 7.5h20c4.14 0 7.5-3.358 7.5-7.5v-170l74.247-74.247v64.246c0 4.142 3.358 7.5 7.5 7.5h20c4.142 0 7.5-3.358 7.5-7.5V7.5c0-4.142-3.358-7.5-7.5-7.5zM59.998 35h64.246c4.142 0 7.5-3.358 7.5-7.5v-20c0-4.142-3.358-7.5-7.5-7.5H7.748c-4.142 0-7.5 3.358-7.5 7.5v116.494c0 4.142 3.358 7.5 7.5 7.5h20c4.142 0 7.5-3.358 7.5-7.5V59.748l74.248 74.248v170c0 4.14 3.358 7.5 7.5 7.5h20c4.142 0 7.5-3.36 7.5-7.5v-181.39c0-1.99-.79-3.898-2.197-5.304L59.997 35z"/></g></svg><br>
-          <span class="main-nav-logo-txt">React Routing</span>
-        </a>
-        <a class="main-nav-item first" href="<%- root %>getting-started">Get Started</a>
-        <a class="main-nav-item" href="https://github.com/kriasoft/react-routing">GitHub</a>
+        <ol class="nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/getting-started">Getting Started</a></li>
+          <li><a href="#how-to-install">How to Install</a></li>
+          <li><a href="#basic-routing">Basic Routing</a></li>
+          <li><a href="#async-routes">Async Routes</a></li>
+          <li>Nested Routes</li>
+          <li>Integration with Flux</li>
+          <li>Server-side Rendering</li>
+        </ol>
+        <div class="content">
+          <a class="github" target="_blank" href="https://github.com/kriasoft/react-routing/tree/master<%- fileName %>">Edit on GitHub</a>
+          <%= body %>
+        </div>
       </div>
     </div>
-    <div class="hero">
-      <h1 class="hero-title">React Routing</h1>
-      <p class="hero-desc">Routing and navigation solutiong for React.js applications</p>
-    </div>
-    <div class="container">
-<%= body %>
-<%= url %>
-<%= fileName %>
+    <a href="https://github.com/kriasoft/react-routing">
+      <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png">
+    </a>
+    <div class="footer">
+      <div class="container">
+        <p class="copy">&copy; 2015 Kriasoft</p>
+      </div>
     </div>
     <script src="<%- root %>js/main.min.js"></script>
     <script>

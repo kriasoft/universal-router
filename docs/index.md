@@ -1,17 +1,6 @@
 ---
-title: Routing and Navigation for React.js
+title: Routing and Navigation for React.js Applications
 ---
-
-# Routing and Navigation for React.js
-
-#### Table of Contents
-
- 1. [How to Install](#how-to-install)
- 2. [Basic Routing](#basic-routing)
- 3. [Async Routes](#async-routes)
- 4. Nested Routes
- 5. Integration with Flux
- 6. Server-side Rendering
 
 ## How to Install
 

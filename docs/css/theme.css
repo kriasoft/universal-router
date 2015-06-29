@@ -2,13 +2,12 @@
    Theme styles
    ========================================================================== */
 
-:root {
-  --max-content-width: 960px;
-  --logo-width: 200px;
-}
-
 body {
   background-color: #f5fcff;
+}
+
+body, html, .wrapper{
+  height: 100%;
 }
 
 .browserupgrade {
@@ -18,26 +17,42 @@ body {
   padding: 0.2em 0;
 }
 
+.wrapper{
+  height: auto;
+  min-height: 100%;
+}
+
 .container {
   width: var(--max-content-width);
   margin: 0 auto;
 }
 
-.hero {
-  background: #05a5d1;
-  padding: 50px 0;
-  color: #fdf3e7;
+.content{
+  width: var(--content-width);
+  float: right;
 }
-.hero-title {
-  font-size: 64px;
-  text-align: center;
-  margin: 0;
-  line-height: 1em;
-  font-weight: normal;
+
+.wrapper > .container{
+  padding-bottom: 60px;
 }
-.hero-desc {
-  font-size: 16px;
-  text-align: center;
-  text-transform: uppercase;
-  margin: 15px 0 0;
+
+.wrapper > .container:after {
+  content: '.';
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.container { display: inline-block; }
+/* Hides from IE-mac \*/
+* html .clearfix { height: 1%;}
+.container {display: block;}
+/* End hide from IE-mac */
+
+/* Edit on GitHub */
+.github {
+  float: right;
+  position: relative;
+  top: 5px;
 }
