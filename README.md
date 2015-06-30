@@ -23,8 +23,8 @@ import { Router } from 'react-routing';
 
 const router = new Router();
 
-router.use('/', require('./components/Layout'));
-router.route('/store', require('./components/Store'));
+router.use('/', () => require('./components/Layout'));
+router.route('/store', () => require('./components/Store'));
 router.route('/store/:name', async (state) => {
   const component = require('./components/Product');
   const data = await http.get(`/api/products/${state.params.name}`);
