@@ -30,6 +30,7 @@
     "marked": "^0.3.3",
     "mkdirp": "^0.5.1",
     "mocha": "^2.2.5",
+    "moment": "^2.10.3",
     "normalize.css": "^3.0.3",
     "postcss": "^4.1.13",
     "postcss-nested": "^0.3.2",

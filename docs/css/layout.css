@@ -1,0 +1,68 @@
+/* ==========================================================================
+   Layout styles
+   ========================================================================== */
+
+body {
+  background-color: #f5fcff;
+}
+
+.browserupgrade {
+  margin: 0.2em 0;
+  padding: 0.2em 0;
+  background: #ccc;
+  color: #000;
+}
+
+.container {
+  margin: 0 auto;
+  width: var(--max-content-width);
+}
+
+.hero {
+  padding: 50px 0;
+  background: #05a5d1;
+  color: #fdf3e7;
+}
+
+.hero-title {
+  margin: 0;
+  text-align: center;
+  font-weight: normal;
+  font-size: 64px;
+  line-height: 1em;
+}
+
+.hero-desc {
+  margin: 15px 0 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+
+.content {
+  display: table;
+  margin: 0 auto;
+  width: var(--max-content-width);
+}
+
+.content-left,
+.content-right {
+  display: table-cell;
+}
+
+.content-left {
+  width: 200px;
+}
+
+.content-right {
+  padding-left: 20px;
+}
+
+.stats {
+  margin-top: -40px;
+  padding: 20px;
+  background: #3b3738;
+  color: #fff;
+  list-style: none;
+  font-size: 14px;
+}

@@ -26,8 +26,27 @@
       <h1 class="hero-title">Babel Starter Kit</h1>
       <p class="hero-desc">A project template for authoring and publishing JavaScript libraries</p>
     </div>
-    <div class="container">
+    <div class="content">
+      <div class="content-left">
+        <% if (url === '/') { %>
+        <ul class="stats">
+          <li class="stats-created">Created <span></span></li>
+          <li class="stats-updated">Updated <span></span></li>
+          <li class="stats-forks"><span></span> forks</li>
+          <li class="stats-stars"><span></span> stars</li>
+          <li class="stats-watchers"><span></span> watchers</li>
+          <li class="stats-open-issues"><span></span> open issues</li>
+        </ul>
+        <% } else { %>
+        <ul class="nav">
+          <li><a href="<%- root %>">Home</a></li>
+          <li><a href="<%- root %>getting-started">Getting Started</a></li>
+        </ul>
+        <% } %>
+      </div>
+      <div class="content-right">
 <%= body %>
+      </div>
     </div>
     <script src="<%- root %>js/main.min.js"></script>
     <script>

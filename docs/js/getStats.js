@@ -35,19 +35,30 @@ const load = (() => {
 const getStats = (() => {
   const key = 'github.repo';
   return async () => {
-    const { value, timestamp } = window.localStorage.getItem(key) || {};
-    if (value && (new Date() - timestamp) < 300000 /* 5 min */) {
+    const { value, timestamp } = JSON.parse(window.localStorage.getItem(key)) || {};
+    if (value && (new Date() - new Date(timestamp)) < 300000 /* 5 min */) {
       return value;
     }
-    let response = await load('https://api.github.com/v3/repo/kriasoft/babel-starter-kit');
+    let response = await load('https://api.github.com/repos/kriasoft/babel-starter-kit');
     if (response.meta.status === 200) {
       const data = {
         value: {
-          forks: response.data.value.forks
+          name: response.data.name,
+          owner: response.data.owner.login,
+          url: response.data.html_url,
+          description: response.data.description,
+          createdAt: response.data.created_at,
+          updatedAt: response.data.updated_at,
+          pushedAt: response.data.pushed_at,
+          size: response.data.size,
+          forks: response.data.forks,
+          stars: response.data.watchers,
+          watchers: response.data.subscribers_count,
+          openIssues: response.data.open_issues
         },
         timestamp: new Date()
       };
-      window.localStorage.setItem(key, data);
+      window.localStorage.setItem(key, JSON.stringify(data));
       return data;
     } else {
       console.log(response);

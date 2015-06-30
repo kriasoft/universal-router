@@ -1,8 +1,9 @@
 @import '../../node_modules/normalize.css/normalize.css';
+@import '../../node_modules/highlight.js/styles/default.css';
+@import './variables.css';
 @import './base.css';
-@import './theme.css';
+@import './layout.css';
 @import './nav.css';
 @import './utils.css';
 @import './media.css';
 @import './print.css';
-@import '../../node_modules/highlight.js/styles/default.css';
