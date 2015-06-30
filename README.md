@@ -56,7 +56,7 @@ $ git merge babel-starter-kit/master
 $ npm install
 ```
 
-### Copyright
+### License
 
 Copyright (c) 2015 Konstantin Tarkus ([@koistya](https://twitter.com/koistya))
 &nbsp;|&nbsp; The MIT License
