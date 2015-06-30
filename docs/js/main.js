@@ -5,21 +5,20 @@
 
 import 'babel/polyfill';
 import moment from 'moment';
-import getStats from './getStats';
+import onStats from './onStats';
 
 const run = async () => {
   try {
     console.log('Welcome to Babel Starter Kit!');
     if (document.querySelector('.stats')) {
-      const stats = await getStats();
-      if (stats) {
+      onStats(stats => {
         document.querySelector('.stats-created span').innerText = moment(stats.createdAt).fromNow();
         document.querySelector('.stats-updated span').innerText = moment(stats.updatedAt).fromNow();
         document.querySelector('.stats-forks span').innerText = stats.forks;
-        document.querySelector('.stats-stars span').innerText = stats.stars;
-        document.querySelector('.stats-watchers span').innerText = stats.watchers;
+        document.querySelector('.stats-stars span').innerText = stats.watchers;
+        document.querySelector('.stats-subscribers span').innerText = stats.subscribers;
         document.querySelector('.stats-open-issues span').innerText = stats.openIssues;
-      }
+      });
     }
   } catch (err) {
     console.log(err);
