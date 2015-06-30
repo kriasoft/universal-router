@@ -1,5 +1,10 @@
 # Babel Starter Kit
 
+[![NPM version](http://img.shields.io/npm/v/generator-javascript.svg?style=flat-square)](http://npmjs.org/generator-javascript)
+[![NPM downloads](http://img.shields.io/npm/dm/generator-javascript.svg?style=flat-square)](http://npmjs.org/generator-javascript)
+[![Build Status](http://img.shields.io/travis/kriasoft/babel-starter-kit/master.svg?style=flat-square)](https://travis-ci.org/kriasoft/babel-starter-kit)
+[![Dependency Status](http://img.shields.io/david/dev/kriasoft/babel-starter-kit.svg?style=flat-square)](https://david-dm.org/kriasoft/babel-starter-kit#info=devDependencies)
+
 > JavaScript library boilerplate, a project template for authoring and
 > publishing JavaScript libraries built with [ES6+](http://babeljs.io/docs/learn-es2015/),
 > [Babel](http://babeljs.io/), [Browserify](http://browserify.org/),
