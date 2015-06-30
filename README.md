@@ -4,6 +4,7 @@
 [![NPM downloads](http://img.shields.io/npm/dm/generator-javascript.svg?style=flat-square)](http://npmjs.org/generator-javascript)
 [![Build Status](http://img.shields.io/travis/kriasoft/babel-starter-kit/master.svg?style=flat-square)](https://travis-ci.org/kriasoft/babel-starter-kit)
 [![Dependency Status](http://img.shields.io/david/dev/kriasoft/babel-starter-kit.svg?style=flat-square)](https://david-dm.org/kriasoft/babel-starter-kit#info=devDependencies)
+[![Chat](http://img.shields.io/badge/chat_room-%23babel--starter--kit-blue.svg?style=flat-square)](https://gitter.im/kriasoft/babel-starter-kit)
 
 > JavaScript library boilerplate, a project template for authoring and
 > publishing JavaScript libraries built with [ES6+](http://babeljs.io/docs/learn-es2015/),
@@ -56,7 +57,11 @@ $ git merge babel-starter-kit/master
 $ npm install
 ```
 
+### Support
+
+ * [#babel-starter-kit](https://gitter.im/kriasoft/babel-starter-kit) on Gitter
+ * [@koistya](https://www.codementor.io/koistya) on Codementor
+
 ### License
 
-Copyright (c) 2015 Konstantin Tarkus ([@koistya](https://twitter.com/koistya))
-&nbsp;|&nbsp; The MIT License
+The MIT License © Konstantin Tarkus ([@koistya](https://twitter.com/koistya))
