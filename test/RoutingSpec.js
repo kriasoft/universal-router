@@ -11,8 +11,13 @@ describe('Routing', () => {
 
   it('Can add routes', () => {
     const router = new Router();
-    router.on('/a', () => {});
-    router.on('/b', () => {}, () => {});
+    router.route('/a', () => {});
+    router.route('/b', () => {}, () => {});
   });
+
+  it('Can add event listeners', () => {
+    const router = new Router();
+    router.on('error', () => {});
+  })
 
 });
