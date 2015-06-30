@@ -19,7 +19,9 @@
   ],
   "license": "MIT",
   "main": "lib/index.js",
-  "dependencies": {},
+  "dependencies": {
+    "path-to-regexp": "^1.2.0"
+  },
   "devDependencies": {
     "autoprefixer-core": "^5.2.1",
     "babel": "^5.6.14",
