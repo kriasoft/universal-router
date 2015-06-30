@@ -34,14 +34,14 @@
         </ul>
         <% } else { %>
         <ol class="nav">
-          <li><a href="<%- root %>">Home</a></li>
-          <li><a href="<%- root %>getting-started">Getting Started</a></li>
-          <li><a href="#how-to-install">How to Install</a></li>
-          <li><a href="#basic-routing">Basic Routing</a></li>
-          <li><a href="#async-routes">Async Routes</a></li>
-          <li>Nested Routes</li>
-          <li>Integration with Flux</li>
-          <li>Server-side Rendering</li>
+          <li class="nav-item <%- url === '/' ? 'nav-item--selected' : '' %>"><a href="<%- root %>">Home</a></li>
+          <li class="nav-item <%- url === '/getting-started' ? 'nav-item--selected' : '' %>"><a href="<%- root %>getting-started">Getting Started</a></li>
+          <li class="nav-item <%- url === '/how-to-install' ? 'nav-item--selected' : '' %>"><a href="#how-to-install">How to Install</a></li>
+          <li class="nav-item <%- url === '/basic-routing' ? 'nav-item--selected' : '' %>"><a href="#basic-routing">Basic Routing</a></li>
+          <li class="nav-item <%- url === '/async-routes' ? 'nav-item--selected' : '' %>"><a href="#async-routes">Async Routes</a></li>
+          <li class="nav-item <%- url === '/nested-routes' ? 'nav-item--selected' : '' %>">Nested Routes</li>
+          <li class="nav-item <%- url === '/integration' ? 'nav-item--selected' : '' %>">Integration with Flux</li>
+          <li class="nav-item <%- url === '/server-side-rendering' ? 'nav-item--selected' : '' %>">Server-side Rendering</li>
         </ol>
         <% } %>
       </div>
