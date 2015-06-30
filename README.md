@@ -4,7 +4,7 @@
 [![NPM downloads](http://img.shields.io/npm/dm/react-routing.svg?style=flat-square)](http://npmjs.org/react-routing)
 [![Build Status](http://img.shields.io/travis/kriasoft/react-routing/master.svg?style=flat-square)](https://travis-ci.org/kriasoft/react-routing)
 [![Dependency Status](http://img.shields.io/david/kriasoft/react-routing.svg?style=flat-square)](https://david-dm.org/kriasoft/react-routing)
-[![Gitter](http://img.shields.io/badge/chat_room-online-brightgreen.svg?style=flat-square)](https://gitter.im/kriasoft/react-routing)
+[![Chat](http://img.shields.io/badge/chat_room-%23react--routing-blue.svg?style=flat-square)](https://gitter.im/kriasoft/react-routing)
 
 > Routing and navigation solution for React.js applications
 
@@ -39,7 +39,11 @@ router.run();
  * [React Starter Kit](https://github.com/kriasoft/react-starter-kit.git)
  * [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit.git)
 
+### Support
+
+ * [#react-routing](https://gitter.im/kriasoft/react-routing) on Gitter
+ * [@koistya](https://www.codementor.io/koistya) on Codementor
+
 ## License
 
-Copyright © 2015 Konstantin Tarkus ([@koistya](https://twitter.com/koistya))
-&nbsp;|&nbsp; The MIT License
+The MIT License © Konstantin Tarkus ([@koistya](https://twitter.com/koistya))
