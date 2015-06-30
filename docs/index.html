@@ -12,14 +12,27 @@
     <!--[if lt IE 8]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <div class="wrapper">
-      <div class="header<%- url === '/' ? ' header--full' : '' %>">
-        <div class="container">
-          <h1 class="header-title">React Routing</h1>
-          <% if (url === '/') { %><p class="header-desc">Routing and navigation solution for React.js applications</p><% } %>
-        </div>
-      </div>
+    <div class="header<%- url === '/' ? ' header--full' : '' %>">
       <div class="container">
+        <h1 class="header-title">React Routing</h1>
+        <% if (url === '/') { %><p class="header-desc">Routing and navigation solution for React.js applications</p><% } %>
+      </div>
+    </div>
+    <a href="https://github.com/kriasoft/react-routing">
+      <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png">
+    </a>
+    <div class="content">
+      <div class="content-left">
+        <% if (url === '/') { %>
+        <ul class="stats">
+          <li class="stats-created">Created <span></span></li>
+          <li class="stats-updated">Updated <span></span></li>
+          <li class="stats-forks"><span></span> forks</li>
+          <li class="stats-stars"><span></span> stars</li>
+          <li class="stats-watchers"><span></span> watchers</li>
+          <li class="stats-open-issues"><span></span> open issues</li>
+        </ul>
+        <% } else { %>
         <ol class="nav">
           <li><a href="<%- root %>">Home</a></li>
           <li><a href="<%- root %>getting-started">Getting Started</a></li>
@@ -30,24 +43,21 @@
           <li>Integration with Flux</li>
           <li>Server-side Rendering</li>
         </ol>
-        <div class="content">
-          <a class="github" target="_blank" href="https://github.com/kriasoft/react-routing/tree/master<%- fileName %>">Edit on GitHub</a>
-          <%= body %>
-          <% if(url !== '/') {%>
-            <div id="disqus_thread"></div>
-          <% } %>
-        </div>
+        <% } %>
+      </div>
+      <div class="content-right">
+        <a class="github" target="_blank" href="https://github.com/kriasoft/react-routing/tree/master<%- fileName %>">Edit on GitHub</a>
+        <%= body %>
+        <% if (url !== '/') {%>
+        <div id="disqus_thread"></div>
+        <% } %>
       </div>
     </div>
-    <a href="https://github.com/kriasoft/react-routing">
-      <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png">
-    </a>
     <div class="footer">
-      <div class="container">
-        <p class="copy">&copy; 2015 Kriasoft</p>
-      </div>
+      <p class="copy">&copy; 2015 Kriasoft</p>
     </div>
-    <script src="<%- root %>js/main.min.js"></script>
+    <script src="<%- root %>js/main.min.js"></script><% if (url !== '/') { %>
+    <script src="https://kriasoft.disqus.com/embed.js" async></script><% } %>
     <script>
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
       function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
@@ -55,13 +65,10 @@
       e.src='https://www.google-analytics.com/analytics.js';
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
       ga('create','UA-33821884-1','auto');ga('send','pageview');
+      window.disqus_shortname = 'kriasoft';
+      window.disqus_identifier = 'react-routing<%- url %>';
+      window.disqus_title = '<%- title %>';
+      window.disqus_url = 'http://www.kriasoft.com/react-routing<%- url %>';
     </script>
-  <script type="text/javascript">
-    window.disqus_shortname = 'kriasoft';
-    window.disqus_identifier = 'react-routing<%- url %>';
-    window.disqus_title = '<%- tilte %>';
-    window.disqus_url = 'http://www.kriasoft.com/react-routing<%- url %>';
-  </script>
-  <script src="https://kriasoft.disqus.com/embed.js" async></script>
   </body>
 </html>

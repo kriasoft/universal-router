@@ -3,9 +3,8 @@
    ========================================================================== */
 
 .footer {
-  width: 100%;
-  height: 50px;
-  margin-top: -66px;
+  margin: 0 auto;
+  width: var(--max-content-width);
   text-align: right;
   line-height: 50px;
 }

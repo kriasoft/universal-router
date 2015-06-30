@@ -1,0 +1,53 @@
+/* ==========================================================================
+   Layout styles
+   ========================================================================== */
+
+body {
+  background-color: #f5fcff;
+}
+
+.browserupgrade {
+  margin: 0.2em 0;
+  padding: 0.2em 0;
+  background: #ccc;
+  color: #000;
+}
+
+.container {
+  margin: 0 auto;
+  width: var(--max-content-width);
+}
+
+.content {
+  display: table;
+  margin: 0 auto;
+  width: var(--max-content-width);
+}
+
+.content-left,
+.content-right {
+  display: table-cell;
+}
+
+.content-left {
+  width: 200px;
+}
+
+.content-right {
+  padding-left: 20px;
+}
+
+.stats {
+  margin: 15px 0 0;
+  padding: 20px;
+  background: #3b3738;
+  color: #fff;
+  list-style: none;
+  font-size: 14px;
+}
+
+.github {
+  position: relative;
+  float: right;
+  font-size: 16px;
+}

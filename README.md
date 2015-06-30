@@ -1,10 +1,14 @@
-# React.js Routing and Navigation ![status](https://img.shields.io/badge/status-early%20preview-orange.svg?style=flat-square)
+# React.js Routing and Navigation
 
-> Routing and navigation solution for React.js applications. For more information please visit
-> [How to implement routing from scratch](https://github.com/kriasoft/react-starter-kit/blob/master/docs/recipes/how-to-implement-routing.md)
-> in [React Starter Kit](https://github.com/kriasoft/react-starter-kit/blob/master/docs/recipes/how-to-implement-routing.md).
+[![NPM version](http://img.shields.io/npm/v/react-routing.svg?style=flat-square)](http://npmjs.org/react-routing)
+[![NPM downloads](http://img.shields.io/npm/dm/react-routing.svg?style=flat-square)](http://npmjs.org/react-routing)
+[![Build Status](http://img.shields.io/travis/kriasoft/react-routing/master.svg?style=flat-square)](https://travis-ci.org/kriasoft/react-routing)
+[![Dependency Status](http://img.shields.io/david/kriasoft/react-routing.svg?style=flat-square)](https://david-dm.org/kriasoft/react-routing)
+[![Gitter](http://img.shields.io/badge/chat_room-online-brightgreen.svg?style=flat-square)](https://gitter.im/kriasoft/react-routing)
 
-[![NPM](https://nodei.co/npm/react-routing.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/react-routing)
+> Routing and navigation solution for React.js applications
+
+For more information visit [www.kriasoft.com/react-routing](http://www.kriasoft.com/react-routing)
 
 ## How to Install
 
@@ -12,24 +16,27 @@
 $ npm install react-routing --save
 ```
 
-## How to Use
+## Quick Start
 
 ```js
 import { Router } from 'react-routing';
 
 const router = new Router();
 
-router.use('/', require('./components/HomePage');
+router.use('/', require('./components/Layout'));
 router.route('/store', require('./components/Store'));
-router.route('/store/:item', async (item) => {
-  const data = await http.get(`/api/products/${item}`);
-  this.render(require('./components/Product'), data);
-}
+router.route('/store/:name', async () => {
+  const data = await http.get(`/api/products/${state.params.name}`);
+  return [require('./components/Product'), data];
+});
 
 router.run();
 ```
 
-For more information visit [kriasoft.com/react-routing](http://www.kriasoft.com/react-routing)
+## Related Projects
+
+ * [React Starter Kit](https://github.com/kriasoft/react-starter-kit.git)
+ * [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit.git)
 
 ## License
 
