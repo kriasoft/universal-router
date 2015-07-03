@@ -5,16 +5,19 @@
 
 import toRegExp from 'path-to-regexp';
 
-const cache = { regExps: Object.create(null) };
+const eventTypes = ['error'];
 
 class Router {
 
   /**
    * Creates a new instance of the `Router` class.
    */
-  constructor() {
+  constructor(initialize) {
     this.routes = [];
     this.events = Object.create(null);
+    if (typeof initialize === 'function') {
+      initialize(this.on.bind(this));
+    }
   }
 
   /**
@@ -23,41 +26,16 @@ class Router {
    * @param {String} path A string in the Express format, an array of strings, or a regular expression.
    * @param {Function|Array} handlers Asynchronous route handler function(s).
    */
-  route(path, ...handlers) {
-    this.routes.push({ path, handlers });
-  }
-
-  /**
-   * Registers a new callback function for the given event.
-   *
-   * @param {String} event The name of the event.
-   * @param {Function} callback Callback function.
-   */
-  on(event, callback) {
-    this.events[event] = callback;
-  }
-
-  /**
-   * Finds a route matching the provided URL string.
-   *
-   * @param {String} path The "path" portion of a URL string.
-   */
-  *match(path) {
-    for (let i = 0; i < this.routes.length; i++) {
-      let route = this.routes[i];
-      let { regExp, regExpKeys } = cache.regExps[route.path] || { regExp: null, regExpKeys: [] };
-
-      if (!regExp) {
-        regExp = toRegExp(route.path, regExpKeys);
-        cache.regExps[route.path] = { regExp, regExpKeys };
-      }
-
-      let match = regExp.exec(path);
-
-      if (match) {
-        yield [route, regExpKeys, match];
-      }
+  on(path, ...handlers) {
+    if (eventTypes.some(x => x === path)) {
+      this.events[path] = handlers[0];
+    } else {
+      this.routes.push({ path, handlers });
     }
+  }
+
+  dispatch(path, callback) {
+
   }
 
 }
