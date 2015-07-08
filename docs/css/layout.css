@@ -76,7 +76,6 @@ body {
   float: right;
   width: 256px;
   height: 256px;
-  fill: var(--logo-color);
 }
 
 .hero-btn {

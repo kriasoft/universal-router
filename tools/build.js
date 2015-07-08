@@ -30,6 +30,16 @@ const src = async () => {
   }
 };
 
+// Copy static files into the build folder
+const assets = async () => {
+  const files = await fs.getFiles('docs');
+  for (let file of files) {
+    if (file.endsWith('.svg') || file.endsWith('.ico')) {
+      await fs.copyFile('docs/' + file, 'build/' + file);
+    }
+  }
+};
+
 // Compile and optimize CSS for the documentation site
 const css = async () => {
   const source = await fs.readFile('./docs/css/main.css');
@@ -77,6 +87,8 @@ const javascript = async () => {
     await html();
     console.log('compile javascript');
     await javascript();
+    console.log('copy static files');
+    await assets();
   } catch (err) {
     console.error(err.message);
   }
