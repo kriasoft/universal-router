@@ -33,9 +33,9 @@ const src = async () => {
 // Compile and optimize CSS for the documentation site
 const css = async () => {
   const source = await fs.readFile('./docs/css/main.css');
-  const css = await compile.css(source);
+  const output = await compile.css(source);
   await fs.makeDir('build/css');
-  await fs.writeFile('build/css/main.min.css', css);
+  await fs.writeFile('build/css/main.min.css', output);
 };
 
 // Compile HTML pages for the documentation site

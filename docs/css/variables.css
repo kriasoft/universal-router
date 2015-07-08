@@ -3,6 +3,15 @@
    ========================================================================== */
 
 :root {
-  --max-content-width: 960px;
-  --logo-width: 200px;
+  /* Layout */
+  --max-content-width: 800px;
+
+  /* Colors */
+  --main-color: #222;
+  --main-bg-color: #fff;
+  --logo-color: rgb(249, 220, 62);
+  --header-color: #fff;
+  --header-bg-color: #323330;
+  --footer-color: #fff;
+  --footer-bg-color: black;
 }

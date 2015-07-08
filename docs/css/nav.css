@@ -2,58 +2,6 @@
    Navigation styles
    ========================================================================== */
 
-.main-nav {
-  background: #3B3738;
-  color: #fafafa;
-  box-shadow: 0 0 5px rgba(0, 0, 0, .5);
-}
-.main-nav > .container {
-  position: relative;
-}
+.nav {
 
-.main-nav-logo {
-  position: absolute;
-  width: var(--logo-width);
-  background: #fff;
-  text-align: center;
-  display: inline-block;
-  margin-right: 25px;
-  padding: 15px 0 30px;
-  text-decoration: none;
-  color: #00262C;
-}
-.main-nav-logo-img {
-  width: 60px;
-  height: 60px;
-}
-.main-nav-logo-img path {
-  fill: #3B3738;
-}
-.main-nav-logo-txt {
-  font-size: .75em;
-  text-transform: uppercase;
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  width: var(--logo-width);
-  letter-spacing: 1px;
-}
-
-.main-nav-item {
-  display: inline-block;
-  margin-right: 1em;
-  font-size: 1.05em;
-  font-weight: 100;
-  padding: 15px 5px;
-}
-.main-nav-item.first {
-  margin-left: 225px;
-}
-
-.main-nav-item,
-.main-nav-item:active,
-.main-nav-item:visited,
-.main-nav-item:hover {
-  color: #ddd;
-  text-decoration: none;
 }

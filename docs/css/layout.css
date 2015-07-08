@@ -4,13 +4,8 @@
 
 body {
   background-color: #f5fcff;
-}
-
-.browserupgrade {
-  margin: 0.2em 0;
-  padding: 0.2em 0;
-  background: #ccc;
-  color: #000;
+  font-size: 18px;
+  font-family: 'Lato', sans-serif;
 }
 
 .container {
@@ -18,25 +13,101 @@ body {
   width: var(--max-content-width);
 }
 
+.header {
+  padding: 1.5rem 0;
+  background: var(--header-bg-color);
+  color: var(--header-color);
+}
+
+.logo {
+  color: var(--logo-color);
+  text-decoration: none;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 2.5rem;
+  font-family: 'Lato', sans-serif;
+}
+
+.logo-img {
+  margin-right: 10px;
+  width: 164px;
+  height: 64px;
+  vertical-align: middle;
+}
+
+.author {
+  float: right;
+  padding: 18px 0;
+  font-size: 18px;
+  color: rgba(255, 255, 255, .6);
+}
+.author a {
+  color: rgba(255, 255, 255, .8);
+  text-decoration: none;
+}
+.author a:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+
 .hero {
   padding: 50px 0;
-  background: #05a5d1;
-  color: #fdf3e7;
 }
 
 .hero-title {
   margin: 0;
-  text-align: center;
-  font-weight: normal;
-  font-size: 64px;
+  padding: 0 0 15px;
+  font-weight: 400;
+  font-size: 2rem;
   line-height: 1em;
 }
 
 .hero-desc {
-  margin: 15px 0 0;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 16px;
+  margin: 0;
+  padding: 0 0 15px;
+  letter-spacing: 1px;
+  font-weight: 300;
+  font-size: 1.5rem;
+}
+
+.hero-img {
+  margin: -20px -20px 0 0;
+  float: right;
+  width: 256px;
+  height: 256px;
+  fill: var(--logo-color);
+}
+
+.hero-btn {
+  display: inline-block;
+  margin: 2rem 1rem 0 0;
+  padding: .8rem 2rem .875rem 2rem;
+  border-radius: 3px;
+  background: rgba(249, 220, 62, .9);
+  color: var(--header-bg-color);
+  text-decoration: none;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
+
+.hero-btn:hover {
+  background: rgba(249, 220, 62, 1);
+}
+
+.hero-btn--muted {
+  background: rgba(255, 255, 255, .5);
+}
+
+.hero-btn--muted:hover {
+  background: rgba(255, 255, 255, .6);
+}
+
+.hero-btn-icon {
+  width: 28px;
+  height: 28px;
+  vertical-align: middle;
+  margin: -4px 10px -4px 0;
+  fill: var(--header-bg-color);
 }
 
 .content {
@@ -59,7 +130,6 @@ body {
 }
 
 .stats {
-  margin-top: -40px;
   padding: 20px;
   background: #3b3738;
   color: #fff;
