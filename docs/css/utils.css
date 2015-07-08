@@ -71,3 +71,7 @@
 .clearfix:after {
   clear: both;
 }
+
+.pull-right {
+  float: right;
+}

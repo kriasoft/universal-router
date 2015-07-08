@@ -41,6 +41,7 @@
     "lint": "eslint src docs/js tools",
     "test": "mocha test --compilers js:babel/register",
     "build": "babel-node tools/build",
-    "start": "babel-node tools/serve"
+    "start": "babel-node tools/serve",
+    "publish": "babel-node tools/build && cd build && git init && git add --all . && git commit --amend --no-edit && git push origin gh-pages -f"
   }
 }

@@ -109,6 +109,23 @@ body {
   fill: var(--header-bg-color);
 }
 
+.version {
+  background: color(var(--header-bg-color) alpha(-90%));
+  padding: 15px 0;
+  font-size: 16px;
+  color: var(--main-color);
+}
+
+.version a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.version a:hover,
+.version a:active {
+  color: color(var(--link-color) blackness(10%));
+}
+
 .content {
   display: table;
   margin: 0 auto;
