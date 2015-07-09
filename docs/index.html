@@ -17,13 +17,19 @@
           <img class="logo-img" src="<%- root %>img/babel.svg" alt="Babel" /> Starter Kit
         </a>
         <span class="author">
-          made with ♥ by <a href="https://twitter.com/koistya" rel="author" title="Konstantin Tarkus on Twitter">@koistya</a>
+          made with &nbsp;♥&nbsp; by&nbsp; <a href="https://twitter.com/koistya" rel="author" title="Konstantin Tarkus on Twitter">@koistya</a>
         </span>
         <% if (url === '/') { %>
         <div class="hero">
           <img class="hero-img" src="<%- root %>img/hero.svg" alt="Babel Starter Kit" />
           <h1 class="hero-title">Create better NPM modules</h1>
           <p class="hero-desc">Babel Starter Kit is a project template for <br> authoring and publishing JavaScript libraries</p>
+          <ul class="stats">
+            <li class="stats-item stats-stars"><span>0</span> stars</li>
+            <li class="stats-item stats-subscribers"><span>0</span> watchers</li>
+            <li class="stats-item stats-forks"><span>0</span> forks</li>
+            <li class="stats-item stats-open-issues"><span>0</span> open issues</li>
+          </ul>
           <a class="hero-btn" href="<% root %>getting-started">Learn more</a>
           <a class="hero-btn hero-btn--muted" href="https://github.com/kriasoft/babel-starter-kit">
             <img class="hero-btn-icon" src="<%- root %>img/github-icon.svg" alt="GitHub" />
@@ -42,18 +48,7 @@
     </div>
     <% } %>
     <div class="content">
-      <div class="content-left">
-        <% if (url === '/') { %>
-        <ul class="stats">
-          <li class="stats-created">Created <span></span></li>
-          <li class="stats-updated">Updated <span></span></li>
-          <li class="stats-forks"><span></span> forks</li>
-          <li class="stats-stars"><span></span> stars</li>
-          <li class="stats-subscribers"><span></span> subscribers</li>
-          <li class="stats-open-issues"><span></span> open issues</li>
-        </ul>
-        <% } %>
-      </div>
+      <div class="content-left"></div>
       <div class="content-right">
 <%= body %>
       </div>

@@ -52,7 +52,7 @@ body {
 
 
 .hero {
-  padding: 50px 0;
+  padding: 50px 0 30px;
 }
 
 .hero-title {
@@ -65,7 +65,7 @@ body {
 
 .hero-desc {
   margin: 0;
-  padding: 0 0 15px;
+  padding: 0 0 30px;
   letter-spacing: 1px;
   font-weight: 300;
   font-size: 1.5rem;
@@ -80,7 +80,7 @@ body {
 
 .hero-btn {
   display: inline-block;
-  margin: 2rem 1rem 0 0;
+  margin: 1rem 1rem 0 0;
   padding: .8rem 2rem .875rem 2rem;
   border-radius: 3px;
   background: rgba(249, 220, 62, .9);
@@ -146,9 +146,19 @@ body {
 }
 
 .stats {
-  padding: 20px;
-  background: #3b3738;
-  color: #fff;
   list-style: none;
   font-size: 14px;
+  margin: 0;
+  padding: 0;
+  color: color(var(--header-color) alpha(-30%));
+}
+
+.stats-item {
+  display: inline-block;
+  padding: 0 10px 0 0;
+  margin: 0;
+}
+
+.stats-item span {
+  padding-right: 3px;
 }
