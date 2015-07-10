@@ -90,6 +90,6 @@ const javascript = async () => {
     console.log('copy static files');
     await assets();
   } catch (err) {
-    console.error(err.message);
+    console.error(err.stack);
   }
 })();
