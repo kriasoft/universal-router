@@ -21,7 +21,8 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "path-to-regexp": "^1.2.0"
+    "path-to-regexp": "^1.2.0",
+    "react": ">= 0.13 < 0.15"
   },
   "devDependencies": {
     "autoprefixer-core": "^5.2.1",
