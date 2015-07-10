@@ -3,17 +3,25 @@
    ========================================================================== */
 
 .footer {
-  clear: both;
-  margin: 0 auto;
-  width: var(--max-content-width);
-  text-align: right;
+  background: #495867;
+  color: rgba(255, 255, 255, .6);
   line-height: 50px;
 }
 
-.footer .license {
+.footer-left {
   float: left;
 }
 
-.footer .copy {
+.footer-right {
   float: right;
+}
+
+.footer a {
+  color: #bdd5ea;
+  text-decoration: none;
+}
+
+.footer a:active,
+.footer a:hover {
+  color: color(#bdd5ea lightness(-10%));
 }
