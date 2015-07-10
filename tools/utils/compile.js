@@ -59,7 +59,7 @@ const js = async (options) => new Promise((resolve, reject) => {
     if (err) {
       reject(err);
     } else {
-      resolve(buffer.toString('utf8'))
+      resolve(buffer.toString('utf8'));
     }
   });
 });

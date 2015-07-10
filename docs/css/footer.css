@@ -3,8 +3,17 @@
    ========================================================================== */
 
 .footer {
+  clear: both;
   margin: 0 auto;
   width: var(--max-content-width);
   text-align: right;
   line-height: 50px;
+}
+
+.footer .license {
+  float: left;
+}
+
+.footer .copy {
+  float: right;
 }

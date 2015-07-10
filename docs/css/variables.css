@@ -3,9 +3,16 @@
    ========================================================================== */
 
 :root {
-  --max-content-width: 960px;
-  --logo-width: 200px;
-  --content-width: 650px;
-  --left-side-width: 210px;
-  --logo-width: 200px;
+  /* Layout */
+  --max-content-width: 800px;
+
+  /* Colors */
+  --main-color: #222;
+  --main-bg-color: #fff;
+  --link-color: #337ab7;
+  --logo-color: #f7f7ff;
+  --header-color: #fff;
+  --header-bg-color: #577399;
+  --footer-color: #fff;
+  --footer-bg-color: black;
 }
