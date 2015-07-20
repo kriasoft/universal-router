@@ -10,7 +10,7 @@ $ npm install react-routing --save
 
 ## Basic Routing
 
-Put your routes in a separate file (e.g. `routes.js`)
+Put your routes in a separate file (e.g. `router.js`)
 
 ```js
 import { Router } from 'react-routing';
