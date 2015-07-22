@@ -16,7 +16,7 @@ const isDirectory = filename => new Promise((resolve, reject) => {
     if (err) {
       reject(err);
     } else {
-      resolve(stat && stat.isDirectory())
+      resolve(stat && stat.isDirectory());
     }
   });
 });
@@ -33,10 +33,11 @@ const readDir = directory => new Promise((resolve, reject) => {
 
 const getFiles = async (directory) => {
   let files = [];
+  const join = (dir, filename) => path.join(dir, filename);
   for (let file of await readDir(directory)) {
     const fullPath = path.resolve(directory, file);
     if (await isDirectory(fullPath)) {
-      files = files.concat((await getFiles(fullPath)).map(x => path.join(file, x)));
+      files = files.concat((await getFiles(fullPath)).map(join.bind(null, file)));
     } else {
       files = files.concat(file);
     }

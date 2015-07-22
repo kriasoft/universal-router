@@ -7,7 +7,7 @@ import browserify from 'browserify';
 import babelify from 'babelify';
 import fm from 'front-matter';
 import template from 'lodash.template';
-import marked from 'marked';
+import Markdown from 'markdown-it';
 import hljs from 'highlight.js';
 import fs from './fs';
 
@@ -27,13 +27,27 @@ const postcss = require('postcss')([
   require('cssnano')()
 ]);
 
-marked.setOptions({ highlight: code => hljs.highlightAuto(code).value });
+const markdown = new Markdown({
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(lang, str).value;
+      } catch (_) {}
+    }
+
+    try {
+      return hljs.highlightAuto(str).value;
+    } catch (_) {}
+
+    return ''; // use external default escaping
+  }
+});
 
 const md = async (source, data) => {
   const layout = template(await fs.readFile('./docs/index.html'));
   const content = fm(source);
   Object.assign(content.attributes, data);
-  const body = marked(content.body);
+  const body = markdown.render(content.body);
   return layout(Object.assign(content.attributes, { body }));
 };
 
