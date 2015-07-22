@@ -28,7 +28,7 @@
     "gaze": "^0.5.1",
     "highlight.js": "^8.6.0",
     "lodash.template": "^3.6.2",
-    "marked": "^0.3.3",
+    "markdown-it": "^4.4.0",
     "mkdirp": "^0.5.1",
     "mocha": "^2.2.5",
     "moment": "^2.10.3",
