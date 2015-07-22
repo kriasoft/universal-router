@@ -4,7 +4,6 @@
  */
 
 import 'babel/polyfill';
-import moment from 'moment';
 import onStats from './onStats';
 
 const run = async () => {
