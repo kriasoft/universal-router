@@ -37,7 +37,7 @@ const getFiles = async (directory) => {
   for (let file of await readDir(directory)) {
     const fullPath = path.resolve(directory, file);
     if (await isDirectory(fullPath)) {
-      files = files.concat((await getFiles(fullPath)).map(join.bind(file)));
+      files = files.concat((await getFiles(fullPath)).map(join.bind(null, file)));
     } else {
       files = files.concat(file);
     }
