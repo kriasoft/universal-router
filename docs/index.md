@@ -42,13 +42,10 @@ import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
 async function render() {
-  try {
-    const path = window.location.path.substr(1) || '/';
-    const component = await router.dispatch(path) || <NotFoundPage path={path} />;
+  const path = window.location.path.substr(1) || '/';
+  await router.dispatch({ path }, component => {
     React.render(component, document.body);
-  } catch (err) {
-    React.render(<ErrorPage error={err} />, document.body);
-  }
+  });
 }
 
 window.addEventListener('hashchange', () => render());
