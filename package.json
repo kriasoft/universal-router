@@ -47,6 +47,7 @@
     "normalize.css": "^3.0.3",
     "postcss": "^4.1.16",
     "postcss-nested": "^0.3.2",
+    "react": "^0.14.0-beta1",
     "sinon": "^1.15.4"
   },
   "scripts": {
