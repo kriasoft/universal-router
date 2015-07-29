@@ -21,15 +21,17 @@ describe('Routing', () => {
     });
     expect(router.routes).to.be.ok.and.of.length(2);
     expect(router.routes[0].handlers).to.be.ok.and.of.length(1);
+    expect(router.routes[0].handlers[0]).to.be.equal(handler);
     expect(router.routes[1].handlers).to.be.ok.and.of.length(2);
+    expect(router.routes[1].handlers[0]).to.be.equal(handler);
     expect(router.events.error).to.be.equal(handler);
   });
 
   it('Should execute route handlers in the same order they were added', async () => {
     const log = [];
     const router = new Router(on => {
-      on('/test', () => { log.push(3); });
-      on('/test', () => { log.push(2); }, () => { log.push(1); });
+      on('/test', async () => { log.push(3); });
+      on('/test', async () => { log.push(2); }, () => { log.push(1); });
     });
     await router.dispatch('/test');
     expect(log).to.be.deep.equal([3, 2, 1]);
@@ -74,15 +76,24 @@ describe('Routing', () => {
     expect(log).to.be.deep.equal([1, 2, 3]);
   });
 
-  it('Should dispatch a route and return a component to render', done => {
+  it('Should dispatch a route and return a component to render', async () => {
     const component = <div>Test</div>;
     const router = new Router(on => {
+      on('/a', () => <p>Test</p>);
       on('/test', () => component);
     });
-    router.dispatch('/test', {}, result => {
+    await router.dispatch('/test', (state, result) => {
       expect(result).to.be.equal(component);
-      done();
     });
+  });
+
+  it('Should support parametrized routes', async () => {
+    const router = new Router(on => {
+      on('/path/:foo/other/:boo', (state) => {
+        expect(state.params).to.be.deep.equal({ foo: '123', boo: '456' });
+      });
+    });
+    await router.dispatch('/path/123/other/456');
   });
 
   it('test', async () => {

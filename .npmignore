@@ -5,9 +5,9 @@
 .gitattributes
 .gitignore
 .npmignore
-.travis.xml
+.travis.yml
+*.tgz
 build
 docs
-src
 test
 tools
