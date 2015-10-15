@@ -19,30 +19,68 @@ $ npm install react-routing --save
 ## Quick Start
 
 ```js
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { Router } from 'react-routing';
+import NotFoundPage from './components/NotFoundPage';
+import ErrorPage from './components/ErrorPage';
 
-const router = new Router();
+const router = new Router(on => {
 
-router.use('/', () => require('./components/Layout'));
-router.route('/store', () => require('./components/Store'));
-router.route('/store/:name', async (state) => {
-  const component = require('./components/Product');
-  const data = await http.get(`/api/products/${state.params.name}`);
-  return [component, data];
+  on('*', async (state, next) => {
+    const Layout = require('./components/Layout');
+    const component = await next();
+    if (component === undefined) {
+      return undefined;
+    }
+    return <Layout context={state.context}>{component}</Layout>;
+  });
+
+  on('/', () => {
+    const HomePage = require('./components/HomePage');
+    return <HomePage />;
+  });
+
+  on('/products', async () => {
+    const [data, require] = await Promise.all([
+      http.get('/api/products'),
+      new Promise(resolve => require.ensure(['./components/ProductsPage'], resolve))
+    ]);
+    const ProductsPage = require('./components/ProductsPage');
+    return data ? <ProductsPage products={data} /> : undefined;
+  });
+
+  on('/products/:name', async (state) => {
+    const [data, require] = await Promise.all([
+      http.get(`/api/products/${state.params.name}`),
+      new Promise(resolve => require.ensure(['./components/ProductInfoPage'], resolve))
+    ]);
+    const ProductInfoPage = require('./components/ProductInfoPage');
+    return data ? <ProductInfoPage product={data} /> : undefined;
+  });
+
+  on('error', (state, error) => state.statusCode === 404 ?
+    <Layout context={state.context} error={error}><NotFoundPage /></Layout> :
+    <Layout context={state.context} error={error}><ErrorPage /></Layout>
+  );
+
 });
 
-router.run();
+await router.dispatch({ path: '/products/example' }, (state, component) => {
+  ReactDOM.render(component, document.getElementById('app'));
+});
 ```
 
 ## Related Projects
 
- * [React Starter Kit](https://github.com/kriasoft/react-starter-kit.git)
- * [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit.git)
+* [React Starter Kit](https://github.com/kriasoft/react-starter-kit.git)
+* [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit.git)
+* [React Static Boilerplate](https://github.com/koistya/react-static-boilerplate.git)
 
 ### Support
 
- * [#react-routing](https://gitter.im/kriasoft/react-routing) on Gitter
- * [@koistya](https://www.codementor.io/koistya) on Codementor
+* [#react-routing](https://gitter.im/kriasoft/react-routing) on Gitter
+* [@koistya](https://www.codementor.io/koistya) on Codementor
 
 ## License
 
