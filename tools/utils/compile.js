@@ -13,8 +13,9 @@ import fs from './fs';
 
 const postcss = require('postcss')([
   require('postcss-nested')(),
-  require('cssnext')(),
-  require('autoprefixer-core')([
+  require('postcss-import')(),
+  require('postcss-cssnext')(),
+  require('autoprefixer')([
     'Android 2.3',
     'Android >= 4',
     'Chrome >= 20',

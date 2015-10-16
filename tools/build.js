@@ -9,13 +9,11 @@ import compile from './utils/compile';
 import { rootDir } from './config';
 
 // Clean output directories
-const cleanup = async () => new Promise((resolve) => {
-  del(['build/*', 'lib/*', '!build/.git'], { dot: true }, async () => {
-    await fs.makeDir('build');
-    await fs.makeDir('lib');
-    resolve();
-  });
-});
+const cleanup = async () => {
+  await del(['build/*', 'lib/*', '!build/.git'], { dot: true });
+  await fs.makeDir('build');
+  await fs.makeDir('lib');
+};
 
 // Compile the source code into a distributable format
 const src = async () => {
