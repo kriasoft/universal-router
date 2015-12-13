@@ -36,7 +36,7 @@ export default router;
 Reference the router from your application code and dispatch a URL change event:
 
 ```js
-import React from 'react;
+import React from 'react';
 import router from './router.js';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
