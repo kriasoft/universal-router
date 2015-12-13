@@ -14,8 +14,8 @@ class Route {
   }
 
   match(path) {
-    const match = this.regExp.exec(path);
-    return match ? new Match(this, path, this.keys, match) : null;
+    const m = this.regExp.exec(path);
+    return m ? new Match(this, path, this.keys, m) : null;
   }
 }
 

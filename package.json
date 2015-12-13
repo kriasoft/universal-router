@@ -1,7 +1,7 @@
 {
   "name": "react-routing",
   "version": "0.0.5",
-  "description": "A routing and navigation solution for React.js applications",
+  "description": "Isomorphic router for React.js applications",
   "homepage": "http://www.kriasoft.com/react-routing",
   "keywords": [
     "react",

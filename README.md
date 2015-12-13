@@ -1,12 +1,10 @@
-# React.js Routing and Navigation
+# Isomorphic router for React.js applications
 
-[![NPM version](http://img.shields.io/npm/v/react-routing.svg?style=flat-square)](http://npmjs.org/react-routing)
-[![NPM downloads](http://img.shields.io/npm/dm/react-routing.svg?style=flat-square)](http://npmjs.org/react-routing)
+[![NPM version](http://img.shields.io/npm/v/react-routing.svg?style=flat-square)](https://www.npmjs.com/package/react-routing)
+[![NPM downloads](http://img.shields.io/npm/dm/react-routing.svg?style=flat-square)](https://www.npmjs.com/package/react-routing)
 [![Build Status](http://img.shields.io/travis/kriasoft/react-routing/master.svg?style=flat-square)](https://travis-ci.org/kriasoft/react-routing)
 [![Dependency Status](http://img.shields.io/david/kriasoft/react-routing.svg?style=flat-square)](https://david-dm.org/kriasoft/react-routing)
 [![Chat](http://img.shields.io/badge/chat_room-%23react--routing-blue.svg?style=flat-square)](https://gitter.im/kriasoft/react-routing)
-
-> Routing and navigation solution for React.js applications
 
 For more information visit [www.kriasoft.com/react-routing](http://www.kriasoft.com/react-routing)
 
@@ -21,7 +19,7 @@ $ npm install react-routing --save
 ```js
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from 'react-routing';
+import Router from 'react-routing/lib/Router';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
@@ -80,6 +78,7 @@ await router.dispatch({ path: '/products/example' }, (state, component) => {
 ### Support
 
 * [#react-routing](https://gitter.im/kriasoft/react-routing) on Gitter
+* [#react-starter-kit](https://gitter.im/kriasoft/react-starter-kit) on Gitter
 * [@koistya](https://www.codementor.io/koistya) on Codementor
 
 ## License
