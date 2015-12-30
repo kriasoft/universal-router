@@ -66,7 +66,7 @@ class Router {
     while (!done) {
       result = await next();
       if (result) {
-        state.statusCode = 200;
+        state.statusCode = typeof state.statusCode === 'number' ? state.statusCode : 200;
         cb(state, result);
         return;
       }
