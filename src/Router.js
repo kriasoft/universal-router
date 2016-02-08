@@ -68,7 +68,7 @@ class Router {
       if (result) {
         state.statusCode = typeof state.statusCode === 'number' ? state.statusCode : 200;
         cb(state, result);
-        return;
+        return result;
       }
     }
 
@@ -83,6 +83,8 @@ class Router {
         cb(state, result);
       }
     }
+
+    return result;
   }
 
 }
