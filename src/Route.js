@@ -11,11 +11,16 @@ class Route {
     this.path = path;
     this.handlers = handlers;
     this.regExp = toRegExp(path, this.keys = []);
+    this.toPath = toRegExp.compile(path);
   }
 
   match(path) {
     const m = this.regExp.exec(path);
     return m ? new Match(this, path, this.keys, m) : null;
+  }
+
+  generate(params) {
+    return this.toPath(params);
   }
 }
 

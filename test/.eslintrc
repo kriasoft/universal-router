@@ -1,5 +1,5 @@
 {
   "rules": {
-    "no-unused-expressions": false
+    "no-unused-expressions": 0
   }
 }
