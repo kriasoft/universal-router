@@ -17,13 +17,20 @@ describe('Routing', () => {
     const router = new Router(on => {
       on('/a', handler);
       on('/b', handler, handler);
+      on('c', '/c', handler);
+      on('d', '/d', handler);
+      on('d', '/d', handler, handler); // Overwrite
       on('error', handler);
     });
-    expect(router.routes).to.be.ok.and.of.length(2);
+    expect(router.routes).to.be.ok.and.of.length(4);
     expect(router.routes[0].handlers).to.be.ok.and.of.length(1);
     expect(router.routes[0].handlers[0]).to.be.equal(handler);
     expect(router.routes[1].handlers).to.be.ok.and.of.length(2);
     expect(router.routes[1].handlers[0]).to.be.equal(handler);
+    expect(router.routes[2].handlers).to.be.ok.and.of.length(1);
+    expect(router.routes[2].handlers[0]).to.be.equal(handler);
+    expect(router.routes[3].handlers).to.be.ok.and.of.length(2);
+    expect(router.routes[3].handlers[0]).to.be.equal(handler);
     expect(router.events.error).to.be.equal(handler);
   });
 
@@ -96,6 +103,20 @@ describe('Routing', () => {
     await router.dispatch('/path/123/other/456');
   });
 
+  it('Should generate paths', async () => {
+    const handler = () => {};
+    const router = new Router(on => {
+      on('a', '/a', handler);
+      on('path', '/path/:foo/other/:boo', handler);
+      on('onHandler', '/foo/:bar', () => {
+        expect(router.generate('onHandler', { bar: 'bar' })).to.be.equal('/foo/bar');
+      });
+    });
+    await router.dispatch('/foo/bar');
+    expect(router.generate('a')).to.be.equal('/a');
+    expect(router.generate('path', { foo: 'foo', boo: 'boo' })).to.be.equal('/path/foo/other/boo');
+  });
+
   it('test', async () => {
     const renderer = TestUtils.createRenderer();
     const router = new Router(on => {
@@ -104,6 +125,6 @@ describe('Routing', () => {
 
       });
     });
-  })
+  });
 
 });

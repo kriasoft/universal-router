@@ -4,6 +4,7 @@
  */
 
 import Route from './Route';
+import shortid from 'shortid';
 
 const emptyFunction = function() {};
 
@@ -13,6 +14,7 @@ class Router {
    * Creates a new instance of the `Router` class.
    */
   constructor(initialize) {
+    this.names = [];
     this.routes = [];
     this.events = Object.create(null);
 
@@ -24,15 +26,41 @@ class Router {
   /**
    * Adds a new route to the routing table or registers an event listener.
    *
+   * @param {String} name A route name
    * @param {String} path A string in the Express format, an array of strings, or a regular expression.
    * @param {Function|Array} handlers Asynchronous route handler function(s).
    */
-  on(path, ...handlers) {
+  on(...params) {
+    let name;
+    let path;
+    let handlers;
+
+    name = (typeof params[1] === 'string' || params[1] instanceof String)
+      ? params.shift()
+      : shortid.generate();
+    path = params.shift();
+    handlers = params;
+
+    const index = this.names.indexOf(name);
+
     if (path === 'error') {
       this.events[path] = handlers[0];
-    } else {
+    } else if (index === -1) {
+      this.names.push(name);
       this.routes.push(new Route(path, handlers));
+    } else {
+      this.routes[index] = new Route(path, handlers);
     }
+  }
+
+  generate(name, params) {
+    const index = this.names.indexOf(name);
+
+    if (index === -1) {
+      return undefined;
+    }
+
+    return this.routes[index].generate(params);
   }
 
   async dispatch(state, cb) {
