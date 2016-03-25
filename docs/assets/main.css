@@ -135,6 +135,7 @@ body {
 .content {
   display: table;
   margin: 0 auto;
+  padding: 16px 16px 40px;
   width: var(--max-content-width);
 }
 

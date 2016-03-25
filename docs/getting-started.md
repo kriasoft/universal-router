@@ -50,6 +50,6 @@ const router = new Router()
 
 ...
 
-Sorry, the rest of the guide is currently under development. Be back soon. 
+Sorry, the rest of the guide is currently under development. Come back soon. 
 
 

@@ -13,3 +13,28 @@ server-side appliactions (e.g. Node.js/Express, Koa).
   with minimum dependencies (just `path-to-regexp` and `babel-runtime`)
 * It can be used with any JavaScript framework such as React, Vue.js etc
 * It uses the same middleware approach used in Express and Koa, making it easy to learn
+
+### How does it look like?
+
+```js
+import Router from 'universal-router';
+
+const router = new Router()
+  .route('/', () => 'Home page')
+  .route('/:username', async (context, { username }) => {
+    const resp = await fetch(`/api/users/${username}`);
+    const data = await resp.json();
+    return `Hello, ${data.displayName}!`;
+  });
+
+router.dispatch('/nick').then(result => {
+  console.log(result);
+});
+```
+
+### Learn More
+
+* [Getting Started](./getting-started)
+* [Universal Router API](./api)
+
+
