@@ -1,11 +1,11 @@
 ---
-title: Routing and Navigation for React.js Applications
+title: Universal Router ∙ Isomorphic routing solution for JavaScript applications
 ---
 
 ## How to Install
 
 ```sh
-$ npm install react-routing --save
+$ npm install universal-router --save
 ```
 
 ## Basic Routing
@@ -13,7 +13,7 @@ $ npm install react-routing --save
 Put your routes in a separate file (e.g. `router.js`)
 
 ```js
-import { Router } from 'react-routing';
+import Router from 'universal-router';
 import Layout from './components/Layout';
 import HomePage from './components/HomePage';
 import AboutPage from './components/AboutPage';
@@ -42,7 +42,7 @@ import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
 async function render() {
-  const path = window.location.path.substr(1) || '/';
+  const path = window.location.pathname.substr(1) || '/';
   await router.dispatch({ path }, component => {
     React.render(component, document.body);
   });

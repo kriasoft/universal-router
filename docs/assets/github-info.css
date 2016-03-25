@@ -7,6 +7,21 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import Router from './Router';
+.github-info {
+  font-size: 12px;
+  font-weight: normal;
+}
 
-export default Router;
+.github-info__link {
+  color: rgba(255, 255, 255, .8);
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.github-info__link:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.github-info__icon {
+  padding-right: 6px;
+}

@@ -1,5 +1,5 @@
 ---
-title: Getting Started ∙ React Routing
+title: Getting Started ∙ Universal Router
 ---
 
 # Getting Started

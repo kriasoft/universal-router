@@ -1,17 +1,17 @@
-# Isomorphic router for React.js applications
+# Universal Router — "isomorphic" routing for JavaScript applications
 
-[![NPM version](http://img.shields.io/npm/v/react-routing.svg?style=flat-square)](https://www.npmjs.com/package/react-routing)
-[![NPM downloads](http://img.shields.io/npm/dm/react-routing.svg?style=flat-square)](https://www.npmjs.com/package/react-routing)
-[![Build Status](http://img.shields.io/travis/kriasoft/react-routing/master.svg?style=flat-square)](https://travis-ci.org/kriasoft/react-routing)
-[![Dependency Status](http://img.shields.io/david/kriasoft/react-routing.svg?style=flat-square)](https://david-dm.org/kriasoft/react-routing)
-[![Chat](http://img.shields.io/badge/chat_room-%23react--routing-blue.svg?style=flat-square)](https://gitter.im/kriasoft/react-routing)
+[![NPM version](http://img.shields.io/npm/v/universal-router.svg?style=flat-square)](https://www.npmjs.com/package/universal-router)
+[![NPM downloads](http://img.shields.io/npm/dm/universal-router.svg?style=flat-square)](https://www.npmjs.com/package/universal-router)
+[![Build Status](http://img.shields.io/travis/kriasoft/universal-router/master.svg?style=flat-square)](https://travis-ci.org/kriasoft/universal-router)
+[![Dependency Status](http://img.shields.io/david/kriasoft/universal-router.svg?style=flat-square)](https://david-dm.org/kriasoft/universal-router)
+[![Chat](http://img.shields.io/badge/chat_room-%23universal--router-blue.svg?style=flat-square)](https://gitter.im/kriasoft/universal-router)
 
-For more information visit [www.kriasoft.com/react-routing](http://www.kriasoft.com/react-routing)
+For more information visit [www.kriasoft.com/universal-router](https://www.kriasoft.com/universal-router/)
 
 ## How to Install
 
 ```sh
-$ npm install react-routing --save
+$ npm install universal-router --save
 ```
 
 ## Quick Start
@@ -19,7 +19,7 @@ $ npm install react-routing --save
 ```js
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Router from 'react-routing/lib/Router';
+import Router from 'universal-router';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
@@ -71,13 +71,13 @@ await router.dispatch({ path: '/products/example' }, (state, component) => {
 
 ## Related Projects
 
-* [React Starter Kit](https://github.com/kriasoft/react-starter-kit.git)
-* [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit.git)
-* [React Static Boilerplate](https://github.com/koistya/react-static-boilerplate.git)
+* [React Starter Kit](https://github.com/kriasoft/react-starter-kit)
+* [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit)
+* [React Static Boilerplate](https://github.com/koistya/react-static-boilerplate)
 
 ### Support
 
-* [#react-routing](https://gitter.im/kriasoft/react-routing) on Gitter
+* [#universal-router](https://gitter.im/kriasoft/universal-router) on Gitter
 * [#react-starter-kit](https://gitter.im/kriasoft/react-starter-kit) on Gitter
 * [@koistya](https://www.codementor.io/koistya) on Codementor
 
