@@ -11,10 +11,23 @@ import toRegExp from 'path-to-regexp';
 import Match from './Match';
 
 class Route {
-  constructor(path, handlers) {
-    this.path = path;
-    this.handlers = handlers;
-    this.regExp = toRegExp(path, this.keys = []);
+  constructor(route) {
+    this.name = route.name || null;
+    this.path = route.path;
+
+    // Support multiple naming conventions:
+    //   handler, handlers, action, actions
+    if (route.handlers) {
+      this.handlers = route.handlers;
+    } else if (route.actions) {
+      this.handlers = route.actions;
+    } else if (route.handler) {
+      this.handlers = [route.handler];
+    } else if (route.action) {
+      this.handlers = [route.action];
+    } else {
+      throw new TypeError('Cannot initialize a new route without route handler(s).');
+    }
   }
 
   match(path) {

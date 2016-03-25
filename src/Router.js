@@ -10,18 +10,43 @@
 import Route from './Route';
 
 const emptyFunction = function() {};
+const eventNames = ['error'];
 
 class Router {
 
-  /**
-   * Creates a new instance of the `Router` class.
-   */
-  constructor(initialize) {
+  constructor(options) {
     this.routes = [];
     this.events = Object.create(null);
 
-    if (typeof initialize === 'function') {
-      initialize(this.on.bind(this));
+    if (typeof options === 'function') {
+      options(this.on.bind(this));
+    } else if (Array.isArray(options)) {
+      this.addRoutes(options);
+    } else if (options) {
+      this.addRoute(options);
+    }
+  }
+
+  addRoute(route) {
+    if (eventNames.some(x => x === route.path)) {
+      this.events[route.path] = route.action || route.handler;
+    } else {
+      this.routes.push(new Route(route));
+    }
+  }
+
+  addRoutes(routes) {
+    for (const route of routes) {
+      this.addRoute(route);
+
+      // Child routes
+      if (route.routes) {
+        if (Array.isArray(route.routes)) {
+          this.addRoutes(route.routes);
+        } else {
+          this.addRoute(route.routes);
+        }
+      }
     }
   }
 
@@ -35,7 +60,7 @@ class Router {
     if (path === 'error') {
       this.events[path] = handlers[0];
     } else {
-      this.routes.push(new Route(path, handlers));
+      this.routes.push(new Route({ path, handlers }));
     }
   }
 
