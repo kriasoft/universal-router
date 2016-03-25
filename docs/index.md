@@ -2,52 +2,14 @@
 title: Universal Router ∙ Isomorphic routing solution for JavaScript applications
 ---
 
-## How to Install
+## Universal Router
 
-```sh
-$ npm install universal-router --save
-```
+A simple middleware-style router that can be used in both client-side (e.g. React, Vue.js) and
+server-side appliactions (e.g. Node.js/Express, Koa).
 
-## Basic Routing
+### Why use Universal Router?
 
-Put your routes in a separate file (e.g. `router.js`)
-
-```js
-import Router from 'universal-router';
-import Layout from './components/Layout';
-import HomePage from './components/HomePage';
-import AboutPage from './components/AboutPage';
-
-const router = new Router(on => {
-
-  on('*', async (state, next) => {         // Matches all URLs
-    const component = await next();        // and wraps child components
-    return <Layout>{component}</Layout/>;  // into a common layout component
-  });
-  
-  on('/', () => <HomePage />);
-  on('/about', () => <AboutPage />);
-
-});
-
-export default router;
-```
-
-Reference the router from your application code and dispatch a URL change event:
-
-```js
-import React from 'react';
-import router from './router.js';
-import NotFoundPage from './components/NotFoundPage';
-import ErrorPage from './components/ErrorPage';
-
-async function render() {
-  const path = window.location.pathname.substr(1) || '/';
-  await router.dispatch({ path }, component => {
-    React.render(component, document.body);
-  });
-}
-
-window.addEventListener('hashchange', () => render());
-render();
-```
+* It has [simple code](https://github.com/kriasoft/universal-router/blob/route/src/Router.js)
+  with minimum dependencies (just `path-to-regexp` and `babel-runtime`)
+* It can be used with any JavaScript framework such as React, Vue.js etc
+* It uses the same middleware approach used in Express and Koa, making it easy to learn

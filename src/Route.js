@@ -11,9 +11,9 @@ import toRegExp from 'path-to-regexp';
 import Match from './Match';
 
 class Route {
-  constructor(path, handlers) {
+  constructor(path, actions) {
     this.path = path;
-    this.handlers = handlers;
+    this.actions = actions;
     this.regExp = toRegExp(path, this.keys = []);
   }
 

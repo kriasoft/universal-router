@@ -1,5 +1,5 @@
 {
-  "rules": {
-    "no-unused-expressions": false
+  "env": {
+    "mocha": true
   }
 }

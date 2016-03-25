@@ -9,84 +9,79 @@
 
 import Route from './Route';
 
-const emptyFunction = function() {};
+function* getMatches(context, routes) {
+  for (const route of routes) {
+    const match = route.match(context.path);
+    if (match) {
+      for (const action of match.route.actions) {
+        yield [match, action];
+      }
+    }
+  }
+}
 
 class Router {
 
   /**
-   * Creates a new instance of the `Router` class.
+   * Initializes a new instance of the Router class.
    */
-  constructor(initialize) {
+  constructor(routes) {
     this.routes = [];
-    this.events = Object.create(null);
+    this.route = this.route.bind(this);
 
-    if (typeof initialize === 'function') {
-      initialize(this.on.bind(this));
+    if (Array.isArray(routes)) {
+      routes.forEach(x => {
+        this.route(x.path, ...(Array.isArray(x.action) ? x.action : [x.action]));
+      });
+    } else if (typeof routes === 'function') {
+      routes(this.route);
     }
   }
 
   /**
-   * Adds a new route to the routing table or registers an event listener.
-   *
-   * @param {String} path A string in the Express format, an array of strings, or a regular expression.
-   * @param {Function|Array} handlers Asynchronous route handler function(s).
+   * Adds a route to the internal collection.
    */
-  on(path, ...handlers) {
-    if (path === 'error') {
-      this.events[path] = handlers[0];
-    } else {
-      this.routes.push(new Route(path, handlers));
-    }
+  route(path, ...actions) {
+    this.routes.push(new Route(path, actions));
+    return this;
   }
 
-  async dispatch(state, cb) {
-    if (typeof state === 'string' || state instanceof String) {
-      state = { path: state };
+  async dispatch(context) {
+    if (typeof context === 'string' || context instanceof String) {
+      context = { path: context }; // eslint-disable-line no-param-reassign
     }
-    cb = cb || emptyFunction;
-    const routes = this.routes;
-    const handlers = (function* () {
-      for (const route of routes) {
-        const match = route.match(state.path);
-        if (match) {
-          for (let handler of match.route.handlers) {
-            yield [match, handler];
-          }
-        }
-      }
-    })();
 
-    let value, result, done = false;
+    let value; // eslint-disable-line prefer-const
+    let result;
+    let done = false;
+
+    const matches = getMatches(context, this.routes);
 
     async function next() {
-      if (({ value, done } = handlers.next()) && !done) {
-        const [match, handler] = value;
-        state.params = match.params;
-        return handler.length > 1 ?
-          await handler(state, next) : await handler(state);
+      const nextMatch = { value, done } = matches.next();
+      if (nextMatch && !done) {
+        const [match, action] = value;
+        context.params = match.params; // eslint-disable-line no-param-reassign
+        return action.length > 1 ?
+          await action(context, context.params) : await action(context);
       }
+      return undefined;
     }
+
+    context.next = next;  // eslint-disable-line no-param-reassign
+    context.end = data => { result = data; done = true; };  // eslint-disable-line no-param-reassign
 
     while (!done) {
       result = await next();
       if (result) {
-        state.statusCode = typeof state.statusCode === 'number' ? state.statusCode : 200;
-        cb(state, result);
-        return;
+        /* eslint-disable no-param-reassign */
+        context.statusCode = typeof context.statusCode === 'number' ? context.statusCode : 200;
+        /* eslint-enable no-param-reassign */
+        break;
       }
     }
 
-    if (this.events.error) {
-      try {
-        state.statusCode = 404;
-        result = await this.events.error(state, new Error(`Cannot found a route matching '${state.path}'.`));
-        cb(state, result);
-      } catch (error) {
-        state.statusCode = 500;
-        result = await this.events.error(state, error);
-        cb(state, result);
-      }
-    }
+    return result;
   }
 
 }

@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - Refactor project's homepage layout. See `docs/assets`.
 - Clean up `package.json`, update Babel and its plug-ins to the latest versions
 - Make the library use `babel-runtime` package instead of an inline runtime
-- Add [CHANGELOG.md](CHANGELOG.md) file
+- Add [CHANGELOG.md](CHANGELOG.md) file with the notable changes to this project
 
 ### [v0.0.7] - 2015-12-13
 

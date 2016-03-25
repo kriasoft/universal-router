@@ -7,6 +7,20 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
+function decodeParam(val) {
+  if (!(typeof val === 'string' || val instanceof String)) {
+    return val;
+  }
+
+  try {
+    return decodeURIComponent(val);
+  } catch (e) {
+    const err = new TypeError(`Failed to decode param '${val}'`);
+    err.status = 400;
+    throw err;
+  }
+}
+
 class Match {
   constructor(route, path, keys, match) {
     this.route = route;
@@ -15,20 +29,6 @@ class Match {
     for (let i = 1; i < match.length; i++) {
       this.params[keys[i - 1].name] = decodeParam(match[i]);
     }
-  }
-}
-
-function decodeParam(val){
-  if (!(typeof val === 'string' || val instanceof String)) {
-    return val;
-  }
-
-  try {
-    return decodeURIComponent(val);
-  } catch (e) {
-    var err = new TypeError(`Failed to decode param '${val}'`);
-    err.status = 400;
-    throw err;
   }
 }
 
