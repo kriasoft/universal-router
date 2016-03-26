@@ -86,17 +86,26 @@ describe('Router', () => {
   it('Should execute route actions in the same order they were added', async () => {
     const log = [];
     const router = new Router();
-    router.route('/test', async () => { log.push(2); })
+    router.route('/test', async () => { log.push(2); });
     router.route('/test', async () => { log.push(1); }, () => { log.push(3); });
     await router.dispatch('/test');
     expect(log).to.be.deep.equal([2, 1, 3]);
+  });
+
+  it('Should return result', async () => {
+    const router = new Router(on => {
+      on('/test', async ({ next }) => 3 + await next());
+      on('/test', async ({ next }) => 2 + await next(), () => 1);
+    });
+    const result = await router.dispatch('/test');
+    expect(result).to.be.equal(6);
   });
 
   it('Should support async route actions', async () => {
     const log = [];
     const router = new Router();
     router.route('/test', () => new Promise(resolve => {
-        setTimeout(() => { log.push(1); resolve(); }, 500);
+      setTimeout(() => { log.push(1); resolve(); }, 500);
     }));
     router.route('/test', () => new Promise(resolve => {
       setTimeout(() => { log.push(2); resolve(); }, 100);
