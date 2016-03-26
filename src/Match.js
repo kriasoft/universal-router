@@ -8,15 +8,18 @@
  */
 
 function decodeParam(val) {
-  if (!(typeof val === 'string' || val instanceof String)) {
+  if (!(typeof val === 'string' || val.length === 0)) {
     return val;
   }
 
   try {
     return decodeURIComponent(val);
-  } catch (e) {
-    const err = new TypeError(`Failed to decode param '${val}'`);
-    err.status = 400;
+  } catch (err) {
+    if (err instanceof URIError) {
+      err.message = `Failed to decode param '${val}'`;
+      err.status = 400;
+    }
+
     throw err;
   }
 }

@@ -16,7 +16,7 @@ Join [#universal-router](https://gitter.im/kriasoft/universal-router) chat room 
 
 * [Overview](docs/index.md)
 * [Getting Started](docs/getting-started.md)
-* [API](docs/api.md)
+* [Universal Router API](docs/api.md)
 
 ## Related Projects
 

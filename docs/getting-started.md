@@ -8,16 +8,17 @@ This router is built around a middleware approach used in Express and Koa, so if
 familiar with any of these frameworks, learning Universal Router should be a breeze. The code
 samples below assume that you're using ES2015 flavor of JavaScript via [Babel](http://babeljs.io/).
 
-You can start by installing Universal Router library via [NPM](https://www.npmjs.com/) by running:
+You can start by installing Universal Router library via [npm](https://www.npmjs.com/package/universal-router)
+by running:
 
 ```bash
 $ npm install universal-router --save
 ```
 
-This module exports `Router` class responsible for storing the list of routes, traversing this list,
-and executing middleware functions (actions) for each of the matched routes. Each "route" is just a
-parametrized path string along with one ore more route actions. To demonstrate it, let's initialize
-a new router as follows:
+This module exports a `Router` class responsible for storing the list of routes, traversing this
+list, and executing middleware functions (actions) for each of the matched routes. Each "route" is
+just a parametrized path string along with one ore more route actions. To demonstrate it, let's
+initialize a new router as follows:
  
 ```js
 import Router from 'universal-router';

@@ -32,7 +32,7 @@ router.dispatch('/nick').then(result => {
 });
 ```
 
-### Learn More
+### Learn more
 
 * [Getting Started](./getting-started)
 * [Universal Router API](./api)
