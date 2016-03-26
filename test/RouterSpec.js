@@ -92,6 +92,15 @@ describe('Router', () => {
     expect(log).to.be.deep.equal([2, 1, 3]);
   });
 
+  it('Should return result', async () => {
+    const router = new Router(on => {
+      on('/test', async ({ next }) => { return 3 + await next(); });
+      on('/test', async ({ next }) => { return 2 + await next(); }, () => { return 1; });
+    });
+    const result = await router.dispatch('/test');
+    expect(result).to.be.equal(6);
+  });
+
   it('Should support async route actions', async () => {
     const log = [];
     const router = new Router();
