@@ -6,11 +6,9 @@
 [![Dependency Status](http://img.shields.io/david/kriasoft/universal-router.svg?style=flat-square)](https://david-dm.org/kriasoft/universal-router)
 [![Online Chat](http://img.shields.io/badge/chat_room-%23universal--router-blue.svg?style=flat-square)](https://gitter.im/kriasoft/universal-router)
 
-> A simple middleware-style router that can be used in both browser and Node.js environments.<br>
-> See [isomorphic JavaScript web apps](http://nerds.airbnb.com/isomorphic-javascript-future-web-apps/).
+> A simple middleware-style router [isomorphic](http://nerds.airbnb.com/isomorphic-javascript-future-web-apps/) JavaScript web apps
 
-For more information visit [www.kriasoft.com/universal-router](https://www.kriasoft.com/universal-router/) |
-Join [#universal-router](https://gitter.im/kriasoft/universal-router) chat room on Gitter to stay up to date
+Visit **[Quickstart Guide](http://slides.com/koistya/universal-router)** (slides) &nbsp;|&nbsp; Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Gitter to stay up to date
 
 ## Documentation
 

@@ -13,6 +13,12 @@ import sinon from 'sinon';
 import Router from '../src/Router';
 
 describe('Router', () => {
+  it('.route(path, ...actions) should be chainable', () => {
+    const router = new Router();
+    const result = router.route('/', () => {});
+    expect(result).to.be.equal(router);
+  });
+
   it('router.dispatch(path) should find and execute the route handler', async () => {
     const action1 = sinon.spy();
     const action2 = sinon.spy();
@@ -33,23 +39,6 @@ describe('Router', () => {
     expect(action2.calledOnce).to.be.true;
     expect(action3.calledOnce).to.be.true;
     expect(action3.args[0][0]).to.have.property('path', '/c');
-  });
-
-  it('Can chain .route(path, ...actions) calls', async () => {
-    const action1 = sinon.spy();
-    const action2 = sinon.spy();
-    const router = new Router()
-      .route('/a', action1)
-      .route('/b', action2);
-    await router.dispatch({ path: '/a' });
-    expect(action1.calledOnce).to.be.true;
-    expect(action1.args[0][0]).to.have.property('path', '/a');
-    expect(action2.called).to.be.false;
-
-    await router.dispatch({ path: '/b' });
-    expect(action1.calledOnce).to.be.true;
-    expect(action2.calledOnce).to.be.true;
-    expect(action2.args[0][0]).to.have.property('path', '/b');
   });
 
   it('router.dispatch({ path }) should find and execute the route handler', async () => {
