@@ -38,6 +38,13 @@ class Router {
     }
   }
 
+  use(path, ...actions) {
+    if (!(typeof path === 'string' || path instanceof String)) {
+      return this.use('/', path, actions);
+    }
+    throw TypeError('Not implemented');
+  }
+
   /**
    * Adds a route to the internal collection.
    */

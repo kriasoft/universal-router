@@ -13,6 +13,14 @@ import sinon from 'sinon';
 import Router from '../src/Router';
 
 describe('Router', () => {
+  it('new Router() creates a router instance', () => {
+    const router = new Router();
+    expect(router).to.be.an.instanceOf(Router);
+    expect(router.use).to.be.a('function');
+    expect(router.route).to.be.a('function');
+    expect(router.dispatch).to.be.a('function');
+  });
+
   it('new Router(routes) initializes a router with a list of routes', async () => {
     const action1 = sinon.spy();
     const action2 = sinon.spy();
@@ -35,7 +43,7 @@ describe('Router', () => {
     expect(action2.calledOnce).to.be.true;
   });
 
-  it('.route(path, ...actions) should be chainable', () => {
+  it('router.route(path, ...actions) should be chainable', () => {
     const router = new Router();
     const result = router.route('/', () => {});
     expect(result).to.be.equal(router);
