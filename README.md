@@ -21,10 +21,10 @@ Visit **[Quickstart Guide](http://slides.com/koistya/universal-router)** (slides
 ♥ Universal Router? Help us keep it alive by [donating funds](https://www.patreon.com/tarkus) to cover project expenses!
 
 <a href="https://github.com/koistya" target="_blank">
-  <img src="https://github.com/koistya.png?size=64">
+  <img src="https://github.com/koistya.png?size=64" width="64" height="64" alt="">
 </a>
 <a href="https://www.patreon.com/bePatron?patAmt=25&amp;u=2475816" target="_blank">
-  <img src="https://opencollective.com/static/images/become_backer.svg">
+  <img src="https://opencollective.com/static/images/become_backer.svg" width="64" height="64" alt="">
 </a>
 
 ## Related Projects

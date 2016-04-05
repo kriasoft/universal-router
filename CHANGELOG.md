@@ -4,10 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ### [Unreleased][unreleased]
 
-- Add `router.use(middleware)` method (PLANNED)
-- Add `router.redirect(from, to)` method (PLANNED)
 - Add `context.redirect(path)` method to be used from inside route actions (PLANNED)
-- Add `context.end()` method to be used from inside route actions (PLANNED)
+
+### [v1.1.0-beta.1] - 2016-04-05
+
+- Remove `Router` class and `router.dispatch()` method in favor of
+ `match(routes, { path, ...context })`, where `routes` is just a plain JavaScript objects containing
+ the list of routes (BREAKING CHANGE)
+- Add `context.end()` method to be used from inside route actions
+- Update documentation and code samples
 
 ### [v1.0.0-beta.1] - 2016-03-25
 

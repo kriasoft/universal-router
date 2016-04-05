@@ -11,42 +11,42 @@ samples below assume that you're using ES2015 flavor of JavaScript via [Babel](h
 You can start by installing Universal Router library via [npm](https://www.npmjs.com/package/universal-router)
 by running:
 
-```bash
+```sh
 $ npm install universal-router --save
 ```
 
-This module exports a `Router` class responsible for storing the list of routes, traversing this
-list, and executing middleware functions (actions) for each of the matched routes. Each "route" is
-just a parametrized path string along with one ore more route actions. To demonstrate it, let's
-initialize a new router as follows:
+This module has a `match` method that responsible for traversing the list of routes, until it finds
+a matching route whose action method returns anything other thand `undefined`. Each route is just a
+plain JavaScript object having `path`, `action`, and `children` (optional) properties.
  
 ```js
-import Router from 'universal-router';
+import { match } from 'universal-router';
 
-const router = new Router()
-  .route('/', () => console.log('show home page'))
-  .route('/about', () => console.log('show about page'));
+const rotues = [
+  {
+    path: '/',
+    action: () => `<h1>Home</h1>`
+  },
+  {
+    path: '/posts',
+    action: () => console.log('checking child routes for /posts'),
+    children: [
+      {
+        path: '/',
+        action: () => `<h1>Posts</h1>`
+      },
+      {
+        path: '/:id',
+        action: (context) => `<h1>Post #${context.params.id}`
+      }
+    ]
+  },
+];
 
-router.dispatch('/about');
-```
-
-When you run this code, it should print "`show about page`" text to the console window. And it
-works the same way in both a browser or Node.js environments.
-
-An action can return an arbitrary value that you can obtain by running `.dispatch(context)` as
-the following code demonstrates:
-
-```js
-import Router from 'universal-router';
-
-const router = new Router()
-  .route('/', () => '<h1>Home page<h1>')
-  .route('/about', () => '<h1>About page</h1>');
-
-(async function(location) {
-  const result = await router.dispatch(location);
-  console.log(result);
-})('/about')
+match(routes, '/posts/123').then(html => {
+  document.body.innerHTML = html;
+  // => renders <h1>Post #123</h1>
+});
 ```
 
 ...

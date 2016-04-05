@@ -5,11 +5,11 @@ title: Universal Router ∙ Isomorphic routing solution for JavaScript applicati
 ## Universal Router
 
 A simple middleware-style router that can be used in both client-side (e.g. React, Vue.js) and
-server-side appliactions (e.g. Node.js/Express, Koa).
+server-side applications (e.g. Node.js/Express, Koa).
 
 ### Why use Universal Router?
 
-* It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/Router.js)
+* It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/match.js)
   with minimum dependencies (just `path-to-regexp` and `babel-runtime`)
 * It can be used with any JavaScript framework such as React, Vue.js etc
 * It uses the same middleware approach used in Express and Koa, making it easy to learn
@@ -17,18 +17,31 @@ server-side appliactions (e.g. Node.js/Express, Koa).
 ### How does it look like?
 
 ```js
-import Router from 'universal-router';
+import { match } from 'universal-router';
 
-const router = new Router()
-  .route('/', () => 'Home page')
-  .route('/:username', async (context, { username }) => {
-    const resp = await fetch(`/api/users/${username}`);
-    const data = await resp.json();
-    return `Hello, ${data.displayName}!`;
-  });
+const rotues = [
+  {
+    path: '/',
+    action: () => `<h1>Home</h1>`
+  },
+  {
+    path: '/posts',
+    action: () => console.log('checking child routes for /posts'),
+    children: [
+      {
+        path: '/',
+        action: () => `<h1>Posts</h1>`
+      },
+      {
+        path: '/:id',
+        action: (context) => `<h1>Post #${context.params.id}`
+      }
+    ]
+  },
+];
 
-router.dispatch('/nick').then(result => {
-  console.log(result);
+match(routes, '/about').then(html => {
+  document.body.innerHTML = html;
 });
 ```
 
@@ -42,8 +55,8 @@ router.dispatch('/nick').then(result => {
 ♥ Universal Router? Help us keep it alive by [donating funds](https://www.patreon.com/tarkus) to cover project expenses!
 
 <a href="https://github.com/koistya" target="_blank">
-  <img src="https://github.com/koistya.png?size=64">
+  <img src="https://github.com/koistya.png?size=64" width="64" height="64" alt="Konstantin Tarkus">
 </a>
-<a href="https://www.patreon.com/bePatron?patAmt=25&amp;u=2475816" target="_blank">
-  <img src="https://opencollective.com/static/images/become_backer.svg">
+<a href="https://www.patreon.com/tarkus" target="_blank">
+  <img src="https://opencollective.com/static/images/become_backer.svg" width="64" height="64" alt="Become a backer">
 </a>

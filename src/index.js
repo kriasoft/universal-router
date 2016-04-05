@@ -7,6 +7,6 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import Router from './Router';
-
-export default Router;
+import match from './match';
+export match from './match';
+export default { match };

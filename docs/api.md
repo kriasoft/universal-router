@@ -5,26 +5,28 @@ title: API ∙ Universal Router
 
 ## Universal Router API
 
-### new Router([routes])
+### `match(routes, { path, ...context })` ⇒ `any`
 
-Creates a new instance of the router, where `[routes]` is an optional list of routes. For example:
-
-```js
-const router = new Router()
-  .route('/one', () => { /* action */ })
-  .route('/two', () => { /* action */ })
-  .route('/tree', () => { /* action */ });
-````
-
-Which can be also written as:
+Traverses the list of routes in the order they are defined until it finds the first route that
+matches provided URL path string and whose action method returns anything other than `undefined`.
 
 ```js
+import { match } from 'universal-router';
+
 const routes = [
-  { path: '/one', action: () => { /* action */ } },
-  { path: '/two', action: () => { /* action */ } },
+  {
+    path: '/one',
+    action: () => 'Page One'
+  },
+  {
+    path: '/two',
+    action: () => `Page Two`
+  }
 ];
-const router = new Router()
-  .route('/tree', () => { /* action */ });
+
+match(routes, { path: '/one' })
+  .then(result => console.log(result));
+  // => Page One
 ```
 
 #### URL Parameters
@@ -32,57 +34,71 @@ const router = new Router()
 Named route parameters are captured and added to `context.params`.
 
 ```js
-const router = new Router()
-  .route('/:category/:title', (context) => {
-    console.log(context.params);
-    // => { category: 'programming', title: 'how-to-code' }
-  });
+const routes = [
+  {
+    path: '/hello/:username',
+    action: (context) => `Welcome, ${context.params.username}!`
+  }
+];
 
-router.dispatch('/programming/how-to-code');
-````
+match(routes, { path: '/hello/john' })
+  .then(result => console.log(result));
+  // => Welcome, john!
+```
 
 Alternatively, captured parameters can be accessed via the second argument to an action method like so:
 
 ```js
-const router = new Router()
-  .route('/:category/:title', (context, { category, title }) => {
-    console.log(category, title);
-    // => programming how-to-code
-  });
+const routes = [
+  {
+    path: '/hello/:username',
+    action: (ctx, { username }) => `Welcome, ${username}!`
+  }
+];
 
-router.dispatch('/programming/how-to-code');
-````
+match(routes, { path: '/hello/john' })
+  .then(result => console.log(result));
+  // => Welcome, john!
+```
 
-### router.route(path, ...actions) ⇒ `Router`
+#### Async Routes
 
-Adds a new router to the internal collection. Returns the router instance for chaining. See examples
-above.
-
-### router.dispatch(context) ⇒ `Promise`
-
-This tells the router to find the first route matching the specified `path` string. When such a
-route found, the router will execute its actions one-by-one starting from the first one, until one
-of them returns anything other than `undefined`, after that it returns whatever the action method
-returned back to the caller by resolving the Promise.
-
-The `context` argument can be either a path string such as `/programming/how-to-code` or an object
-with `path`, `query` variables and some optional arbitrary values that needs to be passed to the
-route actions. For example:
+##### Example 1:
 
 ```js
-import Express from 'express';
-import Router from 'universal-router';
+const routes = [
+  {
+    path: '/hello',
+    action: () => new Promise(resolve => {
+      setTimeout(() => resolve('Welcome!'), 1000);
+    })
+  }
+];
 
-const app = new Express();
-const router = new Router();
+match(routes, { path: '/hello' })
+  .then(result => console.log(result));
+  // => Welcome!
+```
 
-// TODO: Configure routes and middlewares
+##### Example 2:
 
-app.use((req, res, next) => {
-  router.dispatch({ path: req.path, query: req.query, user: req.user })
-    .then(result => res.send(result))
-    .catch(err => next(err));
-});
+```js
+const routes = [
+  {
+    path: '/hello/:username',
+    async action(ctx, { username }) {
+      const resp = await fetch(`/api/users/${username}`);
+      const user = await resp.json();
+      if (user) {
+        return `Welcome, ${user.displayName}!`;
+      }
+    }
+  }
+];
+
+match(routes, { path: '/hello/john' })
+  .then(result => console.log(result));
+  // => Welcome, John Brown!
 ```
 
 ...
