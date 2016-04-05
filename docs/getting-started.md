@@ -8,49 +8,49 @@ This router is built around a middleware approach used in Express and Koa, so if
 familiar with any of these frameworks, learning Universal Router should be a breeze. The code
 samples below assume that you're using ES2015 flavor of JavaScript via [Babel](http://babeljs.io/).
 
-You can start by installing Universal Router library via [npm](https://www.npmjs.com/package/universal-router)
+You can start by installing **Universal Router** library via [npm](https://www.npmjs.com/package/universal-router)
 by running:
 
 ```sh
 $ npm install universal-router --save
 ```
 
-This module has a `match` method that responsible for traversing the list of routes, until it finds
-a matching route whose action method returns anything other thand `undefined`. Each route is just a
-plain JavaScript object having `path`, `action`, and `children` (optional) properties.
+This module contains a `match` function that responsible for traversing the list of routes, until it
+finds the first route matching the provided URL path string and whose action method returns anything
+other than `undefined`. Each route is just a plain JavaScript object having `path`, `action`, and
+`children` (optional) properties.
  
 ```js
 import { match } from 'universal-router';
 
-const rotues = [
-  {
-    path: '/',
-    action: () => `<h1>Home</h1>`
-  },
-  {
-    path: '/posts',
-    action: () => console.log('checking child routes for /posts'),
-    children: [
-      {
-        path: '/',
-        action: () => `<h1>Posts</h1>`
-      },
-      {
-        path: '/:id',
-        action: (context) => `<h1>Post #${context.params.id}`
-      }
-    ]
-  },
+const routes = [
+  { path: '/one', action: () => '<h1>Page One</h1>' },
+  { path: '/two', action: () => '<h1>Page Two</h1>' }
 ];
 
-match(routes, '/posts/123').then(html => {
-  document.body.innerHTML = html;
-  // => renders <h1>Post #123</h1>
+match(routes, { path: '/one' }).then(result => {
+  document.body.innerHTML = result || <h1>Not Found</h1>;
+  // renders: <h1>Post #123</h1>
 });
 ```
 
-...
+### Use with React
 
-Sorry, the rest of the guide is currently under development. Come back soon. 
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { match } from 'universal-router';
 
+const routes = [
+  { path: '/one', action: ({ render }) => render(<h1>Page One</h1>) },
+  { path: '/two', action: ({ render }) => render(<h1>Page Two</h1>) }
+];
 
+function render(component) {
+  return Promise(resolve => {
+    ReactDOM.render(component, document.body, resolve);
+  });
+}
+
+match(routes, { path: '/one', render });
+```
