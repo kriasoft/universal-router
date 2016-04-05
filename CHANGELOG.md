@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.0.0-beta.1...HEAD
+[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.1...HEAD
+[v1.1.0-beta.1]: https://github.com/kriasoft/react-starter-kit/compare/v1.0.0-beta.1...v1.1.0-beta.1
 [v1.0.0-beta.1]: https://github.com/kriasoft/react-starter-kit/compare/v0.0.7...v1.0.0-beta.1
 [v0.0.7]: https://github.com/kriasoft/react-starter-kit/compare/v0.0.6...v0.0.7
