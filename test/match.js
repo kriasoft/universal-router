@@ -196,8 +196,8 @@ describe('match(routes, { path, ...context })', () => {
     const routes = [
       {
         path: '/a',
-        action() { throw error; }
-      }
+        action() { throw error; },
+      },
     ];
 
     try {
@@ -205,6 +205,7 @@ describe('match(routes, { path, ...context })', () => {
       return Promise.reject();
     } catch (err) {
       expect(err).to.be.equal(error);
+      return Promise.resolve();
     }
   });
 
@@ -214,12 +215,12 @@ describe('match(routes, { path, ...context })', () => {
     const routes = [
       {
         path: '/a',
-        action() { throw error; }
+        action() { throw error; },
       },
       {
         path: '/error',
-        action
-      }
+        action,
+      },
     ];
 
     const result = await match(routes, '/a');
