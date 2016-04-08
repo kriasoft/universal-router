@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 - Add `context.redirect(path)` method to be used from inside route actions (PLANNED)
 
+### [v1.1.0-beta.3] - 2016-04-08
+
+- Fix `matchRoute()` yielding the same route twice when it matches to both full and base URLs
+
 ### [v1.1.0-beta.2] - 2016-04-08
 
 - `match(routes, { path, ...context)` now throws an error if a matching route was not found (BREAKING CHANGE)
@@ -35,7 +39,8 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.2...HEAD
+[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.3...HEAD
+[v1.1.0-beta.3]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.2...v1.1.0-beta.3
 [v1.1.0-beta.2]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.1...v1.1.0-beta.2
 [v1.1.0-beta.1]: https://github.com/kriasoft/react-starter-kit/compare/v1.0.0-beta.1...v1.1.0-beta.1
 [v1.0.0-beta.1]: https://github.com/kriasoft/react-starter-kit/compare/v0.0.7...v1.0.0-beta.1

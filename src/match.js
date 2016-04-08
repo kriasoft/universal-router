@@ -22,9 +22,9 @@ async function match(routes, pathOrContext) {
   const matches = matchRoute(root, '', context.path);
 
   async function next() {
-    const nextMatch = { value, done } = matches.next();
+    ({ value, done } = matches.next());
 
-    if (nextMatch && !done) {
+    if (value && !done) {
       const newContext = Object.assign({}, context, value);
 
       if (value.route.action) {

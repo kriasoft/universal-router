@@ -93,4 +93,21 @@ describe('matchRoute(route, baseUrl, path)', () => {
     expect(result[2]).to.have.deep.property('route.path', '/c');
   });
 
+  it('should match 2 routes (3)', () => {
+    const route = {
+      path: '/',
+      children: [
+        {
+          path: '/',
+        },
+      ],
+    };
+    const result = Array.from(matchRoute(route, '', '/'));
+    expect(result).to.have.lengthOf(2);
+    expect(result[0]).to.have.property('baseUrl', '');
+    expect(result[0]).to.have.deep.property('route.path', '/');
+    expect(result[1]).to.have.property('baseUrl', '');
+    expect(result[1]).to.have.deep.property('route.path', '/');
+  });
+
 });
