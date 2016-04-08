@@ -191,4 +191,41 @@ describe('match(routes, { path, ...context })', () => {
     expect(action3.args[0][0]).to.have.property('path', '/a/b');
   });
 
+  it('should re-throw an error', async () => {
+    const error = new Error('test error');
+    const routes = [
+      {
+        path: '/a',
+        action() { throw error; }
+      }
+    ];
+
+    try {
+      await match(routes, '/a');
+      return Promise.reject();
+    } catch (err) {
+      expect(err).to.be.equal(error);
+    }
+  });
+
+  it('should redirect to an error page if it exists', async () => {
+    const error = new Error('test error');
+    const action = sinon.spy(() => 'b');
+    const routes = [
+      {
+        path: '/a',
+        action() { throw error; }
+      },
+      {
+        path: '/error',
+        action
+      }
+    ];
+
+    const result = await match(routes, '/a');
+    expect(result).to.be.equal('b');
+    expect(action.args[0][0]).to.have.property('error', error);
+    expect(action.args[0][0]).to.have.deep.property('error.status', 500);
+  });
+
 });

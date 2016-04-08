@@ -13,14 +13,13 @@ async function match(routes, pathOrContext) {
   const context = typeof pathOrContext === 'string' || pathOrContext instanceof String
     ? { path: pathOrContext }
     : pathOrContext;
+  const root = Array.isArray(routes) ? { path: '/', children: routes } : routes;
   let result;
   let value;
   let done = false;
 
-  const matches = matchRoute(
-    Array.isArray(routes) ? { path: '/', children: routes } : routes, '',
-    context.path
-  );
+  const errorRoute = root.children.find(x => x.path === '/error');
+  const matches = matchRoute(root, '', context.path);
 
   async function next() {
     const nextMatch = { value, done } = matches.next();
@@ -29,7 +28,17 @@ async function match(routes, pathOrContext) {
       const newContext = Object.assign({}, context, value);
 
       if (value.route.action) {
-        return await value.route.action(newContext, newContext.params);
+        if (errorRoute) {
+          try {
+            return await value.route.action(newContext, newContext.params);
+          } catch (err) {
+            err.status = err.status || 500;
+            newContext.error = err;
+            return errorRoute.action(newContext, newContext.params);
+          }
+        } else {
+          return await value.route.action(newContext, newContext.params);
+        }
       }
     }
 
@@ -45,6 +54,12 @@ async function match(routes, pathOrContext) {
     if (result !== undefined) {
       break;
     }
+  }
+
+  if (result === undefined && errorRoute) {
+    context.error = new Error('Not found');
+    context.error.status = 404;
+    return errorRoute.action(context, {});
   }
 
   return result;

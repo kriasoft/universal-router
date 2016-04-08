@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 - Add `context.redirect(path)` method to be used from inside route actions (PLANNED)
 
+### [v1.1.0-beta.2] - 2016-04-08
+
+- `match(routes, { path, ...context)` now throws an error if a matching route was not found (BREAKING CHANGE)
+- If there is a top-level route with path equal to `/error`, it will be used for error handling by convention
+
 ### [v1.1.0-beta.1] - 2016-04-05
 
 - Remove `Router` class and `router.dispatch()` method in favor of
@@ -30,7 +35,8 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.1...HEAD
+[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.2...HEAD
+[v1.1.0-beta.2]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.1...v1.1.0-beta.2
 [v1.1.0-beta.1]: https://github.com/kriasoft/react-starter-kit/compare/v1.0.0-beta.1...v1.1.0-beta.1
 [v1.0.0-beta.1]: https://github.com/kriasoft/react-starter-kit/compare/v0.0.7...v1.0.0-beta.1
 [v0.0.7]: https://github.com/kriasoft/react-starter-kit/compare/v0.0.6...v0.0.7
