@@ -44,6 +44,22 @@ describe('matchPath(routePath, urlPath)', () => {
     expect(Object.keys(result.params)).to.have.lengthOf(0);
   });
 
+  it('should return keys and params (4)', () => {
+    const result = matchPath('/:a/:b?', '/1');
+    expect(result).to.be.ok;
+    expect(result).to.have.property('path', '/1');
+    expect(result).to.have.property('keys').and.be.an('array').lengthOf(2);
+    expect(result).to.have.property('params').and.be.deep.equal({ a: '1' });
+  });
+
+  it('should return keys and params (5)', () => {
+    const result = matchPath('/:a/:b?', '/1/2');
+    expect(result).to.be.ok;
+    expect(result).to.have.property('path', '/1/2');
+    expect(result).to.have.property('keys').and.be.an('array').lengthOf(2);
+    expect(result).to.have.property('params').and.be.deep.equal({ a: '1', b: '2' });
+  });
+
   it('should match to an array of paths', () => {
     const result = matchPath(['/e', '/f'], '/f');
     expect(result).to.be.deep.equal({ path: '/f', keys: [], params: {} });
