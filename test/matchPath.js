@@ -49,7 +49,7 @@ describe('matchPath(routePath, urlPath)', () => {
     expect(result).to.be.ok;
     expect(result).to.have.property('path', '/1');
     expect(result).to.have.property('keys').and.be.an('array').lengthOf(2);
-    expect(result).to.have.property('params').and.be.deep.equal({ a: '1' });
+    expect(result).to.have.property('params').and.be.deep.equal({ a: '1', b: undefined });
   });
 
   it('should return keys and params (5)', () => {
