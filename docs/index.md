@@ -47,8 +47,8 @@ match(routes, '/about').then(html => {
 
 ### Learn more
 
-* [Getting Started](./getting-started)
-* [Universal Router API](./api)
+* [Getting Started](./getting-started.md)
+* [Universal Router API](./api.md)
 
 ### Backers
 
