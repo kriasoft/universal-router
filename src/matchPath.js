@@ -48,7 +48,7 @@ function _matchPath(end, routePath, urlPath) {
   const path = m[0];
 
   for (let i = 1; i < m.length; i++) {
-    params[regexp.keys[i - 1].name] = decodeParam(m[i]);
+    params[regexp.keys[i - 1].name] = m[i] !== undefined ? decodeParam(m[i]) : undefined;
   }
 
   return { path: path === '' ? '/' : path, keys: regexp.keys.slice(), params };
