@@ -19,7 +19,7 @@ server-side applications (e.g. Node.js/Express, Koa).
 ```js
 import { match } from 'universal-router';
 
-const rotues = [
+const routes = [
   {
     path: '/',
     action: () => `<h1>Home</h1>`
