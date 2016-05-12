@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Add `context.redirect(path)` method to be used from inside route actions (PLANNED)
 
-### [v1.2.0] - 2016-05-12
+### [v1.2.1] - 2016-05-12
 
 - Rename `match()` to `resolve()`. E.g. `import { resovle } from 'universal-router'`
 - Fix an issue when the router throws an exception when the top-level route doesn't have `children` property
@@ -50,8 +50,8 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.2.0...HEAD
-[v1.2.0]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.4...v1.2.0
+[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.2.1...HEAD
+[v1.2.1]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.4...v1.2.1
 [v1.1.0-beta.4]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.3...v1.1.0-beta.4
 [v1.1.0-beta.3]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.2...v1.1.0-beta.3
 [v1.1.0-beta.2]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.1...v1.1.0-beta.2

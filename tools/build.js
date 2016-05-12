@@ -97,6 +97,7 @@ promise = promise.then(() => {
   delete pkg.eslintConfig;
   delete pkg.babel;
   fs.writeFileSync('build/package.json', JSON.stringify(pkg, null, '  '), 'utf-8');
+  fs.writeFileSync('build/README.md', fs.readFileSync('README.md', 'utf-8'), 'utf-8');
   fs.writeFileSync('build/LICENSE.txt', fs.readFileSync('LICENSE.txt', 'utf-8'), 'utf-8');
 });
 
