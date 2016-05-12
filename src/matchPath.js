@@ -28,7 +28,7 @@ function decodeParam(val) {
   }
 }
 
-function _matchPath(end, routePath, urlPath) {
+function matchPathBase(end, routePath, urlPath) {
   const key = `${routePath}|${end}`;
   let regexp = cache.get(key);
 
@@ -54,5 +54,5 @@ function _matchPath(end, routePath, urlPath) {
   return { path: path === '' ? '/' : path, keys: regexp.keys.slice(), params };
 }
 
-export const matchPath = _matchPath.bind(undefined, true);
-export const matchBasePath = _matchPath.bind(undefined, false);
+export const matchPath = matchPathBase.bind(undefined, true);
+export const matchBasePath = matchPathBase.bind(undefined, false);

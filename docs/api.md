@@ -5,13 +5,13 @@ title: API ∙ Universal Router
 
 ## Universal Router API
 
-### `match(routes, { path, ...context })` ⇒ `any`
+### `resolve(routes, { path, ...context })` ⇒ `any`
 
 Traverses the list of routes in the order they are defined until it finds the first route that
 matches provided URL path string and whose action method returns anything other than `undefined`.
 
 ```js
-import { match } from 'universal-router';
+import { resolve } from 'universal-router';
 
 const routes = [
   {
@@ -24,10 +24,11 @@ const routes = [
   }
 ];
 
-match(routes, { path: '/one' })
+resolve(routes, { path: '/one' })
   .then(result => console.log(result));
   // => Page One
 ```
+
 
 #### URL Parameters
 
@@ -41,7 +42,7 @@ const routes = [
   }
 ];
 
-match(routes, { path: '/hello/john' })
+resolve(routes, { path: '/hello/john' })
   .then(result => console.log(result));
   // => Welcome, john!
 ```
@@ -56,10 +57,11 @@ const routes = [
   }
 ];
 
-match(routes, { path: '/hello/john' })
+resolve(routes, { path: '/hello/john' })
   .then(result => console.log(result));
   // => Welcome, john!
 ```
+
 
 #### Async Routes
 
@@ -75,7 +77,7 @@ const routes = [
   }
 ];
 
-match(routes, { path: '/hello' })
+resolve(routes, { path: '/hello' })
   .then(result => console.log(result));
   // => Welcome!
 ```
@@ -96,7 +98,7 @@ const routes = [
   }
 ];
 
-match(routes, { path: '/hello/john' })
+resolve(routes, { path: '/hello/john' })
   .then(result => console.log(result));
   // => Welcome, John Brown!
 ```

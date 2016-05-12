@@ -7,17 +7,19 @@ title: Universal Router ∙ Isomorphic routing solution for JavaScript applicati
 A simple middleware-style router that can be used in both client-side (e.g. React, Vue.js) and
 server-side applications (e.g. Node.js/Express, Koa).
 
+
 ### Why use Universal Router?
 
-* It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/match.js)
+* It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/resolve.js)
   with minimum dependencies (just `path-to-regexp` and `babel-runtime`)
 * It can be used with any JavaScript framework such as React, Vue.js etc
 * It uses the same middleware approach used in Express and Koa, making it easy to learn
 
+
 ### How does it look like?
 
 ```js
-import { match } from 'universal-router';
+import { resolve } from 'universal-router';
 
 const rotues = [
   {
@@ -40,15 +42,23 @@ const rotues = [
   },
 ];
 
-match(routes, '/about').then(html => {
+resolve(routes, '/about').then(html => {
   document.body.innerHTML = html;
 });
 ```
+
+**Note**: If you're using the router with Node v5 and below, import it as follows:
+
+```js
+import { resolve } from 'universal-router/legacy';
+````
+
 
 ### Learn more
 
 * [Getting Started](./getting-started.md)
 * [Universal Router API](./api.md)
+
 
 ### Backers
 

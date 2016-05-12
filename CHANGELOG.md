@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file.
 
 - Add `context.redirect(path)` method to be used from inside route actions (PLANNED)
 
+### [v1.2.0] - 2016-05-12
+
+- Rename `match()` to `resolve()`. E.g. `import { resovle } from 'universal-router'`
+- Fix an issue when the router throws an exception when the top-level route doesn't have `children` property
+- Include CommonJS, Harmony Modules, ES5.1 and UMD builds into NPM package
+- Include source maps into NPM package
+
 ### [v1.1.0-beta.4] - 2016-04-27
 
 - Fix optional parameters, e.g. `/products/:id?` ([#27](https://github.com/kriasoft/universal-router/pull/27))
@@ -43,7 +50,8 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.4...HEAD
+[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.2.0...HEAD
+[v1.2.0]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.4...v1.2.0
 [v1.1.0-beta.4]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.3...v1.1.0-beta.4
 [v1.1.0-beta.3]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.2...v1.1.0-beta.3
 [v1.1.0-beta.2]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.1...v1.1.0-beta.2

@@ -15,20 +15,20 @@ by running:
 $ npm install universal-router --save
 ```
 
-This module contains a `match` function that responsible for traversing the list of routes, until it
+This module contains a `resolve` function that responsible for traversing the list of routes, until it
 finds the first route matching the provided URL path string and whose action method returns anything
 other than `undefined`. Each route is just a plain JavaScript object having `path`, `action`, and
 `children` (optional) properties.
  
 ```js
-import { match } from 'universal-router';
+import { resolve } from 'universal-router';
 
 const routes = [
   { path: '/one', action: () => '<h1>Page One</h1>' },
   { path: '/two', action: () => '<h1>Page Two</h1>' }
 ];
 
-match(routes, { path: '/one' }).then(result => {
+resolve(routes, { path: '/one' }).then(result => {
   document.body.innerHTML = result || <h1>Not Found</h1>;
   // renders: <h1>Post #123</h1>
 });
@@ -39,7 +39,7 @@ match(routes, { path: '/one' }).then(result => {
 ```js
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { match } from 'universal-router';
+import { resolve } from 'universal-router';
 
 const routes = [
   { path: '/one', action: ({ render }) => render(<h1>Page One</h1>) },
@@ -52,5 +52,5 @@ function render(component) {
   });
 }
 
-match(routes, { path: '/one', render });
+resolve(routes, { path: '/one', render });
 ```

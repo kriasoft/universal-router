@@ -9,13 +9,13 @@
 
 import sinon from 'sinon';
 import { expect } from 'chai';
-import match from '../src/match';
+import { resolve } from '../src/main';
 
-describe('match(routes, { path, ...context })', () => {
+describe('resolve(routes, { path, ...context })', () => {
 
   it('should return [undefined] if a route wasn\'t not found', async () => {
     const routes = [];
-    const result = await match(routes, '/');
+    const result = await resolve(routes, '/');
     expect(result).to.be.undefined;
   });
 
@@ -24,7 +24,7 @@ describe('match(routes, { path, ...context })', () => {
     const routes = [
       { path: '/a', action },
     ];
-    const result = await match(routes, '/a');
+    const result = await resolve(routes, '/a');
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.property('path', '/a');
     expect(result).to.be.equal('b');
@@ -39,7 +39,7 @@ describe('match(routes, { path, ...context })', () => {
       { path: '/a', action: action2 },
       { path: '/a', action: action2 },
     ];
-    const result = await match(routes, '/a');
+    const result = await resolve(routes, '/a');
     expect(result).to.be.equal('b');
     expect(action1.calledOnce).to.be.true;
     expect(action1.calledOnce).to.be.true;
@@ -51,7 +51,7 @@ describe('match(routes, { path, ...context })', () => {
     const routes = [
       { path: '/a', action },
     ];
-    await match(routes, { path: '/a', test: 'b' });
+    await resolve(routes, { path: '/a', test: 'b' });
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.property('path', '/a');
     expect(action.args[0][0]).to.have.property('test', 'b');
@@ -62,7 +62,7 @@ describe('match(routes, { path, ...context })', () => {
     const routes = [
       { path: '/a', action },
     ];
-    await match(routes, '/b');
+    await resolve(routes, '/b');
     expect(action.called).to.be.false;
   });
 
@@ -70,7 +70,7 @@ describe('match(routes, { path, ...context })', () => {
     const routes = [
       { path: '/a', action: async () => 'b' },
     ];
-    const result = await match(routes, '/a');
+    const result = await resolve(routes, '/a');
     expect(result).to.be.equal('b');
   });
 
@@ -79,7 +79,7 @@ describe('match(routes, { path, ...context })', () => {
     const routes = [
       { path: '/:one/:two', action },
     ];
-    await match(routes, { path: '/a/b' });
+    await resolve(routes, { path: '/a/b' });
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.deep.property('params.one', 'a');
     expect(action.args[0][0]).to.have.deep.property('params.two', 'b');
@@ -99,7 +99,7 @@ describe('match(routes, { path, ...context })', () => {
       { path: '/test', action: () => log.push(2) },
     ];
 
-    await match(routes, '/test');
+    await resolve(routes, '/test');
     expect(log).to.be.deep.equal([1, 2, 3]);
   });
 
@@ -108,7 +108,7 @@ describe('match(routes, { path, ...context })', () => {
     const routes = [
       { path: '/path/:a/other/:b', action },
     ];
-    await match(routes, '/path/1/other/2');
+    await resolve(routes, '/path/1/other/2');
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.deep.property('params.a', '1');
     expect(action.args[0][0]).to.have.deep.property('params.b', '2');
@@ -131,7 +131,7 @@ describe('match(routes, { path, ...context })', () => {
       },
     ];
 
-    await match(routes, '/a');
+    await resolve(routes, '/a');
     expect(action.calledTwice).to.be.true;
     expect(action.args[0][0]).to.have.property('path', '/');
     expect(action.args[1][0]).to.have.property('path', '/a');
@@ -152,7 +152,7 @@ describe('match(routes, { path, ...context })', () => {
       },
     ];
 
-    await match(routes, '/a/b');
+    await resolve(routes, '/a/b');
     expect(action.calledTwice).to.be.true;
     expect(action.args[0][0]).to.have.property('path', '/a');
     expect(action.args[1][0]).to.have.property('path', '/b');
@@ -179,7 +179,7 @@ describe('match(routes, { path, ...context })', () => {
       },
     ];
 
-    await match(routes, '/a/b');
+    await resolve(routes, '/a/b');
     expect(action1.calledOnce).to.be.true;
     expect(action1.args[0][0]).to.have.property('baseUrl', '');
     expect(action1.args[0][0]).to.have.property('path', '/a');
@@ -201,7 +201,7 @@ describe('match(routes, { path, ...context })', () => {
     ];
 
     try {
-      await match(routes, '/a');
+      await resolve(routes, '/a');
       return Promise.reject();
     } catch (err) {
       expect(err).to.be.equal(error);
@@ -223,7 +223,7 @@ describe('match(routes, { path, ...context })', () => {
       },
     ];
 
-    const result = await match(routes, '/a');
+    const result = await resolve(routes, '/a');
     expect(result).to.be.equal('b');
     expect(action.args[0][0]).to.have.property('error', error);
     expect(action.args[0][0]).to.have.deep.property('error.status', 500);

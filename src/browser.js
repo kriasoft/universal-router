@@ -7,6 +7,4 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import match from './match';
-export match from './match';
-export default { match };
+export { default, default as resolve, default as match /* alias */ } from './resolve';

@@ -9,7 +9,7 @@
 
 import matchRoute from './matchRoute';
 
-async function match(routes, pathOrContext) {
+async function resolve(routes, pathOrContext) {
   const context = typeof pathOrContext === 'string' || pathOrContext instanceof String
     ? { path: pathOrContext }
     : pathOrContext;
@@ -18,11 +18,11 @@ async function match(routes, pathOrContext) {
   let value;
   let done = false;
 
-  const errorRoute = root.children.find(x => x.path === '/error');
-  const matches = matchRoute(root, '', context.path);
+  const errorRoute = root.children && root.children.find(x => x.path === '/error');
+  const match = matchRoute(root, '', context.path);
 
   async function next() {
-    ({ value, done } = matches.next());
+    ({ value, done } = match.next());
 
     if (value && !done) {
       const newContext = Object.assign({}, context, value);
@@ -65,4 +65,4 @@ async function match(routes, pathOrContext) {
   return result;
 }
 
-export default match;
+export default resolve;
