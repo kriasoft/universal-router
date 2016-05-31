@@ -14,6 +14,8 @@ const del = require('del');
 const rollup = require('rollup');
 const babel = require('rollup-plugin-babel');
 const uglify = require('rollup-plugin-uglify');
+const commonjs = require('rollup-plugin-commonjs');
+const nodeResolve = require('rollup-plugin-node-resolve');
 const pkg = require('../package.json');
 
 // The source files to be compiled by Rollup
@@ -71,20 +73,23 @@ promise = promise.then(() => del(['build/*']));
 for (const file of files) {
   promise = promise.then(() => rollup.rollup({
     entry: 'src/main.js',
-    external: Object.keys(pkg.dependencies),
+    external: file.format === 'umd' ? [] : Object.keys(pkg.dependencies),
     plugins: [
-      babel(Object.assign(pkg.babel, {
+      ...file.format === 'umd' ? [nodeResolve({ browser: true }), commonjs()] : [],
+      babel({
         babelrc: false,
         exclude: 'node_modules/**',
         runtimeHelpers: true,
         presets: file.presets,
         plugins: file.plugins,
-      })),
-    ].concat(file.minify ? [uglify()] : []),
+      }),
+      ...file.minify ? [uglify()] : [],
+    ],
   }).then(bundle => bundle.write({
     dest: `build/${file.output || 'main'}${file.ext}`,
     format: file.format,
     sourceMap: !file.minify,
+    exports: 'named',
     moduleName: file.moduleName,
   })));
 }
