@@ -33,6 +33,7 @@ Visit **[Quickstart Guide](http://slides.com/koistya/universal-router)** (slides
 
 ## Related Projects
 
+* [React App](https://github.com/kriasoft/react-app) — A better way to bootstrap React apps
 * [React Starter Kit](https://github.com/kriasoft/react-starter-kit) — Isomorphic web app boilerplate (Node.js, Express, React, GraphQL)
 * [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit) — JavaScript library boilerplate (ES2015, Babel, Rollup, Mocha, Chai, Sinon, Rewire)
 * [React Static Boilerplate](https://github.com/koistya/react-static-boilerplate) — Static site starter kit powered by React and Webpack

@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 - Add `context.redirect(path)` method to be used from inside route actions (PLANNED)
 
+### [v1.2.2] - 2016-05-31
+
+- Update UMD build to include missing dependencies ([#33](https://github.com/kriasoft/universal-router/pull/33))
+
 ### [v1.2.1] - 2016-05-12
 
 - Rename `match()` to `resolve()`. E.g. `import { resovle } from 'universal-router'`
@@ -50,7 +54,8 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.2.1...HEAD
+[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.2.2...HEAD
+[v1.2.2]: https://github.com/kriasoft/react-starter-kit/compare/v1.2.1...v1.2.2
 [v1.2.1]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.4...v1.2.1
 [v1.1.0-beta.4]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.3...v1.1.0-beta.4
 [v1.1.0-beta.3]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.2...v1.1.0-beta.3
