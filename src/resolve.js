@@ -59,7 +59,7 @@ async function resolve(routes, pathOrContext) {
   if (result === undefined && errorRoute) {
     context.error = new Error('Not found');
     context.error.status = 404;
-    return errorRoute.action(context, {});
+    return await errorRoute.action(context, {});
   }
 
   return result;
