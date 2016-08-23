@@ -12,26 +12,32 @@
 Visit **[Quickstart Guide](http://slides.com/koistya/universal-router)** (slides) &nbsp;|&nbsp; Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Gitter to stay up to date
 
 
-## Documentation
+### Documentation
 
 * [Overview](docs/index.md)
 * [Getting Started](docs/getting-started.md)
 * [Universal Router API](docs/api.md)
 
 
-## Backers
+### Learn ES6
+
+:mortar_board: &nbsp; **[ES6 Training Course](https://es6.io/friend/konstantin)** by Wes Bos<br>
+:green_book: &nbsp; **[You Don't Know JS: ES6 & Beyond](http://amzn.to/2bKpb4I)** by Kyle Simpson (Dec, 2015)<br>
+
+
+### Backers
 
 ♥ Universal Router? Help us keep it alive by [donating funds](https://www.patreon.com/tarkus) to cover project expenses!
 
 <a href="https://github.com/koistya" target="_blank">
   <img src="https://github.com/koistya.png?size=64" width="64" height="64" alt="">
 </a>
-<a href="https://www.patreon.com/bePatron?patAmt=25&amp;u=2475816" target="_blank">
+<a href="https://www.patreon.com/tarkus" target="_blank">
   <img src="https://opencollective.com/static/images/become_backer.svg" width="64" height="64" alt="">
 </a>
 
 
-## Related Projects
+### Related Projects
 
 * [React App](https://github.com/kriasoft/react-app) — A better way to bootstrap React apps
 * [React Starter Kit](https://github.com/kriasoft/react-starter-kit) — Isomorphic web app boilerplate (Node.js, Express, React, GraphQL)
@@ -46,7 +52,7 @@ Visit **[Quickstart Guide](http://slides.com/koistya/universal-router)** (slides
 * [@koistya](https://www.codementor.io/koistya) on Codementor
 
 
-## License
+### License
 
 Copyright © 2015-2016 Konstantin Tarkus, Kriasoft LLC. This source code is licensed under the MIT
 license found in the [LICENSE.txt](https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt)
