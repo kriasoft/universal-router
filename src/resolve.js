@@ -34,7 +34,7 @@ async function resolve(routes, pathOrContext) {
           } catch (err) {
             err.status = err.status || 500;
             newContext.error = err;
-            return errorRoute.action(newContext, newContext.params);
+            return await errorRoute.action(newContext, newContext.params);
           }
         } else {
           return await value.route.action(newContext, newContext.params);
