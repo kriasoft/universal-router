@@ -22,7 +22,7 @@ Visit **[Quickstart Guide](http://slides.com/koistya/universal-router)** (slides
 ### Learn ES6
 
 :mortar_board: &nbsp; **[ES6 Training Course](https://es6.io/friend/konstantin)** by Wes Bos<br>
-:green_book: &nbsp; **[You Don't Know JS: ES6 & Beyond](http://amzn.to/2bKpb4I)** by Kyle Simpson (Dec, 2015)<br>
+:green_book: &nbsp; **[You Don't Know JS: ES6 & Beyond](http://amzn.to/2bFss85)** by Kyle Simpson (Dec, 2015)<br>
 
 
 ### Backers
