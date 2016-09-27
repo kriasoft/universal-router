@@ -1,5 +1,12 @@
 {
   "rules": {
-    "strict": 0
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "optionalDependencies": false,
+        "peerDependencies": false
+      }
+    ],
+    "strict": "off"
   }
 }

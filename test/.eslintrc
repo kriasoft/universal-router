@@ -3,7 +3,14 @@
     "mocha": true
   },
   "rules": {
-    "no-unused-expressions": 0,
-    "padded-blocks": 0
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "optionalDependencies": false,
+        "peerDependencies": false
+      }
+    ],
+    "no-unused-expressions": "off",
+    "padded-blocks": "off"
   }
 }
