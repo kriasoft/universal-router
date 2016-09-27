@@ -85,6 +85,28 @@ describe('resolve(routes, { path, ...context })', () => {
     expect(action.args[0][0]).to.have.deep.property('params.two', 'b');
   });
 
+  it('should provide all URL parameters to each route', async () => {
+    const action = sinon.spy();
+    const routes = [
+      {
+        path: '/:one',
+        children: [
+          {
+            path: '/:two',
+            action,
+          },
+        ],
+        action,
+      },
+    ];
+    await resolve(routes, { path: '/a/b' });
+    expect(action.calledTwice).to.be.true;
+    expect(action.args[0][0]).to.have.deep.property('params.one', 'a');
+    expect(action.args[0][0]).to.have.deep.property('params.two', 'b');
+    expect(action.args[1][0]).to.have.deep.property('params.one', 'a');
+    expect(action.args[1][0]).to.have.deep.property('params.two', 'b');
+  });
+
   it('should support next() across multiple routes', async () => {
     const log = [];
     const routes = [
