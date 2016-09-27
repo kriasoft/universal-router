@@ -21,46 +21,60 @@ const pkg = require('../package.json');
 // The source files to be compiled by Rollup
 const files = [
   {
-    format: 'cjs', ext: '.js',
-    presets: ['stage-1'], plugins: [
-      'transform-es2015-destructuring',
-      'transform-es2015-function-name',
-      'transform-es2015-parameters',
+    format: 'cjs',
+    ext: '.js',
+    presets: ['es2016', 'es2017'],
+    plugins: [
       'external-helpers',
       'transform-runtime',
     ],
   },
   {
-    format: 'es6', ext: '.mjs',
-    presets: ['stage-1'], plugins: [
-      'transform-es2015-destructuring',
-      'transform-es2015-function-name',
-      'transform-es2015-parameters',
+    format: 'es',
+    ext: '.mjs',
+    presets: ['es2016', 'es2017'],
+    plugins: [
       'external-helpers',
       'transform-runtime',
     ],
   },
   {
-    format: 'cjs', ext: '.js', output: 'legacy',
-    presets: ['es2015-rollup', 'stage-1'], plugins: ['transform-runtime'],
+    format: 'cjs',
+    ext: '.js',
+    output: 'legacy',
+    presets: [['latest', { es2015: { modules: false } }]],
+    plugins: ['transform-runtime'],
   },
   {
-    format: 'cjs', ext: '.js', output: 'browser',
-    presets: ['es2015-rollup', 'stage-1'], plugins: ['transform-runtime'],
+    format: 'cjs',
+    ext: '.js',
+    output: 'browser',
+    presets: [['latest', { es2015: { modules: false } }]],
+    plugins: ['transform-runtime'],
   },
   {
-    format: 'es6', ext: '.mjs', output: 'browser',
-    presets: ['es2015-rollup', 'stage-1'], plugins: ['transform-runtime'],
+    format: 'es',
+    ext: '.mjs',
+    output: 'browser',
+    presets: [['latest', { es2015: { modules: false } }]],
+    plugins: ['transform-runtime'],
   },
   {
-    format: 'umd', ext: '.js',
-    presets: ['es2015-rollup', 'stage-1'], plugins: ['transform-runtime'],
-    output: pkg.name, moduleName: 'UniversalRouter',
+    format: 'umd',
+    ext: '.js',
+    presets: [['latest', { es2015: { modules: false } }]],
+    plugins: ['transform-runtime'],
+    output: pkg.name,
+    moduleName: 'UniversalRouter',
   },
   {
-    format: 'umd', ext: '.min.js',
-    presets: ['es2015-rollup', 'stage-1'], plugins: ['transform-runtime'],
-    output: pkg.name, moduleName: 'UniversalRouter', minify: true,
+    format: 'umd',
+    ext: '.min.js',
+    presets: [['latest', { es2015: { modules: false } }]],
+    plugins: ['transform-runtime'],
+    output: pkg.name,
+    moduleName: 'UniversalRouter',
+    minify: true,
   },
 ];
 

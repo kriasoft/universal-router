@@ -47,7 +47,7 @@ function matchPathBase(end, routePath, urlPath) {
   const params = Object.create(null);
   const path = m[0];
 
-  for (let i = 1; i < m.length; i++) {
+  for (let i = 1; i < m.length; i += 1) {
     params[regexp.keys[i - 1].name] = m[i] !== undefined ? decodeParam(m[i]) : undefined;
   }
 

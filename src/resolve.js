@@ -46,7 +46,7 @@ async function resolve(routes, pathOrContext) {
   }
 
   context.next = next;
-  context.end = data => { result = data; done = true; };
+  context.end = (data) => { result = data; done = true; };
 
   while (!done) {
     result = await next();
