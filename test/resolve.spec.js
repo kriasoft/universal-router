@@ -93,17 +93,22 @@ describe('resolve(routes, { path, ...context })', () => {
     const routes = [
       {
         path: '/test',
+        children: [
+          { path: '/', action() { log.push(2); } },
+        ],
         async action({ next }) {
           log.push(1);
           await next();
-          log.push(3);
+          log.push(5);
         },
       },
-      { path: '/test', action: () => log.push(2) },
+      { path: '/:id', action() { log.push(3); } },
+      { path: '/test', action() { return log.push(4); } },
+      { path: '/*', action() { log.push(6); } },
     ];
 
     await resolve(routes, '/test');
-    expect(log).to.be.deep.equal([1, 2, 3]);
+    expect(log).to.be.deep.equal([1, 2, 3, 4, 5]);
   });
 
   it('should support parametrized routes 1', async () => {
