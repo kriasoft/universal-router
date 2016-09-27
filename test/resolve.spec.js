@@ -217,24 +217,4 @@ describe('resolve(routes, { path, ...context })', () => {
     }
   });
 
-  it('should redirect to an error page if it exists', async () => {
-    const error = new Error('test error');
-    const action = sinon.spy(() => 'b');
-    const routes = [
-      {
-        path: '/a',
-        action() { throw error; },
-      },
-      {
-        path: '/error',
-        action,
-      },
-    ];
-
-    const result = await resolve(routes, '/a');
-    expect(result).to.be.equal('b');
-    expect(action.args[0][0]).to.have.property('error', error);
-    expect(action.args[0][0]).to.have.deep.property('error.status', 500);
-  });
-
 });
