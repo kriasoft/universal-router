@@ -102,7 +102,6 @@ describe('resolve(routes, { path, ...context })', () => {
     await resolve(routes, { path: '/a/b' });
     expect(action.calledTwice).to.be.true;
     expect(action.args[0][0]).to.have.deep.property('params.one', 'a');
-    expect(action.args[0][0]).to.have.deep.property('params.two', 'b');
     expect(action.args[1][0]).to.have.deep.property('params.one', 'a');
     expect(action.args[1][0]).to.have.deep.property('params.two', 'b');
   });

@@ -9,11 +9,11 @@
 
 import { matchPath, matchBasePath } from './matchPath';
 
-function* matchRoute(route, baseUrl, path) {
+function* matchRoute(route, baseUrl, path, parentParams) {
   let match;
 
   if (!route.children) {
-    match = matchPath(route.path, path);
+    match = matchPath(route.path, path, parentParams);
 
     if (match) {
       yield {
@@ -27,7 +27,7 @@ function* matchRoute(route, baseUrl, path) {
   }
 
   if (route.children) {
-    match = matchBasePath(route.path, path);
+    match = matchBasePath(route.path, path, parentParams);
     if (match) {
       yield {
         route,
@@ -42,7 +42,8 @@ function* matchRoute(route, baseUrl, path) {
         yield* matchRoute(
           childRoute,
           baseUrl + (match.path === '/' ? '' : match.path),
-          newPath.startsWith('/') ? newPath : `/${newPath}`
+          newPath.startsWith('/') ? newPath : `/${newPath}`,
+          match.params
         );
       }
     }
