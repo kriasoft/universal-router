@@ -13,10 +13,10 @@ import { resolve } from '../src/main';
 
 describe('resolve(routes, { path, ...context })', () => {
 
-  it('should return [undefined] if a route wasn\'t not found', async () => {
+  it('should return null if a route wasn\'t not found', async () => {
     const routes = [];
     const result = await resolve(routes, '/');
-    expect(result).to.be.undefined;
+    expect(result).to.be.null;
   });
 
   it('should execute the matching route\'s action method and return its result', async () => {
@@ -30,20 +30,23 @@ describe('resolve(routes, { path, ...context })', () => {
     expect(result).to.be.equal('b');
   });
 
-  it('should find the first route whose action method !== [undefined]', async () => {
+  it('should find the first route whose action method !== undefined or null', async () => {
     const action1 = sinon.spy(() => undefined);
-    const action2 = sinon.spy(() => 'b');
-    const action3 = sinon.spy(() => 'b');
+    const action2 = sinon.spy(() => null);
+    const action3 = sinon.spy(() => 'c');
+    const action4 = sinon.spy(() => 'd');
     const routes = [
       { path: '/a', action: action1 },
       { path: '/a', action: action2 },
-      { path: '/a', action: action2 },
+      { path: '/a', action: action3 },
+      { path: '/a', action: action4 },
     ];
     const result = await resolve(routes, '/a');
-    expect(result).to.be.equal('b');
+    expect(result).to.be.equal('c');
     expect(action1.calledOnce).to.be.true;
-    expect(action1.calledOnce).to.be.true;
-    expect(action3.called).to.be.false;
+    expect(action2.calledOnce).to.be.true;
+    expect(action3.calledOnce).to.be.true;
+    expect(action4.called).to.be.false;
   });
 
   it('should be able to pass context variables to action methods', async () => {
