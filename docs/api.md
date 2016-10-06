@@ -8,7 +8,7 @@ title: API ∙ Universal Router
 ### `resolve(routes, { path, ...context })` ⇒ `any`
 
 Traverses the list of routes in the order they are defined until it finds the first route that
-matches provided URL path string and whose action method returns anything other than `undefined`.
+matches provided URL path string and whose action method returns anything other than `null` or `undefined`.
 
 ```js
 import { resolve } from 'universal-router';

@@ -17,7 +17,7 @@ $ npm install universal-router --save
 
 This module contains a `resolve` function that responsible for traversing the list of routes, until it
 finds the first route matching the provided URL path string and whose action method returns anything
-other than `undefined`. Each route is just a plain JavaScript object having `path`, `action`, and
+other than `null` or `undefined`. Each route is just a plain JavaScript object having `path`, `action`, and
 `children` (optional) properties.
  
 ```js
