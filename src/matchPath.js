@@ -28,7 +28,7 @@ function decodeParam(val) {
   }
 }
 
-function matchPathBase(end, routePath, urlPath, parentParams) {
+function matchPathBase(end, routePath, urlPath) {
   const key = `${routePath}|${end}`;
   let regexp = cache.get(key);
 
@@ -45,10 +45,6 @@ function matchPathBase(end, routePath, urlPath, parentParams) {
   }
 
   const params = Object.create(null);
-  if (parentParams) {
-    Object.assign(params, parentParams);
-  }
-
   const path = m[0];
 
   for (let i = 1; i < m.length; i += 1) {
