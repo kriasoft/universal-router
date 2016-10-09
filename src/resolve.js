@@ -50,15 +50,7 @@ async function resolve(routes, pathOrContext) {
   context.next = next;
   context.end = (data) => { result = data; done = true; return data; };
 
-  result = await next();
-
-  if ((result === null || result === undefined) && errorRoute) {
-    context.error = new Error('Not found');
-    context.error.status = 404;
-    return await errorRoute.action(context, {});
-  }
-
-  return result;
+  return await next();
 }
 
 export default resolve;
