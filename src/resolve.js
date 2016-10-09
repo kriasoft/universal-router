@@ -14,7 +14,7 @@ async function resolve(routes, pathOrContext) {
     ? { path: pathOrContext }
     : pathOrContext;
   const root = Array.isArray(routes) ? { path: '/', children: routes } : routes;
-  let result;
+  let result = null;
   let value;
   let done = false;
 
@@ -42,7 +42,7 @@ async function resolve(routes, pathOrContext) {
       }
     }
 
-    return undefined;
+    return null;
   }
 
   context.next = next;
@@ -51,12 +51,12 @@ async function resolve(routes, pathOrContext) {
   while (!done) {
     result = await next();
 
-    if (result !== undefined) {
+    if (result !== null && result !== undefined) {
       break;
     }
   }
 
-  if (result === undefined && errorRoute) {
+  if ((result === null || result === undefined) && errorRoute) {
     context.error = new Error('Not found');
     context.error.status = 404;
     return await errorRoute.action(context, {});

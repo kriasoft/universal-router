@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 - Add `context.redirect(path)` method to be used from inside route actions (PLANNED)
 
+### [v1.3.0] - [unreleased]
+
+- Handle `null` same way as `undefined`
+- Return `null` instead of `undefined` to signal no match. (BREAKING CHANGE)
+
 ### [v1.2.2] - 2016-05-31
 
 - Update UMD build to include missing dependencies ([#33](https://github.com/kriasoft/universal-router/pull/33))
