@@ -12,19 +12,14 @@ import toRegExp from 'path-to-regexp';
 const cache = new Map();
 
 function decodeParam(val) {
-  if (typeof val !== 'string' || val.length === 0) {
+  if (val === undefined || val === '') {
     return val;
   }
 
   try {
     return decodeURIComponent(val);
   } catch (err) {
-    if (err instanceof URIError) {
-      err.message = `Failed to decode param '${val}'`;
-      err.status = 400;
-    }
-
-    throw err;
+    return val;
   }
 }
 
@@ -48,7 +43,7 @@ function matchPathBase(end, routePath, urlPath) {
   const path = m[0];
 
   for (let i = 1; i < m.length; i += 1) {
-    params[regexp.keys[i - 1].name] = m[i] !== undefined ? decodeParam(m[i]) : undefined;
+    params[regexp.keys[i - 1].name] = decodeParam(m[i]);
   }
 
   return { path: path === '' ? '/' : path, keys: regexp.keys.slice(), params };
