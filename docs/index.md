@@ -42,7 +42,7 @@ const routes = [
   },
 ];
 
-resolve(routes, '/about').then(html => {
+resolve(routes, '/posts').then(html => {
   document.body.innerHTML = html;
 });
 ```

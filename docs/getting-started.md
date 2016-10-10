@@ -30,7 +30,7 @@ const routes = [
 
 resolve(routes, { path: '/one' }).then(result => {
   document.body.innerHTML = result || <h1>Not Found</h1>;
-  // renders: <h1>Post #123</h1>
+  // renders: <h1>Page One</h1>
 });
 ```
 
@@ -42,15 +42,12 @@ import ReactDOM from 'react-dom';
 import { resolve } from 'universal-router';
 
 const routes = [
-  { path: '/one', action: ({ render }) => render(<h1>Page One</h1>) },
-  { path: '/two', action: ({ render }) => render(<h1>Page Two</h1>) }
+  { path: '/one', action: () => <h1>Page One</h1> },
+  { path: '/two', action: () => <h1>Page Two</h1> }
 ];
 
-function render(component) {
-  return Promise(resolve => {
-    ReactDOM.render(component, document.body, resolve);
-  });
-}
-
-resolve(routes, { path: '/one', render });
+resolve(routes, { path: '/one' }).then(component => {
+  ReactDOM.render(component, document.body);
+  // renders: <h1>Page One</h1>
+});
 ```
