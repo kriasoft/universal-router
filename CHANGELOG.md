@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-### [Unreleased][unreleased]
+### [v2.0.0] - [unreleased]
 
-- Add `context.redirect(path)` method to be used from inside route actions (PLANNED)
-
-### [v1.3.0] - [unreleased]
-
-- Handle `null` same way as `undefined`
-- Return `null` instead of `undefined` to signal no match. (BREAKING CHANGE)
+- Do not throw an error for malformed URI params (#54)
+- Handle `null` the same way as `undefined` (#51)
+- Return `null` instead of `undefined` to signal no match (#51)
+- Support `context.next()` across multiple routes (#49)
+- Sequential execution of asynchronous routes (#49)
+- Drop support of node.js v5 and below (#47)
+- Allow routes to return the result of `context.end()` (#39)
 
 ### [v1.2.2] - 2016-05-31
 
