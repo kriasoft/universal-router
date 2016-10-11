@@ -4,13 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ### [v2.0.0] - [unreleased]
 
-- Do not throw an error for malformed URI params (#54)
-- Handle `null` the same way as `undefined` (#51)
-- Return `null` instead of `undefined` to signal no match (#51)
-- Support `context.next()` across multiple routes (#49)
-- Sequential execution of asynchronous routes (#49)
-- Drop support of node.js v5 and below (#47)
-- Allow routes to return the result of `context.end()` (#39)
+- Do not throw an error for malformed URI params ([#54](https://github.com/kriasoft/universal-router/pull/54))
+- Handle `null` the same way as `undefined` ([#51](https://github.com/kriasoft/universal-router/pull/51))
+- Return `null` instead of `undefined` to signal no match ([#51](https://github.com/kriasoft/universal-router/pull/51))
+- Support `context.next()` across multiple routes ([#49](https://github.com/kriasoft/universal-router/pull/49))
+- Sequential execution of asynchronous routes ([#49](https://github.com/kriasoft/universal-router/pull/49))
+- Drop support of node.js v5 and below ([#47](https://github.com/kriasoft/universal-router/pull/47))
+- Allow routes to return the result of `context.end()` ([#39](https://github.com/kriasoft/universal-router/pull/39))
 
 ### [v1.2.2] - 2016-05-31
 
@@ -60,12 +60,12 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/react-starter-kit/compare/v1.2.2...HEAD
-[v1.2.2]: https://github.com/kriasoft/react-starter-kit/compare/v1.2.1...v1.2.2
-[v1.2.1]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.4...v1.2.1
-[v1.1.0-beta.4]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.3...v1.1.0-beta.4
-[v1.1.0-beta.3]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.2...v1.1.0-beta.3
-[v1.1.0-beta.2]: https://github.com/kriasoft/react-starter-kit/compare/v1.1.0-beta.1...v1.1.0-beta.2
-[v1.1.0-beta.1]: https://github.com/kriasoft/react-starter-kit/compare/v1.0.0-beta.1...v1.1.0-beta.1
-[v1.0.0-beta.1]: https://github.com/kriasoft/react-starter-kit/compare/v0.0.7...v1.0.0-beta.1
-[v0.0.7]: https://github.com/kriasoft/react-starter-kit/compare/v0.0.6...v0.0.7
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v1.2.2...HEAD
+[v1.2.2]: https://github.com/kriasoft/universal-router/compare/v1.2.1...v1.2.2
+[v1.2.1]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.4...v1.2.1
+[v1.1.0-beta.4]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.3...v1.1.0-beta.4
+[v1.1.0-beta.3]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.2...v1.1.0-beta.3
+[v1.1.0-beta.2]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.1...v1.1.0-beta.2
+[v1.1.0-beta.1]: https://github.com/kriasoft/universal-router/compare/v1.0.0-beta.1...v1.1.0-beta.1
+[v1.0.0-beta.1]: https://github.com/kriasoft/universal-router/compare/v0.0.7...v1.0.0-beta.1
+[v0.0.7]: https://github.com/kriasoft/universal-router/compare/v0.0.6...v0.0.7
