@@ -2,7 +2,7 @@
 title: Getting Started ∙ Universal Router
 ---
 
-## Getting Started
+# Getting Started
 
 This router is built around a middleware approach used in Express and Koa, so if you're already
 familiar with any of these frameworks, learning Universal Router should be a breeze. The code
@@ -34,7 +34,8 @@ resolve(routes, { path: '/one' }).then(result => {
 });
 ```
 
-### Use with React
+
+## Use with React
 
 ```js
 import React from 'react';
