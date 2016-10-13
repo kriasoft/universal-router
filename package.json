@@ -1,13 +1,14 @@
 {
   "private": true,
   "name": "universal-router",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "Isomorphic router for JavaScript web applications",
   "homepage": "https://www.kriasoft.com/universal-router/",
   "repository": "kriasoft/universal-router",
   "author": "Kriasoft <support@kriasoft.com> (https://www.kriasoft.com)",
   "contributors": [
-    "Konstantin Tarkus <hello@tarkus.me> (https://tarkus.me)"
+    "Konstantin Tarkus <hello@tarkus.me> (https://tarkus.me)",
+    "Vladimir Kutepov <frenzzy.man@gmail.com>"
   ],
   "license": "MIT",
   "keywords": [

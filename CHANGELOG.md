@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ### [v2.0.0] - [unreleased]
 
+- Remove obsolete `match` alias for `resolve` function ([#59](https://github.com/kriasoft/universal-router/pull/59))
 - Do not throw an error for malformed URI params ([#54](https://github.com/kriasoft/universal-router/pull/54))
 - Handle `null` the same way as `undefined` ([#51](https://github.com/kriasoft/universal-router/pull/51))
 - Return `null` instead of `undefined` to signal no match ([#51](https://github.com/kriasoft/universal-router/pull/51))

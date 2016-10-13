@@ -9,5 +9,5 @@
 
 import resolve from './resolve';
 
-export { resolve, resolve as match /* alias */ };
-export default { resolve, match: resolve /* alias */ };
+export { resolve };
+export default { resolve };
