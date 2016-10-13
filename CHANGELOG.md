@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ### [v2.0.0] - [unreleased]
 
+- Remove obsolete `context.end()` method ([#60](https://github.com/kriasoft/universal-router/pull/60))
 - Remove obsolete `match` alias for `resolve` function ([#59](https://github.com/kriasoft/universal-router/pull/59))
 - Do not throw an error for malformed URI params ([#54](https://github.com/kriasoft/universal-router/pull/54))
 - Handle `null` the same way as `undefined` ([#51](https://github.com/kriasoft/universal-router/pull/51))
@@ -11,7 +12,6 @@ All notable changes to this project will be documented in this file.
 - Support `context.next()` across multiple routes ([#49](https://github.com/kriasoft/universal-router/pull/49))
 - Sequential execution of asynchronous routes ([#49](https://github.com/kriasoft/universal-router/pull/49))
 - Drop support of node.js v5 and below ([#47](https://github.com/kriasoft/universal-router/pull/47))
-- Allow routes to return the result of `context.end()` ([#39](https://github.com/kriasoft/universal-router/pull/39))
 
 ### [v1.2.2] - 2016-05-31
 
