@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ### [v2.0.0] - [unreleased]
 
+- Throws an error if no route found ([#62](https://github.com/kriasoft/universal-router/pull/62))
 - Remove obsolete `context.end()` method ([#60](https://github.com/kriasoft/universal-router/pull/60))
 - Remove obsolete `match` alias for `resolve` function ([#59](https://github.com/kriasoft/universal-router/pull/59))
 - Do not throw an error for malformed URI params ([#54](https://github.com/kriasoft/universal-router/pull/54))

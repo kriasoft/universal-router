@@ -28,6 +28,7 @@ function* matchRoute(route, baseUrl, path, parentParams) {
 
   if (route.children) {
     match = matchBasePath(route.path, path, parentParams);
+
     if (match) {
       yield {
         route,
