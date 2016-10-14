@@ -48,7 +48,6 @@ async function resolve(routes, pathOrContext) {
   }
 
   context.next = next;
-  context.end = (data) => { result = data; done = true; return data; };
 
   return await next();
 }
