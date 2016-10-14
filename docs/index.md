@@ -2,13 +2,13 @@
 title: Universal Router ∙ Isomorphic routing solution for JavaScript applications
 ---
 
-## Universal Router
+# Universal Router
 
 A simple middleware-style router that can be used in both client-side (e.g. React, Vue.js) and
 server-side applications (e.g. Node.js/Express, Koa).
 
 
-### Why use Universal Router?
+## Why use Universal Router?
 
 * It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/resolve.js)
   with minimum dependencies (just `path-to-regexp` and `babel-runtime`)
@@ -16,7 +16,7 @@ server-side applications (e.g. Node.js/Express, Koa).
 * It uses the same middleware approach used in Express and Koa, making it easy to learn
 
 
-### How does it look like?
+## How does it look like?
 
 ```js
 import { resolve } from 'universal-router';
@@ -54,13 +54,13 @@ import { resolve } from 'universal-router/legacy';
 ````
 
 
-### Learn more
+## Learn more
 
 * [Getting Started](./getting-started.md)
 * [Universal Router API](./api.md)
 
 
-### Backers
+## Backers
 
 ♥ Universal Router? Help us keep it alive by [donating funds](https://www.patreon.com/tarkus) to cover project expenses!
 
