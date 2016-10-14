@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Return `null` instead of `undefined` to signal no match ([#51](https://github.com/kriasoft/universal-router/pull/51))
 - Support `context.next()` across multiple routes ([#49](https://github.com/kriasoft/universal-router/pull/49))
 - Sequential execution of asynchronous routes ([#49](https://github.com/kriasoft/universal-router/pull/49))
+- Remove errors handler from core ([#48](https://github.com/kriasoft/universal-router/pull/48))
 - Drop support of node.js v5 and below ([#47](https://github.com/kriasoft/universal-router/pull/47))
 
 ### [v1.2.2] - 2016-05-31

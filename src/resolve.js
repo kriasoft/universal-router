@@ -18,7 +18,6 @@ async function resolve(routes, pathOrContext) {
   let value;
   let done = false;
 
-  const errorRoute = root.children && root.children.find(x => x.path === '/error');
   const match = matchRoute(root, '', context.path);
 
   async function next() {
@@ -30,18 +29,7 @@ async function resolve(routes, pathOrContext) {
 
     if (value.route.action) {
       const newContext = Object.assign({}, context, value);
-
-      if (errorRoute) {
-        try {
-          result = await value.route.action(newContext, newContext.params);
-        } catch (err) {
-          err.status = err.status || 500;
-          newContext.error = err;
-          result = await errorRoute.action(newContext, newContext.params);
-        }
-      } else {
-        result = await value.route.action(newContext, newContext.params);
-      }
+      result = await value.route.action(newContext, newContext.params);
     }
 
     return await next();
