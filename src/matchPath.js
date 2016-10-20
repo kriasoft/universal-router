@@ -39,12 +39,11 @@ function matchPathBase(end, routePath, urlPath, parentParams) {
     return null;
   }
 
+  const path = m[0];
   const params = Object.create(null);
   if (parentParams) {
     Object.assign(params, parentParams);
   }
-
-  const path = m[0];
 
   for (let i = 1; i < m.length; i += 1) {
     params[regexp.keys[i - 1].name] = decodeParam(m[i]);
