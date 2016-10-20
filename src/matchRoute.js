@@ -38,10 +38,10 @@ function* matchRoute(route, baseUrl, path, parentParams) {
         params: match.params,
       };
 
-      for (const childRoute of route.children) {
+      for (let i = 0; i < route.children.length; i += 1) {
         const newPath = path.substr(match.path.length);
         yield* matchRoute(
-          childRoute,
+          route.children[i],
           baseUrl + (match.path === '/' ? '' : match.path),
           newPath.startsWith('/') ? newPath : `/${newPath}`,
           match.params
