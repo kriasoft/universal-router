@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-### [v2.0.0] - [unreleased]
+### [v2.0.0] - 2016-10-20
 
 - Preserve `context.params` values from the parent route ([#57](https://github.com/kriasoft/universal-router/pull/57))
 - Throws an error if no route found ([#62](https://github.com/kriasoft/universal-router/pull/62))
@@ -64,7 +64,7 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/universal-router/compare/v1.2.2...HEAD
+[v2.0.0]: https://github.com/kriasoft/universal-router/compare/v1.2.2...v2.0.0
 [v1.2.2]: https://github.com/kriasoft/universal-router/compare/v1.2.1...v1.2.2
 [v1.2.1]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.4...v1.2.1
 [v1.1.0-beta.4]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.3...v1.1.0-beta.4
