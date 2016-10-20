@@ -37,7 +37,15 @@ async function resolve(routes, pathOrContext) {
 
   context.next = next;
 
-  return await next();
+  await next();
+
+  if (result === null || result === undefined) {
+    const error = new Error('Page not found');
+    error.status = error.statusCode = 404;
+    throw error;
+  }
+
+  return result;
 }
 
 export default resolve;

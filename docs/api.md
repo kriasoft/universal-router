@@ -29,11 +29,11 @@ resolve(routes, { path: '/one' })
   // => Page One
 ```
 
-..where `action` is just a regular function that may, or may not, return any arbitrary data
+Where `action` is just a regular function that may, or may not, return any arbitrary data
 — a string, a React component, anything!
 
 
-### Nested Routes
+## Nested Routes
 
 Each route may have an optional `children: [ ... ]` property containing the list of child routes:
 
@@ -67,7 +67,7 @@ resolve(routes, { path: '/admin/users/john' })
 ```
 
 
-### URL Parameters
+## URL Parameters
 
 **Named route parameters** are captured and added to `context.params`.
 
@@ -104,7 +104,7 @@ and works the same way as the routing solutions in many popular JavaScript frame
 Also check out online [router tester](http://forbeslindesay.github.io/express-route-tester/).
 
 
-### Context
+## Context
 
 In addition to a URL path string, any arbitrary data can be passed to the router's `resolve()` method,
 that becomes available inside action methods.
@@ -125,7 +125,7 @@ resolve(routes, { path: '/hello', user: 'admin' })
 ```
 
 
-### Async Routes
+## Async Routes
 
 The router works great with asynchronous functions out of the box!
 
