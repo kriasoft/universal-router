@@ -100,8 +100,7 @@ describe('resolve(routes, { path, ...context })', () => {
     ];
     const result = await resolve(routes, { path: '/a/b' });
     expect(action.calledOnce).to.be.true;
-    expect(action.args[0][0]).to.have.deep.property('params.one', 'a');
-    expect(action.args[0][0]).to.have.deep.property('params.two', 'b');
+    expect(action.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a', two: 'b' });
     expect(result).to.be.true;
   });
 
@@ -153,6 +152,48 @@ describe('resolve(routes, { path, ...context })', () => {
     expect(action1.args[1][0]).to.have.property('params').that.deep.equals({ one: 'b' });
     expect(action2.calledOnce).to.be.true;
     expect(action2.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a', two: 'b' });
+    expect(result).to.be.true;
+  });
+
+  it('should not collect parameters from previous routes', async () => {
+    const action1 = sinon.spy(() => undefined);
+    const action2 = sinon.spy(() => null);
+    const action3 = sinon.spy(() => true);
+    const routes = [
+      {
+        path: '/:one',
+        action: action1,
+        children: [
+          {
+            path: '/:two',
+            action: action1,
+          },
+        ],
+      },
+      {
+        path: '/:three',
+        action: action2,
+        children: [
+          {
+            path: '/:four',
+            action: action2,
+          },
+          {
+            path: '/:five',
+            action: action3,
+          },
+        ],
+      },
+    ];
+    const result = await resolve(routes, { path: '/a/b' });
+    expect(action1.calledTwice).to.be.true;
+    expect(action1.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a' });
+    expect(action1.args[1][0]).to.have.property('params').that.deep.equals({ one: 'a', two: 'b' });
+    expect(action2.calledTwice).to.be.true;
+    expect(action2.args[0][0]).to.have.property('params').that.deep.equals({ three: 'a' });
+    expect(action2.args[1][0]).to.have.property('params').that.deep.equals({ three: 'a', four: 'b' });
+    expect(action3.calledOnce).to.be.true;
+    expect(action3.args[0][0]).to.have.property('params').that.deep.equals({ three: 'a', five: 'b' });
     expect(result).to.be.true;
   });
 
