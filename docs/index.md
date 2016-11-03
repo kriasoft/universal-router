@@ -36,7 +36,7 @@ const routes = [
       },
       {
         path: '/:id',
-        action: (context) => `<h1>Post #${context.params.id}`
+        action: (context) => `<h1>Post #${context.params.id}</h1>`
       }
     ]
   },

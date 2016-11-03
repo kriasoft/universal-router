@@ -335,4 +335,22 @@ describe('resolve(routes, { path, ...context })', () => {
     expect(err).to.be.equal(error);
   });
 
+  it('should support common action handler for declarative routes', async () => {
+    const handler = sinon.spy(context => context.route.component || null);
+    const action = sinon.spy();
+    const routes = {
+      path: '/a',
+      action,
+      children: [
+        { path: '/:b', component: null, action },
+        { path: '/c', component: 'c', action },
+        { path: '/d', component: 'd', action },
+      ],
+    };
+    const result = await resolve(routes, '/a/c', handler);
+    expect(handler.calledThrice).to.be.true;
+    expect(action.called).to.be.false;
+    expect(result).to.be.equal('c');
+  });
+
 });

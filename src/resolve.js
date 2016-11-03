@@ -9,7 +9,14 @@
 
 import matchRoute from './matchRoute';
 
-async function resolve(routes, pathOrContext) {
+function handleRoute(context, params) {
+  if (typeof context.route.action === 'function') {
+    return context.route.action(context, params);
+  }
+  return null;
+}
+
+async function resolve(routes, pathOrContext, action = handleRoute) {
   const context = typeof pathOrContext === 'string' || pathOrContext instanceof String
     ? { path: pathOrContext }
     : pathOrContext;
@@ -27,10 +34,8 @@ async function resolve(routes, pathOrContext) {
       return result;
     }
 
-    if (value.route.action) {
-      const newContext = Object.assign({}, context, value);
-      result = await value.route.action(newContext, newContext.params);
-    }
+    const newContext = Object.assign({}, context, value);
+    result = await action(newContext, newContext.params);
 
     return await next();
   }
