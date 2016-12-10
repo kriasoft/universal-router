@@ -7,6 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import match from './match';
-export match from './match';
-export default { match };
+import resolve from './resolve';
+
+export { resolve };
+export default { resolve };

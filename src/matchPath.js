@@ -12,23 +12,18 @@ import toRegExp from 'path-to-regexp';
 const cache = new Map();
 
 function decodeParam(val) {
-  if (!(typeof val === 'string' || val.length === 0)) {
+  if (val === undefined || val === '') {
     return val;
   }
 
   try {
     return decodeURIComponent(val);
   } catch (err) {
-    if (err instanceof URIError) {
-      err.message = `Failed to decode param '${val}'`;
-      err.status = 400;
-    }
-
-    throw err;
+    return val;
   }
 }
 
-function _matchPath(end, routePath, urlPath) {
+function matchPathBase(end, routePath, urlPath, parentParams) {
   const key = `${routePath}|${end}`;
   let regexp = cache.get(key);
 
@@ -44,15 +39,18 @@ function _matchPath(end, routePath, urlPath) {
     return null;
   }
 
-  const params = Object.create(null);
   const path = m[0];
+  const params = Object.create(null);
+  if (parentParams) {
+    Object.assign(params, parentParams);
+  }
 
-  for (let i = 1; i < m.length; i++) {
-    params[regexp.keys[i - 1].name] = m[i] !== undefined ? decodeParam(m[i]) : undefined;
+  for (let i = 1; i < m.length; i += 1) {
+    params[regexp.keys[i - 1].name] = decodeParam(m[i]);
   }
 
   return { path: path === '' ? '/' : path, keys: regexp.keys.slice(), params };
 }
 
-export const matchPath = _matchPath.bind(undefined, true);
-export const matchBasePath = _matchPath.bind(undefined, false);
+export const matchPath = matchPathBase.bind(undefined, true);
+export const matchBasePath = matchPathBase.bind(undefined, false);

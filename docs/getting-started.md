@@ -2,7 +2,7 @@
 title: Getting Started ∙ Universal Router
 ---
 
-## Getting Started
+# Getting Started
 
 This router is built around a middleware approach used in Express and Koa, so if you're already
 familiar with any of these frameworks, learning Universal Router should be a breeze. The code
@@ -15,42 +15,42 @@ by running:
 $ npm install universal-router --save
 ```
 
-This module contains a `match` function that responsible for traversing the list of routes, until it
+This module contains a `resolve` function that responsible for traversing the list of routes, until it
 finds the first route matching the provided URL path string and whose action method returns anything
-other than `undefined`. Each route is just a plain JavaScript object having `path`, `action`, and
+other than `null` or `undefined`. Each route is just a plain JavaScript object having `path`, `action`, and
 `children` (optional) properties.
  
 ```js
-import { match } from 'universal-router';
+import { resolve } from 'universal-router';
 
 const routes = [
   { path: '/one', action: () => '<h1>Page One</h1>' },
-  { path: '/two', action: () => '<h1>Page Two</h1>' }
+  { path: '/two', action: () => '<h1>Page Two</h1>' },
+  { path: '*', action: () => '<h1>Not Found</h1>' }
 ];
 
-match(routes, { path: '/one' }).then(result => {
-  document.body.innerHTML = result || <h1>Not Found</h1>;
-  // renders: <h1>Post #123</h1>
+resolve(routes, { path: '/one' }).then(result => {
+  document.body.innerHTML = result;
+  // renders: <h1>Page One</h1>
 });
 ```
 
-### Use with React
+
+## Use with React
 
 ```js
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { match } from 'universal-router';
+import { resolve } from 'universal-router';
 
 const routes = [
-  { path: '/one', action: ({ render }) => render(<h1>Page One</h1>) },
-  { path: '/two', action: ({ render }) => render(<h1>Page Two</h1>) }
+  { path: '/one', action: () => <h1>Page One</h1> },
+  { path: '/two', action: () => <h1>Page Two</h1> },
+  { path: '*', action: () => <h1>Not Found</h1> }
 ];
 
-function render(component) {
-  return Promise(resolve => {
-    ReactDOM.render(component, document.body, resolve);
-  });
-}
-
-match(routes, { path: '/one', render });
+resolve(routes, { path: '/one' }).then(component => {
+  ReactDOM.render(component, document.body);
+  // renders: <h1>Page One</h1>
+});
 ```

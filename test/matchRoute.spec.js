@@ -28,6 +28,19 @@ describe('matchRoute(route, baseUrl, path)', () => {
     expect(result).to.have.lengthOf(0);
   });
 
+  it('should match 0 routes (3)', () => {
+    const route = {
+      path: '/a',
+      children: [
+        {
+          path: '/b',
+        },
+      ],
+    };
+    const result = Array.from(matchRoute(route, '', '/b'));
+    expect(result).to.have.lengthOf(0);
+  });
+
   it('should match 1 route (1)', () => {
     const route = {
       path: '/',

@@ -2,24 +2,26 @@
 title: Universal Router ∙ Isomorphic routing solution for JavaScript applications
 ---
 
-## Universal Router
+# Universal Router
 
 A simple middleware-style router that can be used in both client-side (e.g. React, Vue.js) and
 server-side applications (e.g. Node.js/Express, Koa).
 
-### Why use Universal Router?
 
-* It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/match.js)
+## Why use Universal Router?
+
+* It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/resolve.js)
   with minimum dependencies (just `path-to-regexp` and `babel-runtime`)
 * It can be used with any JavaScript framework such as React, Vue.js etc
 * It uses the same middleware approach used in Express and Koa, making it easy to learn
 
-### How does it look like?
+
+## How does it look like?
 
 ```js
-import { match } from 'universal-router';
+import { resolve } from 'universal-router';
 
-const rotues = [
+const routes = [
   {
     path: '/',
     action: () => `<h1>Home</h1>`
@@ -40,17 +42,25 @@ const rotues = [
   },
 ];
 
-match(routes, '/about').then(html => {
+resolve(routes, '/posts').then(html => {
   document.body.innerHTML = html;
 });
 ```
 
-### Learn more
+**Note**: If you're using the router with Node v5 and below, import it as follows:
 
-* [Getting Started](./getting-started)
-* [Universal Router API](./api)
+```js
+import { resolve } from 'universal-router/legacy';
+````
 
-### Backers
+
+## Learn more
+
+* [Getting Started](./getting-started.md)
+* [Universal Router API](./api.md)
+
+
+## Backers
 
 ♥ Universal Router? Help us keep it alive by [donating funds](https://www.patreon.com/tarkus) to cover project expenses!
 
