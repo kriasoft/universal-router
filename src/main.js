@@ -8,6 +8,7 @@
  */
 
 import resolve from './resolve';
+import href from './href';
 
-export { resolve };
-export default { resolve };
+export { resolve, href };
+export default { resolve, href };
