@@ -33,6 +33,61 @@ Where `action` is just a regular function that may, or may not, return any arbit
 — a string, a React component, anything!
 
 
+## `href(routes, routeName[, routeParams])` ⇒ `String|null`
+
+Traverses the list of routes in the order they are defined until it finds the first route that
+matches provided name string.
+
+```js
+// ./routes/index.js
+import { href } from 'universal-router';
+
+const routes = {
+  path: '/',
+  children: [
+    { name: 'one', path: '/one', action: () => {} },
+    { path: '/two', action: () => {}, children: [
+      { path: '/three', action: () => {} }
+      { name: 'four', path: '/four/:four', action: () => {} }
+    ] }
+  ]
+};
+
+export default routes;
+
+console.log(href(routes, 'one'));
+// => /one
+
+console.log(href(routes, 'three'));
+// => null
+
+console.log(href(routes, 'four', { four: 'a' }));
+// => /two/four/a
+```
+
+```js
+// ./components/Link/index.js
+import React from 'react';
+import { href } from 'universal-router';
+import routes from '../../routes';
+
+const Link = ({ routeName, routeParams, children }) => (
+  <a href={href(routes, routeName, routeParams)}>{children}</a>
+);
+
+// ./components/Navigation.js
+import React from 'react';
+import Link from './components/Link';
+
+const Navigation = () => (
+  <nav>
+    <Link routeName={'one'}>One</Link>
+    <Link routeName={'four'} routeParams={{ four: 'a' }}>Four</Link>
+  </nav>
+);
+```
+
+
 ## Nested Routes
 
 Each route may have an optional `children: [ ... ]` property containing the list of child routes:
