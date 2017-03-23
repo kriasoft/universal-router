@@ -84,7 +84,7 @@ let promise = Promise.resolve();
 promise = promise.then(() => del(['build/*']));
 
 // Compile source code into a distributable format with Babel
-for (const file of files) {
+files.forEach((file) => {
   promise = promise.then(() => rollup.rollup({
     entry: 'src/main.js',
     external: file.format === 'umd' ? [] : Object.keys(pkg.dependencies),
@@ -106,7 +106,7 @@ for (const file of files) {
     exports: 'named',
     moduleName: file.moduleName,
   })));
-}
+});
 
 // Copy package.json and LICENSE.txt
 promise = promise.then(() => {
