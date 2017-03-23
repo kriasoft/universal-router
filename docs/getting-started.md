@@ -54,3 +54,26 @@ resolve(routes, { path: '/one' }).then(component => {
   // renders: <h1>Page One</h1>
 });
 ```
+
+## Use href method to generate a path by name
+
+```js
+import React from 'react';
+import { href } from 'universal-router';
+
+const routes = [
+  { name: 'one', path: '/one', action: () => <h1>Page One</h1> },
+  { name: 'two', path: '/two/:two', action: () => <h1>Page Two</h1> },
+  { path: '*', action: () => <h1>Not Found</h1> }
+];
+
+const LinkOne = () => (
+  <a href={href(routes, 'one')}>LinkOne</a>
+);
+// <a href:"/one">LinkOne<a/>
+
+const LinkTwo = () => (
+  <a href={href(routes, 'two', { two: 'a' })}>LinkTwo</a>
+);
+// <a href:"/two/a">LinkTwo<a/>
+```
