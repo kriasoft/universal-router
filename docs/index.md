@@ -56,8 +56,8 @@ import { resolve } from 'universal-router/legacy';
 
 ## Learn more
 
-* [Getting Started](./getting-started.md)
-* [Universal Router API](./api.md)
+* [Getting Started](./getting-started)
+* [Universal Router API](./api)
 
 
 ## Backers
