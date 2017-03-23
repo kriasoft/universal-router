@@ -10,7 +10,6 @@
         "peerDependencies": false
       }
     ],
-    "no-unused-expressions": "off",
-    "padded-blocks": "off"
+    "no-unused-expressions": "off"
   }
 }

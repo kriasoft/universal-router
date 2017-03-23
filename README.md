@@ -14,9 +14,9 @@ Visit **[Quickstart Guide](http://slides.com/koistya/universal-router)** (slides
 
 ### Documentation
 
-* [Overview](docs/index.md)
-* [Getting Started](docs/getting-started.md)
-* [Universal Router API](docs/api.md)
+* [Overview](https://github.com/kriasoft/universal-router/blob/master/docs/README.md)
+* [Getting Started](https://github.com/kriasoft/universal-router/blob/master/docs/getting-started.md)
+* [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)
 
 
 ### Learn ES6
@@ -54,7 +54,7 @@ Visit **[Quickstart Guide](http://slides.com/koistya/universal-router)** (slides
 
 ### License
 
-Copyright © 2015-2016 Konstantin Tarkus, Kriasoft LLC. This source code is licensed under the MIT
+Copyright © 2015-present Konstantin Tarkus, Kriasoft LLC. This source code is licensed under the MIT
 license found in the [LICENSE.txt](https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt)
 file. The documentation to the project is licensed under the [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
 license.
