@@ -9,6 +9,10 @@
 
 import { matchPath, matchBasePath } from './matchPath';
 
+function startsWith(targetString, searchString, position = 0) {
+  return targetString.substr(position, searchString.length) === searchString;
+}
+
 function* matchRoute(route, baseUrl, path, parentParams) {
   let match;
 
@@ -43,7 +47,7 @@ function* matchRoute(route, baseUrl, path, parentParams) {
         yield* matchRoute(
           route.children[i],
           baseUrl + (match.path === '/' ? '' : match.path),
-          newPath.startsWith('/') ? newPath : `/${newPath}`,
+          startsWith(newPath, '/') ? newPath : `/${newPath}`,
           match.params
         );
       }
