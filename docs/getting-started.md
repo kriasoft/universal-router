@@ -15,13 +15,13 @@ by running:
 $ npm install universal-router --save
 ```
 
-This module contains a `resolve` function that responsible for traversing the list of routes, until it
+This module contains a `router.resolve` method that responsible for traversing the list of routes, until it
 finds the first route matching the provided URL path string and whose action method returns anything
 other than `null` or `undefined`. Each route is just a plain JavaScript object having `path`, `action`, and
 `children` (optional) properties.
  
 ```js
-import { resolve } from 'universal-router';
+import Router from 'universal-router';
 
 const routes = [
   { path: '/one', action: () => '<h1>Page One</h1>' },
@@ -29,7 +29,9 @@ const routes = [
   { path: '*', action: () => '<h1>Not Found</h1>' }
 ];
 
-resolve(routes, { path: '/one' }).then(result => {
+const router = new Router(routes);
+
+router.resolve({ path: '/one' }).then(result => {
   document.body.innerHTML = result;
   // renders: <h1>Page One</h1>
 });
@@ -41,15 +43,17 @@ resolve(routes, { path: '/one' }).then(result => {
 ```js
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { resolve } from 'universal-router';
+import Router from 'universal-router';
 
 const routes = [
-  { path: '/one', action: () => <h1>Page One</h1> },
-  { path: '/two', action: () => <h1>Page Two</h1> },
-  { path: '*', action: () => <h1>Not Found</h1> }
+  { path: '/one', action: () => '<h1>Page One</h1>' },
+  { path: '/two', action: () => '<h1>Page Two</h1>' },
+  { path: '*', action: () => '<h1>Not Found</h1>' }
 ];
 
-resolve(routes, { path: '/one' }).then(component => {
+const router = new Router(routes);
+
+router.resolve({ path: '/one' }).then(component => {
   ReactDOM.render(component, document.body);
   // renders: <h1>Page One</h1>
 });

@@ -10,8 +10,8 @@ server-side applications (e.g. Node.js/Express, Koa).
 
 ## Why use Universal Router?
 
-* It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/resolve.js)
-  with minimum dependencies (just `path-to-regexp` and `babel-runtime`)
+* It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/Router.js)
+  with only single [path-to-regexp](https://github.com/pillarjs/path-to-regexp) dependency
 * It can be used with any JavaScript framework such as React, Vue.js etc
 * It uses the same middleware approach used in Express and Koa, making it easy to learn
 
@@ -19,7 +19,7 @@ server-side applications (e.g. Node.js/Express, Koa).
 ## How does it look like?
 
 ```js
-import { resolve } from 'universal-router';
+import Router from 'universal-router';
 
 const routes = [
   {
@@ -36,13 +36,15 @@ const routes = [
       },
       {
         path: '/:id',
-        action: (context) => `<h1>Post #${context.params.id}`
+        action: (context) => `<h1>Post #${context.params.id}</h1>`
       }
     ]
   },
 ];
 
-resolve(routes, '/posts').then(html => {
+const router = new Router(routes);
+
+router.resolve('/posts').then(html => {
   document.body.innerHTML = html;
 });
 ```
@@ -50,7 +52,7 @@ resolve(routes, '/posts').then(html => {
 **Note**: If you're using the router with Node v5 and below, import it as follows:
 
 ```js
-import { resolve } from 'universal-router/legacy';
+import Router from 'universal-router/legacy';
 ````
 
 

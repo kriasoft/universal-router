@@ -6,7 +6,6 @@
         "optionalDependencies": false,
         "peerDependencies": false
       }
-    ],
-    "strict": "off"
+    ]
   }
 }

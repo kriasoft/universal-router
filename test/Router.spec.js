@@ -1,7 +1,7 @@
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
  *
- * Copyright © 2015-2016 Konstantin Tarkus, Kriasoft LLC. All rights reserved.
+ * Copyright © 2015-present Konstantin Tarkus, Kriasoft LLC. All rights reserved.
  *
  * This source code is licensed under the Apache 2.0 license found in the
  * LICENSE.txt file in the root directory of this source tree.
@@ -9,28 +9,56 @@
 
 import sinon from 'sinon';
 import { expect } from 'chai';
-import { resolve } from '../src/main';
+import Router from '../src/Router';
 
-describe('resolve(routes, { path, ...context })', () => {
+describe('new Router(routes, options)', () => {
+  it('should throw an error in case of invalid routes', async () => {
+    expect(() => new Router()).to.throw(TypeError, /Invalid routes/);
+    expect(() => new Router(12)).to.throw(TypeError, /Invalid routes/);
+    expect(() => new Router(null)).to.throw(TypeError, /Invalid routes/);
+  });
 
+  it('should support custom resolve option for declarative routes', async () => {
+    const resolveRoute = sinon.spy(context => context.route.component || null);
+    const action = sinon.spy();
+    const router = new Router({
+      path: '/a',
+      action,
+      children: [
+        { path: '/:b', component: null, action },
+        { path: '/c', component: 'c', action },
+        { path: '/d', component: 'd', action },
+      ],
+    }, { resolveRoute });
+    const result = await router.resolve('/a/c');
+    expect(resolveRoute.calledThrice).to.be.true;
+    expect(action.called).to.be.false;
+    expect(result).to.be.equal('c');
+  });
+});
+
+describe('router.resolve({ path, ...context })', () => {
   it('should throw an error if no route found', async () => {
-    const routes = [];
+    const router = new Router([]);
     let err;
     try {
-      await resolve(routes, '/');
+      await router.resolve('/');
     } catch (e) {
       err = e;
     }
     expect(err).to.be.an('error');
     expect(err.message).to.be.equal('Page not found');
+    expect(err.context.url).to.be.equal('/');
+    expect(err.context.path).to.be.equal('/');
+    expect(err.context.router).to.be.equal(router);
     expect(err.status).to.be.equal(404);
     expect(err.statusCode).to.be.equal(404);
   });
 
   it('should execute the matching route\'s action method and return its result', async () => {
     const action = sinon.spy(() => 'b');
-    const route = { path: '/a', action };
-    const result = await resolve(route, '/a');
+    const router = new Router({ path: '/a', action });
+    const result = await router.resolve('/a');
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.property('path', '/a');
     expect(result).to.be.equal('b');
@@ -41,13 +69,13 @@ describe('resolve(routes, { path, ...context })', () => {
     const action2 = sinon.spy(() => null);
     const action3 = sinon.spy(() => 'c');
     const action4 = sinon.spy(() => 'd');
-    const routes = [
+    const router = new Router([
       { path: '/a', action: action1 },
       { path: '/a', action: action2 },
       { path: '/a', action: action3 },
       { path: '/a', action: action4 },
-    ];
-    const result = await resolve(routes, '/a');
+    ]);
+    const result = await router.resolve('/a');
     expect(result).to.be.equal('c');
     expect(action1.calledOnce).to.be.true;
     expect(action2.calledOnce).to.be.true;
@@ -57,10 +85,10 @@ describe('resolve(routes, { path, ...context })', () => {
 
   it('should be able to pass context variables to action methods', async () => {
     const action = sinon.spy(() => true);
-    const routes = [
+    const router = new Router([
       { path: '/a', action },
-    ];
-    const result = await resolve(routes, { path: '/a', test: 'b' });
+    ]);
+    const result = await router.resolve({ path: '/a', test: 'b' });
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.property('path', '/a');
     expect(action.args[0][0]).to.have.property('test', 'b');
@@ -69,12 +97,12 @@ describe('resolve(routes, { path, ...context })', () => {
 
   it('should not call action methods of routes that don\'t match the URL path', async () => {
     const action = sinon.spy();
-    const routes = [
+    const router = new Router([
       { path: '/a', action },
-    ];
+    ]);
     let err;
     try {
-      await resolve(routes, '/b');
+      await router.resolve('/b');
     } catch (e) {
       err = e;
     }
@@ -86,19 +114,19 @@ describe('resolve(routes, { path, ...context })', () => {
   });
 
   it('should asynchronous route actions', async () => {
-    const routes = [
+    const router = new Router([
       { path: '/a', action: async () => 'b' },
-    ];
-    const result = await resolve(routes, '/a');
+    ]);
+    const result = await router.resolve('/a');
     expect(result).to.be.equal('b');
   });
 
   it('URL parameters are captured and added to context.params', async () => {
     const action = sinon.spy(() => true);
-    const routes = [
+    const router = new Router([
       { path: '/:one/:two', action },
-    ];
-    const result = await resolve(routes, { path: '/a/b' });
+    ]);
+    const result = await router.resolve({ path: '/a/b' });
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a', two: 'b' });
     expect(result).to.be.true;
@@ -107,7 +135,7 @@ describe('resolve(routes, { path, ...context })', () => {
   it('should provide all URL parameters to each route', async () => {
     const action1 = sinon.spy();
     const action2 = sinon.spy(() => true);
-    const routes = [
+    const router = new Router([
       {
         path: '/:one',
         action: action1,
@@ -118,8 +146,8 @@ describe('resolve(routes, { path, ...context })', () => {
           },
         ],
       },
-    ];
-    const result = await resolve(routes, { path: '/a/b' });
+    ]);
+    const result = await router.resolve({ path: '/a/b' });
     expect(action1.calledOnce).to.be.true;
     expect(action1.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a' });
     expect(action2.calledOnce).to.be.true;
@@ -130,7 +158,7 @@ describe('resolve(routes, { path, ...context })', () => {
   it('should override URL parameters with same name in child route', async () => {
     const action1 = sinon.spy();
     const action2 = sinon.spy(() => true);
-    const routes = [
+    const router = new Router([
       {
         path: '/:one',
         action: action1,
@@ -145,8 +173,8 @@ describe('resolve(routes, { path, ...context })', () => {
           },
         ],
       },
-    ];
-    const result = await resolve(routes, { path: '/a/b' });
+    ]);
+    const result = await router.resolve({ path: '/a/b' });
     expect(action1.calledTwice).to.be.true;
     expect(action1.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a' });
     expect(action1.args[1][0]).to.have.property('params').that.deep.equals({ one: 'b' });
@@ -159,7 +187,7 @@ describe('resolve(routes, { path, ...context })', () => {
     const action1 = sinon.spy(() => undefined);
     const action2 = sinon.spy(() => null);
     const action3 = sinon.spy(() => true);
-    const routes = [
+    const router = new Router([
       {
         path: '/:one',
         action: action1,
@@ -184,8 +212,8 @@ describe('resolve(routes, { path, ...context })', () => {
           },
         ],
       },
-    ];
-    const result = await resolve(routes, { path: '/a/b' });
+    ]);
+    const result = await router.resolve({ path: '/a/b' });
     expect(action1.calledTwice).to.be.true;
     expect(action1.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a' });
     expect(action1.args[1][0]).to.have.property('params').that.deep.equals({ one: 'a', two: 'b' });
@@ -199,7 +227,7 @@ describe('resolve(routes, { path, ...context })', () => {
 
   it('should support next() across multiple routes', async () => {
     const log = [];
-    const routes = [
+    const router = new Router([
       {
         path: '/test',
         children: [
@@ -208,26 +236,73 @@ describe('resolve(routes, { path, ...context })', () => {
         async action({ next }) {
           log.push(1);
           const result = await next();
-          log.push(5);
+          log.push(3);
           return result;
         },
       },
-      { path: '/:id', action() { log.push(3); } },
-      { path: '/test', action() { return log.push(4); } },
+      { path: '/:id', action() { log.push(4); } },
+      { path: '/test', action() { return log.push(5); } },
       { path: '/*', action() { log.push(6); } },
-    ];
+    ]);
 
-    const result = await resolve(routes, '/test');
+    const result = await router.resolve('/test');
     expect(log).to.be.deep.equal([1, 2, 3, 4, 5]);
-    expect(result).to.be.equal(4);
+    expect(result).to.be.equal(5);
+  });
+
+  it('should support next(true) across multiple routes', async () => {
+    const log = [];
+    const router = new Router({
+      path: '/',
+      action({ next }) {
+        log.push(1);
+        return next().then(() => log.push(8));
+      },
+      children: [
+        {
+          path: '/a/b/c',
+          action({ next }) {
+            log.push(2);
+            return next(true).then(() => log.push(7));
+          },
+        },
+        {
+          path: '/a',
+          action() {
+            log.push(3);
+          },
+          children: [
+            {
+              path: '/b',
+              action({ next }) {
+                log.push(4);
+                return next().then(() => log.push(6));
+              },
+              children: [
+                {
+                  path: '/c',
+                  action() {
+                    log.push(5);
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const result = await router.resolve('/a/b/c');
+    expect(log).to.be.deep.equal([1, 2, 3, 4, 5, 6, 7, 8]);
+    expect(result).to.be.equal(8);
   });
 
   it('should support parametrized routes 1', async () => {
     const action = sinon.spy(() => true);
-    const routes = [
+    const router = new Router([
       { path: '/path/:a/other/:b', action },
-    ];
-    const result = await resolve(routes, '/path/1/other/2');
+    ]);
+    const result = await router.resolve('/path/1/other/2');
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.deep.property('params.a', '1');
     expect(action.args[0][0]).to.have.deep.property('params.b', '2');
@@ -239,7 +314,7 @@ describe('resolve(routes, { path, ...context })', () => {
   it('should support child routes (1)', async () => {
     const action1 = sinon.spy();
     const action2 = sinon.spy(() => true);
-    const routes = [
+    const router = new Router([
       {
         path: '/',
         action: action1,
@@ -250,9 +325,9 @@ describe('resolve(routes, { path, ...context })', () => {
           },
         ],
       },
-    ];
+    ]);
 
-    const result = await resolve(routes, '/a');
+    const result = await router.resolve('/a');
     expect(action1.calledOnce).to.be.true;
     expect(action1.args[0][0]).to.have.property('path', '/');
     expect(action2.calledOnce).to.be.true;
@@ -263,7 +338,7 @@ describe('resolve(routes, { path, ...context })', () => {
   it('should support child routes (2)', async () => {
     const action1 = sinon.spy();
     const action2 = sinon.spy(() => true);
-    const routes = [
+    const router = new Router([
       {
         path: '/a',
         action: action1,
@@ -274,9 +349,9 @@ describe('resolve(routes, { path, ...context })', () => {
           },
         ],
       },
-    ];
+    ]);
 
-    const result = await resolve(routes, '/a/b');
+    const result = await router.resolve('/a/b');
     expect(action1.calledOnce).to.be.true;
     expect(action1.args[0][0]).to.have.property('path', '/a');
     expect(action2.calledOnce).to.be.true;
@@ -288,7 +363,7 @@ describe('resolve(routes, { path, ...context })', () => {
     const action1 = sinon.spy(() => undefined);
     const action2 = sinon.spy(() => null);
     const action3 = sinon.spy(() => true);
-    const routes = [
+    const router = new Router([
       {
         path: '/a',
         action: action1,
@@ -303,9 +378,9 @@ describe('resolve(routes, { path, ...context })', () => {
         path: '/a/b',
         action: action3,
       },
-    ];
+    ]);
 
-    const result = await resolve(routes, '/a/b');
+    const result = await router.resolve('/a/b');
     expect(action1.calledOnce).to.be.true;
     expect(action1.args[0][0]).to.have.property('baseUrl', '');
     expect(action1.args[0][0]).to.have.property('path', '/a');
@@ -320,19 +395,57 @@ describe('resolve(routes, { path, ...context })', () => {
 
   it('should re-throw an error', async () => {
     const error = new Error('test error');
-    const routes = [
+    const router = new Router([
       {
         path: '/a',
         action() { throw error; },
       },
-    ];
+    ]);
     let err;
     try {
-      await resolve(routes, '/a');
+      await router.resolve('/a');
     } catch (e) {
       err = e;
     }
     expect(err).to.be.equal(error);
   });
 
+  it('should respect baseUrl', async () => {
+    const action = sinon.spy(() => 17);
+    const routes = {
+      path: '/a',
+      children: [
+        {
+          path: '/b',
+          children: [
+            { path: '/c', action },
+          ],
+        },
+      ],
+    };
+    const router = new Router(routes, { baseUrl: '/base' });
+    const result = await router.resolve('/base/a/b/c');
+    expect(action.calledOnce).to.be.true;
+    expect(action.args[0][0]).to.have.property('url', '/base/a/b/c');
+    expect(action.args[0][0]).to.have.property('path', '/c');
+    expect(action.args[0][0]).to.have.property('baseUrl', '/base/a/b');
+    expect(action.args[0][0]).to.have.property('route', routes.children[0].children[0]);
+    expect(action.args[0][0]).to.have.property('router', router);
+    expect(result).to.be.equal(17);
+
+    let err;
+    try {
+      await router.resolve('/a/b/c');
+    } catch (e) {
+      err = e;
+    }
+    expect(action.calledOnce).to.be.true;
+    expect(err).to.be.an('error');
+    expect(err.message).to.be.equal('Page not found');
+    expect(err.context.url).to.be.equal('/a/b/c');
+    expect(err.context.path).to.be.equal('/a/b/c');
+    expect(err.context.router).to.be.equal(router);
+    expect(err.status).to.be.equal(404);
+    expect(err.statusCode).to.be.equal(404);
+  });
 });
