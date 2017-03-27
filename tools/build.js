@@ -7,6 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
+const cp = require('child_process');
 const fs = require('fs');
 const del = require('del');
 const rollup = require('rollup');
@@ -73,7 +74,7 @@ files = files.concat(files.map(file => Object.assign({}, file, {
 let promise = Promise.resolve();
 
 // Clean up the output directory
-promise = promise.then(() => del(['build/*']));
+promise = promise.then(() => del(['dist/*']));
 
 // Compile source code into a distributable format with Babel
 files.forEach((file) => {
@@ -89,14 +90,15 @@ files.forEach((file) => {
         presets: file.presets,
         plugins: file.plugins,
       }),
-      ...file.minify ? [uglify()] : [],
+      ...file.minify ? [uglify({ output: { comments: '/^!/' } })] : [],
     ],
   }).then(bundle => bundle.write({
-    dest: `build/${file.output}${file.ext}`,
+    dest: `dist/${file.output}${file.ext}`,
     format: file.format,
-    sourceMap: !file.minify,
+    sourceMap: true,
     exports: 'default',
     moduleName: file.moduleName,
+    banner: '/*! Universal Router | MIT License | https://www.kriasoft.com/universal-router/ */\n',
   })));
 });
 
@@ -106,16 +108,18 @@ promise = promise.then(() => {
   delete pkg.scripts;
   delete pkg.eslintConfig;
   delete pkg.babel;
+  delete pkg.preCommit;
   const pkg2 = Object.assign({}, pkg, {
     name: 'generateUrls',
     description: 'Universal Router extension for URLs generation',
   });
   delete pkg.private;
   delete pkg2.dependencies;
-  fs.writeFileSync('build/package.json', JSON.stringify(pkg, null, '  '), 'utf-8');
-  fs.writeFileSync('build/generateUrls/package.json', JSON.stringify(pkg2, null, '  '), 'utf-8');
-  fs.writeFileSync('build/README.md', fs.readFileSync('README.md', 'utf-8'), 'utf-8');
-  fs.writeFileSync('build/LICENSE.txt', fs.readFileSync('LICENSE.txt', 'utf-8'), 'utf-8');
+  fs.writeFileSync('dist/package.json', JSON.stringify(pkg, null, '  '), 'utf-8');
+  fs.writeFileSync('dist/generateUrls/package.json', JSON.stringify(pkg2, null, '  '), 'utf-8');
+  fs.writeFileSync('dist/README.md', fs.readFileSync('README.md', 'utf-8'), 'utf-8');
+  fs.writeFileSync('dist/LICENSE.txt', fs.readFileSync('LICENSE.txt', 'utf-8'), 'utf-8');
+  cp.spawnSync('git', ['add', 'dist/universal-router*']);
 });
 
 promise.catch(err => console.error(err.stack)); // eslint-disable-line no-console
