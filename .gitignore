@@ -2,7 +2,8 @@
 # Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
 
 coverage
-build
+dist/*
+!dist/universal-router*
 docs/dist
 node_modules
 npm-debug.log
