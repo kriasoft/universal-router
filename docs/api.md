@@ -276,7 +276,8 @@ In most web applications it's much simpler to just use a string for hyperlinks.
 ```
 
 However for some types of web applications it may be useful to generate URLs dynamically based on route name.
-That's why this feature is available as an extension `url(routeName, params) ⇒ String`.
+That's why this feature is available as an add-on with simple API `generateUrls(router, options) ⇒ Function`
+where returned function is used for generating urls `url(routeName, params) ⇒ String`.
 
 ```js
 import Router from 'universal-router';
@@ -287,8 +288,8 @@ const routes = {
   name: 'home',
   children: [
     {
-      path: '/hello/:username',
-      name: 'hello',
+      path: '/user/:username',
+      name: 'user',
     },
   ],
 };
@@ -296,15 +297,24 @@ const routes = {
 const router = new Router(routes, { baseUrl: '/base' });
 const url = generateUrls(router);
 
-url('home');                        // => '/base'
-url('hello', { username: 'john' }); // => '/base/hello/john'
+url('home');                          // => '/base'
+url('user', { username: 'john' });    // => '/base/user/john'
+```
+
+Use `pretty` option for prettier encoding of URI path segments.
+
+```js
+const prettyUrl = generateUrls(router, { pretty: true });
+
+url('user', { username: ':' });       // => '/base/user/%3A'
+prettyUrl('user', { username: ':' }); // => '/base/user/:'
 ```
 
 This approach also works fine for dynamically added routes at runtime.
 
 ```js
-routes.children.push({ path: '/world', name: 'world' });
+routes.children.push({ path: '/world', name: 'hello' });
 
-url('world');                       // => '/base/world'
+url('hello');                         // => '/base/world'
 ```
 

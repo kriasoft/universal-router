@@ -12,6 +12,14 @@ import Router from '../src/Router';
 import generateUrls from '../src/generateUrls';
 
 describe('generateUrls(router) => url(routeName, params)', () => {
+  it('should throw an error in case of invalid router', async () => {
+    expect(() => generateUrls()).to.throw(TypeError, /An instance of Router is expected/);
+    expect(() => generateUrls([])).to.throw(TypeError, /An instance of Router is expected/);
+    expect(() => generateUrls(123)).to.throw(TypeError, /An instance of Router is expected/);
+    expect(() => generateUrls(null)).to.throw(TypeError, /An instance of Router is expected/);
+    expect(() => generateUrls(Router)).to.throw(TypeError, /An instance of Router is expected/);
+  });
+
   it('should throw an error if no route found', async () => {
     const router = new Router({ path: '/a', name: 'a' });
     const url = generateUrls(router);
@@ -59,6 +67,8 @@ describe('generateUrls(router) => url(routeName, params)', () => {
               path: '/c/:y',
               name: 'c',
             },
+            { path: '/d' },
+            { path: '/e' },
           ],
         },
       ],
@@ -67,9 +77,11 @@ describe('generateUrls(router) => url(routeName, params)', () => {
     expect(url('a')).to.be.equal('/');
     expect(url('b', { x: 123 })).to.be.equal('/b/123');
     expect(url('c', { x: 'i', y: 'j' })).to.be.equal('/b/i/c/j');
+    expect(router.routesByName).to.have.all.keys('a', 'b', 'c');
 
     router.root.children.push({ path: '/new', name: 'new' });
     expect(url('new')).to.be.equal('/new');
+    expect(router.routesByName).to.have.all.keys('a', 'b', 'c', 'new');
   });
 
   it('should respect baseUrl', async () => {
@@ -111,5 +123,15 @@ describe('generateUrls(router) => url(routeName, params)', () => {
 
     router3.root.children.push({ path: '/new', name: 'new' });
     expect(url3('new')).to.be.equal('/base/new');
+  });
+
+  it('should support pretty urls', async () => {
+    const router = new Router({ path: '/user/:username', name: 'user' });
+
+    const url = generateUrls(router);
+    const prettyUrl = generateUrls(router, { pretty: true });
+
+    expect(url('user', { username: ':' })).to.be.equal('/user/%3A');
+    expect(prettyUrl('user', { username: ':' })).to.be.equal('/user/:');
   });
 });
