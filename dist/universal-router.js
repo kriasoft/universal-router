@@ -443,7 +443,7 @@ index.tokensToRegExp = tokensToRegExp_1;
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
  *
- * Copyright © 2015-present Konstantin Tarkus, Kriasoft LLC. All rights reserved.
+ * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
  *
  * This source code is licensed under the Apache 2.0 license found in the
  * LICENSE.txt file in the root directory of this source tree.
@@ -495,7 +495,7 @@ function matchPath(routePath, urlPath, end, parentParams) {
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
  *
- * Copyright © 2015-present Konstantin Tarkus, Kriasoft LLC. All rights reserved.
+ * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
  *
  * This source code is licensed under the Apache 2.0 license found in the
  * LICENSE.txt file in the root directory of this source tree.
@@ -556,7 +556,7 @@ function matchRoute(route, baseUrl, path, parentParams) {
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
  *
- * Copyright © 2015-present Konstantin Tarkus, Kriasoft LLC. All rights reserved.
+ * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
  *
  * This source code is licensed under the Apache 2.0 license found in the
  * LICENSE.txt file in the root directory of this source tree.
@@ -577,7 +577,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
  *
- * Copyright © 2015-present Konstantin Tarkus, Kriasoft LLC. All rights reserved.
+ * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
  *
  * This source code is licensed under the Apache 2.0 license found in the
  * LICENSE.txt file in the root directory of this source tree.
