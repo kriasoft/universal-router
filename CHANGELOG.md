@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased][unreleased]
 
 - Add source maps for minified builds ([#87](https://github.com/kriasoft/universal-router/pull/87))
-- Include UMD build to the git repository
+- Include UMD builds to the git repository
 
 ## [v3.0.0] - 2017-03-25
 
@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
   ```
   See [#83](https://github.com/kriasoft/universal-router/pull/83) for more info and examples
 - `context.next()` now iterates only child routes by default (BREAKING CHANGE)<br>
-  use `context.next(true)` to iterate through all remaining routes
+  use `context.next(true)` to iterate through the all remaining routes
 - Add support for URL Generation
   ```js
   import generateUrls from 'universal-router/generate-urls';

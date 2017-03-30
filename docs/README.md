@@ -14,6 +14,9 @@ server-side applications (e.g. Node.js/Express, Koa).
   with only single [path-to-regexp](https://github.com/pillarjs/path-to-regexp) dependency
 * It can be used with any JavaScript framework such as React, Vue.js etc
 * It uses the same middleware approach used in Express and Koa, making it easy to learn
+* Routes are plain javascript objects with which you can interact as you like
+* Support both [imperative](https://en.wikipedia.org/wiki/Imperative_programming) and
+  [declarative](https://en.wikipedia.org/wiki/Declarative_programming) routing style
 
 
 ## How does it look like?
@@ -58,13 +61,14 @@ import Router from 'universal-router/legacy';
 
 ## Learn more
 
-* [Getting Started](./getting-started.md)
-* [Universal Router API](./api.md)
+* [Getting Started](https://github.com/kriasoft/universal-router/blob/master/docs/getting-started.md)
+* [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)
 
 
 ## Backers
 
-♥ Universal Router? Help us keep it alive by [donating funds](https://www.patreon.com/tarkus) to cover project expenses!
+♥ Universal Router? Help us keep it alive by [donating funds](https://www.patreon.com/tarkus)
+to cover project expenses!
 
 <a href="https://github.com/koistya" target="_blank">
   <img src="https://github.com/koistya.png?size=64" width="64" height="64" alt="Konstantin Tarkus">

@@ -8,33 +8,31 @@ title: API ∙ Universal Router
 ## `const router = new Router(routes, options)`
 
 Creates an universal router instance which have a single
-[`router.resolve()`](##routerresolve-path-context---promiseany) method.
-`Router` constructor expects a plain javascript object for the first argument
-with any amount of params where only `path` is required or array of such objects.
-Second argument is optional or you can pass following:
+[`router.resolve()`](#routerresolve-path-context---promiseany) method.
+`Router` constructor expects a plain javascript object for the first `routes` argument
+with any amount of params where only `path` is required, or array of such objects.
+Second `options` argument is optional where you can pass the following:
 
-- `context` - The object with any data which you want to pass through to `resolveRoute` function.<br>
+- `context` - The object with any data which you want to pass to `resolveRoute` function.<br>
   See [Context](#context) section below for details.
-- `baseUrl` - The base URL of the app. Empty string `''` by default.<br>
+- `baseUrl` - The base URL of the app. By default is empty string `''`.<br>
   If all the URLs in your app are relative to some other "base" URL, use this option.
 - `resolveRoute` - The function for any custom route handling logic.<br>
   For example you can define this option to work with routes in declarative manner.<br>
-  By default the router calls `action` methods of matched route if any.
-
-Example:
+  By default the router calls the `action` function of matched route.
 
 ```js
 import Router from 'universal-router';
 
 const routes = {
-  path: '/',                      // string, required 
-  name: 'home',                   // unique string, optional
-  parent: null,                   // route object or null, optional (filled by router)
-  children: [],                   // array of route objects or null, optional 
-  action(context, params) {       // function, optional
+  path: '/',                // string, required 
+  name: 'home',             // unique string, optional
+  parent: null,             // route object or null, automatically filled by the router
+  children: [],             // array of route objects or null, optional 
+  action(context, params) { // function, optional
 
-    // method should return anything except `null` or `undefined` to be resolved by router
-    // otherwise router will throw an error if all matched routes returned nothing
+    // action method should return anything except `null` or `undefined` to be resolved by router
+    // otherwise router will throw `Page not found` error if all matched routes returned nothing
     return '<h1>Home Page</h1>';
   },
   // ...
@@ -58,7 +56,7 @@ const router = new Router(routes, options);
 ## `router.resolve({ path, ...context })` ⇒ `Promise<any>`
 
 Traverses the list of routes in the order they are defined until it finds the first route that
-matches provided URL path string and whose action method returns anything other than `null` or `undefined`.
+matches provided URL path string and whose `action` function returns anything other than `null` or `undefined`.
 
 ```js
 const router = new Router([
@@ -150,8 +148,8 @@ Also check out online [router tester](http://forbeslindesay.github.io/express-ro
 
 ## Context
 
-In addition to a URL path string, any arbitrary data can be passed to the router's `resolve()` method,
-that becomes available inside action methods.
+In addition to a URL path string, any arbitrary data can be passed to the `router.resolve()` method,
+that becomes available inside `action` functions.
 
 ```js
 const router = new Router({
@@ -166,29 +164,17 @@ router.resolve({ path: '/hello', user: 'admin' })
   // => Welcome, admin!
 ```
 
-Router supports `context` option in the constructor
+Router supports `context` option in the `Router` constructor
 to support for specify of custom context properties only once.
 
 ```js
-import { createStore } from 'redux';
-
-const route = {
-  path: '/hello',
-  action(context) {
-    const state = context.store.getState();
-    return `Welcome, ${state.user}!`;
-  },
-};
-
 const context = {
-  store: createStore({ user: 'admin' }),
+  store: {},
+  user: 'admin',
+  // ...
 };
 
 const router = new Router(route, { context });
-
-router.resolve({ path: '/hello' })
-  .then(result => console.log(result));
-  // => Welcome, admin!
 ```
 
 Router always adds following parameters to the `context` object
@@ -199,7 +185,7 @@ before passing it to the `resolveRoute` function:
 - `next` - Middleware style function which can continue resolving,
   see [Middlewares](#middlewares) section below for details.
 - `url` - URL which was transmitted to `router.resolve()`.
-- `baseUrl` - Base URL path relative to the current route.
+- `baseUrl` - Base URL path relative to the path of the current route.
 - `path` - Matched path.
 - `params` - Matched path params,
   see [URL Parameters](#url-parameters) section above for details.
@@ -274,7 +260,7 @@ router.resolve({ path: '/hello' });
 ```
 
 Remember that `context.next()` iterates only child routes,
-use `context.next(true)` to iterate through all remaining routes. 
+use `context.next(true)` to iterate through the all remaining routes. 
 
 
 ## URL Generation
@@ -289,7 +275,7 @@ In most web applications it's much simpler to just use a string for hyperlinks.
 // etc.
 ```
 
-However for some types of web applications it may be useful to generate URLs dynamically based on route names.
+However for some types of web applications it may be useful to generate URLs dynamically based on route name.
 That's why this feature is available as an extension `url(routeName, params) ⇒ String`.
 
 ```js
@@ -314,7 +300,7 @@ url('home');                        // => '/base'
 url('hello', { username: 'john' }); // => '/base/hello/john'
 ```
 
-This approach also works fine for dynamically added routes at runtime:
+This approach also works fine for dynamically added routes at runtime.
 
 ```js
 routes.children.push({ path: '/world', name: 'world' });
