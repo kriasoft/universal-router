@@ -82,9 +82,10 @@ to cover project expenses!
 
 ## License
 
-Copyright © 2015-present Kriasoft, LLC. This source code is licensed under the MIT license
-found in the [LICENSE.txt](https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt)
-file. The documentation to the project is licensed under the
+Copyright © 2015-present Kriasoft, LLC.
+This source code is licensed under the MIT license found in the
+[LICENSE.txt](https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt) file.
+The documentation to the project is licensed under the
 [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/) license.
 
 
