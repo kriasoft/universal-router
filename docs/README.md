@@ -14,9 +14,9 @@ server-side applications (e.g. Node.js/Express, Koa).
   with only single [path-to-regexp](https://github.com/pillarjs/path-to-regexp) dependency
 * It can be used with any JavaScript framework such as React, Vue.js etc
 * It uses the same middleware approach used in Express and Koa, making it easy to learn
-* Routes are plain javascript objects with which you can interact as you like
-* Support both [imperative](https://en.wikipedia.org/wiki/Imperative_programming) and
+* It supports both [imperative](https://en.wikipedia.org/wiki/Imperative_programming) and
   [declarative](https://en.wikipedia.org/wiki/Declarative_programming) routing style
+* Routes are plain javascript objects with which you can interact as you like
 
 
 ## How does it look like?

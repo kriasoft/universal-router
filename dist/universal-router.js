@@ -548,7 +548,7 @@ function matchRoute(route, baseUrl, path, parentParams) {
         }
       }
 
-      return { done: true, value: null };
+      return { done: true };
     }
   };
 }
