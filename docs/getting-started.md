@@ -37,6 +37,22 @@ router.resolve({ path: '/one' }).then(result => {
 });
 ```
 
+**Note**: If you're using the router with Node v5 and below, import it as follows:
+
+```js
+import Router from 'universal-router/legacy';
+```
+
+If you don't want to use npm to manage client packages, the `universal-router` npm package
+also provide single-file distributions, which are hosted on a [CDN](https://unpkg.com/):
+
+```html
+<script src="https://unpkg.com/universal-router/universal-router.js"></script>
+<script src="https://unpkg.com/universal-router/universal-router.min.js"></script>
+<script src="https://unpkg.com/universal-router/universal-router-generate-urls.js"></script>
+<script src="https://unpkg.com/universal-router/universal-router-generate-urls.min.js"></script>
+```
+
 
 ## Use with React
 

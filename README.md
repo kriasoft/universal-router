@@ -21,33 +21,85 @@ Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Git
 * [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)
 
 
-## How to Contribute
-
-Anyone and everyone is welcome to
-[contribute](https://github.com/kriasoft/universal-router/blob/master/CONTRIBUTING.md) to this project.
-The best way to start is by checking our [open issues](https://github.com/kriasoft/universal-router/issues),
-[submit a new issues](https://github.com/kriasoft/universal-router/issues/new?labels=bug) or
-[feature request](https://github.com/kriasoft/universal-router/issues/new?labels=enhancement),
-participate in discussions, upvote or downvote the issues you like or dislike, send [pull
-requests](https://github.com/kriasoft/universal-router/blob/master/CONTRIBUTING.md#pull-requests).
-
-
 ## Learn ES6
 
 :mortar_board: &nbsp; **[ES6 Training Course](https://es6.io/friend/konstantin)** by Wes Bos<br>
 :green_book: &nbsp; **[You Don't Know JS: ES6 & Beyond](http://amzn.to/2bFss85)** by Kyle Simpson (Dec, 2015)<br>
 
 
+## Sponsors
+
+Does your company use Universal Router in production? Please consider
+[sponsoring this project](https://opencollective.com/universal-router#sponsor).
+Your help will allow maintainers to dedicate more time and resources to its development and support.
+
+<a href="https://opencollective.com/universal-router/sponsor/0/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/sponsor/0/avatar.svg" height="64">
+</a>
+<a href="https://opencollective.com/universal-router/sponsor/1/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/sponsor/1/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/sponsor/2/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/sponsor/2/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/sponsor/3/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/sponsor/3/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/sponsor/4/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/sponsor/4/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/sponsor/5/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/sponsor/5/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/sponsor/6/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/sponsor/6/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/sponsor/7/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/sponsor/7/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/sponsor/8/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/sponsor/8/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/sponsor/9/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/sponsor/9/avatar.svg">
+</a>
+
+
 ## Backers
 
-♥ Universal Router? Help us keep it alive by [donating funds](https://www.patreon.com/tarkus)
-to cover project expenses!
+♥ Universal Router? [Become a backer](https://opencollective.com/universal-router#backer)
+to show your support and help us maintain and improve this open source project
+and get your image on our README with a link to your site.
 
-<a href="https://github.com/koistya" target="_blank">
-  <img src="https://github.com/koistya.png?size=64" width="64" height="64" alt="">
+<a href="https://opencollective.com/universal-router/backer/0/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/backer/0/avatar.svg" height="64">
 </a>
-<a href="https://www.patreon.com/tarkus" target="_blank">
-  <img src="https://opencollective.com/static/images/become_backer.svg" width="64" height="64" alt="">
+<a href="https://opencollective.com/universal-router/backer/1/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/backer/1/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/backer/2/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/backer/2/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/backer/3/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/backer/3/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/backer/4/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/backer/4/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/backer/5/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/backer/5/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/backer/6/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/backer/6/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/backer/7/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/backer/7/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/backer/8/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/backer/8/avatar.svg">
+</a>
+<a href="https://opencollective.com/universal-router/backer/9/website" target="_blank">
+  <img src="https://opencollective.com/universal-router/backer/9/avatar.svg">
 </a>
 
 
@@ -80,11 +132,22 @@ to cover project expenses!
   or [Skype](https://hatscripts.com/addskype?koistya) — Private consulting
 
 
+## Contributing
+
+Anyone and everyone is welcome to
+[contribute](https://github.com/kriasoft/universal-router/blob/master/CONTRIBUTING.md) to this project.
+The best way to start is by checking our [open issues](https://github.com/kriasoft/universal-router/issues),
+[submit a new issues](https://github.com/kriasoft/universal-router/issues/new?labels=bug) or
+[feature request](https://github.com/kriasoft/universal-router/issues/new?labels=enhancement),
+participate in discussions, upvote or downvote the issues you like or dislike, send [pull
+requests](https://github.com/kriasoft/universal-router/blob/master/CONTRIBUTING.md#pull-requests).
+
+
 ## License
 
-Copyright © 2015-present Kriasoft, LLC.
+Copyright © 2015-present Kriasoft, LLC.<br>
 This source code is licensed under the MIT license found in the
-[LICENSE.txt](https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt) file.
+[LICENSE.txt](https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt) file.<br>
 The documentation to the project is licensed under the
 [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/) license.
 

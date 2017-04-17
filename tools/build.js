@@ -103,7 +103,6 @@ files.forEach((file) => {
       babel({
         babelrc: false,
         exclude: 'node_modules/**',
-        runtimeHelpers: true,
         presets: file.presets,
         plugins: file.plugins,
       }),

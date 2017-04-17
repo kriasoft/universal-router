@@ -24,6 +24,11 @@ All notable changes to this project will be documented in this file.
   See [#83](https://github.com/kriasoft/universal-router/pull/83) for more info and examples
 - `context.next()` now iterates only child routes by default (BREAKING CHANGE)<br>
   use `context.next(true)` to iterate through the all remaining routes
+- Remove `babel-runtime` dependency to decrease library size (BREAKING CHANGE)<br>
+  Now you need to care about these polyfills yourself:
+  - [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+  - [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+  - [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
 - Add support for URL Generation
   ```js
   import generateUrls from 'universal-router/generate-urls';
@@ -34,16 +39,11 @@ All notable changes to this project will be documented in this file.
 - Add support for Declarative Routes, `new Router(routes, { resolveRoute: customResolveRouteFn })`
 - Add support for Base URL option, `new Router(routes, { baseUrl: '/base' })`
 - Add ability to specify custom context properties once, `new Router(routes, { context: { ... } })`
-- Remove `babel-runtime` dependency to decrease library size<br>
-  Now you need to care about these polyfills yourself:
-  - [Object.assign](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
-  - [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-  - [Map](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map)
 - Rewrite `matchRoute` function without usage of
-  [generators](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/function*)
+  [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*)
   to decrease amount of necessary polyfills
 - Remove usage of
-  [String.prototype.startsWith()](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith)
+  [String.prototype.startsWith()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith)
 - Add `context.url` with the original url passed to `resolve` method
 - Add `context` property to `Route not found` error
 
