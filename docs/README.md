@@ -100,8 +100,8 @@ Your help will allow maintainers to dedicate more time and resources to its deve
 ## Backers
 
 ♥ Universal Router? [Become a backer](https://opencollective.com/universal-router#backer)
-to show your support and help us maintain and improve this open source project
-and get your image on our README with a link to your site.
+to show your support and help us maintain and improve this open source project.
+Get your image on our README with a link to your site.
 
 <a href="https://opencollective.com/universal-router/backer/0/website" target="_blank">
   <img src="https://opencollective.com/universal-router/backer/0/avatar.svg" height="64">

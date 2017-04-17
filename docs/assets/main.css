@@ -122,6 +122,7 @@ textarea {
    ========================================================================== */
 
 body {
+  margin: 0;
   background-color: #f5fcff;
   font-size: 18px;
   font-family: 'Lato', sans-serif;
@@ -174,6 +175,11 @@ pre code {
   border-left: 4px solid #fe6f55;
   background: #f7f7ff;
   font-size: 16px;
+  white-space: pre-wrap;
+}
+
+a[target='_blank'] {
+  text-decoration: none;
 }
 
 /* ==========================================================================

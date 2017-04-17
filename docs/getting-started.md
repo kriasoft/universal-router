@@ -37,7 +37,7 @@ router.resolve({ path: '/one' }).then(result => {
 });
 ```
 
-**Note**: If you're using the router with Node v5 and below, import it as follows:
+If you're using the router with Node v5 and below, import it as follows:
 
 ```js
 import Router from 'universal-router/legacy';
@@ -52,6 +52,12 @@ also provide single-file distributions, which are hosted on a [CDN](https://unpk
 <script src="https://unpkg.com/universal-router/universal-router-generate-urls.js"></script>
 <script src="https://unpkg.com/universal-router/universal-router-generate-urls.min.js"></script>
 ```
+
+**Note**: You may need to include
+[Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map),
+[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and
+[Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+polyfills for compatibility with older browsers.
 
 
 ## Use with React

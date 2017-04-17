@@ -68,8 +68,8 @@ Your help will allow maintainers to dedicate more time and resources to its deve
 ## Backers
 
 ♥ Universal Router? [Become a backer](https://opencollective.com/universal-router#backer)
-to show your support and help us maintain and improve this open source project
-and get your image on our README with a link to your site.
+to show your support and help us maintain and improve this open source project.
+Get your image on our README with a link to your site.
 
 <a href="https://opencollective.com/universal-router/backer/0/website" target="_blank">
   <img src="https://opencollective.com/universal-router/backer/0/avatar.svg" height="64">
@@ -145,9 +145,9 @@ requests](https://github.com/kriasoft/universal-router/blob/master/CONTRIBUTING.
 
 ## License
 
-Copyright © 2015-present Kriasoft, LLC.<br>
+Copyright © 2015-present Kriasoft, LLC.
 This source code is licensed under the MIT license found in the
-[LICENSE.txt](https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt) file.<br>
+[LICENSE.txt](https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt) file.
 The documentation to the project is licensed under the
 [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/) license.
 
