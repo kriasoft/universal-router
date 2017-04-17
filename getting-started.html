@@ -56,7 +56,7 @@ router.resolve({ path: '/one' }).then(result =&gt; {
   // renders: &lt;h1&gt;Page One&lt;/h1&gt;
 });
 </code></pre>
-<p><strong>Note</strong>: If you're using the router with Node v5 and below, import it as follows:</p>
+<p>If you're using the router with Node v5 and below, import it as follows:</p>
 <pre><code class="language-js">import Router from 'universal-router/legacy';
 </code></pre>
 <p>If you don't want to use npm to manage client packages, the <code>universal-router</code> npm package
@@ -66,6 +66,11 @@ also provide single-file distributions, which are hosted on a <a href="https://u
 &lt;script src=&quot;https://unpkg.com/universal-router/universal-router-generate-urls.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;https://unpkg.com/universal-router/universal-router-generate-urls.min.js&quot;&gt;&lt;/script&gt;
 </code></pre>
+<p><strong>Note</strong>: You may need to include
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map">Map</a>,
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a> and
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign">Object.assign</a>
+polyfills for compatibility with older browsers.</p>
 <h2>Use with React</h2>
 <pre><code class="language-jsx">import React from 'react';
 import ReactDOM from 'react-dom';
