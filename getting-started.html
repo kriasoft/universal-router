@@ -6,16 +6,15 @@
     <title>Getting Started ∙ Universal Router</title>
     <meta name="description" content="Routing and navigation solution for React.js applications">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <base href="https://www.kriasoft.com/universal-router/">
-    <link rel="shortcut icon" href="/universal-router/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
-    <link rel="stylesheet" href="/universal-router/main.css">
+    <link rel="stylesheet" href="main.css">
   </head>
   <body>
   <div class="header">
   <div class="container">
-    <a class="header__logo" href="/universal-router/">
-      Universal <img class="header__logo-img" src="/universal-router/img/tour.svg" alt="Universal Router" /> Router
+    <a class="header__logo" href=".">
+      Universal <img class="header__logo-img" src="img/tour.svg" alt="Universal Router" /> Router
     </a>
     <span class="header_author">
       made with &nbsp;♥&nbsp; by&nbsp; <a href="https://twitter.com/koistya" rel="author" title="Konstantin Tarkus on Twitter">@koistya</a>
@@ -38,11 +37,11 @@ samples below assume that you're using ES2015 flavor of JavaScript via <a href="
 by running:</p>
 <pre><code class="language-sh">$ npm install universal-router --save
 </code></pre>
-<p>This module contains a <code>resolve</code> function that responsible for traversing the list of routes, until it
-finds the first route matching the provided URL path string and whose action method returns anything
-other than <code>null</code> or <code>undefined</code>. Each route is just a plain JavaScript object having <code>path</code>, <code>action</code>, and
-<code>children</code> (optional) properties.</p>
-<pre><code class="language-js">import { resolve } from 'universal-router';
+<p>This module contains a <code>Router</code> class with a single <code>router.resolve</code> method that responsible for traversing
+the list of routes, until it finds the first route matching the provided URL path string and whose action method
+returns anything other than <code>null</code> or <code>undefined</code>. Each route is just a plain JavaScript object having <code>path</code>,
+<code>action</code>, and <code>children</code> (optional) properties.</p>
+<pre><code class="language-js">import Router from 'universal-router';
 
 const routes = [
   { path: '/one', action: () =&gt; '&lt;h1&gt;Page One&lt;/h1&gt;' },
@@ -50,15 +49,27 @@ const routes = [
   { path: '*', action: () =&gt; '&lt;h1&gt;Not Found&lt;/h1&gt;' }
 ];
 
-resolve(routes, { path: '/one' }).then(result =&gt; {
+const router = new Router(routes);
+
+router.resolve({ path: '/one' }).then(result =&gt; {
   document.body.innerHTML = result;
   // renders: &lt;h1&gt;Page One&lt;/h1&gt;
 });
 </code></pre>
+<p><strong>Note</strong>: If you're using the router with Node v5 and below, import it as follows:</p>
+<pre><code class="language-js">import Router from 'universal-router/legacy';
+</code></pre>
+<p>If you don't want to use npm to manage client packages, the <code>universal-router</code> npm package
+also provide single-file distributions, which are hosted on a <a href="https://unpkg.com/">CDN</a>:</p>
+<pre><code class="language-html">&lt;script src=&quot;https://unpkg.com/universal-router/universal-router.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/universal-router/universal-router.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/universal-router/universal-router-generate-urls.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/universal-router/universal-router-generate-urls.min.js&quot;&gt;&lt;/script&gt;
+</code></pre>
 <h2>Use with React</h2>
-<pre><code class="language-js">import React from 'react';
+<pre><code class="language-jsx">import React from 'react';
 import ReactDOM from 'react-dom';
-import { resolve } from 'universal-router';
+import Router from 'universal-router';
 
 const routes = [
   { path: '/one', action: () =&gt; &lt;h1&gt;Page One&lt;/h1&gt; },
@@ -66,11 +77,17 @@ const routes = [
   { path: '*', action: () =&gt; &lt;h1&gt;Not Found&lt;/h1&gt; }
 ];
 
-resolve(routes, { path: '/one' }).then(component =&gt; {
+const router = new Router(routes);
+
+router.resolve({ path: '/one' }).then(component =&gt; {
   ReactDOM.render(component, document.body);
   // renders: &lt;h1&gt;Page One&lt;/h1&gt;
 });
 </code></pre>
+<h2>Learn more</h2>
+<ul>
+<li><a href="api">Universal Router API</a></li>
+</ul>
 
       
       <div id="disqus_thread"></div>
@@ -79,8 +96,8 @@ resolve(routes, { path: '/one' }).then(component =&gt; {
   </div>
   <div class="footer">
   <div class="container clearfix">
-    <p class="footer__left">Licensed under the MIT license</p>
-    <p class="footer__right">&copy; 2015-2016 <a href="https://www.kriasoft.com">Kriasoft</a></p>
+    <p class="footer__left">Licensed under the <a href="https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt">MIT license</a></p>
+    <p class="footer__right">&copy; 2015-<script>document.write(new Date().getFullYear())</script> <a href="https://www.kriasoft.com">Kriasoft</a></p>
   </div>
 </div>
 
