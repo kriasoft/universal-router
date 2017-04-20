@@ -452,10 +452,6 @@ index.tokensToRegExp = tokensToRegExp_1;
 var cache = new Map();
 
 function decodeParam(val) {
-  if (!val) {
-    return val;
-  }
-
   try {
     return decodeURIComponent(val);
   } catch (err) {
@@ -486,7 +482,7 @@ function matchPath(routePath, urlPath, end, parentParams) {
   }
 
   for (var i = 1; i < m.length; i += 1) {
-    params[regexp.keys[i - 1].name] = decodeParam(m[i]);
+    params[regexp.keys[i - 1].name] = m[i] && decodeParam(m[i]);
   }
 
   return { path: path === '' ? '/' : path, keys: regexp.keys.slice(), params: params };
@@ -583,6 +579,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * LICENSE.txt file in the root directory of this source tree.
  */
 
+function isChildRoute(parentRoute, childRoute) {
+  var route = childRoute;
+  while (route) {
+    route = route.parent;
+    if (route === parentRoute) {
+      return true;
+    }
+  }
+  return false;
+}
+
 var Router = function () {
   function Router(routes) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -606,12 +613,21 @@ var Router = function () {
       var context = Object.assign({}, this.context, typeof pathOrContext === 'string' ? { path: pathOrContext } : pathOrContext);
       var match = matchRoute(this.root, this.baseUrl, context.path.substr(this.baseUrl.length));
       var resolve = this.resolveRoute;
-      var matches = void 0;
-      var parent = void 0;
+      var matches = null;
+      var nextMatches = null;
 
       function next(resume) {
-        parent = matches ? matches.value.route.parent : null;
-        matches = match.next();
+        var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : matches.value.route;
+
+        matches = nextMatches || match.next();
+        nextMatches = null;
+
+        if (!resume) {
+          if (matches.done || !isChildRoute(parent, matches.value.route)) {
+            nextMatches = matches;
+            return Promise.resolve(null);
+          }
+        }
 
         if (matches.done) {
           return Promise.reject(Object.assign(new Error('Page not found'), { context: context, status: 404, statusCode: 404 }));
@@ -622,18 +638,14 @@ var Router = function () {
             return result;
           }
 
-          if (resume || parent === matches.value.route.parent) {
-            return next(resume);
-          }
-
-          return result;
+          return next(resume, parent);
         });
       }
 
       context.url = context.path;
       context.next = next;
 
-      return next(true);
+      return next(true, this.root);
     }
   }]);
 

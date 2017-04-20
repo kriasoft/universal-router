@@ -12,10 +12,6 @@ import pathToRegexp from 'path-to-regexp';
 const cache = new Map();
 
 function decodeParam(val) {
-  if (!val) {
-    return val;
-  }
-
   try {
     return decodeURIComponent(val);
   } catch (err) {
@@ -46,7 +42,7 @@ function matchPath(routePath, urlPath, end, parentParams) {
   }
 
   for (let i = 1; i < m.length; i += 1) {
-    params[regexp.keys[i - 1].name] = decodeParam(m[i]);
+    params[regexp.keys[i - 1].name] = m[i] && decodeParam(m[i]);
   }
 
   return { path: path === '' ? '/' : path, keys: regexp.keys.slice(), params };
