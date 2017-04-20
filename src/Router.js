@@ -12,6 +12,17 @@ import matchPath from './matchPath';
 import matchRoute from './matchRoute';
 import resolveRoute from './resolveRoute';
 
+function isChildRoute(parentRoute, childRoute) {
+  let route = childRoute;
+  while (route) {
+    route = route.parent;
+    if (route === parentRoute) {
+      return true;
+    }
+  }
+  return false;
+}
+
 class Router {
   constructor(routes, options = {}) {
     if (Object(routes) !== routes) {
@@ -30,12 +41,19 @@ class Router {
       typeof pathOrContext === 'string' ? { path: pathOrContext } : pathOrContext);
     const match = matchRoute(this.root, this.baseUrl, context.path.substr(this.baseUrl.length));
     const resolve = this.resolveRoute;
-    let matches;
-    let parent;
+    let matches = null;
+    let nextMatches = null;
 
-    function next(resume) {
-      parent = matches ? matches.value.route.parent : null;
-      matches = match.next();
+    function next(resume, parent = matches.value.route) {
+      matches = nextMatches || match.next();
+      nextMatches = null;
+
+      if (!resume) {
+        if (matches.done || !isChildRoute(parent, matches.value.route)) {
+          nextMatches = matches;
+          return Promise.resolve(null);
+        }
+      }
 
       if (matches.done) {
         return Promise.reject(Object.assign(
@@ -52,18 +70,14 @@ class Router {
           return result;
         }
 
-        if (resume || parent === matches.value.route.parent) {
-          return next(resume);
-        }
-
-        return result;
+        return next(resume, parent);
       });
     }
 
     context.url = context.path;
     context.next = next;
 
-    return next(true);
+    return next(true, this.root);
   }
 }
 

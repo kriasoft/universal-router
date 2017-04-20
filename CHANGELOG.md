@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+- Fix `context.next()` for multiple nested routes
+  ([#91](https://github.com/kriasoft/universal-router/pull/91))
 - Add `pretty` option for `generateUrls(router, options)` to prettier encoding of URI path segments
   ([#88](https://github.com/kriasoft/universal-router/pull/88))
 - Add source maps for minified builds ([#87](https://github.com/kriasoft/universal-router/pull/87))
