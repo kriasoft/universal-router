@@ -45,9 +45,9 @@ function matchPath(routePath, urlPath, end, parentParams) {
     Object.assign(params, parentParams);
   }
 
-  for (let i = 1; i < m.length; i += 1) {
-    params[regexp.keys[i - 1].name] = decodeParam(m[i]);
-  }
+  m.slice(1).forEach((match, i) => {
+    params[regexp.keys[i].name] = decodeParam(match);
+  });
 
   return { path: path === '' ? '/' : path, keys: regexp.keys.slice(), params };
 }
