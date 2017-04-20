@@ -231,23 +231,52 @@ describe('router.resolve({ path, ...context })', () => {
       {
         path: '/test',
         children: [
-          { path: '/', action() { log.push(2); } },
+          {
+            path: '/',
+            action() { log.push(2); },
+            children: [
+              {
+                path: '/',
+                action({ next }) {
+                  log.push(3);
+                  return next().then(() => { log.push(6); });
+                },
+                children: [
+                  {
+                    path: '/',
+                    action({ next }) {
+                      log.push(4);
+                      return next().then(() => { log.push(5); });
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: '/',
+            action() { log.push(7); },
+            children: [
+              { path: '/', action() { log.push(8); } },
+              { path: '*', action() { log.push(9); } },
+            ],
+          },
         ],
         async action({ next }) {
           log.push(1);
           const result = await next();
-          log.push(3);
+          log.push(10);
           return result;
         },
       },
-      { path: '/:id', action() { log.push(4); } },
-      { path: '/test', action() { return log.push(5); } },
-      { path: '/*', action() { log.push(6); } },
+      { path: '/:id', action() { log.push(11); } },
+      { path: '/test', action() { log.push(12); return 'done'; } },
+      { path: '/*', action() { log.push(13); } },
     ]);
 
     const result = await router.resolve('/test');
-    expect(log).to.be.deep.equal([1, 2, 3, 4, 5]);
-    expect(result).to.be.equal(5);
+    expect(log).to.be.deep.equal([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+    expect(result).to.be.equal('done');
   });
 
   it('should support next(true) across multiple routes', async () => {
@@ -256,36 +285,36 @@ describe('router.resolve({ path, ...context })', () => {
       path: '/',
       action({ next }) {
         log.push(1);
-        return next().then(() => log.push(8));
+        return next().then((result) => { log.push(9); return result; });
       },
       children: [
         {
           path: '/a/b/c',
           action({ next }) {
             log.push(2);
-            return next(true).then(() => log.push(7));
+            return next(true).then((result) => { log.push(8); return result; });
           },
         },
         {
           path: '/a',
-          action() {
-            log.push(3);
-          },
+          action() { log.push(3); },
           children: [
             {
               path: '/b',
               action({ next }) {
                 log.push(4);
-                return next().then(() => log.push(6));
+                return next().then((result) => { log.push(6); return result; });
               },
               children: [
                 {
                   path: '/c',
-                  action() {
-                    log.push(5);
-                  },
+                  action() { log.push(5); },
                 },
               ],
+            },
+            {
+              path: '/b/c',
+              action() { log.push(7); return 'done'; },
             },
           ],
         },
@@ -293,8 +322,8 @@ describe('router.resolve({ path, ...context })', () => {
     });
 
     const result = await router.resolve('/a/b/c');
-    expect(log).to.be.deep.equal([1, 2, 3, 4, 5, 6, 7, 8]);
-    expect(result).to.be.equal(8);
+    expect(log).to.be.deep.equal([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(result).to.be.equal('done');
   });
 
   it('should support parametrized routes 1', async () => {
