@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased][unreleased]
+## [v3.1.0] - 2017-04-20
 
 - Fix `context.next()` for multiple nested routes
   ([#91](https://github.com/kriasoft/universal-router/pull/91))
@@ -111,7 +111,8 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/universal-router/compare/v3.0.0...HEAD
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v3.1.0...HEAD
+[v3.1.0]: https://github.com/kriasoft/universal-router/compare/v3.0.0...v3.1.0
 [v3.0.0]: https://github.com/kriasoft/universal-router/compare/v2.0.0...v3.0.0
 [v2.0.0]: https://github.com/kriasoft/universal-router/compare/v1.2.2...v2.0.0
 [v1.2.2]: https://github.com/kriasoft/universal-router/compare/v1.2.1...v1.2.2
