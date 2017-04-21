@@ -6,6 +6,7 @@
     <title>Universal Router ∙ Isomorphic routing solution for JavaScript applications</title>
     <meta name="description" content="Routing and navigation solution for React.js applications">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="canonical" href="https://www.kriasoft.com/universal-router/">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
     <link rel="stylesheet" href="main.css">
@@ -25,19 +26,19 @@
   <p class="github-info">
   <a href="https://github.com/kriasoft/universal-router/watchers" class="github-info__link">
     <svg class="github-info__icon" aria-hidden="true" height="16" role="img" version="1.1" viewBox="0 0 16 16" width="16"><path d="M8.06 2C3 2 0 8 0 8s3 6 8.06 6c4.94 0 7.94-6 7.94-6S13 2 8.06 2z m-0.06 10c-2.2 0-4-1.78-4-4 0-2.2 1.8-4 4-4 2.22 0 4 1.8 4 4 0 2.22-1.78 4-4 4z m2-4c0 1.11-0.89 2-2 2s-2-0.89-2-2 0.89-2 2-2 2 0.89 2 2z"></path></svg>
-    12 watchers
+    <span id="subscribers_count">12</span> watchers
   </a>
   <a href="https://github.com/kriasoft/universal-router/stargazers" class="github-info__link">
     <svg class="github-info__icon" aria-hidden="true" height="16" role="img" version="1.1" viewBox="0 0 14 16" width="14"><path d="M14 6l-4.9-0.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14l4.33-2.33 4.33 2.33L10.4 9.26 14 6z"></path></svg>
-    487 stars
+    <span id="stargazers_count">488</span> stars
   </a>
   <a href="https://github.com/kriasoft/universal-router/network" class="github-info__link">
     <svg class="github-info__icon" aria-hidden="true" height="16" role="img" version="1.1" viewBox="0 0 10 16" width="10"><path d="M8 1c-1.11 0-2 0.89-2 2 0 0.73 0.41 1.38 1 1.72v1.28L5 8 3 6v-1.28c0.59-0.34 1-0.98 1-1.72 0-1.11-0.89-2-2-2S0 1.89 0 3c0 0.73 0.41 1.38 1 1.72v1.78l3 3v1.78c-0.59 0.34-1 0.98-1 1.72 0 1.11 0.89 2 2 2s2-0.89 2-2c0-0.73-0.41-1.38-1-1.72V9.5l3-3V4.72c0.59-0.34 1-0.98 1-1.72 0-1.11-0.89-2-2-2zM2 4.2c-0.66 0-1.2-0.55-1.2-1.2s0.55-1.2 1.2-1.2 1.2 0.55 1.2 1.2-0.55 1.2-1.2 1.2z m3 10c-0.66 0-1.2-0.55-1.2-1.2s0.55-1.2 1.2-1.2 1.2 0.55 1.2 1.2-0.55 1.2-1.2 1.2z m3-10c-0.66 0-1.2-0.55-1.2-1.2s0.55-1.2 1.2-1.2 1.2 0.55 1.2 1.2-0.55 1.2-1.2 1.2z"></path></svg>
-    46 forks
+    <span id="network_count">47</span> forks
   </a>
   <a href="https://github.com/kriasoft/universal-router/issues" class="github-info__link">
     <svg class="github-info__icon" aria-hidden="true" height="16" role="img" version="1.1" viewBox="0 0 14 16" width="14"><path d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7S10.14 13.7 7 13.7 1.3 11.14 1.3 8s2.56-5.7 5.7-5.7m0-1.3C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7S10.86 1 7 1z m1 3H6v5h2V4z m0 6H6v2h2V10z"></path></svg>
-    13 open issues
+    <span id="open_issues_count">13</span> open issues
   </a>
 </p>
 
@@ -74,7 +75,7 @@ with only single <a href="https://github.com/pillarjs/path-to-regexp">path-to-re
 <li>It can be used with any JavaScript framework such as React, Vue.js etc</li>
 <li>It uses the same middleware approach used in Express and Koa, making it easy to learn</li>
 <li>It supports both <a href="https://en.wikipedia.org/wiki/Imperative_programming">imperative</a> and
-    <a href="https://en.wikipedia.org/wiki/Declarative_programming">declarative</a> routing style</li>
+<a href="https://en.wikipedia.org/wiki/Declarative_programming">declarative</a> routing style</li>
 <li>Routes are plain javascript objects with which you can interact as you like</li>
 </ul>
 <h2>How does it look like?</h2>
@@ -191,18 +192,17 @@ Get your image on our README with a link to your site.</p>
   </div>
 </div>
 
-  <script src="https://kriasoft.disqus.com/embed.js" async>
   <script>
-    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-      e.src='https://www.google-analytics.com/analytics.js';
-      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
     ga('create','UA-33821884-1','auto');ga('send','pageview');
-    window.disqus_shortname = 'kriasoft';
-    window.disqus_identifier = 'react-routing/';
-    window.disqus_title = 'Universal Router ∙ Isomorphic routing solution for JavaScript applications';
-    window.disqus_url = 'http://www.kriasoft.com/react-routing/';
+
+    (function(){var r=new XMLHttpRequest;r.onreadystatechange=function(){if(4===r.readyState&&200===r.status){
+    var d=JSON.parse(r.responseText);['subscribers_count','stargazers_count','network_count','open_issues_count']
+    .forEach(function(i){document.getElementById(i).innerHTML=d[i]})}};
+    r.open('GET','https://api.github.com/repos/kriasoft/universal-router',true);r.send(null)})();
+
   </script>
+  <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+
   </body>
 </html>
