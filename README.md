@@ -1,3 +1,7 @@
+<a href="https://www.kriasoft.com/universal-router/" target="_blank">
+  <img width="64" height="64" align="right" src="https://raw.githubusercontent.com/kriasoft/universal-router/master/docs/assets/img/tour.png" />
+</a>
+
 # Universal Router
 
 [![NPM version](http://img.shields.io/npm/v/universal-router.svg?style=flat-square)](https://www.npmjs.com/package/universal-router)
@@ -14,11 +18,51 @@ Visit **[Quickstart Guide](http://slides.com/koistya/universal-router)** (slides
 Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Gitter to stay up to date
 
 
+## Installation
+
+```bash
+$ npm install universal-router --save
+```
+
+
+## Usage
+
+```js
+import Router from 'universal-router';
+
+const routes = [
+  { path: '/one', action: () => '<h1>Page One</h1>' },
+  { path: '/two', action: () => '<h1>Page Two</h1>' },
+  { path: '*', action: () => '<h1>Not Found</h1>' }
+];
+
+const router = new Router(routes);
+
+router.resolve({ path: '/one' }).then(result => {
+  document.body.innerHTML = result;
+  // renders: <h1>Page One</h1>
+});
+```
+
+
 ## Documentation
 
 * [Overview](https://github.com/kriasoft/universal-router/blob/master/docs/README.md)
 * [Getting Started](https://github.com/kriasoft/universal-router/blob/master/docs/getting-started.md)
 * [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)
+
+
+## Browser Support
+
+Universal Router supports all popular browsers, including Internet Explorer 9 and above with following polyfills:
+- [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+- [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+- [`Object.assign`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+
+For compatibility with older browsers that don't support ES5 methods you may need to include 
+[`Array.isArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray)
+and [`Object.create`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create)
+polyfills before any other code.
 
 
 ## Learn ES6
