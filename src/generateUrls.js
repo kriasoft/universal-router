@@ -31,7 +31,7 @@ function cacheRoutes(routesByName, route, routes) {
   }
 }
 
-function generateUrls(router, options) {
+function generateUrls(router, options = {}) {
   if (!(router instanceof Router)) {
     throw new TypeError('An instance of Router is expected');
   }
@@ -50,20 +50,47 @@ function generateUrls(router, options) {
       }
     }
 
-    let path = '';
-    while (route) {
-      if (route.path !== '/') {
-        let toPath = cache.get(route.path);
-        if (!toPath) {
-          toPath = Router.pathToRegexp.compile(route.path);
-          cache.set(route.path, toPath);
+    let regexp = cache.get(route.fullPath);
+    if (!regexp) {
+      let fullPath = '';
+      let rt = route;
+      while (rt) {
+        if (rt.path !== '/') {
+          fullPath = rt.path + fullPath;
         }
-        path = toPath(params, options) + path;
+        rt = rt.parent;
       }
-      route = route.parent;
+      const tokens = Router.pathToRegexp.parse(fullPath);
+      const toPath = Router.pathToRegexp.tokensToFunction(tokens);
+      const keys = Object.create(null);
+      for (let i = 0; i < tokens.length; i += 1) {
+        if (typeof tokens[i] !== 'string') {
+          keys[tokens[i].name] = true;
+        }
+      }
+      regexp = { toPath, keys };
+      cache.set(fullPath, regexp);
+      route.fullPath = fullPath;
     }
 
-    return router.baseUrl + path || '/';
+    let url = router.baseUrl + regexp.toPath(params, options) || '/';
+
+    if (options.stringifyQueryParams && params) {
+      const queryParams = Object.create(null);
+      const keys = Object.keys(params);
+      for (let i = 0; i < keys.length; i += 1) {
+        const key = keys[i];
+        if (!regexp.keys[key]) {
+          queryParams[key] = params[key];
+        }
+      }
+      const query = options.stringifyQueryParams(queryParams);
+      if (query) {
+        url += query.charAt(0) === '?' ? query : `?${query}`;
+      }
+    }
+
+    return url;
   };
 }
 

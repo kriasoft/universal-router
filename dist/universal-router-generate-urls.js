@@ -39,7 +39,9 @@ function cacheRoutes(routesByName, route, routes) {
   }
 }
 
-function generateUrls(router, options) {
+function generateUrls(router) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
   if (!(router instanceof Router)) {
     throw new TypeError('An instance of Router is expected');
   }
@@ -58,20 +60,47 @@ function generateUrls(router, options) {
       }
     }
 
-    var path = '';
-    while (route) {
-      if (route.path !== '/') {
-        var toPath = cache.get(route.path);
-        if (!toPath) {
-          toPath = Router.pathToRegexp.compile(route.path);
-          cache.set(route.path, toPath);
+    var regexp = cache.get(route.fullPath);
+    if (!regexp) {
+      var fullPath = '';
+      var rt = route;
+      while (rt) {
+        if (rt.path !== '/') {
+          fullPath = rt.path + fullPath;
         }
-        path = toPath(params, options) + path;
+        rt = rt.parent;
       }
-      route = route.parent;
+      var tokens = Router.pathToRegexp.parse(fullPath);
+      var toPath = Router.pathToRegexp.tokensToFunction(tokens);
+      var keys = Object.create(null);
+      for (var i = 0; i < tokens.length; i += 1) {
+        if (typeof tokens[i] !== 'string') {
+          keys[tokens[i].name] = true;
+        }
+      }
+      regexp = { toPath: toPath, keys: keys };
+      cache.set(fullPath, regexp);
+      route.fullPath = fullPath;
     }
 
-    return router.baseUrl + path || '/';
+    var url = router.baseUrl + regexp.toPath(params, options) || '/';
+
+    if (options.stringifyQueryParams && params) {
+      var queryParams = Object.create(null);
+      var _keys = Object.keys(params);
+      for (var _i = 0; _i < _keys.length; _i += 1) {
+        var key = _keys[_i];
+        if (!regexp.keys[key]) {
+          queryParams[key] = params[key];
+        }
+      }
+      var query = options.stringifyQueryParams(queryParams);
+      if (query) {
+        url += query.charAt(0) === '?' ? query : '?' + query;
+      }
+    }
+
+    return url;
   };
 }
 

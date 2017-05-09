@@ -7,11 +7,12 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
+import sinon from 'sinon';
 import { expect } from 'chai';
 import Router from '../src/Router';
 import generateUrls from '../src/generateUrls';
 
-describe('generateUrls(router) => url(routeName, params)', () => {
+describe('generateUrls(router, options)(routeName, params)', () => {
   it('should throw an error in case of invalid router', async () => {
     expect(() => generateUrls()).to.throw(TypeError, /An instance of Router is expected/);
     expect(() => generateUrls([])).to.throw(TypeError, /An instance of Router is expected/);
@@ -126,12 +127,45 @@ describe('generateUrls(router) => url(routeName, params)', () => {
   });
 
   it('should support pretty urls', async () => {
-    const router = new Router({ path: '/user/:username', name: 'user' });
+    const router = new Router({ path: '/:user', name: 'user' });
 
     const url = generateUrls(router);
     const prettyUrl = generateUrls(router, { pretty: true });
 
-    expect(url('user', { username: ':' })).to.be.equal('/user/%3A');
-    expect(prettyUrl('user', { username: ':' })).to.be.equal('/user/:');
+    expect(url('user', { user: '#$&+,/:;=?@' })).to.be.equal('/%23%24%26%2B%2C%2F%3A%3B%3D%3F%40');
+    expect(prettyUrl('user', { user: '#$&+,/:;=?@' })).to.be.equal('/%23$&+,%2F:;=%3F@');
+  });
+
+  it('should stringify query params (1)', async () => {
+    const router = new Router({ path: '/:user', name: 'user' });
+    const stringifyQueryParams = sinon.spy(() => 'qs');
+
+    const url = generateUrls(router, { stringifyQueryParams });
+
+    expect(url('user', { user: 'tj', busy: 1 })).to.be.equal('/tj?qs');
+    expect(stringifyQueryParams.calledOnce).to.be.true;
+    expect(stringifyQueryParams.args[0][0]).to.be.deep.equal({ busy: 1 });
+  });
+
+  it('should stringify query params (2)', async () => {
+    const router = new Router({ path: '/user/:username', name: 'user' });
+    const stringifyQueryParams = sinon.spy(() => '');
+
+    const url = generateUrls(router, { stringifyQueryParams });
+
+    expect(url('user', { username: 'tj', busy: 1 })).to.be.equal('/user/tj');
+    expect(stringifyQueryParams.calledOnce).to.be.true;
+    expect(stringifyQueryParams.args[0][0]).to.be.deep.equal({ busy: 1 });
+  });
+
+  it('should stringify query params (3)', async () => {
+    const router = new Router({ path: '/me', name: 'me' });
+    const stringifyQueryParams = sinon.spy(() => '?x=i&y=j&z=k');
+
+    const url = generateUrls(router, { stringifyQueryParams });
+
+    expect(url('me', { x: 'i', y: 'j', z: 'k' })).to.be.equal('/me?x=i&y=j&z=k');
+    expect(stringifyQueryParams.calledOnce).to.be.true;
+    expect(stringifyQueryParams.args[0][0]).to.be.deep.equal({ x: 'i', y: 'j', z: 'k' });
   });
 });
