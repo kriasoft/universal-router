@@ -147,6 +147,8 @@ router.resolve({ path: '/hello/john' })
   .then(result =&gt; console.log(result));
   // =&gt; Welcome, john!
 </code></pre>
+<p>Router preserves the <code>context.params</code> values from the parent router.
+If the parent and the child have conflicting param names, the child's value take precedence.</p>
 <p>This functionality is powered by <a href="https://github.com/pillarjs/path-to-regexp">path-to-regexp</a> npm module
 and works the same way as the routing solutions in many popular JavaScript frameworks such as Express and Koa.
 Also check out online <a href="http://forbeslindesay.github.io/express-route-tester/">router tester</a>.</p>
@@ -276,16 +278,33 @@ const url = generateUrls(router);
 url('home');                          // =&gt; '/base'
 url('user', { username: 'john' });    // =&gt; '/base/user/john'
 </code></pre>
+<p>This approach also works fine for dynamically added routes at runtime.</p>
+<pre><code class="language-js">routes.children.push({ path: '/world', name: 'hello' });
+
+url('hello');                         // =&gt; '/base/world'
+</code></pre>
 <p>Use <code>pretty</code> option for prettier encoding of URI path segments.</p>
 <pre><code class="language-js">const prettyUrl = generateUrls(router, { pretty: true });
 
 url('user', { username: ':' });       // =&gt; '/base/user/%3A'
 prettyUrl('user', { username: ':' }); // =&gt; '/base/user/:'
 </code></pre>
-<p>This approach also works fine for dynamically added routes at runtime.</p>
-<pre><code class="language-js">routes.children.push({ path: '/world', name: 'hello' });
+<p>Provide a function to <code>stringifyQueryParams</code> option to generate URL with
+<a href="http://en.wikipedia.org/wiki/Query_string">query string</a> from unknown route params.</p>
+<pre><code class="language-js">const urlWithQueryString = generateUrls(router, {
+  stringifyQueryParams(params) {
+    return Object.keys(params).map(key =&gt; `${key}=${params[key]}`).join('&amp;');
+  },
+});
 
-url('hello');                         // =&gt; '/base/world'
+const params = { username: 'John', busy: 1 };
+url('user', params);                  // =&gt; /base/user/John
+urlWithQueryString('user', params);   // =&gt; /base/user/John?busy=1
+</code></pre>
+<p>Or use external library such as <a href="https://github.com/ljharb/qs">qs</a>,
+<a href="https://github.com/sindresorhus/query-string">query-string</a>, etc.</p>
+<pre><code class="language-js">import qs from 'qs';
+generateUrls(router, { stringifyQueryParams: qs.stringify });
 </code></pre>
 
 
