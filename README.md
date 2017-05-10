@@ -1,5 +1,6 @@
 <a href="https://www.kriasoft.com/universal-router/" target="_blank">
-  <img width="64" height="64" align="right" src="https://raw.githubusercontent.com/kriasoft/universal-router/master/docs/assets/img/tour.png" />
+  <img width="64" height="64" align="right" alt="Visit Universal Router Website"
+  src="https://raw.githubusercontent.com/kriasoft/universal-router/master/docs/assets/img/tour.png" />
 </a>
 
 # Universal Router
@@ -11,38 +12,77 @@
 [![Dependency Status](http://img.shields.io/david/kriasoft/universal-router.svg?style=flat-square)](https://david-dm.org/kriasoft/universal-router)
 [![Online Chat](http://img.shields.io/badge/chat_room-%23universal--router-blue.svg?style=flat-square)](https://gitter.im/kriasoft/universal-router)
 
-> A simple middleware-style router for
-  [isomorphic](http://nerds.airbnb.com/isomorphic-javascript-future-web-apps/) JavaScript web apps
+A simple middleware-style router that can be used in both client-side (e.g. React, Vue.js)
+and server-side applications (e.g. Node.js/Express, Koa).
 
 Visit **[Quickstart Guide](http://slides.com/koistya/universal-router)** (slides) &nbsp;|&nbsp;
 Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Gitter to stay up to date
 
 
+## Features
+
+✓ It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/Router.js)
+  with only single [path-to-regexp](https://github.com/pillarjs/path-to-regexp) dependency<br>
+✓ It can be used with any JavaScript framework such as React, Vue.js etc<br>
+✓ It uses the same middleware approach used in Express and Koa, making it easy to learn<br>
+✓ It supports both [imperative](https://en.wikipedia.org/wiki/Imperative_programming) and
+  [declarative](https://en.wikipedia.org/wiki/Declarative_programming) routing style<br>
+✓ Routes are plain JavaScript objects with which you can interact as you like<br>
+
+
 ## Installation
+
+Using [npm](https://www.npmjs.com/package/universal-router):
 
 ```bash
 $ npm install universal-router --save
 ```
 
+Or using a [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) like [unpkg.com](https://unpkg.com)
+with the following script tag:
 
-## Usage
+```html
+<script src="https://unpkg.com/universal-router@3.1.0/universal-router.min.js"></script>
+```
+
+
+## How does it look like?
 
 ```js
-import Router from 'universal-router';
+import UniversalRouter from 'universal-router';
 
 const routes = [
-  { path: '/one', action: () => '<h1>Page One</h1>' },
-  { path: '/two', action: () => '<h1>Page Two</h1>' },
-  { path: '*', action: () => '<h1>Not Found</h1>' }
+  {
+    path: '/',
+    action: () => `<h1>Home</h1>`
+  },
+  {
+    path: '/posts',
+    action: () => console.log('checking child routes for /posts'),
+    children: [
+      {
+        path: '/',
+        action: () => `<h1>Posts</h1>`
+      },
+      {
+        path: '/:id',
+        action: (context) => `<h1>Post #${context.params.id}</h1>`
+      }
+    ]
+  },
 ];
 
-const router = new Router(routes);
+const router = new UniversalRouter(routes);
 
-router.resolve({ path: '/one' }).then(result => {
-  document.body.innerHTML = result;
-  // renders: <h1>Page One</h1>
+router.resolve('/posts').then(html => {
+  document.body.innerHTML = html; // renders: <h1>Posts</h1>
 });
 ```
+
+Play with an example on [JSFiddle](https://jsfiddle.net/frenzzy/b0w9mjck/),
+[CodePen](https://codepen.io/frenzzy/pen/aWLKpb/),
+[JS Bin](https://jsbin.com/degedol/edit?js,output) in your browser or try
+[RunKit](https://runkit.com/frenzzy/universal-router-demo) node.js playground.
 
 
 ## Documentation
@@ -54,18 +94,19 @@ router.resolve({ path: '/one' }).then(result => {
 
 ## Browser Support
 
-Universal Router supports all popular browsers, including Internet Explorer 9 and above with following polyfills:
-- [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
-- [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-- [`Object.assign`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+Universal Router supports all popular browsers, including Internet Explorer 9 and above
+with polyfills such as [es6-shim](https://github.com/es-shims/es6-shim) for
+[`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map),
+[`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and
+[`Object.assign`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+that must be included before any other code.
 
-For compatibility with older browsers that don't support ES5 methods you may need to include 
+For compatibility with older browsers you may also need to include polyfills for
 [`Array.isArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray)
-and [`Object.create`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create)
-polyfills before any other code.
+and [`Object.create`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create).
 
 
-## Learn ES6
+## Books and Tutorials
 
 :mortar_board: &nbsp; **[ES6 Training Course](https://es6.io/friend/konstantin)** by Wes Bos<br>
 :green_book: &nbsp; **[You Don't Know JS: ES6 & Beyond](http://amzn.to/2bFss85)** by Kyle Simpson (Dec, 2015)<br>

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased][unreleased]
+
+- Add `stringifyQueryParams` option to `generateUrls(router, options)` to generate URL with
+  [query string](http://en.wikipedia.org/wiki/Query_string) from unknown route params
+  ([#93](https://github.com/kriasoft/universal-router/pull/93))
+
 ## [v3.1.0] - 2017-04-20
 
 - Fix `context.next()` for multiple nested routes

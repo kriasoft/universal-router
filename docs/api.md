@@ -141,6 +141,9 @@ router.resolve({ path: '/hello/john' })
   // => Welcome, john!
 ```
 
+Router preserves the `context.params` values from the parent router.
+If the parent and the child have conflicting param names, the child's value take precedence.
+
 This functionality is powered by [path-to-regexp](https://github.com/pillarjs/path-to-regexp) npm module
 and works the same way as the routing solutions in many popular JavaScript frameworks such as Express and Koa.
 Also check out online [router tester](http://forbeslindesay.github.io/express-route-tester/).
@@ -301,6 +304,14 @@ url('home');                          // => '/base'
 url('user', { username: 'john' });    // => '/base/user/john'
 ```
 
+This approach also works fine for dynamically added routes at runtime.
+
+```js
+routes.children.push({ path: '/world', name: 'hello' });
+
+url('hello');                         // => '/base/world'
+```
+
 Use `pretty` option for prettier encoding of URI path segments.
 
 ```js
@@ -310,11 +321,25 @@ url('user', { username: ':' });       // => '/base/user/%3A'
 prettyUrl('user', { username: ':' }); // => '/base/user/:'
 ```
 
-This approach also works fine for dynamically added routes at runtime.
+Provide a function to `stringifyQueryParams` option to generate URL with
+[query string](http://en.wikipedia.org/wiki/Query_string) from unknown route params.
 
 ```js
-routes.children.push({ path: '/world', name: 'hello' });
+const urlWithQueryString = generateUrls(router, {
+  stringifyQueryParams(params) {
+    return Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
+  },
+});
 
-url('hello');                         // => '/base/world'
+const params = { username: 'John', busy: 1 };
+url('user', params);                  // => /base/user/John
+urlWithQueryString('user', params);   // => /base/user/John?busy=1
 ```
 
+Or use external library such as [qs](https://github.com/ljharb/qs),
+[query-string](https://github.com/sindresorhus/query-string), etc.
+
+```js
+import qs from 'qs';
+generateUrls(router, { stringifyQueryParams: qs.stringify });
+```
