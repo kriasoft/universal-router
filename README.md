@@ -42,7 +42,7 @@ Or using a [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) like [u
 with the following script tag:
 
 ```html
-<script src="https://unpkg.com/universal-router@3.1.0/universal-router.min.js"></script>
+<script src="https://unpkg.com/universal-router@3.2.0/universal-router.min.js"></script>
 ```
 
 

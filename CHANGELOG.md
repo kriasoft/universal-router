@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased][unreleased]
+## [v3.2.0] - 2017-05-10
 
 - Add `stringifyQueryParams` option to `generateUrls(router, options)` to generate URL with
   [query string](http://en.wikipedia.org/wiki/Query_string) from unknown route params
@@ -117,7 +117,8 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/universal-router/compare/v3.1.0...HEAD
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v3.2.0...HEAD
+[v3.2.0]: https://github.com/kriasoft/universal-router/compare/v3.1.0...v3.2.0
 [v3.1.0]: https://github.com/kriasoft/universal-router/compare/v3.0.0...v3.1.0
 [v3.0.0]: https://github.com/kriasoft/universal-router/compare/v2.0.0...v3.0.0
 [v2.0.0]: https://github.com/kriasoft/universal-router/compare/v1.2.2...v2.0.0
