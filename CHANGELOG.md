@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased][unreleased]
+
+- Remove the need of [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+  polyfill ([#97](https://github.com/kriasoft/universal-router/pull/97))
+
 ## [v3.2.0] - 2017-05-10
 
 - Add `stringifyQueryParams` option to `generateUrls(router, options)` to generate URL with

@@ -19,7 +19,7 @@ Router = 'default' in Router ? Router['default'] : Router;
 
 /* eslint no-param-reassign: ['error', { props: false }] */
 
-var cache = new Map();
+var cache = Object.create(null);
 
 function cacheRoutes(routesByName, route, routes) {
   if (routesByName[route.name]) {
@@ -60,7 +60,7 @@ function generateUrls(router) {
       }
     }
 
-    var regexp = cache.get(route.fullPath);
+    var regexp = cache[route.fullPath];
     if (!regexp) {
       var fullPath = '';
       var rt = route;
@@ -79,7 +79,7 @@ function generateUrls(router) {
         }
       }
       regexp = { toPath: toPath, keys: keys };
-      cache.set(fullPath, regexp);
+      cache[fullPath] = regexp;
       route.fullPath = fullPath;
     }
 

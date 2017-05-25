@@ -449,7 +449,7 @@ index.tokensToRegExp = tokensToRegExp_1;
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-var cache = new Map();
+var cache = Object.create(null);
 
 function decodeParam(val) {
   try {
@@ -461,12 +461,12 @@ function decodeParam(val) {
 
 function matchPath(routePath, urlPath, end, parentParams) {
   var key = routePath + '|' + end;
-  var regexp = cache.get(key);
+  var regexp = cache[key];
 
   if (!regexp) {
     var keys = [];
     regexp = { pattern: index(routePath, keys, { end: end }), keys: keys };
-    cache.set(key, regexp);
+    cache[key] = regexp;
   }
 
   var m = regexp.pattern.exec(urlPath);
