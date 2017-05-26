@@ -9,7 +9,7 @@
 
 import pathToRegexp from 'path-to-regexp';
 
-const cache = Object.create(null);
+const cache = new Map();
 
 function decodeParam(val) {
   try {
@@ -21,12 +21,12 @@ function decodeParam(val) {
 
 function matchPath(routePath, urlPath, end, parentParams) {
   const key = `${routePath}|${end}`;
-  let regexp = cache[key];
+  let regexp = cache.get(key);
 
   if (!regexp) {
     const keys = [];
     regexp = { pattern: pathToRegexp(routePath, keys, { end }), keys };
-    cache[key] = regexp;
+    cache.set(key, regexp);
   }
 
   const m = regexp.pattern.exec(urlPath);

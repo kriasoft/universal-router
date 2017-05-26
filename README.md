@@ -95,6 +95,7 @@ Play with an example on [JSFiddle](https://jsfiddle.net/frenzzy/b0w9mjck/),
 
 Universal Router supports all popular browsers, including Internet Explorer 9 and above
 with polyfills such as [es6-shim](https://github.com/es-shims/es6-shim) for
+[`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map),
 [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and
 [`Object.assign`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
 that must be included before any other code.
