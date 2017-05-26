@@ -11,7 +11,7 @@
 
 import Router from './Router';
 
-const cache = Object.create(null);
+const cache = new Map();
 
 function cacheRoutes(routesByName, route, routes) {
   if (routesByName[route.name]) {
@@ -50,7 +50,7 @@ function generateUrls(router, options = {}) {
       }
     }
 
-    let regexp = cache[route.fullPath];
+    let regexp = cache.get(route.fullPath);
     if (!regexp) {
       let fullPath = '';
       let rt = route;
@@ -69,7 +69,7 @@ function generateUrls(router, options = {}) {
         }
       }
       regexp = { toPath, keys };
-      cache[fullPath] = regexp;
+      cache.set(fullPath, regexp);
       route.fullPath = fullPath;
     }
 

@@ -333,8 +333,8 @@ describe('router.resolve({ path, ...context })', () => {
     ]);
     const result = await router.resolve('/path/1/other/2');
     expect(action.calledOnce).to.be.true;
-    expect(action.args[0][0]).to.have.deep.property('params.a', '1');
-    expect(action.args[0][0]).to.have.deep.property('params.b', '2');
+    expect(action.args[0][0]).to.have.nested.property('params.a', '1');
+    expect(action.args[0][0]).to.have.nested.property('params.b', '2');
     expect(action.args[0][1]).to.have.property('a', '1');
     expect(action.args[0][1]).to.have.property('b', '2');
     expect(result).to.be.true;

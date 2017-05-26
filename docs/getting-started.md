@@ -50,6 +50,7 @@ also provide single-file distributions, which are hosted on a [CDN](https://unpk
 ```
 
 **Note**: You may need to include
+[Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map),
 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and
 [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
 polyfills for compatibility with older browsers.
