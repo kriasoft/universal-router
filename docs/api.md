@@ -1,8 +1,3 @@
----
-id: api
-title: API ∙ Universal Router
----
-
 # Universal Router API
 
 ## `const router = new Router(routes, options)`
