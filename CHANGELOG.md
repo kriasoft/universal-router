@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased][unreleased]
+
+- Include the source code of the router in the [npm package](https://www.npmjs.com/package/universal-router)
+  ([#110](https://github.com/kriasoft/universal-router/pull/110))
+
 ## [v3.2.0] - 2017-05-10
 
 - Add `stringifyQueryParams` option to `generateUrls(router, options)` to generate URL with
