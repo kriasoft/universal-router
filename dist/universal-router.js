@@ -6,14 +6,14 @@
 	(global.UniversalRouter = factory());
 }(this, (function () { 'use strict';
 
-var index$1 = Array.isArray || function (arr) {
+var isarray = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
 /**
  * Expose `pathToRegexp`.
  */
-var index = pathToRegexp;
+var pathToRegexp_1$1 = pathToRegexp;
 var parse_1 = parse;
 var compile_1 = compile;
 var tokensToFunction_1 = tokensToFunction;
@@ -190,7 +190,7 @@ function tokensToFunction (tokens) {
         }
       }
 
-      if (index$1(value)) {
+      if (isarray(value)) {
         if (!token.repeat) {
           throw new TypeError('Expected "' + token.name + '" to not repeat, but received `' + JSON.stringify(value) + '`')
         }
@@ -341,7 +341,7 @@ function stringToRegexp (path, keys, options) {
  * @return {!RegExp}
  */
 function tokensToRegExp (tokens, keys, options) {
-  if (!index$1(keys)) {
+  if (!isarray(keys)) {
     options = /** @type {!Object} */ (keys || options);
     keys = [];
   }
@@ -417,7 +417,7 @@ function tokensToRegExp (tokens, keys, options) {
  * @return {!RegExp}
  */
 function pathToRegexp (path, keys, options) {
-  if (!index$1(keys)) {
+  if (!isarray(keys)) {
     options = /** @type {!Object} */ (keys || options);
     keys = [];
   }
@@ -428,17 +428,17 @@ function pathToRegexp (path, keys, options) {
     return regexpToRegexp(path, /** @type {!Array} */ (keys))
   }
 
-  if (index$1(path)) {
+  if (isarray(path)) {
     return arrayToRegexp(/** @type {!Array} */ (path), /** @type {!Array} */ (keys), options)
   }
 
   return stringToRegexp(/** @type {string} */ (path), /** @type {!Array} */ (keys), options)
 }
 
-index.parse = parse_1;
-index.compile = compile_1;
-index.tokensToFunction = tokensToFunction_1;
-index.tokensToRegExp = tokensToRegExp_1;
+pathToRegexp_1$1.parse = parse_1;
+pathToRegexp_1$1.compile = compile_1;
+pathToRegexp_1$1.tokensToFunction = tokensToFunction_1;
+pathToRegexp_1$1.tokensToRegExp = tokensToRegExp_1;
 
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
@@ -465,7 +465,7 @@ function matchPath(routePath, urlPath, end, parentParams) {
 
   if (!regexp) {
     var keys = [];
-    regexp = { pattern: index(routePath, keys, { end: end }), keys: keys };
+    regexp = { pattern: pathToRegexp_1$1(routePath, keys, { end: end }), keys: keys };
     cache.set(key, regexp);
   }
 
@@ -652,7 +652,7 @@ var Router = function () {
   return Router;
 }();
 
-Router.pathToRegexp = index;
+Router.pathToRegexp = pathToRegexp_1$1;
 Router.matchPath = matchPath;
 Router.matchRoute = matchRoute;
 Router.resolveRoute = resolveRoute;

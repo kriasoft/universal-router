@@ -7,9 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-const cp = require('child_process');
-const fs = require('fs');
-const del = require('del');
+const fs = require('fs-extra');
 const path = require('path');
 const rollup = require('rollup');
 const babel = require('rollup-plugin-babel');
@@ -18,11 +16,11 @@ const commonjs = require('rollup-plugin-commonjs');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const pkg = require('../package.json');
 
-const moduleName = 'UniversalRouter';
+const name = 'UniversalRouter';
 const addons = [
   {
-    name: 'generate-urls',
-    moduleName: 'generateUrls',
+    file: 'generate-urls',
+    name: 'generateUrls',
     description: 'Universal Router Generate URLs Add-on',
   },
 ];
@@ -36,7 +34,7 @@ const files = [
   },
   {
     format: 'es',
-    ext: '.mjs',
+    ext: '.esm.js',
     output: 'main',
   },
   {
@@ -53,7 +51,7 @@ const files = [
   },
   {
     format: 'es',
-    ext: '.mjs',
+    ext: '.esm.js',
     output: 'browser',
     presets: [['es2015', { modules: false }]],
   },
@@ -62,7 +60,7 @@ const files = [
     ext: '.js',
     presets: [['es2015', { modules: false }]],
     output: pkg.name,
-    moduleName,
+    name,
     external: [],
   },
   {
@@ -70,7 +68,7 @@ const files = [
     ext: '.min.js',
     presets: [['es2015', { modules: false }]],
     output: pkg.name,
-    moduleName,
+    name,
     external: [],
     minify: true,
   },
@@ -79,72 +77,76 @@ const files = [
 addons.forEach((addon) => {
   files.push(...files.map(file =>
     Object.assign({}, file, {
-      entry: `src/${addon.moduleName}.js`,
-      basePath: file.format === 'umd' ? '' : `/${addon.moduleName}`,
-      output: file.output === pkg.name ? `${pkg.name}-${addon.name}` : file.output,
-      moduleName: file.moduleName ? addon.moduleName : null,
-      external: Object.keys(pkg.dependencies).concat([path.resolve('src/Router.js')]),
+      input: `dist/src/${addon.name}.js`,
+      basePath: file.format === 'umd' ? '' : `/${addon.name}`,
+      output: file.output === pkg.name ? `${pkg.name}-${addon.file}` : file.output,
+      name: file.name ? addon.name : null,
+      external: Object.keys(pkg.dependencies).concat([path.resolve('dist/src/Router.js')]),
     })
   ));
 });
 
-let promise = Promise.resolve();
+async function run() {
+  // Clean up the output directory
+  await fs.remove('dist');
 
-// Clean up the output directory
-promise = promise.then(() => del(['dist/*']));
+  // Copy source code, package.json and LICENSE.txt
+  await Promise.all([
+    fs.copy('src', 'dist/src'),
+    fs.copy('README.md', 'dist/README.md'),
+    fs.copy('LICENSE.txt', 'dist/LICENSE.txt'),
+  ]);
 
-// Compile source code into a distributable format with Babel
-files.forEach((file) => {
-  promise = promise.then(() => rollup.rollup({
-    entry: file.entry || 'src/Router.js',
-    external: file.external || Object.keys(pkg.dependencies),
-    plugins: [
-      ...file.format === 'umd' ? [nodeResolve({ browser: true }), commonjs()] : [],
-      babel({
-        babelrc: false,
-        exclude: 'node_modules/**',
-        presets: file.presets,
-        plugins: file.plugins,
-      }),
-      ...file.minify ? [uglify({ output: { comments: '/^!/' } })] : [],
-    ],
-    paths: {
-      [path.resolve('src/Router.js')]: file.format === 'umd' ? `./${pkg.name}${file.ext}` : '..',
-    },
-  }).then(bundle => bundle.write({
-    dest: `dist${file.basePath || ''}/${file.output}${file.ext}`,
-    format: file.format,
-    sourceMap: true,
-    exports: 'default',
-    moduleName: file.moduleName,
-    banner: '/*! Universal Router | MIT License | https://www.kriasoft.com/universal-router/ */\n',
-    globals: {
-      [path.resolve('src/Router.js')]: moduleName,
-    },
-  })));
-});
-
-// Copy package.json and LICENSE.txt
-promise = promise.then(() => {
-  delete pkg.private;
-  delete pkg.devDependencies;
-  delete pkg.scripts;
-  delete pkg.eslintConfig;
-  delete pkg.babel;
-  delete pkg.preCommit;
-  fs.writeFileSync('dist/package.json', JSON.stringify(pkg, null, '  '), 'utf-8');
-  addons.forEach((addon) => {
-    const p = Object.assign({}, pkg, {
-      private: true,
-      name: addon.moduleName,
-      description: addon.description,
+  // Compile source code into a distributable format with Babel
+  await Promise.all(files.map(async (file) => {
+    const bundle = await rollup.rollup({
+      input: file.input || 'dist/src/Router.js',
+      external: file.external || Object.keys(pkg.dependencies),
+      plugins: [
+        ...file.format === 'umd' ? [nodeResolve({ browser: true }), commonjs()] : [],
+        babel({
+          babelrc: false,
+          exclude: 'node_modules/**',
+          presets: file.presets,
+          plugins: file.plugins,
+        }),
+        ...file.minify ? [uglify({ output: { comments: '/^!/' } })] : [],
+      ],
     });
-    delete p.dependencies;
-    fs.writeFileSync(`dist/${addon.moduleName}/package.json`, JSON.stringify(p, null, '  '), 'utf-8');
-  });
-  fs.writeFileSync('dist/README.md', fs.readFileSync('README.md', 'utf-8'), 'utf-8');
-  fs.writeFileSync('dist/LICENSE.txt', fs.readFileSync('LICENSE.txt', 'utf-8'), 'utf-8');
-  cp.spawnSync('git', ['add', 'dist/universal-router*']);
-});
 
-promise.catch(err => console.error(err.stack));
+    bundle.write({
+      file: `dist${file.basePath || ''}/${file.output}${file.ext}`,
+      format: file.format,
+      sourcemap: true,
+      exports: 'default',
+      name: file.name,
+      banner: '/*! Universal Router | MIT License | https://www.kriasoft.com/universal-router/ */\n',
+      globals: {
+        [path.resolve('dist/src/Router.js')]: name,
+      },
+      paths: {
+        [path.resolve('dist/src/Router.js')]: file.format === 'umd' ? `./${pkg.name}${file.ext}` : '..',
+      },
+    });
+  }));
+
+  const libPkg = Object.assign({}, pkg);
+  delete libPkg.private;
+  delete libPkg.devDependencies;
+  delete libPkg.scripts;
+  await fs.outputJson('dist/package.json', libPkg, { spaces: 2 });
+
+  await Promise.all(addons.map((addon) => {
+    const addonPkg = Object.assign({}, pkg, {
+      name: addon.name,
+      description: addon.description,
+      esnext: `../src/${addon.name}.js`,
+    });
+    delete addonPkg.dependencies;
+    delete addonPkg.devDependencies;
+    delete addonPkg.scripts;
+    return fs.outputJson(`dist/${addon.name}/package.json`, addonPkg, { spaces: 2 });
+  }));
+}
+
+module.exports = run();

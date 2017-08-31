@@ -6,7 +6,7 @@
 	(global.generateUrls = factory(global.UniversalRouter));
 }(this, (function (Router) { 'use strict';
 
-Router = 'default' in Router ? Router['default'] : Router;
+Router = Router && Router.hasOwnProperty('default') ? Router['default'] : Router;
 
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
