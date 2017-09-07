@@ -232,18 +232,18 @@ describe('router.resolve({ path, ...context })', () => {
         path: '/test',
         children: [
           {
-            path: '/',
+            path: '',
             action() { log.push(2); },
             children: [
               {
-                path: '/',
+                path: '',
                 action({ next }) {
                   log.push(3);
                   return next().then(() => { log.push(6); });
                 },
                 children: [
                   {
-                    path: '/',
+                    path: '',
                     action({ next }) {
                       log.push(4);
                       return next().then(() => { log.push(5); });
@@ -254,11 +254,11 @@ describe('router.resolve({ path, ...context })', () => {
             ],
           },
           {
-            path: '/',
+            path: '',
             action() { log.push(7); },
             children: [
               { path: '/', action() { log.push(8); } },
-              { path: '*', action() { log.push(9); } },
+              { path: '(.*)', action() { log.push(9); } },
             ],
           },
         ],
@@ -282,7 +282,6 @@ describe('router.resolve({ path, ...context })', () => {
   it('should support next(true) across multiple routes', async () => {
     const log = [];
     const router = new Router({
-      path: '/',
       action({ next }) {
         log.push(1);
         return next().then((result) => { log.push(9); return result; });
@@ -345,7 +344,7 @@ describe('router.resolve({ path, ...context })', () => {
     const action2 = sinon.spy(() => true);
     const router = new Router([
       {
-        path: '/',
+        path: '',
         action: action1,
         children: [
           {

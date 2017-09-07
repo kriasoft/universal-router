@@ -9,7 +9,7 @@
 
 import matchPath from './matchPath';
 
-function matchRoute(route, baseUrl, path, parentParams) {
+function matchRoute(route, baseUrl, path, parentKeys, parentParams) {
   let match;
   let childMatches;
   let childIndex = 0;
@@ -17,7 +17,7 @@ function matchRoute(route, baseUrl, path, parentParams) {
   return {
     next() {
       if (!match) {
-        match = matchPath(route.path, path, !route.children, parentParams);
+        match = matchPath(route, path, parentKeys, parentParams);
 
         if (match) {
           return {
@@ -44,6 +44,7 @@ function matchRoute(route, baseUrl, path, parentParams) {
               childRoute,
               baseUrl + (match.path === '/' ? '' : match.path),
               newPath.charAt(0) === '/' ? newPath : `/${newPath}`,
+              match.keys,
               match.params,
             );
           }

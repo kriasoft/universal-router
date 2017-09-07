@@ -65,7 +65,7 @@ function generateUrls(router) {
       var fullPath = '';
       var rt = route;
       while (rt) {
-        if (rt.path !== '/') {
+        if (rt.path && rt.path !== '/') {
           fullPath = rt.path + fullPath;
         }
         rt = rt.parent;
@@ -86,7 +86,7 @@ function generateUrls(router) {
     var url = router.baseUrl + regexp.toPath(params, options) || '/';
 
     if (options.stringifyQueryParams && params) {
-      var queryParams = Object.create(null);
+      var queryParams = {};
       var _keys = Object.keys(params);
       for (var _i = 0; _i < _keys.length; _i += 1) {
         var key = _keys[_i];
