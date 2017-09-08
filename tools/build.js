@@ -82,8 +82,7 @@ addons.forEach((addon) => {
       output: file.output === pkg.name ? `${pkg.name}-${addon.file}` : file.output,
       name: file.name ? addon.name : null,
       external: Object.keys(pkg.dependencies).concat([path.resolve('dist/src/Router.js')]),
-    })
-  ));
+    })));
 });
 
 async function run() {

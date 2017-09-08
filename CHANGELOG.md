@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+- Update [path-to-regexp](https://github.com/pillarjs/path-to-regexp) to v2.0.0, see
+  [changelog](https://github.com/pillarjs/path-to-regexp/blob/1bf805251c8486ea44395cd12afc37f77deec95e/History.md#200--2017-08-23)
+  (BREAKING CHANGE)
+  - Explicitly handle trailing delimiters (e.g. `/test/` is now treated as `/test/` instead of `/test` when matching)
+  - No wildcard asterisk (`*`) - use parameters instead (`(.*)`)
+  
+  Middleware routes must use empty string path `''` or do not use path at all when need to match any url.<br>
+  See [#111](https://github.com/kriasoft/universal-router/pull/111) for more info and examples
+- Add `encode` option to `generateUrls(router, options)` function for pretty encoding
+  (e.g. pass your own implementation)
+- Remove `pretty` option from `generateUrls(router, options)` function in favor of new `encode` option
+- Preserve `context.keys` values from the parent route
+- Inherit `context.params` and `queryParams` from
+  [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)
+  (e.g. `params.hasOwnProperty()` won't throw an exception anymore)
 - Include the source code of the router in the [npm package](https://www.npmjs.com/package/universal-router)
   ([#110](https://github.com/kriasoft/universal-router/pull/110))
 

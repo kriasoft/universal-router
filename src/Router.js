@@ -32,14 +32,23 @@ class Router {
     this.baseUrl = options.baseUrl || '';
     this.resolveRoute = options.resolveRoute || resolveRoute;
     this.context = Object.assign({ router: this }, options.context);
-    this.root = Array.isArray(routes) ? { path: '/', children: routes, parent: null } : routes;
+    this.root = Array.isArray(routes) ? { path: '', children: routes, parent: null } : routes;
     this.root.parent = null;
   }
 
   resolve(pathOrContext) {
-    const context = Object.assign({}, this.context,
-      typeof pathOrContext === 'string' ? { path: pathOrContext } : pathOrContext);
-    const match = matchRoute(this.root, this.baseUrl, context.path.substr(this.baseUrl.length));
+    const context = Object.assign(
+      {},
+      this.context,
+      typeof pathOrContext === 'string' ? { path: pathOrContext } : pathOrContext,
+    );
+    const match = matchRoute(
+      this.root,
+      this.baseUrl,
+      context.path.substr(this.baseUrl.length),
+      [],
+      null,
+    );
     const resolve = this.resolveRoute;
     let matches = null;
     let nextMatches = null;

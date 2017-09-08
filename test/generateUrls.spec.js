@@ -43,12 +43,12 @@ describe('generateUrls(router, options)(routeName, params)', () => {
     const router1 = new Router({ path: '/:name', name: 'user' });
     const url1 = generateUrls(router1);
     expect(url1('user', { name: 'koistya' })).to.be.equal('/koistya');
-    expect(() => url1('user')).to.throw(TypeError, /Expected "name" to be defined/);
+    expect(() => url1('user')).to.throw(TypeError, /Expected "name" to be a string/);
 
     const router2 = new Router({ path: '/user/:id', name: 'user' });
     const url2 = generateUrls(router2);
     expect(url2('user', { id: 123 })).to.be.equal('/user/123');
-    expect(() => url2('user')).to.throw(TypeError, /Expected "id" to be defined/);
+    expect(() => url2('user')).to.throw(TypeError, /Expected "id" to be a string/);
 
     const router3 = new Router({ path: '/user/:id' });
     const url3 = generateUrls(router3);
@@ -97,7 +97,6 @@ describe('generateUrls(router, options)(routeName, params)', () => {
     expect(url2('post', { id: 12, x: 'y' })).to.be.equal('/base/post/12');
 
     const router3 = new Router({
-      path: '/',
       name: 'a',
       children: [
         {
@@ -126,11 +125,15 @@ describe('generateUrls(router, options)(routeName, params)', () => {
     expect(url3('new')).to.be.equal('/base/new');
   });
 
-  it('should support pretty urls', async () => {
+  it('should encode params', async () => {
     const router = new Router({ path: '/:user', name: 'user' });
 
     const url = generateUrls(router);
-    const prettyUrl = generateUrls(router, { pretty: true });
+    const prettyUrl = generateUrls(router, {
+      encode(str) {
+        return encodeURI(str).replace(/[/?#]/g, c => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+      },
+    });
 
     expect(url('user', { user: '#$&+,/:;=?@' })).to.be.equal('/%23%24%26%2B%2C%2F%3A%3B%3D%3F%40');
     expect(prettyUrl('user', { user: '#$&+,/:;=?@' })).to.be.equal('/%23$&+,%2F:;=%3F@');

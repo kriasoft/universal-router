@@ -1,8 +1,7 @@
 sudo: false
 language: node_js
 node_js:
-  - 'node'
-  - '7'
+  - 'stable'
   - '6'
 script:
   - npm run lint

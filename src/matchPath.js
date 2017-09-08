@@ -19,33 +19,35 @@ function decodeParam(val) {
   }
 }
 
-function matchPath(routePath, urlPath, end, parentParams) {
-  const key = `${routePath}|${end}`;
+function matchPath(route, path, parentKeys, parentParams) {
+  const key = `${route.path || ''}|${!route.children}`;
   let regexp = cache.get(key);
 
   if (!regexp) {
     const keys = [];
-    regexp = { pattern: pathToRegexp(routePath, keys, { end }), keys };
+    regexp = {
+      keys,
+      pattern: pathToRegexp(route.path || '', keys, { end: !route.children }),
+    };
     cache.set(key, regexp);
   }
 
-  const m = regexp.pattern.exec(urlPath);
+  const m = regexp.pattern.exec(path || '/');
   if (!m) {
     return null;
   }
 
-  const path = m[0];
-  const params = Object.create(null);
-
-  if (parentParams) {
-    Object.assign(params, parentParams);
-  }
+  const params = Object.assign({}, parentParams);
 
   for (let i = 1; i < m.length; i += 1) {
     params[regexp.keys[i - 1].name] = m[i] && decodeParam(m[i]);
   }
 
-  return { path: path === '' ? '/' : path, keys: regexp.keys.slice(), params };
+  return {
+    path: m[0] === '' ? '/' : m[0],
+    keys: regexp.keys.concat(parentKeys),
+    params,
+  };
 }
 
 export default matchPath;

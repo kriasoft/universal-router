@@ -231,7 +231,7 @@ Any route action function may act as a **middleware** by calling `context.next()
 
 ```js
 const router = new Router({
-  path: '/',
+  path: '', // optional
   async action({ next }) {
     console.log('middleware: start');
     const child = await next();
@@ -281,16 +281,10 @@ where returned function is used for generating urls `url(routeName, params) ⇒ 
 import Router from 'universal-router';
 import generateUrls from 'universal-router/generateUrls';
 
-const routes = {
-  path: '/',
-  name: 'home',
-  children: [
-    {
-      path: '/user/:username',
-      name: 'user',
-    },
-  ],
-};
+const routes = [
+  { name: 'home', path: '/', },
+  { name: 'user', path: '/user/:username' },
+];
 
 const router = new Router(routes, { baseUrl: '/base' });
 const url = generateUrls(router);
@@ -307,10 +301,14 @@ routes.children.push({ path: '/world', name: 'hello' });
 url('hello');                         // => '/base/world'
 ```
 
-Use `pretty` option for prettier encoding of URI path segments.
+Use `encode` option for prettier encoding of URI path segments.
 
 ```js
-const prettyUrl = generateUrls(router, { pretty: true });
+const prettyUrl = generateUrls(router, {
+  encode(param) {
+    return encodeURI(param).replace(/[/?#]/g, char => `%${char.charCodeAt(0).toString(16).toUpperCase()}`);
+  },
+});
 
 url('user', { username: ':' });       // => '/base/user/%3A'
 prettyUrl('user', { username: ':' }); // => '/base/user/:'
