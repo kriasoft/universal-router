@@ -48,7 +48,7 @@ const router = new UniversalRouter(routes, options);
 ```
 
 
-## `router.resolve({ path, ...context })` ⇒ `Promise<any>`
+## `router.resolve({ pathname, ...context })` ⇒ `Promise<any>`
 
 Traverses the list of routes in the order they are defined until it finds the first route that
 matches provided URL path string and whose `action` function returns anything other than `null` or `undefined`.
@@ -65,7 +65,7 @@ const router = new UniversalRouter([
   },
 ]);
 
-router.resolve({ path: '/one' })
+router.resolve({ pathname: '/one' })
   .then(result => console.log(result));
   // => Page One
 ```
@@ -102,7 +102,7 @@ const router = new UniversalRouter({
   ],
 });
 
-router.resolve({ path: '/admin/users/john' })
+router.resolve({ pathname: '/admin/users/john' })
   .then(result => console.log(result));
   // => User Profile
 ```
@@ -118,7 +118,7 @@ const router = new UniversalRouter({
   action: (context) => `Welcome, ${context.params.username}!`,
 });
 
-router.resolve({ path: '/hello/john' })
+router.resolve({ pathname: '/hello/john' })
   .then(result => console.log(result));
   // => Welcome, john!
 ```
@@ -131,7 +131,7 @@ const router = new UniversalRouter({
   action: (ctx, { username }) => `Welcome, ${username}!`,
 });
 
-router.resolve({ path: '/hello/john' })
+router.resolve({ pathname: '/hello/john' })
   .then(result => console.log(result));
   // => Welcome, john!
 ```
@@ -157,7 +157,7 @@ const router = new UniversalRouter({
   },
 });
 
-router.resolve({ path: '/hello', user: 'admin' })
+router.resolve({ pathname: '/hello', user: 'admin' })
   .then(result => console.log(result));
   // => Welcome, admin!
 ```
@@ -182,7 +182,7 @@ before passing it to the `resolveRoute` function:
 - `route` - Matched route object.
 - `next` - Middleware style function which can continue resolving,
   see [Middlewares](#middlewares) section below for details.
-- `url` - URL which was transmitted to `router.resolve()`.
+- `pathname` - URL which was transmitted to `router.resolve()`.
 - `baseUrl` - Base URL path relative to the path of the current route.
 - `path` - Matched path.
 - `params` - Matched path params,
@@ -205,7 +205,7 @@ const router = new UniversalRouter({
   },
 });
 
-router.resolve({ path: '/hello/john' })
+router.resolve({ pathname: '/hello/john' })
   .then(result => console.log(result));
   // => Welcome, John Brown!
 ```
@@ -249,8 +249,7 @@ const router = new UniversalRouter({
   ],
 });
 
-router.resolve({ path: '/hello' });
-
+router.resolve({ pathname: '/hello' });
 // Prints:
 //   middleware: start
 //   route: return a result

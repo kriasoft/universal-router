@@ -553,9 +553,9 @@ var UniversalRouter = function () {
 
   _createClass(UniversalRouter, [{
     key: 'resolve',
-    value: function resolve(pathOrContext) {
-      var context = Object.assign({}, this.context, typeof pathOrContext === 'string' ? { path: pathOrContext } : pathOrContext);
-      var match = matchRoute(this.root, this.baseUrl, context.path.substr(this.baseUrl.length), [], null);
+    value: function resolve(pathnameOrContext) {
+      var context = Object.assign({}, this.context, typeof pathnameOrContext === 'string' ? { pathname: pathnameOrContext } : pathnameOrContext);
+      var match = matchRoute(this.root, this.baseUrl, context.pathname.substr(this.baseUrl.length), [], null);
       var resolve = this.resolveRoute;
       var matches = null;
       var nextMatches = null;
@@ -586,7 +586,6 @@ var UniversalRouter = function () {
         });
       }
 
-      context.url = context.path;
       context.next = next;
 
       return next(true, this.root);

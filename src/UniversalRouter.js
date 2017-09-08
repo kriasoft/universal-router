@@ -36,16 +36,16 @@ class UniversalRouter {
     this.root.parent = null;
   }
 
-  resolve(pathOrContext) {
+  resolve(pathnameOrContext) {
     const context = Object.assign(
       {},
       this.context,
-      typeof pathOrContext === 'string' ? { path: pathOrContext } : pathOrContext,
+      typeof pathnameOrContext === 'string' ? { pathname: pathnameOrContext } : pathnameOrContext,
     );
     const match = matchRoute(
       this.root,
       this.baseUrl,
-      context.path.substr(this.baseUrl.length),
+      context.pathname.substr(this.baseUrl.length),
       [],
       null,
     );
@@ -83,7 +83,6 @@ class UniversalRouter {
       });
     }
 
-    context.url = context.path;
     context.next = next;
 
     return next(true, this.root);
