@@ -23,7 +23,7 @@ function isChildRoute(parentRoute, childRoute) {
   return false;
 }
 
-class Router {
+class UniversalRouter {
   constructor(routes, options = {}) {
     if (Object(routes) !== routes) {
       throw new TypeError('Invalid routes');
@@ -90,9 +90,9 @@ class Router {
   }
 }
 
-Router.pathToRegexp = pathToRegexp;
-Router.matchPath = matchPath;
-Router.matchRoute = matchRoute;
-Router.resolveRoute = resolveRoute;
+UniversalRouter.pathToRegexp = pathToRegexp;
+UniversalRouter.matchPath = matchPath;
+UniversalRouter.matchRoute = matchRoute;
+UniversalRouter.resolveRoute = resolveRoute;
 
-export default Router;
+export default UniversalRouter;

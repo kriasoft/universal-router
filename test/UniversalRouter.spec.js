@@ -9,19 +9,19 @@
 
 import sinon from 'sinon';
 import { expect } from 'chai';
-import Router from '../src/Router';
+import UniversalRouter from '../src/UniversalRouter';
 
-describe('new Router(routes, options)', () => {
+describe('new UniversalRouter(routes, options)', () => {
   it('should throw an error in case of invalid routes', async () => {
-    expect(() => new Router()).to.throw(TypeError, /Invalid routes/);
-    expect(() => new Router(12)).to.throw(TypeError, /Invalid routes/);
-    expect(() => new Router(null)).to.throw(TypeError, /Invalid routes/);
+    expect(() => new UniversalRouter()).to.throw(TypeError, /Invalid routes/);
+    expect(() => new UniversalRouter(12)).to.throw(TypeError, /Invalid routes/);
+    expect(() => new UniversalRouter(null)).to.throw(TypeError, /Invalid routes/);
   });
 
   it('should support custom resolve option for declarative routes', async () => {
     const resolveRoute = sinon.spy(context => context.route.component || null);
     const action = sinon.spy();
-    const router = new Router({
+    const router = new UniversalRouter({
       path: '/a',
       action,
       children: [
@@ -39,7 +39,7 @@ describe('new Router(routes, options)', () => {
 
 describe('router.resolve({ path, ...context })', () => {
   it('should throw an error if no route found', async () => {
-    const router = new Router([]);
+    const router = new UniversalRouter([]);
     let err;
     try {
       await router.resolve('/');
@@ -57,7 +57,7 @@ describe('router.resolve({ path, ...context })', () => {
 
   it('should execute the matching route\'s action method and return its result', async () => {
     const action = sinon.spy(() => 'b');
-    const router = new Router({ path: '/a', action });
+    const router = new UniversalRouter({ path: '/a', action });
     const result = await router.resolve('/a');
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.property('path', '/a');
@@ -69,7 +69,7 @@ describe('router.resolve({ path, ...context })', () => {
     const action2 = sinon.spy(() => null);
     const action3 = sinon.spy(() => 'c');
     const action4 = sinon.spy(() => 'd');
-    const router = new Router([
+    const router = new UniversalRouter([
       { path: '/a', action: action1 },
       { path: '/a', action: action2 },
       { path: '/a', action: action3 },
@@ -85,7 +85,7 @@ describe('router.resolve({ path, ...context })', () => {
 
   it('should be able to pass context variables to action methods', async () => {
     const action = sinon.spy(() => true);
-    const router = new Router([
+    const router = new UniversalRouter([
       { path: '/a', action },
     ]);
     const result = await router.resolve({ path: '/a', test: 'b' });
@@ -97,7 +97,7 @@ describe('router.resolve({ path, ...context })', () => {
 
   it('should not call action methods of routes that don\'t match the URL path', async () => {
     const action = sinon.spy();
-    const router = new Router([
+    const router = new UniversalRouter([
       { path: '/a', action },
     ]);
     let err;
@@ -114,7 +114,7 @@ describe('router.resolve({ path, ...context })', () => {
   });
 
   it('should asynchronous route actions', async () => {
-    const router = new Router([
+    const router = new UniversalRouter([
       { path: '/a', action: async () => 'b' },
     ]);
     const result = await router.resolve('/a');
@@ -123,7 +123,7 @@ describe('router.resolve({ path, ...context })', () => {
 
   it('URL parameters are captured and added to context.params', async () => {
     const action = sinon.spy(() => true);
-    const router = new Router([
+    const router = new UniversalRouter([
       { path: '/:one/:two', action },
     ]);
     const result = await router.resolve({ path: '/a/b' });
@@ -135,7 +135,7 @@ describe('router.resolve({ path, ...context })', () => {
   it('should provide all URL parameters to each route', async () => {
     const action1 = sinon.spy();
     const action2 = sinon.spy(() => true);
-    const router = new Router([
+    const router = new UniversalRouter([
       {
         path: '/:one',
         action: action1,
@@ -158,7 +158,7 @@ describe('router.resolve({ path, ...context })', () => {
   it('should override URL parameters with same name in child route', async () => {
     const action1 = sinon.spy();
     const action2 = sinon.spy(() => true);
-    const router = new Router([
+    const router = new UniversalRouter([
       {
         path: '/:one',
         action: action1,
@@ -187,7 +187,7 @@ describe('router.resolve({ path, ...context })', () => {
     const action1 = sinon.spy(() => undefined);
     const action2 = sinon.spy(() => null);
     const action3 = sinon.spy(() => true);
-    const router = new Router([
+    const router = new UniversalRouter([
       {
         path: '/:one',
         action: action1,
@@ -227,7 +227,7 @@ describe('router.resolve({ path, ...context })', () => {
 
   it('should support next() across multiple routes', async () => {
     const log = [];
-    const router = new Router([
+    const router = new UniversalRouter([
       {
         path: '/test',
         children: [
@@ -281,7 +281,7 @@ describe('router.resolve({ path, ...context })', () => {
 
   it('should support next(true) across multiple routes', async () => {
     const log = [];
-    const router = new Router({
+    const router = new UniversalRouter({
       action({ next }) {
         log.push(1);
         return next().then((result) => { log.push(9); return result; });
@@ -327,7 +327,7 @@ describe('router.resolve({ path, ...context })', () => {
 
   it('should support parametrized routes 1', async () => {
     const action = sinon.spy(() => true);
-    const router = new Router([
+    const router = new UniversalRouter([
       { path: '/path/:a/other/:b', action },
     ]);
     const result = await router.resolve('/path/1/other/2');
@@ -342,7 +342,7 @@ describe('router.resolve({ path, ...context })', () => {
   it('should support child routes (1)', async () => {
     const action1 = sinon.spy();
     const action2 = sinon.spy(() => true);
-    const router = new Router([
+    const router = new UniversalRouter([
       {
         path: '',
         action: action1,
@@ -366,7 +366,7 @@ describe('router.resolve({ path, ...context })', () => {
   it('should support child routes (2)', async () => {
     const action1 = sinon.spy();
     const action2 = sinon.spy(() => true);
-    const router = new Router([
+    const router = new UniversalRouter([
       {
         path: '/a',
         action: action1,
@@ -391,7 +391,7 @@ describe('router.resolve({ path, ...context })', () => {
     const action1 = sinon.spy(() => undefined);
     const action2 = sinon.spy(() => null);
     const action3 = sinon.spy(() => true);
-    const router = new Router([
+    const router = new UniversalRouter([
       {
         path: '/a',
         action: action1,
@@ -423,7 +423,7 @@ describe('router.resolve({ path, ...context })', () => {
 
   it('should re-throw an error', async () => {
     const error = new Error('test error');
-    const router = new Router([
+    const router = new UniversalRouter([
       {
         path: '/a',
         action() { throw error; },
@@ -451,7 +451,7 @@ describe('router.resolve({ path, ...context })', () => {
         },
       ],
     };
-    const router = new Router(routes, { baseUrl: '/base' });
+    const router = new UniversalRouter(routes, { baseUrl: '/base' });
     const result = await router.resolve('/base/a/b/c');
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.property('url', '/base/a/b/c');

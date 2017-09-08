@@ -27,7 +27,7 @@
     "main.js": "./browser.js",
     "main.esm.js": "./browser.esm.js"
   },
-  "esnext": "src/Router.js",
+  "esnext": "src/UniversalRouter.js",
   "dependencies": {
     "path-to-regexp": "^2.0.0"
   },

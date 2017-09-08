@@ -81,7 +81,7 @@ addons.forEach((addon) => {
       basePath: file.format === 'umd' ? '' : `/${addon.name}`,
       output: file.output === pkg.name ? `${pkg.name}-${addon.file}` : file.output,
       name: file.name ? addon.name : null,
-      external: Object.keys(pkg.dependencies).concat([path.resolve('dist/src/Router.js')]),
+      external: Object.keys(pkg.dependencies).concat([path.resolve('dist/src/UniversalRouter.js')]),
     })));
 });
 
@@ -99,7 +99,7 @@ async function run() {
   // Compile source code into a distributable format with Babel
   await Promise.all(files.map(async (file) => {
     const bundle = await rollup.rollup({
-      input: file.input || 'dist/src/Router.js',
+      input: file.input || 'dist/src/UniversalRouter.js',
       external: file.external || Object.keys(pkg.dependencies),
       plugins: [
         ...file.format === 'umd' ? [nodeResolve({ browser: true }), commonjs()] : [],
@@ -121,10 +121,10 @@ async function run() {
       name: file.name,
       banner: '/*! Universal Router | MIT License | https://www.kriasoft.com/universal-router/ */\n',
       globals: {
-        [path.resolve('dist/src/Router.js')]: name,
+        [path.resolve('dist/src/UniversalRouter.js')]: name,
       },
       paths: {
-        [path.resolve('dist/src/Router.js')]: file.format === 'umd' ? `./${pkg.name}${file.ext}` : '..',
+        [path.resolve('dist/src/UniversalRouter.js')]: file.format === 'umd' ? `./${pkg.name}${file.ext}` : '..',
       },
     });
   }));

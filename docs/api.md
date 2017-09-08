@@ -1,10 +1,10 @@
 # Universal Router API
 
-## `const router = new Router(routes, options)`
+## `const router = new UniversalRouter(routes, options)`
 
 Creates an universal router instance which have a single
 [`router.resolve()`](#routerresolve-path-context---promiseany) method.
-`Router` constructor expects a plain javascript object for the first `routes` argument
+`UniversalRouter` constructor expects a plain javascript object for the first `routes` argument
 with any amount of params where only `path` is required, or array of such objects.
 Second `options` argument is optional where you can pass the following:
 
@@ -17,7 +17,7 @@ Second `options` argument is optional where you can pass the following:
   By default the router calls the `action` function of matched route.
 
 ```js
-import Router from 'universal-router';
+import UniversalRouter from 'universal-router';
 
 const routes = {
   path: '/',                // string, required 
@@ -44,7 +44,7 @@ const options = {
   }
 };
 
-const router = new Router(routes, options);
+const router = new UniversalRouter(routes, options);
 ```
 
 
@@ -54,7 +54,7 @@ Traverses the list of routes in the order they are defined until it finds the fi
 matches provided URL path string and whose `action` function returns anything other than `null` or `undefined`.
 
 ```js
-const router = new Router([
+const router = new UniversalRouter([
   {
     path: '/one',
     action: () => 'Page One',
@@ -79,7 +79,7 @@ Where `action` is just a regular function that may, or may not, return any arbit
 Each route may have an optional `children: [ ... ]` property containing the list of child routes:
 
 ```js
-const router = new Router({
+const router = new UniversalRouter({
   path: '/admin',
   children: [
     {
@@ -113,7 +113,7 @@ router.resolve({ path: '/admin/users/john' })
 **Named route parameters** are captured and added to `context.params`.
 
 ```js
-const router = new Router({
+const router = new UniversalRouter({
   path: '/hello/:username',
   action: (context) => `Welcome, ${context.params.username}!`,
 });
@@ -126,7 +126,7 @@ router.resolve({ path: '/hello/john' })
 Alternatively, captured parameters can be accessed via the second argument to an action method like so:
 
 ```js
-const router = new Router({
+const router = new UniversalRouter({
   path: '/hello/:username',
   action: (ctx, { username }) => `Welcome, ${username}!`,
 });
@@ -150,7 +150,7 @@ In addition to a URL path string, any arbitrary data can be passed to the `route
 that becomes available inside `action` functions.
 
 ```js
-const router = new Router({
+const router = new UniversalRouter({
   path: '/hello',
   action(context) {
     return `Welcome, ${context.user}!`;
@@ -162,7 +162,7 @@ router.resolve({ path: '/hello', user: 'admin' })
   // => Welcome, admin!
 ```
 
-Router supports `context` option in the `Router` constructor
+Router supports `context` option in the `UniversalRouter` constructor
 to support for specify of custom context properties only once.
 
 ```js
@@ -172,7 +172,7 @@ const context = {
   // ...
 };
 
-const router = new Router(route, { context });
+const router = new UniversalRouter(route, { context });
 ```
 
 Router always adds following parameters to the `context` object
@@ -196,7 +196,7 @@ before passing it to the `resolveRoute` function:
 The router works great with asynchronous functions out of the box!
 
 ```js
-const router = new Router({
+const router = new UniversalRouter({
   path: '/hello/:username',
   async action({ params }) {
     const resp = await fetch(`/api/users/${params.username}`);
@@ -230,7 +230,7 @@ const route = {
 Any route action function may act as a **middleware** by calling `context.next()`.
 
 ```js
-const router = new Router({
+const router = new UniversalRouter({
   path: '', // optional
   async action({ next }) {
     console.log('middleware: start');
@@ -278,7 +278,7 @@ That's why this feature is available as an add-on with simple API `generateUrls(
 where returned function is used for generating urls `url(routeName, params) ⇒ String`.
 
 ```js
-import Router from 'universal-router';
+import UniversalRouter from 'universal-router';
 import generateUrls from 'universal-router/generateUrls';
 
 const routes = [
@@ -286,7 +286,7 @@ const routes = [
   { name: 'user', path: '/user/:username' },
 ];
 
-const router = new Router(routes, { baseUrl: '/base' });
+const router = new UniversalRouter(routes, { baseUrl: '/base' });
 const url = generateUrls(router);
 
 url('home');                          // => '/base'
