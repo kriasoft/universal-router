@@ -534,11 +534,11 @@ function isChildRoute(parentRoute, childRoute) {
   return false;
 }
 
-var Router = function () {
-  function Router(routes) {
+var UniversalRouter = function () {
+  function UniversalRouter(routes) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    _classCallCheck(this, Router);
+    _classCallCheck(this, UniversalRouter);
 
     if (Object(routes) !== routes) {
       throw new TypeError('Invalid routes');
@@ -551,7 +551,7 @@ var Router = function () {
     this.root.parent = null;
   }
 
-  _createClass(Router, [{
+  _createClass(UniversalRouter, [{
     key: 'resolve',
     value: function resolve(pathOrContext) {
       var context = Object.assign({}, this.context, typeof pathOrContext === 'string' ? { path: pathOrContext } : pathOrContext);
@@ -593,15 +593,15 @@ var Router = function () {
     }
   }]);
 
-  return Router;
+  return UniversalRouter;
 }();
 
-Router.pathToRegexp = pathToRegexp_1$1;
-Router.matchPath = matchPath;
-Router.matchRoute = matchRoute;
-Router.resolveRoute = resolveRoute;
+UniversalRouter.pathToRegexp = pathToRegexp_1$1;
+UniversalRouter.matchPath = matchPath;
+UniversalRouter.matchRoute = matchRoute;
+UniversalRouter.resolveRoute = resolveRoute;
 
-return Router;
+return UniversalRouter;
 
 })));
 //# sourceMappingURL=universal-router.js.map

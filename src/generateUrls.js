@@ -9,8 +9,9 @@
 
 /* eslint no-param-reassign: ['error', { props: false }] */
 
-import Router from './Router';
+import UniversalRouter from './UniversalRouter';
 
+const { pathToRegexp } = UniversalRouter;
 const cache = new Map();
 
 function cacheRoutes(routesByName, route, routes) {
@@ -32,8 +33,8 @@ function cacheRoutes(routesByName, route, routes) {
 }
 
 function generateUrls(router, options = {}) {
-  if (!(router instanceof Router)) {
-    throw new TypeError('An instance of Router is expected');
+  if (!(router instanceof UniversalRouter)) {
+    throw new TypeError('An instance of UniversalRouter is expected');
   }
 
   router.routesByName = router.routesByName || {};
@@ -60,8 +61,8 @@ function generateUrls(router, options = {}) {
         }
         rt = rt.parent;
       }
-      const tokens = Router.pathToRegexp.parse(fullPath);
-      const toPath = Router.pathToRegexp.tokensToFunction(tokens);
+      const tokens = pathToRegexp.parse(fullPath);
+      const toPath = pathToRegexp.tokensToFunction(tokens);
       const keys = Object.create(null);
       for (let i = 0; i < tokens.length; i += 1) {
         if (typeof tokens[i] !== 'string') {
@@ -94,6 +95,6 @@ function generateUrls(router, options = {}) {
   };
 }
 
-Router.generateUrls = generateUrls;
+UniversalRouter.generateUrls = generateUrls;
 
 export default generateUrls;

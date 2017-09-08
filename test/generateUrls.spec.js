@@ -9,20 +9,20 @@
 
 import sinon from 'sinon';
 import { expect } from 'chai';
-import Router from '../src/Router';
+import UniversalRouter from '../src/UniversalRouter';
 import generateUrls from '../src/generateUrls';
 
 describe('generateUrls(router, options)(routeName, params)', () => {
   it('should throw an error in case of invalid router', async () => {
-    expect(() => generateUrls()).to.throw(TypeError, /An instance of Router is expected/);
-    expect(() => generateUrls([])).to.throw(TypeError, /An instance of Router is expected/);
-    expect(() => generateUrls(123)).to.throw(TypeError, /An instance of Router is expected/);
-    expect(() => generateUrls(null)).to.throw(TypeError, /An instance of Router is expected/);
-    expect(() => generateUrls(Router)).to.throw(TypeError, /An instance of Router is expected/);
+    expect(() => generateUrls()).to.throw(TypeError, /An instance of UniversalRouter is expected/);
+    expect(() => generateUrls([])).to.throw(TypeError, /An instance of UniversalRouter is expected/);
+    expect(() => generateUrls(123)).to.throw(TypeError, /An instance of UniversalRouter is expected/);
+    expect(() => generateUrls(null)).to.throw(TypeError, /An instance of UniversalRouter is expected/);
+    expect(() => generateUrls(UniversalRouter)).to.throw(TypeError, /An instance of UniversalRouter is expected/);
   });
 
   it('should throw an error if no route found', async () => {
-    const router = new Router({ path: '/a', name: 'a' });
+    const router = new UniversalRouter({ path: '/a', name: 'a' });
     const url = generateUrls(router);
     expect(() => url('hello')).to.throw(Error, /Route "hello" not found/);
 
@@ -31,7 +31,7 @@ describe('generateUrls(router, options)(routeName, params)', () => {
   });
 
   it('should throw an error if route name is not unique', async () => {
-    const router = new Router([
+    const router = new UniversalRouter([
       { path: '/a', name: 'example' },
       { path: '/b', name: 'example' },
     ]);
@@ -40,23 +40,23 @@ describe('generateUrls(router, options)(routeName, params)', () => {
   });
 
   it('should generate url for named routes', async () => {
-    const router1 = new Router({ path: '/:name', name: 'user' });
+    const router1 = new UniversalRouter({ path: '/:name', name: 'user' });
     const url1 = generateUrls(router1);
     expect(url1('user', { name: 'koistya' })).to.be.equal('/koistya');
     expect(() => url1('user')).to.throw(TypeError, /Expected "name" to be a string/);
 
-    const router2 = new Router({ path: '/user/:id', name: 'user' });
+    const router2 = new UniversalRouter({ path: '/user/:id', name: 'user' });
     const url2 = generateUrls(router2);
     expect(url2('user', { id: 123 })).to.be.equal('/user/123');
     expect(() => url2('user')).to.throw(TypeError, /Expected "id" to be a string/);
 
-    const router3 = new Router({ path: '/user/:id' });
+    const router3 = new UniversalRouter({ path: '/user/:id' });
     const url3 = generateUrls(router3);
     expect(() => url3('user')).to.throw(Error, /Route "user" not found/);
   });
 
   it('should generate url for nested routes', async () => {
-    const router = new Router({
+    const router = new UniversalRouter({
       path: '/',
       name: 'a',
       children: [
@@ -88,15 +88,15 @@ describe('generateUrls(router, options)(routeName, params)', () => {
   it('should respect baseUrl', async () => {
     const options = { baseUrl: '/base' };
 
-    const router1 = new Router({ path: '/', name: 'home' }, options);
+    const router1 = new UniversalRouter({ path: '/', name: 'home' }, options);
     const url1 = generateUrls(router1);
     expect(url1('home')).to.be.equal('/base');
 
-    const router2 = new Router({ path: '/post/:id', name: 'post' }, options);
+    const router2 = new UniversalRouter({ path: '/post/:id', name: 'post' }, options);
     const url2 = generateUrls(router2);
     expect(url2('post', { id: 12, x: 'y' })).to.be.equal('/base/post/12');
 
-    const router3 = new Router({
+    const router3 = new UniversalRouter({
       name: 'a',
       children: [
         {
@@ -126,7 +126,7 @@ describe('generateUrls(router, options)(routeName, params)', () => {
   });
 
   it('should encode params', async () => {
-    const router = new Router({ path: '/:user', name: 'user' });
+    const router = new UniversalRouter({ path: '/:user', name: 'user' });
 
     const url = generateUrls(router);
     const prettyUrl = generateUrls(router, {
@@ -140,7 +140,7 @@ describe('generateUrls(router, options)(routeName, params)', () => {
   });
 
   it('should stringify query params (1)', async () => {
-    const router = new Router({ path: '/:user', name: 'user' });
+    const router = new UniversalRouter({ path: '/:user', name: 'user' });
     const stringifyQueryParams = sinon.spy(() => 'qs');
 
     const url = generateUrls(router, { stringifyQueryParams });
@@ -151,7 +151,7 @@ describe('generateUrls(router, options)(routeName, params)', () => {
   });
 
   it('should stringify query params (2)', async () => {
-    const router = new Router({ path: '/user/:username', name: 'user' });
+    const router = new UniversalRouter({ path: '/user/:username', name: 'user' });
     const stringifyQueryParams = sinon.spy(() => '');
 
     const url = generateUrls(router, { stringifyQueryParams });
@@ -162,7 +162,7 @@ describe('generateUrls(router, options)(routeName, params)', () => {
   });
 
   it('should stringify query params (3)', async () => {
-    const router = new Router({ path: '/me', name: 'me' });
+    const router = new UniversalRouter({ path: '/me', name: 'me' });
     const stringifyQueryParams = sinon.spy(() => '?x=i&y=j&z=k');
 
     const url = generateUrls(router, { stringifyQueryParams });

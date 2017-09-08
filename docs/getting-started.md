@@ -11,21 +11,21 @@ by running:
 $ npm install universal-router --save
 ```
 
-This module contains a `Router` class with a single `router.resolve` method that responsible for traversing
+This module contains a `UniversalRouter` class with a single `router.resolve` method that responsible for traversing
 the list of routes, until it finds the first route matching the provided URL path string and whose action method
 returns anything other than `null` or `undefined`. Each route is just a plain JavaScript object having `path`,
 `action`, and `children` (optional) properties.
  
 ```js
-import Router from 'universal-router';
+import UniversalRouter from 'universal-router';
 
 const routes = [
   { path: '/one', action: () => '<h1>Page One</h1>' },
   { path: '/two', action: () => '<h1>Page Two</h1>' },
-  { path: '*', action: () => '<h1>Not Found</h1>' }
+  { path: '(.*)', action: () => '<h1>Not Found</h1>' }
 ];
 
-const router = new Router(routes);
+const router = new UniversalRouter(routes);
 
 router.resolve({ path: '/one' }).then(result => {
   document.body.innerHTML = result;
@@ -36,7 +36,7 @@ router.resolve({ path: '/one' }).then(result => {
 If you're using the router with Node v5 and below, import it as follows:
 
 ```js
-import Router from 'universal-router/legacy';
+import UniversalRouter from 'universal-router/legacy';
 ```
 
 If you don't want to use npm to manage client packages, the `universal-router` npm package
@@ -61,15 +61,15 @@ polyfills for compatibility with older browsers.
 ```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Router from 'universal-router';
+import UniversalRouter from 'universal-router';
 
 const routes = [
   { path: '/one', action: () => <h1>Page One</h1> },
   { path: '/two', action: () => <h1>Page Two</h1> },
-  { path: '*', action: () => <h1>Not Found</h1> }
+  { path: '(.*)', action: () => <h1>Not Found</h1> }
 ];
 
-const router = new Router(routes);
+const router = new UniversalRouter(routes);
 
 router.resolve({ path: '/one' }).then(component => {
   ReactDOM.render(component, document.body);

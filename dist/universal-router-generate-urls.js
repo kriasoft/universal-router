@@ -4,9 +4,9 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('./universal-router.js')) :
 	typeof define === 'function' && define.amd ? define(['./universal-router.js'], factory) :
 	(global.generateUrls = factory(global.UniversalRouter));
-}(this, (function (Router) { 'use strict';
+}(this, (function (UniversalRouter) { 'use strict';
 
-Router = Router && Router.hasOwnProperty('default') ? Router['default'] : Router;
+UniversalRouter = UniversalRouter && UniversalRouter.hasOwnProperty('default') ? UniversalRouter['default'] : UniversalRouter;
 
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
@@ -18,6 +18,8 @@ Router = Router && Router.hasOwnProperty('default') ? Router['default'] : Router
  */
 
 /* eslint no-param-reassign: ['error', { props: false }] */
+
+var pathToRegexp = UniversalRouter.pathToRegexp;
 
 var cache = new Map();
 
@@ -42,8 +44,8 @@ function cacheRoutes(routesByName, route, routes) {
 function generateUrls(router) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-  if (!(router instanceof Router)) {
-    throw new TypeError('An instance of Router is expected');
+  if (!(router instanceof UniversalRouter)) {
+    throw new TypeError('An instance of UniversalRouter is expected');
   }
 
   router.routesByName = router.routesByName || {};
@@ -70,8 +72,8 @@ function generateUrls(router) {
         }
         rt = rt.parent;
       }
-      var tokens = Router.pathToRegexp.parse(fullPath);
-      var toPath = Router.pathToRegexp.tokensToFunction(tokens);
+      var tokens = pathToRegexp.parse(fullPath);
+      var toPath = pathToRegexp.tokensToFunction(tokens);
       var keys = Object.create(null);
       for (var i = 0; i < tokens.length; i += 1) {
         if (typeof tokens[i] !== 'string') {
@@ -104,7 +106,7 @@ function generateUrls(router) {
   };
 }
 
-Router.generateUrls = generateUrls;
+UniversalRouter.generateUrls = generateUrls;
 
 return generateUrls;
 
