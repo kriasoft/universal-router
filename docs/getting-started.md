@@ -27,7 +27,7 @@ const routes = [
 
 const router = new UniversalRouter(routes);
 
-router.resolve({ path: '/one' }).then(result => {
+router.resolve({ pathname: '/one' }).then(result => {
   document.body.innerHTML = result;
   // renders: <h1>Page One</h1>
 });
@@ -71,7 +71,7 @@ const routes = [
 
 const router = new UniversalRouter(routes);
 
-router.resolve({ path: '/one' }).then(component => {
+router.resolve({ pathname: '/one' }).then(component => {
   ReactDOM.render(component, document.body);
   // renders: <h1>Page One</h1>
 });

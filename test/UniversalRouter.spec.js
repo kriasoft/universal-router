@@ -37,7 +37,7 @@ describe('new UniversalRouter(routes, options)', () => {
   });
 });
 
-describe('router.resolve({ path, ...context })', () => {
+describe('router.resolve({ pathname, ...context })', () => {
   it('should throw an error if no route found', async () => {
     const router = new UniversalRouter([]);
     let err;
@@ -48,8 +48,8 @@ describe('router.resolve({ path, ...context })', () => {
     }
     expect(err).to.be.an('error');
     expect(err.message).to.be.equal('Page not found');
-    expect(err.context.url).to.be.equal('/');
-    expect(err.context.path).to.be.equal('/');
+    expect(err.context.pathname).to.be.equal('/');
+    expect(err.context.path).to.be.equal(undefined);
     expect(err.context.router).to.be.equal(router);
     expect(err.status).to.be.equal(404);
     expect(err.statusCode).to.be.equal(404);
@@ -88,7 +88,7 @@ describe('router.resolve({ path, ...context })', () => {
     const router = new UniversalRouter([
       { path: '/a', action },
     ]);
-    const result = await router.resolve({ path: '/a', test: 'b' });
+    const result = await router.resolve({ pathname: '/a', test: 'b' });
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.property('path', '/a');
     expect(action.args[0][0]).to.have.property('test', 'b');
@@ -126,7 +126,7 @@ describe('router.resolve({ path, ...context })', () => {
     const router = new UniversalRouter([
       { path: '/:one/:two', action },
     ]);
-    const result = await router.resolve({ path: '/a/b' });
+    const result = await router.resolve({ pathname: '/a/b' });
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a', two: 'b' });
     expect(result).to.be.true;
@@ -147,7 +147,7 @@ describe('router.resolve({ path, ...context })', () => {
         ],
       },
     ]);
-    const result = await router.resolve({ path: '/a/b' });
+    const result = await router.resolve({ pathname: '/a/b' });
     expect(action1.calledOnce).to.be.true;
     expect(action1.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a' });
     expect(action2.calledOnce).to.be.true;
@@ -174,7 +174,7 @@ describe('router.resolve({ path, ...context })', () => {
         ],
       },
     ]);
-    const result = await router.resolve({ path: '/a/b' });
+    const result = await router.resolve({ pathname: '/a/b' });
     expect(action1.calledTwice).to.be.true;
     expect(action1.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a' });
     expect(action1.args[1][0]).to.have.property('params').that.deep.equals({ one: 'b' });
@@ -213,7 +213,7 @@ describe('router.resolve({ path, ...context })', () => {
         ],
       },
     ]);
-    const result = await router.resolve({ path: '/a/b' });
+    const result = await router.resolve({ pathname: '/a/b' });
     expect(action1.calledTwice).to.be.true;
     expect(action1.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a' });
     expect(action1.args[1][0]).to.have.property('params').that.deep.equals({ one: 'a', two: 'b' });
@@ -454,7 +454,7 @@ describe('router.resolve({ path, ...context })', () => {
     const router = new UniversalRouter(routes, { baseUrl: '/base' });
     const result = await router.resolve('/base/a/b/c');
     expect(action.calledOnce).to.be.true;
-    expect(action.args[0][0]).to.have.property('url', '/base/a/b/c');
+    expect(action.args[0][0]).to.have.property('pathname', '/base/a/b/c');
     expect(action.args[0][0]).to.have.property('path', '/c');
     expect(action.args[0][0]).to.have.property('baseUrl', '/base/a/b');
     expect(action.args[0][0]).to.have.property('route', routes.children[0].children[0]);
@@ -470,8 +470,8 @@ describe('router.resolve({ path, ...context })', () => {
     expect(action.calledOnce).to.be.true;
     expect(err).to.be.an('error');
     expect(err.message).to.be.equal('Page not found');
-    expect(err.context.url).to.be.equal('/a/b/c');
-    expect(err.context.path).to.be.equal('/a/b/c');
+    expect(err.context.pathname).to.be.equal('/a/b/c');
+    expect(err.context.path).to.be.equal(undefined);
     expect(err.context.router).to.be.equal(router);
     expect(err.status).to.be.equal(404);
     expect(err.statusCode).to.be.equal(404);
