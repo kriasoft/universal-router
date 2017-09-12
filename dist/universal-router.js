@@ -414,7 +414,7 @@ function matchPath(route, path, parentKeys, parentParams) {
     cache.set(key, regexp);
   }
 
-  var m = regexp.pattern.exec(path || '/');
+  var m = regexp.pattern.exec(path);
   if (!m) {
     return null;
   }
@@ -426,7 +426,7 @@ function matchPath(route, path, parentKeys, parentParams) {
   }
 
   return {
-    path: m[0] === '' ? '/' : m[0],
+    path: m[0],
     keys: regexp.keys.concat(parentKeys),
     params: params
   };
@@ -468,11 +468,10 @@ function matchRoute(route, baseUrl, path, parentKeys, parentParams) {
       if (match && route.children) {
         while (childIndex < route.children.length) {
           if (!childMatches) {
-            var newPath = path.substr(match.path.length);
             var childRoute = route.children[childIndex];
             childRoute.parent = route;
 
-            childMatches = matchRoute(childRoute, baseUrl + (match.path === '/' ? '' : match.path), newPath.charAt(0) === '/' ? newPath : '/' + newPath, match.keys, match.params);
+            childMatches = matchRoute(childRoute, baseUrl + match.path, path.substr(match.path.length), match.keys, match.params);
           }
 
           var childMatch = childMatches.next();

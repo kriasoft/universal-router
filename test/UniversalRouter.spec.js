@@ -257,7 +257,7 @@ describe('router.resolve({ pathname, ...context })', () => {
             path: '',
             action() { log.push(7); },
             children: [
-              { path: '/', action() { log.push(8); } },
+              { path: '', action() { log.push(8); } },
               { path: '(.*)', action() { log.push(9); } },
             ],
           },
@@ -357,7 +357,7 @@ describe('router.resolve({ pathname, ...context })', () => {
 
     const result = await router.resolve('/a');
     expect(action1.calledOnce).to.be.true;
-    expect(action1.args[0][0]).to.have.property('path', '/');
+    expect(action1.args[0][0]).to.have.property('path', '');
     expect(action2.calledOnce).to.be.true;
     expect(action2.args[0][0]).to.have.property('path', '/a');
     expect(result).to.be.true;

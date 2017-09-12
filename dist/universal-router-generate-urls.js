@@ -67,7 +67,7 @@ function generateUrls(router) {
       var fullPath = '';
       var rt = route;
       while (rt) {
-        if (rt.path && rt.path !== '/') {
+        if (rt.path) {
           fullPath = rt.path + fullPath;
         }
         rt = rt.parent;

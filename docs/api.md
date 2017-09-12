@@ -3,7 +3,7 @@
 ## `const router = new UniversalRouter(routes, options)`
 
 Creates an universal router instance which have a single
-[`router.resolve()`](#routerresolve-path-context---promiseany) method.
+[`router.resolve()`](#routerresolve-pathname-context---promiseany) method.
 `UniversalRouter` constructor expects a plain javascript object for the first `routes` argument
 with any amount of params where only `path` is required, or array of such objects.
 Second `options` argument is optional where you can pass the following:
@@ -20,15 +20,15 @@ Second `options` argument is optional where you can pass the following:
 import UniversalRouter from 'universal-router';
 
 const routes = {
-  path: '/',                // string, required 
-  name: 'home',             // unique string, optional
+  path: '/page',            // string, optional 
+  name: 'page',             // unique string, optional
   parent: null,             // route object or null, automatically filled by the router
   children: [],             // array of route objects or null, optional 
   action(context, params) { // function, optional
 
     // action method should return anything except `null` or `undefined` to be resolved by router
     // otherwise router will throw `Page not found` error if all matched routes returned nothing
-    return '<h1>Home Page</h1>';
+    return '<h1>The Page</h1>';
   },
   // ...
 };
@@ -83,14 +83,14 @@ const router = new UniversalRouter({
   path: '/admin',
   children: [
     {
-      path: '/',                       // www.example.com/admin
+      path: '',                        // www.example.com/admin
       action: () => 'Admin Page',
     },
     {
       path: '/users',
       children: [
         {
-          path: '/',                   // www.example.com/admin/users
+          path: '',                    // www.example.com/admin/users
           action: () => 'User List',
         },
         {
@@ -281,14 +281,14 @@ import UniversalRouter from 'universal-router';
 import generateUrls from 'universal-router/generateUrls';
 
 const routes = [
-  { name: 'home', path: '/', },
+  { name: 'users', path: '/users' },
   { name: 'user', path: '/user/:username' },
 ];
 
 const router = new UniversalRouter(routes, { baseUrl: '/base' });
 const url = generateUrls(router);
 
-url('home');                          // => '/base'
+url('users');                         // => '/base/users'
 url('user', { username: 'john' });    // => '/base/user/john'
 ```
 
@@ -300,17 +300,15 @@ routes.children.push({ path: '/world', name: 'hello' });
 url('hello');                         // => '/base/world'
 ```
 
-Use `encode` option for prettier encoding of URI path segments.
+Use `encode` option for custom encoding of URI path segments. By default
+[encodeURIComponent](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent)
+is used.
 
 ```js
-const prettyUrl = generateUrls(router, {
-  encode(param) {
-    return encodeURI(param).replace(/[/?#]/g, char => `%${char.charCodeAt(0).toString(16).toUpperCase()}`);
-  },
-});
+const prettyUrl = generateUrls(router, { encode: x => x });
 
-url('user', { username: ':' });       // => '/base/user/%3A'
-prettyUrl('user', { username: ':' }); // => '/base/user/:'
+url('user', { username: ':/' });       // => '/base/user/%3A%2F'
+prettyUrl('user', { username: ':/' }); // => '/base/user/:/'
 ```
 
 Provide a function to `stringifyQueryParams` option to generate URL with

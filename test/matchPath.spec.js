@@ -36,6 +36,16 @@ describe('matchPath(route, path)', () => {
     expect(result).to.be.deep.equal(null);
   });
 
+  it('should return null if path not fond (6)', () => {
+    const result = matchPath({ path: '/' }, '');
+    expect(result).to.be.deep.equal(null);
+  });
+
+  it('should return null if path not fond (7)', () => {
+    const result = matchPath({ path: '/', children: [] }, '');
+    expect(result).to.be.deep.equal(null);
+  });
+
   it('should return keys and params (1)', () => {
     const result = matchPath({ path: '/a' }, '/a', [], { x: 'y' });
     expect(result).to.be.deep.equal({ path: '/a', keys: [], params: { x: 'y' } });
@@ -50,9 +60,9 @@ describe('matchPath(route, path)', () => {
   });
 
   it('should return keys and params (3)', () => {
-    const result = matchPath({ path: '/' }, '', [], null);
+    const result = matchPath({ path: '' }, '', [], null);
     expect(result).to.be.ok;
-    expect(result).to.have.property('path', '/');
+    expect(result).to.have.property('path', '');
     expect(result).to.have.property('keys').and.be.an('array').lengthOf(0);
     expect(result).to.have.property('params').and.be.an('object');
     expect(Object.keys(result.params)).to.have.lengthOf(0);
@@ -85,8 +95,8 @@ describe('matchPath(route, path)', () => {
   });
 
   it('should return keys and params (8)', () => {
-    const result = matchPath({ path: '/', children: [] }, '', [], {});
-    expect(result).to.be.deep.equal({ path: '/', keys: [], params: {} });
+    const result = matchPath({ path: '', children: [] }, '', [], {});
+    expect(result).to.be.deep.equal({ path: '', keys: [], params: {} });
   });
 
   it('should work inside literal parenthesis', () => {

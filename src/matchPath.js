@@ -32,7 +32,7 @@ function matchPath(route, path, parentKeys, parentParams) {
     cache.set(key, regexp);
   }
 
-  const m = regexp.pattern.exec(path || '/');
+  const m = regexp.pattern.exec(path);
   if (!m) {
     return null;
   }
@@ -44,7 +44,7 @@ function matchPath(route, path, parentKeys, parentParams) {
   }
 
   return {
-    path: m[0] === '' ? '/' : m[0],
+    path: m[0],
     keys: regexp.keys.concat(parentKeys),
     params,
   };
