@@ -50,6 +50,19 @@ describe('matchRoute(route, baseUrl, path)', () => {
     expect(result).to.have.lengthOf(0);
   });
 
+  it('should match 0 routes (4)', () => {
+    const route = {
+      path: 'a',
+      children: [
+        {
+          path: 'b',
+        },
+      ],
+    };
+    const result = toArray(matchRoute(route, '', 'ab'));
+    expect(result).to.have.lengthOf(0);
+  });
+
   it('should match 1 route (1)', () => {
     const route = {
       path: '/',
@@ -84,7 +97,7 @@ describe('matchRoute(route, baseUrl, path)', () => {
     const result = toArray(matchRoute(route, '', '/a'));
     expect(result).to.have.lengthOf(2);
     expect(result[0]).to.have.property('baseUrl', '');
-    expect(result[0]).to.have.property('path', '/');
+    expect(result[0]).to.have.property('path', '');
     expect(result[0]).to.have.nested.property('route.path', '');
     expect(result[1]).to.have.property('baseUrl', '');
     expect(result[1]).to.have.property('path', '/a');
@@ -117,18 +130,18 @@ describe('matchRoute(route, baseUrl, path)', () => {
 
   it('should match 2 routes (3)', () => {
     const route = {
-      path: '/',
+      path: '',
       children: [
         {
-          path: '/',
+          path: '',
         },
       ],
     };
     const result = toArray(matchRoute(route, '', '/'));
     expect(result).to.have.lengthOf(2);
     expect(result[0]).to.have.property('baseUrl', '');
-    expect(result[0]).to.have.nested.property('route.path', '/');
-    expect(result[1]).to.have.property('baseUrl', '');
-    expect(result[1]).to.have.nested.property('route.path', '/');
+    expect(result[0]).to.have.nested.property('route.path', '');
+    expect(result[1]).to.have.property('baseUrl', '/');
+    expect(result[1]).to.have.nested.property('route.path', '');
   });
 });

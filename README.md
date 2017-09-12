@@ -53,22 +53,22 @@ import UniversalRouter from 'universal-router';
 
 const routes = [
   {
-    path: '/',
-    action: () => `<h1>Home</h1>`
+    path: '', // optional
+    action: () => `<h1>Home</h1>`,
   },
   {
     path: '/posts',
     action: () => console.log('checking child routes for /posts'),
     children: [
       {
-        path: '/',
-        action: () => `<h1>Posts</h1>`
+        path: '', // optional, matches both "/posts" and "/posts/"
+        action: () => `<h1>Posts</h1>`,
       },
       {
         path: '/:id',
-        action: (context) => `<h1>Post #${context.params.id}</h1>`
-      }
-    ]
+        action: (context) => `<h1>Post #${context.params.id}</h1>`,
+      },
+    ],
   },
 ];
 
@@ -107,8 +107,14 @@ and [`Object.create`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Re
 
 ## Books and Tutorials
 
-:mortar_board: &nbsp; **[ES6 Training Course](https://es6.io/friend/konstantin)** by Wes Bos<br>
-:green_book: &nbsp; **[You Don't Know JS: ES6 & Beyond](http://amzn.to/2bFss85)** by Kyle Simpson (Dec, 2015)<br>
+:mortar_board: &nbsp; **[ES6 Training Course](https://es6.io/friend/konstantin)**
+by [Wes Bos](https://twitter.com/wesbos)<br>
+:green_book: &nbsp; **[You Don't Know JS: ES6 & Beyond](http://amzn.to/2bFss85)**
+by [Kyle Simpson](https://github.com/getify) (Dec, 2015)<br>
+:page_facing_up: &nbsp; **[You might not need React Router](https://medium.freecodecamp.org/38673620f3d)**
+by [Konstantin Tarkus](https://twitter.com/koistya)<br>
+:page_facing_up: &nbsp; **[An Introduction to the Redux-First Routing Model](https://medium.freecodecamp.org/98926ebf53cb)**
+by [Michael Sargent](https://twitter.com/michaelksarge)<br>
 
 
 ## Sponsors
@@ -190,19 +196,21 @@ Get your image on our README with a link to your site.
 ## Related Projects
 
 * [React Starter Kit](https://github.com/kriasoft/react-starter-kit) —
-  Isomorphic web app boilerplate (Node.js, React, GraphQL, Webpack, CSS Modules)
+  Boilerplate and tooling for building isomorphic web apps with React and Relay
 * [Node.js API Starter Kit](https://github.com/kriasoft/nodejs-api-starter) —
-  Boilerplate and tooling for building data APIs with Node.js, GraphQL and Relay
+  Boilerplate and tooling for building data APIs with Docker, Node.js and GraphQL
 * [ASP.NET Core Starter Kit](https://github.com/kriasoft/aspnet-starter-kit) —
   Cross-platform single-page application boilerplate (ASP.NET Core, React, Redux)
 * [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit) —
-  JavaScript library boilerplate (ES2015, Babel, Rollup, Mocha, Chai, Sinon, Rewire)
+  Boilerplate for authoring JavaScript/React.js libraries
 * [React App SDK](https://github.com/kriasoft/react-app) —
   Create React apps with just a single dev dependency and zero configuration
-* [React Static Boilerplate](https://github.com/koistya/react-static-boilerplate) —
+* [React Static Boilerplate](https://github.com/kriasoft/react-static-boilerplate) —
   Single-page application (SPA) starter kit (React, Redux, Webpack, Firebase)
-* [History](https://github.com/mjackson/history) —
+* [History](https://github.com/ReactTraining/history) —
   HTML5 History API wrapper library that handle navigation in single-page apps
+* [Redux-First Routing](https://github.com/mksarge/redux-first-routing) —
+  A minimal, framework-agnostic API for accomplishing Redux-first routing
 
 
 ## Support

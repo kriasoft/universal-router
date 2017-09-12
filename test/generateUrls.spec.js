@@ -57,7 +57,7 @@ describe('generateUrls(router, options)(routeName, params)', () => {
 
   it('should generate url for nested routes', async () => {
     const router = new UniversalRouter({
-      path: '/',
+      path: '',
       name: 'a',
       children: [
         {
@@ -88,7 +88,7 @@ describe('generateUrls(router, options)(routeName, params)', () => {
   it('should respect baseUrl', async () => {
     const options = { baseUrl: '/base' };
 
-    const router1 = new UniversalRouter({ path: '/', name: 'home' }, options);
+    const router1 = new UniversalRouter({ path: '', name: 'home' }, options);
     const url1 = generateUrls(router1);
     expect(url1('home')).to.be.equal('/base');
 
@@ -100,7 +100,7 @@ describe('generateUrls(router, options)(routeName, params)', () => {
       name: 'a',
       children: [
         {
-          path: '/',
+          path: '',
           name: 'b',
         },
         {
@@ -123,6 +123,31 @@ describe('generateUrls(router, options)(routeName, params)', () => {
 
     router3.root.children.push({ path: '/new', name: 'new' });
     expect(url3('new')).to.be.equal('/base/new');
+  });
+
+  it('should generate url with trailing slash', async () => {
+    const routes = [
+      { name: 'a', path: '/' },
+      {
+        path: '/parent',
+        children: [
+          { name: 'b', path: '/' },
+          { name: 'c', path: '/child/' },
+        ],
+      },
+    ];
+
+    const router = new UniversalRouter(routes);
+    const url = generateUrls(router);
+    expect(url('a')).to.be.equal('/');
+    expect(url('b')).to.be.equal('/parent/');
+    expect(url('c')).to.be.equal('/parent/child/');
+
+    const baseRouter = new UniversalRouter(routes, { baseUrl: '/base' });
+    const baseUrl = generateUrls(baseRouter);
+    expect(baseUrl('a')).to.be.equal('/base/');
+    expect(baseUrl('b')).to.be.equal('/base/parent/');
+    expect(baseUrl('c')).to.be.equal('/base/parent/child/');
   });
 
   it('should encode params', async () => {

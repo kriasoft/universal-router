@@ -36,14 +36,13 @@ function matchRoute(route, baseUrl, path, parentKeys, parentParams) {
       if (match && route.children) {
         while (childIndex < route.children.length) {
           if (!childMatches) {
-            const newPath = path.substr(match.path.length);
             const childRoute = route.children[childIndex];
             childRoute.parent = route;
 
             childMatches = matchRoute(
               childRoute,
-              baseUrl + (match.path === '/' ? '' : match.path),
-              newPath.charAt(0) === '/' ? newPath : `/${newPath}`,
+              baseUrl + match.path,
+              path.substr(match.path.length),
               match.keys,
               match.params,
             );
