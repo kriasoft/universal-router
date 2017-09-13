@@ -19,6 +19,13 @@ function decodeParam(val) {
   }
 }
 
+function parseParam(key, value) {
+  if (key.repeat) {
+    return value ? value.split(key.delimiter).map(decodeParam) : [];
+  }
+  return value ? decodeParam(value) : value;
+}
+
 function matchPath(route, path, parentKeys, parentParams) {
   const key = `${route.path || ''}|${!route.children}`;
   let regexp = cache.get(key);
@@ -40,7 +47,7 @@ function matchPath(route, path, parentKeys, parentParams) {
   const params = Object.assign({}, parentParams);
 
   for (let i = 1; i < m.length; i += 1) {
-    params[regexp.keys[i - 1].name] = m[i] && decodeParam(m[i]);
+    params[regexp.keys[i - 1].name] = parseParam(regexp.keys[i - 1], m[i]);
   }
 
   return {

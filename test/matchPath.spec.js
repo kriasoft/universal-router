@@ -46,6 +46,11 @@ describe('matchPath(route, path)', () => {
     expect(result).to.be.deep.equal(null);
   });
 
+  it('should return null if path not fond (8)', () => {
+    const result = matchPath({ path: '/:a+' }, '', [], null);
+    expect(result).to.be.null;
+  });
+
   it('should return keys and params (1)', () => {
     const result = matchPath({ path: '/a' }, '/a', [], { x: 'y' });
     expect(result).to.be.deep.equal({ path: '/a', keys: [], params: { x: 'y' } });
@@ -132,5 +137,29 @@ describe('matchPath(route, path)', () => {
     const fn = () => matchPath({ path: '/:a' }, '/%AF', [], null);
     expect(fn).to.not.throw();
     expect(fn()).to.have.property('params').and.be.deep.equal({ a: '%AF' });
+  });
+
+  it('should support repeat parameters (1)', () => {
+    const fn = () => matchPath({ path: '/:a*' }, '/x/y/z', [], null);
+    expect(fn).to.not.throw();
+    expect(fn()).to.have.property('params').and.be.deep.equal({ a: ['x', 'y', 'z'] });
+  });
+
+  it('should support repeat parameters (2)', () => {
+    const fn = () => matchPath({ path: '/:a*' }, '/x/y/z', [], null);
+    expect(fn).to.not.throw();
+    expect(fn()).to.have.property('params').and.be.deep.equal({ a: ['x', 'y', 'z'] });
+  });
+
+  it('should support repeat parameters (3)', () => {
+    const fn = () => matchPath({ path: '/:a*' }, '', [], null);
+    expect(fn).to.not.throw();
+    expect(fn()).to.have.property('params').and.be.deep.equal({ a: [] });
+  });
+
+  it('should decode repeat parameters correctly', () => {
+    const fn = () => matchPath({ path: '/:a+' }, '/x%2Fy/z/%20/%AF', [], null);
+    expect(fn).to.not.throw();
+    expect(fn()).to.have.property('params').and.be.deep.equal({ a: ['x/y', 'z', ' ', '%AF'] });
   });
 });
