@@ -401,6 +401,13 @@ function decodeParam(val) {
   }
 }
 
+function parseParam(key, value) {
+  if (key.repeat) {
+    return value ? value.split(key.delimiter).map(decodeParam) : [];
+  }
+  return value ? decodeParam(value) : value;
+}
+
 function matchPath(route, path, parentKeys, parentParams) {
   var key = (route.path || '') + '|' + !route.children;
   var regexp = cache.get(key);
@@ -422,7 +429,7 @@ function matchPath(route, path, parentKeys, parentParams) {
   var params = Object.assign({}, parentParams);
 
   for (var i = 1; i < m.length; i += 1) {
-    params[regexp.keys[i - 1].name] = m[i] && decodeParam(m[i]);
+    params[regexp.keys[i - 1].name] = parseParam(regexp.keys[i - 1], m[i]);
   }
 
   return {

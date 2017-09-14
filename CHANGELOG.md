@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
   - No wildcard asterisk (`*`) - use parameters instead (`(.*)`)
 - Add `encode` option to `generateUrls(router, options)` function for pretty encoding
   (e.g. pass your own implementation)
+- Add support for repeat parameters ([#116](https://github.com/kriasoft/universal-router/pull/116))
 - Preserve `context.keys` values from the parent route
 - Inherit `context.params` and `queryParams` from
   [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)
