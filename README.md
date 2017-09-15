@@ -21,7 +21,7 @@ Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Git
 
 ## Features
 
-✓ It has [simple code](https://github.com/kriasoft/universal-router/blob/v3.2.0/src/Router.js)
+✓ It has [simple code](https://github.com/kriasoft/universal-router/blob/v4.0.0/src/UniversalRouter.js)
   with only single [path-to-regexp](https://github.com/pillarjs/path-to-regexp) dependency<br>
 ✓ It can be used with any JavaScript framework such as React, Vue.js etc<br>
 ✓ It uses the same middleware approach used in Express and Koa, making it easy to learn<br>
@@ -42,7 +42,7 @@ Or using a [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) like [u
 with the following script tag:
 
 ```html
-<script src="https://unpkg.com/universal-router@3.2.0/universal-router.min.js"></script>
+<script src="https://unpkg.com/universal-router@4.0.0/universal-router.min.js"></script>
 ```
 
 
@@ -79,10 +79,10 @@ router.resolve('/posts').then(html => {
 });
 ```
 
-Play with an example on [JSFiddle](https://jsfiddle.net/frenzzy/b0w9mjck/),
+Play with an example on [JSFiddle](https://jsfiddle.net/frenzzy/b0w9mjck/84/),
 [CodePen](https://codepen.io/frenzzy/pen/aWLKpb/),
-[JS Bin](https://jsbin.com/degedol/edit?js,output) in your browser or try
-[RunKit](https://runkit.com/frenzzy/universal-router-demo) node.js playground.
+[JS Bin](https://jsbin.com/kaluden/1/edit?js,output) in your browser or try
+[RunKit](https://runkit.com/frenzzy/universal-router-v4-demo) node.js playground.
 
 
 ## Documentation
