@@ -22,10 +22,10 @@
     "flux"
   ],
   "main": "main.js",
-  "module": "main.esm.js",
+  "module": "main.mjs",
   "browser": {
     "main.js": "./browser.js",
-    "main.esm.js": "./browser.esm.js"
+    "main.mjs": "./browser.mjs"
   },
   "esnext": "src/UniversalRouter.js",
   "dependencies": {
@@ -42,7 +42,7 @@
     "eslint": "^4.6.1",
     "eslint-config-airbnb-base": "^12.0.0",
     "eslint-plugin-import": "^2.7.0",
-    "fs-extra": "^4.0.1",
+    "fs-extra": "^4.0.2",
     "husky": "^0.14.3",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.5.3",

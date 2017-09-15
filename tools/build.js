@@ -34,7 +34,7 @@ const files = [
   },
   {
     format: 'es',
-    ext: '.esm.js',
+    ext: '.mjs',
     output: 'main',
   },
   {
@@ -51,7 +51,7 @@ const files = [
   },
   {
     format: 'es',
-    ext: '.esm.js',
+    ext: '.mjs',
     output: 'browser',
     presets: [['es2015', { modules: false }]],
   },
