@@ -15,13 +15,14 @@ All notable changes to this project will be documented in this file.
   (BREAKING CHANGE [#111](https://github.com/kriasoft/universal-router/pull/111))
   - Explicitly handle trailing delimiters (e.g. `/test/` is now treated as `/test/` instead of `/test` when matching)
   - No wildcard asterisk (`*`) - use parameters instead (`(.*)`)
-- Add `encode` option to `generateUrls(router, options)` function for pretty encoding
-  (e.g. pass your own implementation)
 - Add support for repeat parameters ([#116](https://github.com/kriasoft/universal-router/pull/116))
-- Preserve `context.keys` values from the parent route
+- Add `encode` option to `generateUrls(router, options)` function for pretty encoding
+  (e.g. pass your own implementation) ([#111](https://github.com/kriasoft/universal-router/pull/111))
+- Preserve `context.keys` values from the parent route ([#111](https://github.com/kriasoft/universal-router/pull/111))
 - Inherit `context.params` and `queryParams` from
   [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)
   (e.g. `params.hasOwnProperty()` won't throw an exception anymore)
+  ([#111](https://github.com/kriasoft/universal-router/pull/111))
 - Include the source code of the router in the [npm package](https://www.npmjs.com/package/universal-router)
   ([#110](https://github.com/kriasoft/universal-router/pull/110))
 
