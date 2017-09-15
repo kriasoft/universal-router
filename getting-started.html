@@ -38,27 +38,27 @@ samples below assume that you're using ES2015 flavor of JavaScript via <a href="
 by running:</p>
 <pre><code class="language-sh">$ npm install universal-router --save
 </code></pre>
-<p>This module contains a <code>Router</code> class with a single <code>router.resolve</code> method that responsible for traversing
+<p>This module contains a <code>UniversalRouter</code> class with a single <code>router.resolve</code> method that responsible for traversing
 the list of routes, until it finds the first route matching the provided URL path string and whose action method
 returns anything other than <code>null</code> or <code>undefined</code>. Each route is just a plain JavaScript object having <code>path</code>,
 <code>action</code>, and <code>children</code> (optional) properties.</p>
-<pre><code class="language-js">import Router from 'universal-router';
+<pre><code class="language-js">import UniversalRouter from 'universal-router';
 
 const routes = [
   { path: '/one', action: () =&gt; '&lt;h1&gt;Page One&lt;/h1&gt;' },
   { path: '/two', action: () =&gt; '&lt;h1&gt;Page Two&lt;/h1&gt;' },
-  { path: '*', action: () =&gt; '&lt;h1&gt;Not Found&lt;/h1&gt;' }
+  { path: '(.*)', action: () =&gt; '&lt;h1&gt;Not Found&lt;/h1&gt;' }
 ];
 
-const router = new Router(routes);
+const router = new UniversalRouter(routes);
 
-router.resolve({ path: '/one' }).then(result =&gt; {
+router.resolve({ pathname: '/one' }).then(result =&gt; {
   document.body.innerHTML = result;
   // renders: &lt;h1&gt;Page One&lt;/h1&gt;
 });
 </code></pre>
 <p>If you're using the router with Node v5 and below, import it as follows:</p>
-<pre><code class="language-js">import Router from 'universal-router/legacy';
+<pre><code class="language-js">import UniversalRouter from 'universal-router/legacy';
 </code></pre>
 <p>If you don't want to use npm to manage client packages, the <code>universal-router</code> npm package
 also provide single-file distributions, which are hosted on a <a href="https://unpkg.com/">CDN</a>:</p>
@@ -75,17 +75,17 @@ polyfills for compatibility with older browsers.</p>
 <h2 id="use-with-react">Use with React</h2>
 <pre><code class="language-jsx">import React from 'react';
 import ReactDOM from 'react-dom';
-import Router from 'universal-router';
+import UniversalRouter from 'universal-router';
 
 const routes = [
   { path: '/one', action: () =&gt; &lt;h1&gt;Page One&lt;/h1&gt; },
   { path: '/two', action: () =&gt; &lt;h1&gt;Page Two&lt;/h1&gt; },
-  { path: '*', action: () =&gt; &lt;h1&gt;Not Found&lt;/h1&gt; }
+  { path: '(.*)', action: () =&gt; &lt;h1&gt;Not Found&lt;/h1&gt; }
 ];
 
-const router = new Router(routes);
+const router = new UniversalRouter(routes);
 
-router.resolve({ path: '/one' }).then(component =&gt; {
+router.resolve({ pathname: '/one' }).then(component =&gt; {
   ReactDOM.render(component, document.body);
   // renders: &lt;h1&gt;Page One&lt;/h1&gt;
 });
