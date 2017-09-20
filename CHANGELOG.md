@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased][unreleased]
+## [v4.2.0] - 2017-09-20
 
 - Correctly handle trailing slashes in paths of routes
   ([#124](https://github.com/kriasoft/universal-router/pull/124))<br>
@@ -167,7 +167,8 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/universal-router/compare/v4.1.0...HEAD
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v4.2.0...HEAD
+[v4.2.0]: https://github.com/kriasoft/universal-router/compare/v4.1.0...v4.2.0
 [v4.1.0]: https://github.com/kriasoft/universal-router/compare/v4.0.0...v4.1.0
 [v4.0.0]: https://github.com/kriasoft/universal-router/compare/v3.2.0...v4.0.0
 [v3.2.0]: https://github.com/kriasoft/universal-router/compare/v3.1.0...v3.2.0
