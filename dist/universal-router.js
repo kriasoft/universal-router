@@ -9,7 +9,7 @@
 /**
  * Expose `pathToRegexp`.
  */
-var pathToRegexp_1$1 = pathToRegexp;
+var pathToRegexp_1 = pathToRegexp;
 var parse_1 = parse;
 var compile_1 = compile;
 var tokensToFunction_1 = tokensToFunction;
@@ -377,10 +377,10 @@ function pathToRegexp (path, keys, options) {
   return stringToRegexp(/** @type {string} */ (path), keys, options)
 }
 
-pathToRegexp_1$1.parse = parse_1;
-pathToRegexp_1$1.compile = compile_1;
-pathToRegexp_1$1.tokensToFunction = tokensToFunction_1;
-pathToRegexp_1$1.tokensToRegExp = tokensToRegExp_1;
+pathToRegexp_1.parse = parse_1;
+pathToRegexp_1.compile = compile_1;
+pathToRegexp_1.tokensToFunction = tokensToFunction_1;
+pathToRegexp_1.tokensToRegExp = tokensToRegExp_1;
 
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
@@ -411,7 +411,7 @@ function matchPath(route, path, parentKeys, parentParams) {
     var keys = [];
     regexp = {
       keys: keys,
-      pattern: pathToRegexp_1$1(route.path || '', keys, { end: !route.children })
+      pattern: pathToRegexp_1(route.path || '', keys, { end: !route.children })
     };
     cache.set(cacheKey, regexp);
   }
@@ -605,7 +605,7 @@ var UniversalRouter = function () {
   return UniversalRouter;
 }();
 
-UniversalRouter.pathToRegexp = pathToRegexp_1$1;
+UniversalRouter.pathToRegexp = pathToRegexp_1;
 UniversalRouter.matchPath = matchPath;
 UniversalRouter.matchRoute = matchRoute;
 UniversalRouter.resolveRoute = resolveRoute;

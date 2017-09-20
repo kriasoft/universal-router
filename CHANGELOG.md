@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased][unreleased]
+## [v4.1.0] - 2017-09-20
 
 - Support for using the same param name in array of paths ([#122](https://github.com/kriasoft/universal-router/pull/122))
 
@@ -145,7 +145,8 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/universal-router/compare/v4.0.0...HEAD
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v4.1.0...HEAD
+[v4.1.0]: https://github.com/kriasoft/universal-router/compare/v4.0.0...v4.1.0
 [v4.0.0]: https://github.com/kriasoft/universal-router/compare/v3.2.0...v4.0.0
 [v3.2.0]: https://github.com/kriasoft/universal-router/compare/v3.1.0...v3.2.0
 [v3.1.0]: https://github.com/kriasoft/universal-router/compare/v3.0.0...v3.1.0
