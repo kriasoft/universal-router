@@ -9,7 +9,7 @@
 /**
  * Expose `pathToRegexp`.
  */
-var pathToRegexp_1 = pathToRegexp;
+var pathToRegexp_1$1 = pathToRegexp;
 var parse_1 = parse;
 var compile_1 = compile;
 var tokensToFunction_1 = tokensToFunction;
@@ -377,10 +377,10 @@ function pathToRegexp (path, keys, options) {
   return stringToRegexp(/** @type {string} */ (path), keys, options)
 }
 
-pathToRegexp_1.parse = parse_1;
-pathToRegexp_1.compile = compile_1;
-pathToRegexp_1.tokensToFunction = tokensToFunction_1;
-pathToRegexp_1.tokensToRegExp = tokensToRegExp_1;
+pathToRegexp_1$1.parse = parse_1;
+pathToRegexp_1$1.compile = compile_1;
+pathToRegexp_1$1.tokensToFunction = tokensToFunction_1;
+pathToRegexp_1$1.tokensToRegExp = tokensToRegExp_1;
 
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
@@ -403,24 +403,26 @@ function decodeParam(val) {
   }
 }
 
-function matchPath(route, path, parentKeys, parentParams) {
-  var cacheKey = (route.path || '') + '|' + !route.children;
+function matchPath(route, pathname, parentKeys, parentParams) {
+  var end = !route.children;
+  var cacheKey = (route.path || '') + '|' + end;
   var regexp = cache.get(cacheKey);
 
   if (!regexp) {
     var keys = [];
     regexp = {
       keys: keys,
-      pattern: pathToRegexp_1(route.path || '', keys, { end: !route.children })
+      pattern: pathToRegexp_1$1(route.path || '', keys, { end: end })
     };
     cache.set(cacheKey, regexp);
   }
 
-  var m = regexp.pattern.exec(path);
+  var m = regexp.pattern.exec(pathname);
   if (!m) {
     return null;
   }
 
+  var path = m[0];
   var params = Object.assign({}, parentParams);
 
   for (var i = 1; i < m.length; i += 1) {
@@ -437,7 +439,7 @@ function matchPath(route, path, parentKeys, parentParams) {
   }
 
   return {
-    path: m[0],
+    path: !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path,
     keys: regexp.keys.concat(parentKeys),
     params: params
   };
@@ -452,7 +454,7 @@ function matchPath(route, path, parentKeys, parentParams) {
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-function matchRoute(route, baseUrl, path, parentKeys, parentParams) {
+function matchRoute(route, baseUrl, pathname, parentKeys, parentParams) {
   var match = void 0;
   var childMatches = void 0;
   var childIndex = 0;
@@ -460,7 +462,7 @@ function matchRoute(route, baseUrl, path, parentKeys, parentParams) {
   return {
     next: function next() {
       if (!match) {
-        match = matchPath(route, path, parentKeys, parentParams);
+        match = matchPath(route, pathname, parentKeys, parentParams);
 
         if (match) {
           return {
@@ -482,7 +484,7 @@ function matchRoute(route, baseUrl, path, parentKeys, parentParams) {
             var childRoute = route.children[childIndex];
             childRoute.parent = route;
 
-            childMatches = matchRoute(childRoute, baseUrl + match.path, path.substr(match.path.length), match.keys, match.params);
+            childMatches = matchRoute(childRoute, baseUrl + match.path, pathname.substr(match.path.length), match.keys, match.params);
           }
 
           var childMatch = childMatches.next();
@@ -605,7 +607,7 @@ var UniversalRouter = function () {
   return UniversalRouter;
 }();
 
-UniversalRouter.pathToRegexp = pathToRegexp_1;
+UniversalRouter.pathToRegexp = pathToRegexp_1$1;
 UniversalRouter.matchPath = matchPath;
 UniversalRouter.matchRoute = matchRoute;
 UniversalRouter.resolveRoute = resolveRoute;

@@ -56,8 +56,9 @@ function generateUrls(router, options = {}) {
       let fullPath = '';
       let rt = route;
       while (rt) {
-        if (rt.path) {
-          fullPath = rt.path + fullPath;
+        const path = Array.isArray(rt.path) ? rt.path[0] : rt.path;
+        if (path) {
+          fullPath = path + fullPath;
         }
         rt = rt.parent;
       }

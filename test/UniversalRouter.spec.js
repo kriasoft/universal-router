@@ -113,7 +113,7 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(action.called).to.be.false;
   });
 
-  it('should asynchronous route actions', async () => {
+  it('should support asynchronous route actions', async () => {
     const router = new UniversalRouter([
       { path: '/a', action: async () => 'b' },
     ]);
@@ -475,5 +475,23 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(err.context.router).to.be.equal(router);
     expect(err.status).to.be.equal(404);
     expect(err.statusCode).to.be.equal(404);
+  });
+
+  it('should match routes with trailing slashes', async () => {
+    const router = new UniversalRouter([
+      { path: '/', action: () => 'a' },
+      { path: '/page/', action: () => 'b' },
+      {
+        path: '/child',
+        children: [
+          { path: '/', action: () => 'c' },
+          { path: '/page/', action: () => 'd' },
+        ],
+      },
+    ]);
+    expect(await router.resolve('/')).to.be.equal('a');
+    expect(await router.resolve('/page/')).to.be.equal('b');
+    expect(await router.resolve('/child/')).to.be.equal('c');
+    expect(await router.resolve('/child/page/')).to.be.equal('d');
   });
 });

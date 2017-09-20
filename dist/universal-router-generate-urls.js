@@ -67,8 +67,9 @@ function generateUrls(router) {
       var fullPath = '';
       var rt = route;
       while (rt) {
-        if (rt.path) {
-          fullPath = rt.path + fullPath;
+        var path = Array.isArray(rt.path) ? rt.path[0] : rt.path;
+        if (path) {
+          fullPath = path + fullPath;
         }
         rt = rt.parent;
       }

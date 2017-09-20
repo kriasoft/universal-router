@@ -20,7 +20,7 @@ function toArray(gen) {
   return arr;
 }
 
-describe('matchRoute(route, baseUrl, path)', () => {
+describe('matchRoute(route, baseUrl, pathname)', () => {
   it('should match 0 routes (1)', () => {
     const route = {
       path: '/',
@@ -141,7 +141,7 @@ describe('matchRoute(route, baseUrl, path)', () => {
     expect(result).to.have.lengthOf(2);
     expect(result[0]).to.have.property('baseUrl', '');
     expect(result[0]).to.have.nested.property('route.path', '');
-    expect(result[1]).to.have.property('baseUrl', '/');
+    expect(result[1]).to.have.property('baseUrl', '');
     expect(result[1]).to.have.nested.property('route.path', '');
   });
 });
