@@ -20,24 +20,26 @@ function decodeParam(val) {
   }
 }
 
-function matchPath(route, path, parentKeys, parentParams) {
-  const cacheKey = `${route.path || ''}|${!route.children}`;
+function matchPath(route, pathname, parentKeys, parentParams) {
+  const end = !route.children;
+  const cacheKey = `${route.path || ''}|${end}`;
   let regexp = cache.get(cacheKey);
 
   if (!regexp) {
     const keys = [];
     regexp = {
       keys,
-      pattern: pathToRegexp(route.path || '', keys, { end: !route.children }),
+      pattern: pathToRegexp(route.path || '', keys, { end }),
     };
     cache.set(cacheKey, regexp);
   }
 
-  const m = regexp.pattern.exec(path);
+  const m = regexp.pattern.exec(pathname);
   if (!m) {
     return null;
   }
 
+  const path = m[0];
   const params = Object.assign({}, parentParams);
 
   for (let i = 1; i < m.length; i += 1) {
@@ -54,7 +56,7 @@ function matchPath(route, path, parentKeys, parentParams) {
   }
 
   return {
-    path: m[0],
+    path: !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path,
     keys: regexp.keys.concat(parentKeys),
     params,
   };

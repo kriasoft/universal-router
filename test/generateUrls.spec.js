@@ -55,6 +55,20 @@ describe('generateUrls(router, options)(routeName, params)', () => {
     expect(() => url3('user')).to.throw(Error, /Route "user" not found/);
   });
 
+  it('should generate urls for routes with array of paths', async () => {
+    const router1 = new UniversalRouter({ path: ['/:name', '/user/:name'], name: 'user' });
+    const url1 = generateUrls(router1);
+    expect(url1('user', { name: 'koistya' })).to.be.equal('/koistya');
+
+    const router2 = new UniversalRouter({ path: ['/user/:id', /\/user\/(\d+)/i], name: 'user' });
+    const url2 = generateUrls(router2);
+    expect(url2('user', { id: 123 })).to.be.equal('/user/123');
+
+    const router3 = new UniversalRouter({ path: [], name: 'user' });
+    const url3 = generateUrls(router3);
+    expect(url3('user')).to.be.equal('/');
+  });
+
   it('should generate url for nested routes', async () => {
     const router = new UniversalRouter({
       path: '',

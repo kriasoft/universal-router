@@ -10,7 +10,7 @@
 import { expect } from 'chai';
 import matchPath from '../src/matchPath';
 
-describe('matchPath(route, path)', () => {
+describe('matchPath(route, pathname)', () => {
   it('should return null if path not fond (1)', () => {
     const result = matchPath({ path: '/' }, '/a');
     expect(result).to.be.null;
@@ -96,7 +96,7 @@ describe('matchPath(route, path)', () => {
 
   it('should return keys and params (7)', () => {
     const result = matchPath({ path: '/', children: [] }, '/', []);
-    expect(result).to.be.deep.equal({ path: '/', keys: [], params: {} });
+    expect(result).to.be.deep.equal({ path: '', keys: [], params: {} });
   });
 
   it('should return keys and params (8)', () => {

@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased][unreleased]
+
+- Correctly handle trailing slashes in paths of routes
+  ([#124](https://github.com/kriasoft/universal-router/pull/124))<br>
+  If you are using trailing slashes in your paths, then the router will match urls only with trailing slashes:
+  ```js
+  const routes = [
+    { path: '/posts', ... },  // matches both "/posts" and "/posts/"
+    { path: '/posts/', ... }, // matches only "/posts/"
+  ];
+  ```
+- Generate url from first path for routes with an array of paths
+  ([#124](https://github.com/kriasoft/universal-router/pull/124))
+  ```js
+  const router = new UniversalRouter({
+    name: 'page',
+    path: ['/one', '/two', /RegExp/], // only first path is used for url generation
+  });
+  const url = generateUrls(router);
+  url('page'); // => /one
+  ```
+
 ## [v4.1.0] - 2017-09-20
 
 - Support for using the same param name in array of paths ([#122](https://github.com/kriasoft/universal-router/pull/122))
