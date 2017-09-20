@@ -9,6 +9,7 @@
 
 import pathToRegexp from 'path-to-regexp';
 
+const { hasOwnProperty } = Object.prototype;
 const cache = new Map();
 
 function decodeParam(val) {
@@ -19,16 +20,9 @@ function decodeParam(val) {
   }
 }
 
-function parseParam(key, value) {
-  if (key.repeat) {
-    return value ? value.split(key.delimiter).map(decodeParam) : [];
-  }
-  return value ? decodeParam(value) : value;
-}
-
 function matchPath(route, path, parentKeys, parentParams) {
-  const key = `${route.path || ''}|${!route.children}`;
-  let regexp = cache.get(key);
+  const cacheKey = `${route.path || ''}|${!route.children}`;
+  let regexp = cache.get(cacheKey);
 
   if (!regexp) {
     const keys = [];
@@ -36,7 +30,7 @@ function matchPath(route, path, parentKeys, parentParams) {
       keys,
       pattern: pathToRegexp(route.path || '', keys, { end: !route.children }),
     };
-    cache.set(key, regexp);
+    cache.set(cacheKey, regexp);
   }
 
   const m = regexp.pattern.exec(path);
@@ -47,7 +41,16 @@ function matchPath(route, path, parentKeys, parentParams) {
   const params = Object.assign({}, parentParams);
 
   for (let i = 1; i < m.length; i += 1) {
-    params[regexp.keys[i - 1].name] = parseParam(regexp.keys[i - 1], m[i]);
+    const key = regexp.keys[i - 1];
+    const prop = key.name;
+    const value = m[i];
+    if (value !== undefined || !hasOwnProperty.call(params, prop)) {
+      if (key.repeat) {
+        params[prop] = value ? value.split(key.delimiter).map(decodeParam) : [];
+      } else {
+        params[prop] = value ? decodeParam(value) : value;
+      }
+    }
   }
 
   return {

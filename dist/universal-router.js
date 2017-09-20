@@ -391,6 +391,8 @@ pathToRegexp_1$1.tokensToRegExp = tokensToRegExp_1;
  * LICENSE.txt file in the root directory of this source tree.
  */
 
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
 var cache = new Map();
 
 function decodeParam(val) {
@@ -401,16 +403,9 @@ function decodeParam(val) {
   }
 }
 
-function parseParam(key, value) {
-  if (key.repeat) {
-    return value ? value.split(key.delimiter).map(decodeParam) : [];
-  }
-  return value ? decodeParam(value) : value;
-}
-
 function matchPath(route, path, parentKeys, parentParams) {
-  var key = (route.path || '') + '|' + !route.children;
-  var regexp = cache.get(key);
+  var cacheKey = (route.path || '') + '|' + !route.children;
+  var regexp = cache.get(cacheKey);
 
   if (!regexp) {
     var keys = [];
@@ -418,7 +413,7 @@ function matchPath(route, path, parentKeys, parentParams) {
       keys: keys,
       pattern: pathToRegexp_1$1(route.path || '', keys, { end: !route.children })
     };
-    cache.set(key, regexp);
+    cache.set(cacheKey, regexp);
   }
 
   var m = regexp.pattern.exec(path);
@@ -429,7 +424,16 @@ function matchPath(route, path, parentKeys, parentParams) {
   var params = Object.assign({}, parentParams);
 
   for (var i = 1; i < m.length; i += 1) {
-    params[regexp.keys[i - 1].name] = parseParam(regexp.keys[i - 1], m[i]);
+    var key = regexp.keys[i - 1];
+    var prop = key.name;
+    var value = m[i];
+    if (value !== undefined || !hasOwnProperty.call(params, prop)) {
+      if (key.repeat) {
+        params[prop] = value ? value.split(key.delimiter).map(decodeParam) : [];
+      } else {
+        params[prop] = value ? decodeParam(value) : value;
+      }
+    }
   }
 
   return {

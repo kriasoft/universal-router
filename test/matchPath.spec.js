@@ -162,4 +162,10 @@ describe('matchPath(route, path)', () => {
     expect(fn).to.not.throw();
     expect(fn()).to.have.property('params').and.be.deep.equal({ a: ['x/y', 'z', ' ', '%AF'] });
   });
+
+  it('should not override existing param with undefined', () => {
+    const fn = () => matchPath({ path: ['/a/:c', '/b/:c'] }, '/a/x', [], null);
+    expect(fn).to.not.throw();
+    expect(fn()).to.have.property('params').and.be.deep.equal({ c: 'x' });
+  });
 });

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased][unreleased]
+
+- Support for using the same param name in array of paths ([#122](https://github.com/kriasoft/universal-router/pull/122))
+
 ## [v4.0.0] - 2017-09-15
 
 - Rename `router.resolve({ path })` to `router.resolve({ pathname })`
