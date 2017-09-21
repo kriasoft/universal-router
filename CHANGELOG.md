@@ -27,6 +27,15 @@ All notable changes to this project will be documented in this file.
 ## [v4.1.0] - 2017-09-20
 
 - Support for using the same param name in array of paths ([#122](https://github.com/kriasoft/universal-router/pull/122))
+  ```js
+  const router = new UniversalRouter({
+    path: ['/one/:parameter', '/two/:parameter'],
+    action: context => context.params,
+  });
+
+  router.resolve('/one/a'); // => { parameter: 'a' }
+  router.resolve('/two/b'); // => { parameter: 'b' }
+  ```
 
 ## [v4.0.0] - 2017-09-15
 
@@ -51,6 +60,17 @@ All notable changes to this project will be documented in this file.
   ([#111](https://github.com/kriasoft/universal-router/pull/111))
 - Include the source code of the router in the [npm package](https://www.npmjs.com/package/universal-router)
   ([#110](https://github.com/kriasoft/universal-router/pull/110))
+
+**Migration from v3 to v4:**
+- Change `router.resolve({ path, ... })` to `router.resolve({ pathname, ... })`
+- Remove trailing slashes from all paths of your routes, i.e.
+  - `path: '/posts/:uri/'` => `path: '/posts/:uri'`
+  - `path: '/posts/'` => `path: '/posts'`
+  - `path: '/'` => `path: ''`
+  - etc.
+- Replace `path: '*'` with `path: '(.*)'` if any
+- If you are using webpack, change [rule](https://webpack.js.org/configuration/module/#rule) (loader) for `.js` files to include `.mjs` extension, i.e.
+  - `test: /\.js$/` => `test: /\.m?js$/`
 
 ## [v3.2.0] - 2017-05-10
 
