@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased][unreleased]
+
+- Fix order of `context.keys` when they preserved from parent routes
+  (i.e. keys order is the same as they appear in a url)
+  ([#129](https://github.com/kriasoft/universal-router/pull/129))
+
 ## [v4.2.0] - 2017-09-20
 
 - Correctly handle trailing slashes in paths of routes

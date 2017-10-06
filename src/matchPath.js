@@ -57,7 +57,7 @@ function matchPath(route, pathname, parentKeys, parentParams) {
 
   return {
     path: !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path,
-    keys: regexp.keys.concat(parentKeys),
+    keys: parentKeys.concat(regexp.keys),
     params,
   };
 }

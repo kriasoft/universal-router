@@ -1,9 +1,18 @@
-# Include your project-specific ignores in this file
-# Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
+# See https://help.github.com/ignore-files/ for more about ignoring files
 
-coverage
+# Dependencies
+node_modules
+
+# Compiled output
 dist/*
 !dist/universal-router*
-docs/dist
-node_modules
-npm-debug.log
+
+# Test coverage
+coverage
+.nyc_output
+
+# Logs
+npm-debug.log*
+
+# Misc
+.DS_Store

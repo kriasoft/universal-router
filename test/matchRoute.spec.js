@@ -67,7 +67,7 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
     const route = {
       path: '/',
     };
-    const result = toArray(matchRoute(route, '', '/'));
+    const result = toArray(matchRoute(route, '', '/', []));
     expect(result).to.have.lengthOf(1);
     expect(result[0]).to.have.property('baseUrl', '');
     expect(result[0]).to.have.property('path', '/');
@@ -78,7 +78,7 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
     const route = {
       path: '/a',
     };
-    const result = toArray(matchRoute(route, '', '/a'));
+    const result = toArray(matchRoute(route, '', '/a', []));
     expect(result).to.have.lengthOf(1);
     expect(result[0]).to.have.property('baseUrl', '');
     expect(result[0]).to.have.property('path', '/a');
@@ -94,7 +94,7 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
         },
       ],
     };
-    const result = toArray(matchRoute(route, '', '/a'));
+    const result = toArray(matchRoute(route, '', '/a', []));
     expect(result).to.have.lengthOf(2);
     expect(result[0]).to.have.property('baseUrl', '');
     expect(result[0]).to.have.property('path', '');
@@ -118,7 +118,7 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
         },
       ],
     };
-    const result = toArray(matchRoute(route, '', '/a/b/c'));
+    const result = toArray(matchRoute(route, '', '/a/b/c', []));
     expect(result).to.have.lengthOf(3);
     expect(result[0]).to.have.property('baseUrl', '');
     expect(result[0]).to.have.nested.property('route.path', '/a');
@@ -137,7 +137,7 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
         },
       ],
     };
-    const result = toArray(matchRoute(route, '', '/'));
+    const result = toArray(matchRoute(route, '', '/', []));
     expect(result).to.have.lengthOf(2);
     expect(result[0]).to.have.property('baseUrl', '');
     expect(result[0]).to.have.nested.property('route.path', '');
