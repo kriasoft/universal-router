@@ -74,11 +74,12 @@ describe('matchPath(route, pathname)', () => {
   });
 
   it('should return keys and params (4)', () => {
-    const result = matchPath({ path: '/:a/:b?' }, '/1', [], { x: 'y' });
+    const result = matchPath({ path: '/:a/:b?' }, '/1', ['key'], { x: 'y' });
     expect(result).to.be.ok;
     expect(result).to.have.property('path', '/1');
-    expect(result).to.have.property('keys').and.be.an('array').lengthOf(2);
+    expect(result).to.have.property('keys').and.be.an('array').lengthOf(3);
     expect(result).to.have.property('params').and.be.deep.equal({ x: 'y', a: '1', b: undefined });
+    expect(result.keys[0]).to.be.equal('key');
   });
 
   it('should return keys and params (5)', () => {
