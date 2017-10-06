@@ -20,7 +20,7 @@ Second `options` argument is optional where you can pass the following:
 import UniversalRouter from 'universal-router';
 
 const routes = {
-  path: '/page',            // string, optional 
+  path: '/page',            // string or regexp or array of them, optional 
   name: 'page',             // unique string, optional
   parent: null,             // route object or null, automatically filled by the router
   children: [],             // array of route objects or null, optional 
