@@ -333,3 +333,17 @@ Or use external library such as [qs](https://github.com/ljharb/qs),
 import qs from 'qs';
 generateUrls(router, { stringifyQueryParams: qs.stringify });
 ```
+
+## Allowing for more route parameter characters
+
+Adding (.*) to the end of your route will allow you to add characters such as /, ., <, >, *, and a few others (\ doesn't work). <br />
+
+An example path would be yoursite.com/categories/science/space/**unkown** <br />
+
+For more information: https://github.com/pillarjs/path-to-regexp#parameters
+```js
+const route = {
+  path: '/categories/:category(.*)',
+};
+```
+
