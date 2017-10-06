@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased][unreleased]
+## [v4.2.1] - 2017-10-06
 
 - Fix order of `context.keys` when they preserved from parent routes
   (i.e. keys order is the same as they appear in a url)
@@ -193,7 +193,8 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/universal-router/compare/v4.2.0...HEAD
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v4.2.1...HEAD
+[v4.2.1]: https://github.com/kriasoft/universal-router/compare/v4.2.0...v4.2.1
 [v4.2.0]: https://github.com/kriasoft/universal-router/compare/v4.1.0...v4.2.0
 [v4.1.0]: https://github.com/kriasoft/universal-router/compare/v4.0.0...v4.1.0
 [v4.0.0]: https://github.com/kriasoft/universal-router/compare/v3.2.0...v4.0.0
