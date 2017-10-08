@@ -333,3 +333,8 @@ Or use external library such as [qs](https://github.com/ljharb/qs),
 import qs from 'qs';
 generateUrls(router, { stringifyQueryParams: qs.stringify });
 ```
+
+## Recipes
+
+* [Redirects](https://github.com/kriasoft/universal-router/blob/master/docs/redirects.md)
+* [Request a recipe](https://github.com/kriasoft/universal-router/issues/new)
