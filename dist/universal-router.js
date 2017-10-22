@@ -16,6 +16,12 @@ var tokensToFunction_1 = tokensToFunction;
 var tokensToRegExp_1 = tokensToRegExp;
 
 /**
+ * Default configs.
+ */
+var DEFAULT_DELIMITER = '/';
+var DEFAULT_DELIMITERS = './';
+
+/**
  * The main path matching regexp utility.
  *
  * @type {RegExp}
@@ -44,8 +50,8 @@ function parse (str, options) {
   var key = 0;
   var index = 0;
   var path = '';
-  var defaultDelimiter = (options && options.delimiter) || '/';
-  var delimiters = (options && options.delimiters) || './';
+  var defaultDelimiter = (options && options.delimiter) || DEFAULT_DELIMITER;
+  var delimiters = (options && options.delimiters) || DEFAULT_DELIMITERS;
   var pathEscaped = false;
   var res;
 
@@ -303,9 +309,11 @@ function tokensToRegExp (tokens, keys, options) {
 
   var strict = options.strict;
   var end = options.end !== false;
-  var delimiter = escapeString(options.delimiter || '/');
+  var delimiter = escapeString(options.delimiter || DEFAULT_DELIMITER);
+  var delimiters = options.delimiters || DEFAULT_DELIMITERS;
   var endsWith = [].concat(options.endsWith || []).map(escapeString).concat('$').join('|');
   var route = '';
+  var isEndDelimited = false;
 
   // Iterate over the tokens and create our regexp string.
   for (var i = 0; i < tokens.length; i++) {
@@ -313,41 +321,34 @@ function tokensToRegExp (tokens, keys, options) {
 
     if (typeof token === 'string') {
       route += escapeString(token);
+      isEndDelimited = i === tokens.length - 1 && delimiters.indexOf(token[token.length - 1]) > -1;
     } else {
       var prefix = escapeString(token.prefix);
-      var capture = '(?:' + token.pattern + ')';
+      var capture = token.repeat
+        ? '(?:' + token.pattern + ')(?:' + prefix + '(?:' + token.pattern + '))*'
+        : token.pattern;
 
       if (keys) keys.push(token);
 
-      if (token.repeat) {
-        capture += '(?:' + prefix + capture + ')*';
-      }
-
       if (token.optional) {
-        if (!token.partial) {
-          capture = '(?:' + prefix + '(' + capture + '))?';
+        if (token.partial) {
+          route += prefix + '(' + capture + ')?';
         } else {
-          capture = prefix + '(' + capture + ')?';
+          route += '(?:' + prefix + '(' + capture + '))?';
         }
       } else {
-        capture = prefix + '(' + capture + ')';
+        route += prefix + '(' + capture + ')';
       }
-
-      route += capture;
     }
   }
 
-  // In non-strict mode we allow a delimiter at the end of a match.
-  if (!strict) {
-    route += '(?:' + delimiter + '(?=' + endsWith + '))?';
-  }
-
   if (end) {
-    route += endsWith === '$' ? endsWith : '(?=' + endsWith + ')';
+    if (!strict) route += '(?:' + delimiter + ')?';
+
+    route += endsWith === '$' ? '$' : '(?=' + endsWith + ')';
   } else {
-    // In non-ending mode, we need the capturing groups to match as much as
-    // possible by using a positive lookahead to the end or next path segment.
-    route += '(?=' + delimiter + '|' + endsWith + ')';
+    if (!strict) route += '(?:' + delimiter + '(?=' + endsWith + '))?';
+    if (!isEndDelimited) route += '(?=' + delimiter + '|' + endsWith + ')';
   }
 
   return new RegExp('^' + route, flags(options))
