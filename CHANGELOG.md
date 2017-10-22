@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased][unreleased]
+
+- Update [path-to-regexp](https://github.com/pillarjs/path-to-regexp) from v2.0.0 to v2.1.0, see
+  [changelog](https://github.com/pillarjs/path-to-regexp/blob/b0b9a92663059d7a7d40d81fa811f0d31e2ba877/History.md#210--2017-10-20)
+  ([#137](https://github.com/kriasoft/universal-router/pull/137))
+
 ## [v4.2.1] - 2017-10-06
 
 - Fix order of `context.keys` when they preserved from parent routes
