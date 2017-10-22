@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased][unreleased]
+## [v4.3.0] - 2017-10-22
 
 - Update [path-to-regexp](https://github.com/pillarjs/path-to-regexp) from v2.0.0 to v2.1.0, see
   [changelog](https://github.com/pillarjs/path-to-regexp/blob/b0b9a92663059d7a7d40d81fa811f0d31e2ba877/History.md#210--2017-10-20)
@@ -199,7 +199,8 @@ All notable changes to this project will be documented in this file.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/universal-router/compare/v4.2.1...HEAD
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v4.3.0...HEAD
+[v4.3.0]: https://github.com/kriasoft/universal-router/compare/v4.2.1...v4.3.0
 [v4.2.1]: https://github.com/kriasoft/universal-router/compare/v4.2.0...v4.2.1
 [v4.2.0]: https://github.com/kriasoft/universal-router/compare/v4.1.0...v4.2.0
 [v4.1.0]: https://github.com/kriasoft/universal-router/compare/v4.0.0...v4.1.0

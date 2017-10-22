@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "universal-router",
-  "version": "4.2.1",
+  "version": "4.3.0",
   "description": "Isomorphic router for JavaScript web applications",
   "homepage": "https://www.kriasoft.com/universal-router/",
   "repository": "kriasoft/universal-router",
