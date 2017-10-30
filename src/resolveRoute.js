@@ -12,7 +12,7 @@ function resolveRoute(context, params) {
     return context.route.action(context, params);
   }
 
-  return null;
+  return undefined;
 }
 
 export default resolveRoute;

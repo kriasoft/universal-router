@@ -2,19 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
-## [v4.3.0] - 2017-10-22
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+- Skip nested routes when a middleware route returns `null`
+  (BREAKING CHANGE [#140](https://github.com/kriasoft/universal-router/pull/140))<br>
+  
+
+## [4.3.0] - 2017-10-22
 
 - Update [path-to-regexp](https://github.com/pillarjs/path-to-regexp) from v2.0.0 to v2.1.0, see
   [changelog](https://github.com/pillarjs/path-to-regexp/blob/b0b9a92663059d7a7d40d81fa811f0d31e2ba877/History.md#210--2017-10-20)
   ([#137](https://github.com/kriasoft/universal-router/pull/137))
 
-## [v4.2.1] - 2017-10-06
+## [4.2.1] - 2017-10-06
 
 - Fix order of `context.keys` when they preserved from parent routes
   (i.e. keys order is the same as they appear in a url)
   ([#129](https://github.com/kriasoft/universal-router/pull/129))
 
-## [v4.2.0] - 2017-09-20
+## [4.2.0] - 2017-09-20
 
 - Correctly handle trailing slashes in paths of routes
   ([#124](https://github.com/kriasoft/universal-router/pull/124))<br>
@@ -36,7 +45,7 @@ All notable changes to this project will be documented in this file.
   url('page'); // => /one
   ```
 
-## [v4.1.0] - 2017-09-20
+## [4.1.0] - 2017-09-20
 
 - Support for using the same param name in array of paths ([#122](https://github.com/kriasoft/universal-router/pull/122))
   ```js
@@ -49,7 +58,7 @@ All notable changes to this project will be documented in this file.
   router.resolve('/two/b'); // => { parameter: 'b' }
   ```
 
-## [v4.0.0] - 2017-09-15
+## [4.0.0] - 2017-09-15
 
 - Rename `router.resolve({ path })` to `router.resolve({ pathname })`
   (BREAKING CHANGE [#114](https://github.com/kriasoft/universal-router/pull/114))
@@ -81,16 +90,17 @@ All notable changes to this project will be documented in this file.
   - `path: '/'` => `path: ''`
   - etc.
 - Replace `path: '*'` with `path: '(.*)'` if any
-- If you are using webpack, change [rule](https://webpack.js.org/configuration/module/#rule) (loader) for `.js` files to include `.mjs` extension, i.e.
+- If you are using webpack, change [rule](https://webpack.js.org/configuration/module/#rule) (loader)
+  for `.js` files to include `.mjs` extension, i.e.
   - `test: /\.js$/` => `test: /\.m?js$/`
 
-## [v3.2.0] - 2017-05-10
+## [3.2.0] - 2017-05-10
 
 - Add `stringifyQueryParams` option to `generateUrls(router, options)` to generate URL with
   [query string](http://en.wikipedia.org/wiki/Query_string) from unknown route params
   ([#93](https://github.com/kriasoft/universal-router/pull/93))
 
-## [v3.1.0] - 2017-04-20
+## [3.1.0] - 2017-04-20
 
 - Fix `context.next()` for multiple nested routes
   ([#91](https://github.com/kriasoft/universal-router/pull/91))
@@ -99,7 +109,7 @@ All notable changes to this project will be documented in this file.
 - Add source maps for minified builds ([#87](https://github.com/kriasoft/universal-router/pull/87))
 - Include UMD builds to the git repository
 
-## [v3.0.0] - 2017-03-25
+## [3.0.0] - 2017-03-25
 
 - Update Router API (BREAKING CHANGE)
   ```js
@@ -137,7 +147,7 @@ All notable changes to this project will be documented in this file.
 - Add `context.url` with the original url passed to `resolve` method
 - Add `context` property to `Route not found` error
 
-## [v2.0.0] - 2016-10-20
+## [2.0.0] - 2016-10-20
 
 - Preserve `context.params` values from the parent route ([#57](https://github.com/kriasoft/universal-router/pull/57))
 - Throws an error if no route found ([#62](https://github.com/kriasoft/universal-router/pull/62))
@@ -151,31 +161,31 @@ All notable changes to this project will be documented in this file.
 - Remove errors handler from core ([#48](https://github.com/kriasoft/universal-router/pull/48))
 - Drop support of node.js v5 and below ([#47](https://github.com/kriasoft/universal-router/pull/47))
 
-## [v1.2.2] - 2016-05-31
+## [1.2.2] - 2016-05-31
 
 - Update UMD build to include missing dependencies ([#33](https://github.com/kriasoft/universal-router/pull/33))
 
-## [v1.2.1] - 2016-05-12
+## [1.2.1] - 2016-05-12
 
 - Rename `match()` to `resolve()`. E.g. `import { resovle } from 'universal-router'`
 - Fix an issue when the router throws an exception when the top-level route doesn't have `children` property
 - Include CommonJS, Harmony Modules, ES5.1 and UMD builds into NPM package
 - Include source maps into NPM package
 
-## [v1.1.0-beta.4] - 2016-04-27
+## [1.1.0-beta.4] - 2016-04-27
 
 - Fix optional parameters, e.g. `/products/:id?` ([#27](https://github.com/kriasoft/universal-router/pull/27))
 
-## [v1.1.0-beta.3] - 2016-04-08
+## [1.1.0-beta.3] - 2016-04-08
 
 - Fix `matchRoute()` yielding the same route twice when it matches to both full and base URLs
 
-## [v1.1.0-beta.2] - 2016-04-08
+## [1.1.0-beta.2] - 2016-04-08
 
 - `match(routes, { path, ...context)` now throws an error if a matching route was not found (BREAKING CHANGE)
 - If there is a top-level route with path equal to `/error`, it will be used for error handling by convention
 
-## [v1.1.0-beta.1] - 2016-04-05
+## [1.1.0-beta.1] - 2016-04-05
 
 - Remove `Router` class and `router.dispatch()` method in favor of
  `match(routes, { path, ...context })`, where `routes` is just a plain JavaScript objects containing
@@ -183,7 +193,7 @@ All notable changes to this project will be documented in this file.
 - Add `context.end()` method to be used from inside route actions
 - Update documentation and code samples
 
-## [v1.0.0-beta.1] - 2016-03-25
+## [1.0.0-beta.1] - 2016-03-25
 
 - Rename `react-routing` to `universal-router` (BREAKING CHANGE)
 - Remove `router.on(path, ...actions)` in favor of `router.route(path, ...actions)` (BREAKING CHANGE)
@@ -195,25 +205,25 @@ All notable changes to this project will be documented in this file.
 - Make the library use `babel-runtime` package instead of an inline runtime
 - Add [CHANGELOG.md](CHANGELOG.md) file with the notable changes to this project
 
-## [v0.0.7] - 2015-12-13
+## [0.0.7] - 2015-12-13
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/universal-router/compare/v4.3.0...HEAD
-[v4.3.0]: https://github.com/kriasoft/universal-router/compare/v4.2.1...v4.3.0
-[v4.2.1]: https://github.com/kriasoft/universal-router/compare/v4.2.0...v4.2.1
-[v4.2.0]: https://github.com/kriasoft/universal-router/compare/v4.1.0...v4.2.0
-[v4.1.0]: https://github.com/kriasoft/universal-router/compare/v4.0.0...v4.1.0
-[v4.0.0]: https://github.com/kriasoft/universal-router/compare/v3.2.0...v4.0.0
-[v3.2.0]: https://github.com/kriasoft/universal-router/compare/v3.1.0...v3.2.0
-[v3.1.0]: https://github.com/kriasoft/universal-router/compare/v3.0.0...v3.1.0
-[v3.0.0]: https://github.com/kriasoft/universal-router/compare/v2.0.0...v3.0.0
-[v2.0.0]: https://github.com/kriasoft/universal-router/compare/v1.2.2...v2.0.0
-[v1.2.2]: https://github.com/kriasoft/universal-router/compare/v1.2.1...v1.2.2
-[v1.2.1]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.4...v1.2.1
-[v1.1.0-beta.4]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.3...v1.1.0-beta.4
-[v1.1.0-beta.3]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.2...v1.1.0-beta.3
-[v1.1.0-beta.2]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.1...v1.1.0-beta.2
-[v1.1.0-beta.1]: https://github.com/kriasoft/universal-router/compare/v1.0.0-beta.1...v1.1.0-beta.1
-[v1.0.0-beta.1]: https://github.com/kriasoft/universal-router/compare/v0.0.7...v1.0.0-beta.1
-[v0.0.7]: https://github.com/kriasoft/universal-router/compare/v0.0.6...v0.0.7
+[Unreleased]: https://github.com/kriasoft/universal-router/compare/v4.3.0...HEAD
+[4.3.0]: https://github.com/kriasoft/universal-router/compare/v4.2.1...v4.3.0
+[4.2.1]: https://github.com/kriasoft/universal-router/compare/v4.2.0...v4.2.1
+[4.2.0]: https://github.com/kriasoft/universal-router/compare/v4.1.0...v4.2.0
+[4.1.0]: https://github.com/kriasoft/universal-router/compare/v4.0.0...v4.1.0
+[4.0.0]: https://github.com/kriasoft/universal-router/compare/v3.2.0...v4.0.0
+[3.2.0]: https://github.com/kriasoft/universal-router/compare/v3.1.0...v3.2.0
+[3.1.0]: https://github.com/kriasoft/universal-router/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/kriasoft/universal-router/compare/v2.0.0...v3.0.0
+[2.0.0]: https://github.com/kriasoft/universal-router/compare/v1.2.2...v2.0.0
+[1.2.2]: https://github.com/kriasoft/universal-router/compare/v1.2.1...v1.2.2
+[1.2.1]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.4...v1.2.1
+[1.1.0-beta.4]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.3...v1.1.0-beta.4
+[1.1.0-beta.3]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.2...v1.1.0-beta.3
+[1.1.0-beta.2]: https://github.com/kriasoft/universal-router/compare/v1.1.0-beta.1...v1.1.0-beta.2
+[1.1.0-beta.1]: https://github.com/kriasoft/universal-router/compare/v1.0.0-beta.1...v1.1.0-beta.1
+[1.0.0-beta.1]: https://github.com/kriasoft/universal-router/compare/v0.0.7...v1.0.0-beta.1
+[0.0.7]: https://github.com/kriasoft/universal-router/compare/v0.0.6...v0.0.7

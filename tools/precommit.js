@@ -28,4 +28,8 @@ async function run() {
   await spawn('git', ['add', 'dist/universal-router*']);
 }
 
+process.on('unhandledRejection', (error) => {
+  throw error;
+});
+
 module.exports = run();

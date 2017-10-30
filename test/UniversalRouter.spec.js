@@ -19,7 +19,7 @@ describe('new UniversalRouter(routes, options)', () => {
   });
 
   it('should support custom resolve option for declarative routes', async () => {
-    const resolveRoute = sinon.spy(context => context.route.component || null);
+    const resolveRoute = sinon.spy(context => context.route.component || undefined);
     const action = sinon.spy();
     const router = new UniversalRouter({
       path: '/a',
@@ -185,7 +185,7 @@ describe('router.resolve({ pathname, ...context })', () => {
 
   it('should not collect parameters from previous routes', async () => {
     const action1 = sinon.spy(() => undefined);
-    const action2 = sinon.spy(() => null);
+    const action2 = sinon.spy(() => undefined);
     const action3 = sinon.spy(() => true);
     const router = new UniversalRouter([
       {
@@ -339,7 +339,7 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(result).to.be.true;
   });
 
-  it('should support child routes (1)', async () => {
+  it('should support nested routes (1)', async () => {
     const action1 = sinon.spy();
     const action2 = sinon.spy(() => true);
     const router = new UniversalRouter([
@@ -363,7 +363,7 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(result).to.be.true;
   });
 
-  it('should support child routes (2)', async () => {
+  it('should support nested routes (2)', async () => {
     const action1 = sinon.spy();
     const action2 = sinon.spy(() => true);
     const router = new UniversalRouter([
@@ -387,7 +387,7 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(result).to.be.true;
   });
 
-  it('should support child routes (3)', async () => {
+  it('should support nested routes (3)', async () => {
     const action1 = sinon.spy(() => undefined);
     const action2 = sinon.spy(() => null);
     const action3 = sinon.spy(() => true);
@@ -493,5 +493,47 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(await router.resolve('/page/')).to.be.equal('b');
     expect(await router.resolve('/child/')).to.be.equal('c');
     expect(await router.resolve('/child/page/')).to.be.equal('d');
+  });
+
+  it('should skip nested routes when middleware route returns null', async () => {
+    const middleware = sinon.spy(() => null);
+    const action = sinon.spy(() => 'skipped');
+    const router = new UniversalRouter([
+      {
+        path: '/match',
+        action: middleware,
+        children: [{ action }],
+      },
+      {
+        path: '/match',
+        action: () => 404,
+      },
+    ]);
+
+    const result = await router.resolve('/match');
+    expect(result).to.be.equal(404);
+    expect(action.called).to.be.false;
+    expect(middleware.calledOnce).to.be.true;
+  });
+
+  it('should match nested routes when middleware route returns undefined', async () => {
+    const middleware = sinon.spy(() => undefined);
+    const action = sinon.spy(() => 200);
+    const router = new UniversalRouter([
+      {
+        path: '/match',
+        action: middleware,
+        children: [{ action }],
+      },
+      {
+        path: '/match',
+        action: () => 404,
+      },
+    ]);
+
+    const result = await router.resolve('/match');
+    expect(result).to.be.equal(200);
+    expect(action.calledOnce).to.be.true;
+    expect(middleware.calledOnce).to.be.true;
   });
 });
