@@ -148,4 +148,8 @@ async function run() {
   }));
 }
 
+process.on('unhandledRejection', (error) => {
+  throw error;
+});
+
 module.exports = run();

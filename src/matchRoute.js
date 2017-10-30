@@ -15,7 +15,11 @@ function matchRoute(route, baseUrl, pathname, parentKeys, parentParams) {
   let childIndex = 0;
 
   return {
-    next() {
+    next(routeToSkip) {
+      if (route === routeToSkip) {
+        return { done: true };
+      }
+
       if (!match) {
         match = matchPath(route, pathname, parentKeys, parentParams);
 
@@ -48,7 +52,7 @@ function matchRoute(route, baseUrl, pathname, parentKeys, parentParams) {
             );
           }
 
-          const childMatch = childMatches.next();
+          const childMatch = childMatches.next(routeToSkip);
           if (!childMatch.done) {
             return {
               done: false,

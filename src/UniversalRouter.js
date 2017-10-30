@@ -53,8 +53,9 @@ class UniversalRouter {
     let matches = null;
     let nextMatches = null;
 
-    function next(resume, parent = matches.value.route) {
-      matches = nextMatches || match.next();
+    function next(resume, parent = matches.value.route, prevResult) {
+      const routeToSkip = prevResult === null && matches.value.route;
+      matches = nextMatches || match.next(routeToSkip);
       nextMatches = null;
 
       if (!resume) {
@@ -79,7 +80,7 @@ class UniversalRouter {
           return result;
         }
 
-        return next(resume, parent);
+        return next(resume, parent, result);
       });
     }
 

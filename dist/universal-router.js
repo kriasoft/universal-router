@@ -461,7 +461,11 @@ function matchRoute(route, baseUrl, pathname, parentKeys, parentParams) {
   var childIndex = 0;
 
   return {
-    next: function next() {
+    next: function next(routeToSkip) {
+      if (route === routeToSkip) {
+        return { done: true };
+      }
+
       if (!match) {
         match = matchPath(route, pathname, parentKeys, parentParams);
 
@@ -488,7 +492,7 @@ function matchRoute(route, baseUrl, pathname, parentKeys, parentParams) {
             childMatches = matchRoute(childRoute, baseUrl + match.path, pathname.substr(match.path.length), match.keys, match.params);
           }
 
-          var childMatch = childMatches.next();
+          var childMatch = childMatches.next(routeToSkip);
           if (!childMatch.done) {
             return {
               done: false,
@@ -520,7 +524,7 @@ function resolveRoute(context, params) {
     return context.route.action(context, params);
   }
 
-  return null;
+  return undefined;
 }
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -575,8 +579,10 @@ var UniversalRouter = function () {
 
       function next(resume) {
         var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : matches.value.route;
+        var prevResult = arguments[2];
 
-        matches = nextMatches || match.next();
+        var routeToSkip = prevResult === null && matches.value.route;
+        matches = nextMatches || match.next(routeToSkip);
         nextMatches = null;
 
         if (!resume) {
@@ -595,7 +601,7 @@ var UniversalRouter = function () {
             return result;
           }
 
-          return next(resume, parent);
+          return next(resume, parent, result);
         });
       }
 

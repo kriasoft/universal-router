@@ -257,7 +257,27 @@ router.resolve({ pathname: '/hello' });
 ```
 
 Remember that `context.next()` iterates only child routes,
-use `context.next(true)` to iterate through the all remaining routes. 
+use `context.next(true)` to iterate through the all remaining routes.
+
+Note that if the middleware action returns `null` then the router will skip all nested routes
+and go to the next sibling route. But if the `action` is missing or returns `undefined`
+then the router will try to match the child routes. This can be useful for permissions check.
+
+```js
+const middlewareRoute = {
+  path: '/admin',
+  action(context) {
+    if (!context.user) {
+      return null; // route does not match (skip all /admin* routes)
+    }
+    if (context.user.role !== 'Admin') {
+      return 'Access denied!'; // return a page (for any /admin* urls)
+    }
+    return undefined; // or `return context.next();` - try to match child routes
+  },
+  children: [/* admin routes here */],
+};
+```
 
 
 ## URL Generation
