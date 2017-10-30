@@ -5,11 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [5.0.0] - 2017-10-30
 
 - Skip nested routes when a middleware route returns `null`
-  (BREAKING CHANGE [#140](https://github.com/kriasoft/universal-router/pull/140))<br>
-  
+  (BREAKING CHANGE [#140](https://github.com/kriasoft/universal-router/pull/140))
+
+**Migration from v4 to v5:**
+- If you are using `resolveRoute` option for custom route handling logic then you need
+  to return `undefined` instead of `null` in cases when a route should not match
 
 ## [4.3.0] - 2017-10-22
 
@@ -209,7 +212,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Small bug fixes and improvements
 
-[Unreleased]: https://github.com/kriasoft/universal-router/compare/v4.3.0...HEAD
+[Unreleased]: https://github.com/kriasoft/universal-router/compare/v5.0.0...HEAD
+[5.0.0]: https://github.com/kriasoft/universal-router/compare/v4.3.0...v5.0.0
 [4.3.0]: https://github.com/kriasoft/universal-router/compare/v4.2.1...v4.3.0
 [4.2.1]: https://github.com/kriasoft/universal-router/compare/v4.2.0...v4.2.1
 [4.2.0]: https://github.com/kriasoft/universal-router/compare/v4.1.0...v4.2.0

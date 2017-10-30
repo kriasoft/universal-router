@@ -21,7 +21,7 @@ Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Git
 
 ## Features
 
-✓ It has [simple code](https://github.com/kriasoft/universal-router/blob/v4.3.0/src/UniversalRouter.js)
+✓ It has [simple code](https://github.com/kriasoft/universal-router/blob/v5.0.0/src/UniversalRouter.js)
   with only single [path-to-regexp](https://github.com/pillarjs/path-to-regexp) dependency<br>
 ✓ It can be used with any JavaScript framework such as React, Vue.js etc<br>
 ✓ It uses the same middleware approach used in Express and Koa, making it easy to learn<br>
@@ -42,7 +42,7 @@ Or using a [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) like [u
 with the following script tag:
 
 ```html
-<script src="https://unpkg.com/universal-router@4.3.0/universal-router.min.js"></script>
+<script src="https://unpkg.com/universal-router@5.0.0/universal-router.min.js"></script>
 ```
 
 
