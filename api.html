@@ -49,7 +49,7 @@ By default the router calls the <code>action</code> function of matched route.</
 <pre><code class="language-js">import UniversalRouter from 'universal-router';
 
 const routes = {
-  path: '/page',            // string, optional
+  path: '/page',            // string or regexp or array of them, optional
 
   name: 'page',             // unique string, optional
   parent: null,             // route object or null, automatically filled by the router
@@ -246,6 +246,23 @@ router.resolve({ pathname: '/hello' });
 </code></pre>
 <p>Remember that <code>context.next()</code> iterates only child routes,
 use <code>context.next(true)</code> to iterate through the all remaining routes.</p>
+<p>Note that if the middleware action returns <code>null</code> then the router will skip all nested routes
+and go to the next sibling route. But if the <code>action</code> is missing or returns <code>undefined</code>
+then the router will try to match the child routes. This can be useful for permissions check.</p>
+<pre><code class="language-js">const middlewareRoute = {
+  path: '/admin',
+  action(context) {
+    if (!context.user) {
+      return null; // route does not match (skip all /admin* routes)
+    }
+    if (context.user.role !== 'Admin') {
+      return 'Access denied!'; // return a page (for any /admin* urls)
+    }
+    return undefined; // or `return context.next();` - try to match child routes
+  },
+  children: [/* admin routes here */],
+};
+</code></pre>
 <h2 id="url-generation">URL Generation</h2>
 <p>In most web applications it's much simpler to just use a string for hyperlinks.</p>
 <pre><code class="language-js">`&lt;a href=&quot;/page&quot;&gt;Page&lt;/a&gt;`
@@ -301,6 +318,11 @@ urlWithQueryString('user', params);   // =&gt; /base/user/John?busy=1
 <pre><code class="language-js">import qs from 'qs';
 generateUrls(router, { stringifyQueryParams: qs.stringify });
 </code></pre>
+<h2>Recipes</h2>
+<ul>
+<li><a href="redirects">Redirects</a></li>
+<li><a href="https://github.com/kriasoft/universal-router/issues/new">Request a recipe</a></li>
+</ul>
 
 
       <div id="disqus_thread"></div>

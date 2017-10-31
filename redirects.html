@@ -1,0 +1,208 @@
+<!doctype html>
+<html class="no-js" lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Redirects ∙ Universal Router</title>
+    <meta name="description" content="Routing and navigation solution for React.js applications">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="canonical" href="https://www.kriasoft.com/universal-router/redirects">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
+    <link rel="stylesheet" href="main.css">
+  </head>
+  <body>
+  <div class="header">
+  <div class="container">
+    <a class="header__logo" href=".">
+      Universal <img class="header__logo-img" src="img/tour.svg" alt="Universal Router" /> Router
+    </a>
+    <span class="header_author">
+      made with &nbsp;♥&nbsp; by&nbsp; <a href="https://twitter.com/koistya" rel="author" title="Konstantin Tarkus on Twitter">@koistya</a>
+    </span>
+
+  </div>
+</div>
+
+
+  <div class="content">
+    <div class="content-left">
+      <a class="edit-btn" target="_blank" href="https://github.com/kriasoft/universal-router/edit/master/docs/redirects.md" title="Edit on GitHub">
+        <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" width="612" height="612" viewBox="0 0 612 612"><path d="M545.062 286.875c-15.854 0-28.688 12.852-28.688 28.688v239.062h-459v-459h239.062c15.854 0 28.688-12.852 28.688-28.688S312.292 38.25 296.438 38.25H38.25C17.136 38.25 0 55.367 0 76.5v497.25C0 594.883 17.136 612 38.25 612H535.5c21.114 0 38.25-17.117 38.25-38.25V315.562c0-15.835-12.833-28.687-28.688-28.687zM605.325 88.95L523.03 6.655C518.556 2.18 512.684 0 506.812 0s-11.743 2.18-16.218 6.675l-318.47 318.45v114.75h114.75l318.45-318.45c4.494-4.495 6.675-10.366 6.675-16.237 0-5.89-2.18-11.743-6.675-16.238zM267.75 382.5H229.5v-38.25L506.812 66.938l38.25 38.25L267.75 382.5z"/></svg>
+      </a>
+        <h1 id="redirects">Redirects</h1>
+        <p>The easiest way to add a redirect to your route is to return from the action method something
+            that you can interpret as a redirect at the end of routes resolving, for example:</p>
+        <pre><code class="language-js">import UniversalRouter from 'universal-router';
+
+const router = new UniversalRouter([
+  {
+    path: '/redirect',
+    action() {
+      return { redirect: '/target' }; // &lt;== request a redirect
+    },
+  },
+  {
+    path: '/target',
+    action() {
+      return { content: '&lt;h1&gt;Content&lt;/h1&gt;' };
+    },
+  },
+]);
+
+router.resolve('/redirect').then(page =&gt; {
+  if (page.redirect) {
+    window.location = page.redirect; // &lt;== actual redirect here
+  } else {
+    document.body.innerHTML = page.content;
+  }
+})
+</code></pre>
+        <p>The most common use case of redirects is to redirect to the login page for authorization-protected pages:</p>
+        <pre><code class="language-js">const router = new UniversalRouter([
+  {
+    path: '/login',
+    action() {
+      return { content: '&lt;h1&gt;Login&lt;/h1&gt;' };
+    },
+  },
+  {
+    path: '/admin',
+    action(context) {
+      if (!context.user) {
+        return { redirect: '/login' };
+      }
+      return { content: '&lt;h1&gt;Admin&lt;/h1&gt;' };
+    },
+  },
+]);
+
+router.resolve({
+  pathname: '/admin',
+  user: null, // &lt;== is the user logged in?
+}).then(page =&gt; {
+  if (page.redirect) {
+    window.location = page.redirect;
+  } else {
+    document.body.innerHTML = page.content;
+  }
+});
+</code></pre>
+        <p>You also can use <a href="api#middlewares">middleware</a>
+            approach to protect a bunch of routes:</p>
+        <pre><code class="language-js">const adminRoutes = {
+  path: '/admin',
+  action(context) {
+    if (!context.user) {
+      return { redirect: '/login' }; // stop and redirect
+    }
+    return context.next(); // go to children
+  },
+  children: [
+    { path: '',       action: () =&gt; ({ content: '&lt;h1&gt;Admin: Home&lt;/h1&gt;'  }) },
+    { path: '/users', action: () =&gt; ({ content: '&lt;h1&gt;Admin: Users&lt;/h1&gt;' }) },
+    { path: '/posts', action: () =&gt; ({ content: '&lt;h1&gt;Admin: Posts&lt;/h1&gt;' }) },
+  ],
+};
+</code></pre>
+        <p>In case if you prefer <a href="https://en.wikipedia.org/wiki/Declarative_programming">declarative</a> routing:</p>
+        <pre><code class="language-js">const routes = [
+  { path: '/login', content: '&lt;h1&gt;Login&lt;/h1&gt;' },
+  {
+    path: '/admin',
+    protected: true, // &lt;== protect current and all child routes
+    children: [
+      { path: '',       content: '&lt;h1&gt;Admin: Home&lt;/h1&gt;'  },
+      { path: '/users', content: '&lt;h1&gt;Admin: Users&lt;/h1&gt;' },
+      { path: '/posts', content: '&lt;h1&gt;Admin: Posts&lt;/h1&gt;' },
+    ],
+  },
+];
+
+const router = new UniversalRouter(routes, {
+  resolveRoute(context, params) {
+    if (context.route.protected &amp;&amp; !context.user) {
+      return { redirect: '/login', from: context.pathname }; // &lt;== where the redirect come from?
+    }
+    if (context.route.content) {
+      return { content: context.route.content };
+    }
+    return null;
+  },
+});
+
+router.resolve({ pathname: '/admin/users', user: null }).then(page =&gt; {
+  if (page.redirect) {
+    console.log(`Redirect from ${page.from} to ${page.redirect}`);
+    window.location = page.redirect;
+  } else {
+    document.body.innerHTML = page.content;
+  }
+});
+</code></pre>
+        <p>For client side redirects without a full page reload you may use the browser
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/History_API">History API</a>
+            (or libraries like <a href="https://github.com/ReactTraining/history">history</a>):</p>
+        <pre><code class="language-js">router.resolve('/redirect').then(page =&gt; {
+  if (page.redirect) {
+    const state = { from: page.from };
+    window.history.pushState(state, '', page.redirect);
+  } else {
+    document.body.innerHTML = page.content;
+  }
+});
+</code></pre>
+        <p>For server side redirect you need to respond with
+            <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection">3xx http status code</a> and a new location:</p>
+        <pre><code class="language-js">import http from 'http';
+import url from 'url';
+
+const server = http.createServer(async (req, res) =&gt; {
+  const location = url.parse(req.url);
+  const page = await router.resolve(location.pathname);
+
+  if (page.redirect) {
+    res.writeHead(301, { Location: page.redirect });
+    res.end();
+  } else {
+    res.write(`&lt;!doctype html&gt;${page.content}`);
+    res.end();
+  }
+});
+
+server.listen(8080);
+</code></pre>
+        <p>Playground: <a href="https://jsfiddle.net/frenzzy/2nq9o896/">JSFiddle</a></p>
+        <h2 id="learn-more">Learn more</h2>
+        <ul>
+            <li><a href="api">Universal Router API</a></li>
+        </ul>
+
+
+        <div id="disqus_thread"></div>
+
+    </div>
+</div>
+<div class="footer">
+    <div class="container clearfix">
+        <p class="footer__left">Licensed under the <a href="https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt">MIT license</a></p>
+        <p class="footer__right">&copy; 2015-<script>document.write(new Date().getFullYear())</script> <a href="https://www.kriasoft.com">Kriasoft</a></p>
+    </div>
+</div>
+
+<script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-33821884-1','auto');ga('send','pageview');
+
+    window.disqus_shortname = 'kriasoft';
+    window.disqus_identifier = 'universal-router/redirects';
+    window.disqus_title = 'Redirects ∙ Universal Router';
+    window.disqus_url = 'https://www.kriasoft.com/universal-router/redirects';
+
+</script>
+<script src="https://www.google-analytics.com/analytics.js" async defer></script>
+
+<script src="https://kriasoft.disqus.com/embed.js" async defer></script>
+
+</body>
+</html>
