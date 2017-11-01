@@ -518,7 +518,7 @@ describe('router.resolve({ pathname, ...context })', () => {
 
   it('should match nested routes when middleware route returns undefined', async () => {
     const middleware = sinon.spy(() => undefined);
-    const action = sinon.spy(() => 200);
+    const action = sinon.spy(() => null);
     const router = new UniversalRouter([
       {
         path: '/match',
@@ -532,7 +532,7 @@ describe('router.resolve({ pathname, ...context })', () => {
     ]);
 
     const result = await router.resolve('/match');
-    expect(result).to.be.equal(200);
+    expect(result).to.be.equal(404);
     expect(action.calledOnce).to.be.true;
     expect(middleware.calledOnce).to.be.true;
   });

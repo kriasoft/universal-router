@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 **Migration from v4 to v5:**
 - If you are using `resolveRoute` option for custom route handling logic then you need
   to return `undefined` instead of `null` in cases when a route should not match
+- Make sure that your middleware routes which return `null` are working as you expect,
+  child routes are no longer executed in this case
 
 ## [4.3.0] - 2017-10-22
 
