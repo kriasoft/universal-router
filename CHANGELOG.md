@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.0] - 2018-01-16
+
+- Allow any string to be a valid route name ([#145](https://github.com/kriasoft/universal-router/pull/145))
+
 ## [5.0.0] - 2017-10-30
 
 - Skip nested routes when a middleware route returns `null`
@@ -214,7 +218,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Small bug fixes and improvements
 
-[Unreleased]: https://github.com/kriasoft/universal-router/compare/v5.0.0...HEAD
+[Unreleased]: https://github.com/kriasoft/universal-router/compare/v5.1.0...HEAD
+[5.1.0]: https://github.com/kriasoft/universal-router/compare/v5.0.0...v5.1.0
 [5.0.0]: https://github.com/kriasoft/universal-router/compare/v4.3.0...v5.0.0
 [4.3.0]: https://github.com/kriasoft/universal-router/compare/v4.2.1...v4.3.0
 [4.2.1]: https://github.com/kriasoft/universal-router/compare/v4.2.0...v4.2.1

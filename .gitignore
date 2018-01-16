@@ -1,18 +1,26 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files
 
 # Dependencies
-node_modules
+node_modules/
+package-lock.json
+yarn.lock
 
 # Compiled output
 dist/*
 !dist/universal-router*
 
 # Test coverage
-coverage
-.nyc_output
+coverage/
+.nyc_output/
 
 # Logs
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editors and IDEs
+.idea/
+.vscode/
 
 # Misc
 .DS_Store
