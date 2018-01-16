@@ -15,12 +15,12 @@ const { pathToRegexp } = UniversalRouter;
 const cache = new Map();
 
 function cacheRoutes(routesByName, route, routes) {
-  if (routesByName[route.name]) {
+  if (routesByName.has(route.name)) {
     throw new Error(`Route "${route.name}" already exists`);
   }
 
   if (route.name) {
-    routesByName[route.name] = route;
+    routesByName.set(route.name, route);
   }
 
   if (routes) {
@@ -37,15 +37,15 @@ function generateUrls(router, options = {}) {
     throw new TypeError('An instance of UniversalRouter is expected');
   }
 
-  router.routesByName = router.routesByName || {};
+  router.routesByName = router.routesByName || new Map();
 
   return (routeName, params) => {
-    let route = router.routesByName[routeName];
+    let route = router.routesByName.get(routeName);
     if (!route) {
-      router.routesByName = {}; // clear cache
+      router.routesByName.clear(); // clear cache
       cacheRoutes(router.routesByName, router.root, router.root.children);
 
-      route = router.routesByName[routeName];
+      route = router.routesByName.get(routeName);
       if (!route) {
         throw new Error(`Route "${routeName}" not found`);
       }
