@@ -1,9 +1,10 @@
+# https://docs.travis-ci.com/user/languages/javascript-with-nodejs
 sudo: false
 language: node_js
 node_js:
-  - 'stable'
-  - '8'
-  - '6'
+  - '9' # stable
+  - '8' # lts
+  - '6' # lts
 script:
   - npm run lint
   - npm run test
