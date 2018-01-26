@@ -20,7 +20,7 @@ Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Git
 
 ## Features
 
-* It has [simple code](https://github.com/kriasoft/universal-router/master/src/UniversalRouter.js)
+* It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/UniversalRouter.js)
   with only single [path-to-regexp](https://github.com/pillarjs/path-to-regexp) dependency
 * It can be used with any JavaScript framework such as
   [React](https://reactjs.org/), [Vue](https://vuejs.org/), [Hyperapp](https://hyperapp.js.org/) etc
