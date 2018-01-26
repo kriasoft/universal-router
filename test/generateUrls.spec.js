@@ -1,9 +1,9 @@
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
  *
- * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
+ * Copyright (c) 2015-present Kriasoft.
  *
- * This source code is licensed under the Apache 2.0 license found in the
+ * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 
@@ -15,10 +15,22 @@ import generateUrls from '../src/generateUrls';
 describe('generateUrls(router, options)(routeName, params)', () => {
   it('should throw an error in case of invalid router', async () => {
     expect(() => generateUrls()).to.throw(TypeError, /An instance of UniversalRouter is expected/);
-    expect(() => generateUrls([])).to.throw(TypeError, /An instance of UniversalRouter is expected/);
-    expect(() => generateUrls(123)).to.throw(TypeError, /An instance of UniversalRouter is expected/);
-    expect(() => generateUrls(null)).to.throw(TypeError, /An instance of UniversalRouter is expected/);
-    expect(() => generateUrls(UniversalRouter)).to.throw(TypeError, /An instance of UniversalRouter is expected/);
+    expect(() => generateUrls([])).to.throw(
+      TypeError,
+      /An instance of UniversalRouter is expected/,
+    );
+    expect(() => generateUrls(123)).to.throw(
+      TypeError,
+      /An instance of UniversalRouter is expected/,
+    );
+    expect(() => generateUrls(null)).to.throw(
+      TypeError,
+      /An instance of UniversalRouter is expected/,
+    );
+    expect(() => generateUrls(UniversalRouter)).to.throw(
+      TypeError,
+      /An instance of UniversalRouter is expected/,
+    );
   });
 
   it('should throw an error if no route found', async () => {
@@ -110,25 +122,28 @@ describe('generateUrls(router, options)(routeName, params)', () => {
     const url2 = generateUrls(router2);
     expect(url2('post', { id: 12, x: 'y' })).to.be.equal('/base/post/12');
 
-    const router3 = new UniversalRouter({
-      name: 'a',
-      children: [
-        {
-          path: '',
-          name: 'b',
-        },
-        {
-          path: '/c/:x',
-          name: 'c',
-          children: [
-            {
-              path: '/d/:y',
-              name: 'd',
-            },
-          ],
-        },
-      ],
-    }, options);
+    const router3 = new UniversalRouter(
+      {
+        name: 'a',
+        children: [
+          {
+            path: '',
+            name: 'b',
+          },
+          {
+            path: '/c/:x',
+            name: 'c',
+            children: [
+              {
+                path: '/d/:y',
+                name: 'd',
+              },
+            ],
+          },
+        ],
+      },
+      options,
+    );
     const url3 = generateUrls(router3);
     expect(url3('a')).to.be.equal('/base');
     expect(url3('b')).to.be.equal('/base');
@@ -144,10 +159,7 @@ describe('generateUrls(router, options)(routeName, params)', () => {
       { name: 'a', path: '/' },
       {
         path: '/parent',
-        children: [
-          { name: 'b', path: '/' },
-          { name: 'c', path: '/child/' },
-        ],
+        children: [{ name: 'b', path: '/' }, { name: 'c', path: '/child/' }],
       },
     ];
 
@@ -170,7 +182,14 @@ describe('generateUrls(router, options)(routeName, params)', () => {
     const url = generateUrls(router);
     const prettyUrl = generateUrls(router, {
       encode(str) {
-        return encodeURI(str).replace(/[/?#]/g, c => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+        return encodeURI(str).replace(
+          /[/?#]/g,
+          (c) =>
+            `%${c
+              .charCodeAt(0)
+              .toString(16)
+              .toUpperCase()}`,
+        );
       },
     });
 

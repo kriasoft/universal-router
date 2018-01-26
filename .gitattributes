@@ -91,12 +91,14 @@ TODO         text
 *.twig       text
 
 ## LINTERS
+.babelrc      text
 .csslintrc    text
 .eslintrc     text
 .htmlhintrc   text
 .jscsrc       text
 .jshintrc     text
 .jshintignore text
+.prettierrc   text
 .stylelintrc  text
 
 ## CONFIGS

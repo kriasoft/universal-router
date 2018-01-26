@@ -1,11 +1,15 @@
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
  *
- * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
+ * Copyright (c) 2015-present Kriasoft.
  *
- * This source code is licensed under the Apache 2.0 license found in the
+ * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
+
+process.on('unhandledRejection', (error) => {
+  throw error;
+});
 
 const fs = require('fs-extra');
 const path = require('path');
@@ -75,14 +79,19 @@ const files = [
 ];
 
 addons.forEach((addon) => {
-  files.push(...files.map(file =>
-    Object.assign({}, file, {
-      input: `dist/src/${addon.name}.js`,
-      basePath: file.format === 'umd' ? '' : `/${addon.name}`,
-      output: file.output === pkg.name ? `${pkg.name}-${addon.file}` : file.output,
-      name: file.name ? addon.name : null,
-      external: Object.keys(pkg.dependencies).concat([path.resolve('dist/src/UniversalRouter.js')]),
-    })));
+  files.push(
+    ...files.map((file) =>
+      Object.assign({}, file, {
+        input: `dist/src/${addon.name}.js`,
+        basePath: file.format === 'umd' ? '' : `/${addon.name}`,
+        output: file.output === pkg.name ? `${pkg.name}-${addon.file}` : file.output,
+        name: file.name ? addon.name : null,
+        external: Object.keys(pkg.dependencies).concat([
+          path.resolve('dist/src/UniversalRouter.js'),
+        ]),
+      }),
+    ),
+  );
 });
 
 async function run() {
@@ -97,37 +106,41 @@ async function run() {
   ]);
 
   // Compile source code into a distributable format with Babel
-  await Promise.all(files.map(async (file) => {
-    const bundle = await rollup.rollup({
-      input: file.input || 'dist/src/UniversalRouter.js',
-      external: file.external || Object.keys(pkg.dependencies),
-      plugins: [
-        ...file.format === 'umd' ? [nodeResolve({ browser: true }), commonjs()] : [],
-        babel({
-          babelrc: false,
-          exclude: 'node_modules/**',
-          presets: file.presets,
-          plugins: file.plugins,
-        }),
-        ...file.minify ? [uglify({ output: { comments: '/^!/' } })] : [],
-      ],
-    });
+  await Promise.all(
+    files.map(async (file) => {
+      const bundle = await rollup.rollup({
+        input: file.input || 'dist/src/UniversalRouter.js',
+        external: file.external || Object.keys(pkg.dependencies),
+        plugins: [
+          ...(file.format === 'umd' ? [nodeResolve({ browser: true }), commonjs()] : []),
+          babel({
+            babelrc: false,
+            exclude: 'node_modules/**',
+            presets: file.presets,
+            plugins: file.plugins,
+          }),
+          ...(file.minify ? [uglify({ output: { comments: '/^!/' } })] : []),
+        ],
+      });
 
-    bundle.write({
-      file: `dist${file.basePath || ''}/${file.output}${file.ext}`,
-      format: file.format,
-      sourcemap: true,
-      exports: 'default',
-      name: file.name,
-      banner: '/*! Universal Router | MIT License | https://www.kriasoft.com/universal-router/ */\n',
-      globals: {
-        [path.resolve('dist/src/UniversalRouter.js')]: name,
-      },
-      paths: {
-        [path.resolve('dist/src/UniversalRouter.js')]: file.format === 'umd' ? `./${pkg.name}${file.ext}` : '..',
-      },
-    });
-  }));
+      bundle.write({
+        file: `dist${file.basePath || ''}/${file.output}${file.ext}`,
+        format: file.format,
+        sourcemap: true,
+        exports: 'default',
+        name: file.name,
+        banner:
+          '/*! Universal Router | MIT License | https://www.kriasoft.com/universal-router/ */\n',
+        globals: {
+          [path.resolve('dist/src/UniversalRouter.js')]: name,
+        },
+        paths: {
+          [path.resolve('dist/src/UniversalRouter.js')]:
+            file.format === 'umd' ? `./${pkg.name}${file.ext}` : '..',
+        },
+      });
+    }),
+  );
 
   const libPkg = Object.assign({}, pkg);
   delete libPkg.private;
@@ -135,21 +148,19 @@ async function run() {
   delete libPkg.scripts;
   await fs.outputJson('dist/package.json', libPkg, { spaces: 2 });
 
-  await Promise.all(addons.map((addon) => {
-    const addonPkg = Object.assign({}, pkg, {
-      name: addon.name,
-      description: addon.description,
-      esnext: `../src/${addon.name}.js`,
-    });
-    delete addonPkg.dependencies;
-    delete addonPkg.devDependencies;
-    delete addonPkg.scripts;
-    return fs.outputJson(`dist/${addon.name}/package.json`, addonPkg, { spaces: 2 });
-  }));
+  await Promise.all(
+    addons.map((addon) => {
+      const addonPkg = Object.assign({}, pkg, {
+        name: addon.name,
+        description: addon.description,
+        esnext: `../src/${addon.name}.js`,
+      });
+      delete addonPkg.dependencies;
+      delete addonPkg.devDependencies;
+      delete addonPkg.scripts;
+      return fs.outputJson(`dist/${addon.name}/package.json`, addonPkg, { spaces: 2 });
+    }),
+  );
 }
-
-process.on('unhandledRejection', (error) => {
-  throw error;
-});
 
 module.exports = run();

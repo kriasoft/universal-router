@@ -5,12 +5,13 @@
 
 # Universal Router
 
-[![NPM version](http://img.shields.io/npm/v/universal-router.svg?style=flat-square)](https://www.npmjs.com/package/universal-router)
-[![NPM downloads](http://img.shields.io/npm/dm/universal-router.svg?style=flat-square)](https://www.npmjs.com/package/universal-router)
-[![Build Status](http://img.shields.io/travis/kriasoft/universal-router/master.svg?style=flat-square)](https://travis-ci.org/kriasoft/universal-router)
-[![Coverage Status](https://img.shields.io/coveralls/kriasoft/universal-router.svg?style=flat-square)](https://coveralls.io/github/kriasoft/universal-router)
-[![Dependency Status](http://img.shields.io/david/kriasoft/universal-router.svg?style=flat-square)](https://david-dm.org/kriasoft/universal-router)
-[![Online Chat](http://img.shields.io/badge/chat_room-%23universal--router-blue.svg?style=flat-square)](https://gitter.im/kriasoft/universal-router)
+[![NPM version](https://img.shields.io/npm/v/universal-router.svg?style=flat-square&maxAge=3600)](https://www.npmjs.com/package/universal-router)
+[![NPM downloads](https://img.shields.io/npm/dm/universal-router.svg?style=flat-square&maxAge=3600)](https://npm-stat.com/charts.html?package=universal-router)
+[![Build Status](https://img.shields.io/travis/kriasoft/universal-router/master.svg?style=flat-square&maxAge=3600)](https://travis-ci.org/kriasoft/universal-router)
+[![Coverage Status](https://img.shields.io/coveralls/kriasoft/universal-router.svg?style=flat-square&maxAge=3600)](https://coveralls.io/github/kriasoft/universal-router)
+[![Dependency Status](https://img.shields.io/david/kriasoft/universal-router.svg?style=flat-square&maxAge=3600)](https://david-dm.org/kriasoft/universal-router)
+[![Library Size](http://img.badgesize.io/kriasoft/universal-router/master/dist/universal-router.min.js.svg?compression=gzip&label=size&style=flat-square&maxAge=3600)](https://bundlephobia.com/result?p=universal-router)
+[![Online Chat](https://img.shields.io/badge/gitter-join_chat-753a88.svg?style=flat-square&maxAge=3600)](https://hyperappjs.herokuapp.com)
 
 A simple middleware-style router that can be used in both client-side (e.g. React, Vue.js)
 and server-side applications (e.g. Node.js/Express, Koa).
@@ -18,10 +19,9 @@ and server-side applications (e.g. Node.js/Express, Koa).
 Visit **[Quickstart Guide](http://slides.com/koistya/universal-router)** (slides) &nbsp;|&nbsp;
 Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Gitter to stay up to date
 
-
 ## Features
 
-✓ It has [simple code](https://github.com/kriasoft/universal-router/blob/v5.1.0/src/UniversalRouter.js)
+✓ It has [simple code](https://github.com/kriasoft/universal-router/master/src/UniversalRouter.js)
   with only single [path-to-regexp](https://github.com/pillarjs/path-to-regexp) dependency<br>
 ✓ It can be used with any JavaScript framework such as React, Vue.js etc<br>
 ✓ It uses the same middleware approach used in Express and Koa, making it easy to learn<br>
@@ -29,22 +29,24 @@ Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Git
   [declarative](https://en.wikipedia.org/wiki/Declarative_programming) routing style<br>
 ✓ Routes are plain JavaScript objects with which you can interact as you like<br>
 
-
 ## Installation
 
 Using [npm](https://www.npmjs.com/package/universal-router):
 
 ```bash
-$ npm install universal-router --save
+npm install universal-router --save
 ```
 
-Or using a [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) like [unpkg.com](https://unpkg.com)
+Or using a [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) like
+[unpkg.com](https://unpkg.com/universal-router@latest/universal-router.min.js) or
+[jsDelivr](https://cdn.jsdelivr.net/npm/universal-router@latest/universal-router.min.js)
 with the following script tag:
 
 ```html
-<script src="https://unpkg.com/universal-router@5.1.0/universal-router.min.js"></script>
+<script src="https://unpkg.com/universal-router@latest/universal-router.min.js"></script>
 ```
 
+You can find the library in `window.UniversalRouter`.
 
 ## How does it look like?
 
@@ -84,26 +86,24 @@ Play with an example on [JSFiddle](https://jsfiddle.net/frenzzy/b0w9mjck/84/),
 [JS Bin](https://jsbin.com/kaluden/1/edit?js,output) in your browser or try
 [RunKit](https://runkit.com/frenzzy/universal-router-v4-demo) node.js playground.
 
-
 ## Documentation
 
 * [Getting Started](https://github.com/kriasoft/universal-router/blob/master/docs/getting-started.md)
 * [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)
 
-
 ## Browser Support
 
-Universal Router supports all popular browsers, including Internet Explorer 9 and above
-with polyfills such as [es6-shim](https://github.com/es-shims/es6-shim) for
+We support all ES5-compliant browsers, including Internet Explorer 9 and above,
+but depending on your target browsers you may need to include
+[polyfills](https://en.wikipedia.org/wiki/Polyfill_(programming)) for
 [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map),
 [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and
 [`Object.assign`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
-that must be included before any other code.
+before any other code.
 
 For compatibility with older browsers you may also need to include polyfills for
 [`Array.isArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray)
 and [`Object.create`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create).
-
 
 ## Books and Tutorials
 
@@ -118,43 +118,41 @@ by [Michael Sargent](https://twitter.com/michaelksarge)<br>
 :page_facing_up: &nbsp; **[Getting Started with Relay “Modern” for Building Isomorphic Web Apps](https://hackernoon.com/ae049e4e23c1)**
 by [Konstantin Tarkus](https://twitter.com/koistya)<br>
 
-
 ## Sponsors
 
 Become a sponsor and get your logo on our README on Github with a link to your site.
 [[Become a sponsor](https://opencollective.com/universal-router#sponsor)]
 
 <a href="https://opencollective.com/universal-router/sponsor/0/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/0/avatar.svg?2018-01-16" height="64">
+  <img src="https://opencollective.com/universal-router/sponsor/0/avatar.svg?2018-01-26" height="64">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/1/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/1/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/sponsor/1/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/2/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/2/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/sponsor/2/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/3/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/3/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/sponsor/3/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/4/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/4/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/sponsor/4/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/5/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/5/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/sponsor/5/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/6/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/6/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/sponsor/6/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/7/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/7/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/sponsor/7/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/8/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/8/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/sponsor/8/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/9/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/9/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/sponsor/9/avatar.svg?2018-01-26">
 </a>
-
 
 ## Backers
 
@@ -162,36 +160,35 @@ Support us with a monthly donation and help us continue our activities.
 [[Become a backer](https://opencollective.com/universal-router#backer)]
 
 <a href="https://opencollective.com/universal-router/backer/0/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/0/avatar.svg?2018-01-16" height="64">
+  <img src="https://opencollective.com/universal-router/backer/0/avatar.svg?2018-01-26" height="64">
 </a>
 <a href="https://opencollective.com/universal-router/backer/1/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/1/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/backer/1/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/backer/2/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/2/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/backer/2/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/backer/3/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/3/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/backer/3/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/backer/4/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/4/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/backer/4/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/backer/5/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/5/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/backer/5/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/backer/6/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/6/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/backer/6/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/backer/7/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/7/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/backer/7/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/backer/8/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/8/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/backer/8/avatar.svg?2018-01-26">
 </a>
 <a href="https://opencollective.com/universal-router/backer/9/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/9/avatar.svg?2018-01-16">
+  <img src="https://opencollective.com/universal-router/backer/9/avatar.svg?2018-01-26">
 </a>
-
 
 ## What users say about Universal Router
 
@@ -227,7 +224,6 @@ Support us with a monthly donation and help us continue our activities.
 * [Redux-First Routing](https://github.com/mksarge/redux-first-routing) —
   A minimal, framework-agnostic API for accomplishing Redux-first routing
 
-
 ## Support
 
 * [#universal-router](https://gitter.im/kriasoft/universal-router) on Gitter —
@@ -238,26 +234,23 @@ Support us with a monthly donation and help us continue our activities.
   [HackHands](https://hackhands.com/koistya/)
   or [Skype](https://hatscripts.com/addskype?koistya) — Private consulting
 
-
 ## Contributing
 
 Anyone and everyone is welcome to
-[contribute](https://github.com/kriasoft/universal-router/blob/master/CONTRIBUTING.md) to this project.
+[contribute](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md) to this project.
 The best way to start is by checking our [open issues](https://github.com/kriasoft/universal-router/issues),
-[submit a new issues](https://github.com/kriasoft/universal-router/issues/new?labels=bug) or
-[feature request](https://github.com/kriasoft/universal-router/issues/new?labels=enhancement),
+submit a [bug report](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md#bugs) or
+[feature request](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md#features),
 participate in discussions, upvote or downvote the issues you like or dislike, send [pull
-requests](https://github.com/kriasoft/universal-router/blob/master/CONTRIBUTING.md#pull-requests).
-
+requests](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md#pull-requests).
 
 ## License
 
-Copyright © 2015-present Kriasoft, LLC.
+Copyright © 2015-present Kriasoft.
 This source code is licensed under the MIT license found in the
 [LICENSE.txt](https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt) file.
 The documentation to the project is licensed under the
 [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/) license.
-
 
 ---
 Made with ♥ by

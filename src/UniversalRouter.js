@@ -1,9 +1,9 @@
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
  *
- * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
+ * Copyright (c) 2015-present Kriasoft.
  *
- * This source code is licensed under the Apache 2.0 license found in the
+ * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 
@@ -66,16 +66,14 @@ class UniversalRouter {
       }
 
       if (matches.done) {
-        return Promise.reject(Object.assign(
-          new Error('Page not found'),
-          { context, status: 404, statusCode: 404 },
-        ));
+        return Promise.reject(
+          Object.assign(new Error('Page not found'), { context, status: 404, statusCode: 404 }),
+        );
       }
 
-      return Promise.resolve(resolve(
-        Object.assign({}, context, matches.value),
-        matches.value.params,
-      )).then((result) => {
+      return Promise.resolve(
+        resolve(Object.assign({}, context, matches.value), matches.value.params),
+      ).then((result) => {
         if (result !== null && result !== undefined) {
           return result;
         }

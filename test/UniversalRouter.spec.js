@@ -1,9 +1,9 @@
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
  *
- * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
+ * Copyright (c) 2015-present Kriasoft.
  *
- * This source code is licensed under the Apache 2.0 license found in the
+ * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 
@@ -19,17 +19,20 @@ describe('new UniversalRouter(routes, options)', () => {
   });
 
   it('should support custom resolve option for declarative routes', async () => {
-    const resolveRoute = sinon.spy(context => context.route.component || undefined);
+    const resolveRoute = sinon.spy((context) => context.route.component || undefined);
     const action = sinon.spy();
-    const router = new UniversalRouter({
-      path: '/a',
-      action,
-      children: [
-        { path: '/:b', component: null, action },
-        { path: '/c', component: 'c', action },
-        { path: '/d', component: 'd', action },
-      ],
-    }, { resolveRoute });
+    const router = new UniversalRouter(
+      {
+        path: '/a',
+        action,
+        children: [
+          { path: '/:b', component: null, action },
+          { path: '/c', component: 'c', action },
+          { path: '/d', component: 'd', action },
+        ],
+      },
+      { resolveRoute },
+    );
     const result = await router.resolve('/a/c');
     expect(resolveRoute.calledThrice).to.be.true;
     expect(action.called).to.be.false;
@@ -55,7 +58,7 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(err.statusCode).to.be.equal(404);
   });
 
-  it('should execute the matching route\'s action method and return its result', async () => {
+  it("should execute the matching route's action method and return its result", async () => {
     const action = sinon.spy(() => 'b');
     const router = new UniversalRouter({ path: '/a', action });
     const result = await router.resolve('/a');
@@ -85,9 +88,7 @@ describe('router.resolve({ pathname, ...context })', () => {
 
   it('should be able to pass context variables to action methods', async () => {
     const action = sinon.spy(() => true);
-    const router = new UniversalRouter([
-      { path: '/a', action },
-    ]);
+    const router = new UniversalRouter([{ path: '/a', action }]);
     const result = await router.resolve({ pathname: '/a', test: 'b' });
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.property('path', '/a');
@@ -95,11 +96,9 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(result).to.be.true;
   });
 
-  it('should not call action methods of routes that don\'t match the URL path', async () => {
+  it("should not call action methods of routes that don't match the URL path", async () => {
     const action = sinon.spy();
-    const router = new UniversalRouter([
-      { path: '/a', action },
-    ]);
+    const router = new UniversalRouter([{ path: '/a', action }]);
     let err;
     try {
       await router.resolve('/b');
@@ -114,21 +113,19 @@ describe('router.resolve({ pathname, ...context })', () => {
   });
 
   it('should support asynchronous route actions', async () => {
-    const router = new UniversalRouter([
-      { path: '/a', action: async () => 'b' },
-    ]);
+    const router = new UniversalRouter([{ path: '/a', action: async () => 'b' }]);
     const result = await router.resolve('/a');
     expect(result).to.be.equal('b');
   });
 
   it('URL parameters are captured and added to context.params', async () => {
     const action = sinon.spy(() => true);
-    const router = new UniversalRouter([
-      { path: '/:one/:two', action },
-    ]);
+    const router = new UniversalRouter([{ path: '/:one/:two', action }]);
     const result = await router.resolve({ pathname: '/a/b' });
     expect(action.calledOnce).to.be.true;
-    expect(action.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a', two: 'b' });
+    expect(action.args[0][0])
+      .to.have.property('params')
+      .that.deep.equals({ one: 'a', two: 'b' });
     expect(result).to.be.true;
   });
 
@@ -149,9 +146,13 @@ describe('router.resolve({ pathname, ...context })', () => {
     ]);
     const result = await router.resolve({ pathname: '/a/b' });
     expect(action1.calledOnce).to.be.true;
-    expect(action1.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a' });
+    expect(action1.args[0][0])
+      .to.have.property('params')
+      .that.deep.equals({ one: 'a' });
     expect(action2.calledOnce).to.be.true;
-    expect(action2.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a', two: 'b' });
+    expect(action2.args[0][0])
+      .to.have.property('params')
+      .that.deep.equals({ one: 'a', two: 'b' });
     expect(result).to.be.true;
   });
 
@@ -176,10 +177,16 @@ describe('router.resolve({ pathname, ...context })', () => {
     ]);
     const result = await router.resolve({ pathname: '/a/b' });
     expect(action1.calledTwice).to.be.true;
-    expect(action1.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a' });
-    expect(action1.args[1][0]).to.have.property('params').that.deep.equals({ one: 'b' });
+    expect(action1.args[0][0])
+      .to.have.property('params')
+      .that.deep.equals({ one: 'a' });
+    expect(action1.args[1][0])
+      .to.have.property('params')
+      .that.deep.equals({ one: 'b' });
     expect(action2.calledOnce).to.be.true;
-    expect(action2.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a', two: 'b' });
+    expect(action2.args[0][0])
+      .to.have.property('params')
+      .that.deep.equals({ one: 'a', two: 'b' });
     expect(result).to.be.true;
   });
 
@@ -215,13 +222,23 @@ describe('router.resolve({ pathname, ...context })', () => {
     ]);
     const result = await router.resolve({ pathname: '/a/b' });
     expect(action1.calledTwice).to.be.true;
-    expect(action1.args[0][0]).to.have.property('params').that.deep.equals({ one: 'a' });
-    expect(action1.args[1][0]).to.have.property('params').that.deep.equals({ one: 'a', two: 'b' });
+    expect(action1.args[0][0])
+      .to.have.property('params')
+      .that.deep.equals({ one: 'a' });
+    expect(action1.args[1][0])
+      .to.have.property('params')
+      .that.deep.equals({ one: 'a', two: 'b' });
     expect(action2.calledTwice).to.be.true;
-    expect(action2.args[0][0]).to.have.property('params').that.deep.equals({ three: 'a' });
-    expect(action2.args[1][0]).to.have.property('params').that.deep.equals({ three: 'a', four: 'b' });
+    expect(action2.args[0][0])
+      .to.have.property('params')
+      .that.deep.equals({ three: 'a' });
+    expect(action2.args[1][0])
+      .to.have.property('params')
+      .that.deep.equals({ three: 'a', four: 'b' });
     expect(action3.calledOnce).to.be.true;
-    expect(action3.args[0][0]).to.have.property('params').that.deep.equals({ three: 'a', five: 'b' });
+    expect(action3.args[0][0])
+      .to.have.property('params')
+      .that.deep.equals({ three: 'a', five: 'b' });
     expect(result).to.be.true;
   });
 
@@ -233,20 +250,26 @@ describe('router.resolve({ pathname, ...context })', () => {
         children: [
           {
             path: '',
-            action() { log.push(2); },
+            action() {
+              log.push(2);
+            },
             children: [
               {
                 path: '',
                 action({ next }) {
                   log.push(3);
-                  return next().then(() => { log.push(6); });
+                  return next().then(() => {
+                    log.push(6);
+                  });
                 },
                 children: [
                   {
                     path: '',
                     action({ next }) {
                       log.push(4);
-                      return next().then(() => { log.push(5); });
+                      return next().then(() => {
+                        log.push(5);
+                      });
                     },
                   },
                 ],
@@ -255,10 +278,22 @@ describe('router.resolve({ pathname, ...context })', () => {
           },
           {
             path: '',
-            action() { log.push(7); },
+            action() {
+              log.push(7);
+            },
             children: [
-              { path: '', action() { log.push(8); } },
-              { path: '(.*)', action() { log.push(9); } },
+              {
+                path: '',
+                action() {
+                  log.push(8);
+                },
+              },
+              {
+                path: '(.*)',
+                action() {
+                  log.push(9);
+                },
+              },
             ],
           },
         ],
@@ -269,9 +304,25 @@ describe('router.resolve({ pathname, ...context })', () => {
           return result;
         },
       },
-      { path: '/:id', action() { log.push(11); } },
-      { path: '/test', action() { log.push(12); return 'done'; } },
-      { path: '/*', action() { log.push(13); } },
+      {
+        path: '/:id',
+        action() {
+          log.push(11);
+        },
+      },
+      {
+        path: '/test',
+        action() {
+          log.push(12);
+          return 'done';
+        },
+      },
+      {
+        path: '/*',
+        action() {
+          log.push(13);
+        },
+      },
     ]);
 
     const result = await router.resolve('/test');
@@ -284,36 +335,52 @@ describe('router.resolve({ pathname, ...context })', () => {
     const router = new UniversalRouter({
       action({ next }) {
         log.push(1);
-        return next().then((result) => { log.push(9); return result; });
+        return next().then((result) => {
+          log.push(9);
+          return result;
+        });
       },
       children: [
         {
           path: '/a/b/c',
           action({ next }) {
             log.push(2);
-            return next(true).then((result) => { log.push(8); return result; });
+            return next(true).then((result) => {
+              log.push(8);
+              return result;
+            });
           },
         },
         {
           path: '/a',
-          action() { log.push(3); },
+          action() {
+            log.push(3);
+          },
           children: [
             {
               path: '/b',
               action({ next }) {
                 log.push(4);
-                return next().then((result) => { log.push(6); return result; });
+                return next().then((result) => {
+                  log.push(6);
+                  return result;
+                });
               },
               children: [
                 {
                   path: '/c',
-                  action() { log.push(5); },
+                  action() {
+                    log.push(5);
+                  },
                 },
               ],
             },
             {
               path: '/b/c',
-              action() { log.push(7); return 'done'; },
+              action() {
+                log.push(7);
+                return 'done';
+              },
             },
           ],
         },
@@ -327,9 +394,7 @@ describe('router.resolve({ pathname, ...context })', () => {
 
   it('should support parametrized routes 1', async () => {
     const action = sinon.spy(() => true);
-    const router = new UniversalRouter([
-      { path: '/path/:a/other/:b', action },
-    ]);
+    const router = new UniversalRouter([{ path: '/path/:a/other/:b', action }]);
     const result = await router.resolve('/path/1/other/2');
     expect(action.calledOnce).to.be.true;
     expect(action.args[0][0]).to.have.nested.property('params.a', '1');
@@ -426,7 +491,9 @@ describe('router.resolve({ pathname, ...context })', () => {
     const router = new UniversalRouter([
       {
         path: '/a',
-        action() { throw error; },
+        action() {
+          throw error;
+        },
       },
     ]);
     let err;
@@ -445,9 +512,7 @@ describe('router.resolve({ pathname, ...context })', () => {
       children: [
         {
           path: '/b',
-          children: [
-            { path: '/c', action },
-          ],
+          children: [{ path: '/c', action }],
         },
       ],
     };
@@ -483,10 +548,7 @@ describe('router.resolve({ pathname, ...context })', () => {
       { path: '/page/', action: () => 'b' },
       {
         path: '/child',
-        children: [
-          { path: '/', action: () => 'c' },
-          { path: '/page/', action: () => 'd' },
-        ],
+        children: [{ path: '/', action: () => 'c' }, { path: '/page/', action: () => 'd' }],
       },
     ]);
     expect(await router.resolve('/')).to.be.equal('a');

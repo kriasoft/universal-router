@@ -8,18 +8,16 @@
   "author": "Kriasoft <support@kriasoft.com> (https://www.kriasoft.com)",
   "contributors": [
     "Konstantin Tarkus <hello@tarkus.me> (https://tarkus.me)",
-    "Vladimir Kutepov <frenzzy.man@gmail.com>"
+    "Vladimir Kutepov"
   ],
   "license": "MIT",
   "keywords": [
-    "react",
-    "reactjs",
-    "react-component",
-    "route",
-    "routes",
+    "isomorphic",
+    "universal",
     "router",
     "routing",
-    "flux"
+    "routes",
+    "route"
   ],
   "main": "main.js",
   "module": "main.mjs",
@@ -38,19 +36,22 @@
     "babel-register": "^6.26.0",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
-    "eslint": "^4.10.0",
+    "eslint": "^4.16.0",
     "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-prettier": "^2.5.0",
     "fs-extra": "^5.0.0",
     "husky": "^0.14.3",
-    "mocha": "^4.0.1",
+    "mocha": "^5.0.0",
     "nyc": "^11.3.0",
-    "rollup": "^0.54.0",
+    "prettier": "^1.10.2",
+    "rollup": "^0.55.1",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-uglify": "^2.0.1",
-    "sinon": "^4.0.2"
+    "rollup-plugin-uglify": "^3.0.0",
+    "sinon": "^4.2.1"
   },
   "scripts": {
     "lint": "eslint src test tools",
@@ -58,7 +59,6 @@
     "watch": "mocha --require babel-register --reporter min --watch",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "node tools/build",
-    "precommit": "node tools/precommit",
-    "prepublishOnly": "node tools/build"
+    "precommit": "node tools/precommit"
   }
 }

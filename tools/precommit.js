@@ -1,11 +1,15 @@
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
  *
- * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
+ * Copyright (c) 2015-present Kriasoft.
  *
- * This source code is licensed under the Apache 2.0 license found in the
+ * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
+
+process.on('unhandledRejection', (error) => {
+  throw error;
+});
 
 const cp = require('child_process');
 
@@ -23,13 +27,7 @@ function spawn(command, args) {
 
 async function run() {
   await spawn('npm', ['run', '-s', 'lint']);
-  await spawn('npm', ['run', '-s', 'build']);
   await spawn('npm', ['run', '-s', 'test']);
-  await spawn('git', ['add', 'dist/universal-router*']);
 }
-
-process.on('unhandledRejection', (error) => {
-  throw error;
-});
 
 module.exports = run();
