@@ -13,8 +13,7 @@
 [![Library Size](http://img.badgesize.io/kriasoft/universal-router/master/dist/universal-router.min.js.svg?compression=gzip&label=size&style=flat-square&maxAge=3600)](https://bundlephobia.com/result?p=universal-router)
 [![Online Chat](https://img.shields.io/badge/gitter-join_chat-753a88.svg?style=flat-square&maxAge=3600)](https://gitter.im/kriasoft/universal-router)
 
-A simple middleware-style router that can be used in both client-side (e.g. React, Vue.js)
-and server-side applications (e.g. Node.js/Express, Koa).
+A simple middleware-style router that can be used in both client-side and server-side applications.
 
 Visit **[Quickstart Guide](http://slides.com/koistya/universal-router)** (slides) &nbsp;|&nbsp;
 Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Gitter to stay up to date
@@ -32,6 +31,21 @@ Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Git
 * Routes are plain JavaScript
   [objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer)
   with which you can interact as you like
+
+## What users say about Universal Router
+
+> Just switched a project over to universal-router.
+> Love that the whole thing is a few hundred lines of flexible, easy-to-read code.
+>
+> -- [Tweet](https://twitter.com/wincent/status/862115805378494464) by **Greg Hurrell** from Facebook
+
+
+> It does a great job at trying to be _universal_ — it's not tied to any framework,
+> it can be run on both server and client, and it's not even tied to history.
+> It's a great library which does one thing: routing.
+>
+> -- [Comment on Reddit](https://www.reddit.com/r/reactjs/comments/5xhw3o#form-t1_dejkw4p367)
+> by **@everdimension**
 
 ## Installation
 
@@ -95,6 +109,19 @@ Play with an example on [JSFiddle](https://jsfiddle.net/frenzzy/b0w9mjck/84/),
 * [Getting Started](https://github.com/kriasoft/universal-router/blob/master/docs/getting-started.md)
 * [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)
 
+## Books and Tutorials
+
+* 🎓 **[ES6 Training Course](https://es6.io/friend/konstantin)**
+by [Wes Bos](https://twitter.com/wesbos)
+* 📗 **[You Don't Know JS: ES6 & Beyond](http://amzn.to/2bFss85)**
+by [Kyle Simpson](https://github.com/getify) (Dec, 2015)
+* 📄 **[You might not need React Router](https://medium.freecodecamp.org/38673620f3d)**
+by [Konstantin Tarkus](https://twitter.com/koistya)
+* 📄 **[An Introduction to the Redux-First Routing Model](https://medium.freecodecamp.org/98926ebf53cb)**
+by [Michael Sargent](https://twitter.com/michaelksarge)
+* 📄 **[Getting Started with Relay Modern for Building Isomorphic Web Apps](https://hackernoon.com/ae049e4e23c1)**
+by [Konstantin Tarkus](https://twitter.com/koistya)
+
 ## Browser Support
 
 We support all ES5-compliant browsers, including Internet Explorer 9 and above,
@@ -108,6 +135,45 @@ before any other code.
 For compatibility with older browsers you may also need to include polyfills for
 [`Array.isArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray)
 and [`Object.create`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create).
+
+## Contributing
+
+Anyone and everyone is welcome to
+[contribute](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md) to this project.
+The best way to start is by checking our [open issues](https://github.com/kriasoft/universal-router/issues),
+submit a [bug report](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md#bugs) or
+[feature request](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md#features),
+participate in discussions, upvote or downvote the issues you like or dislike, send [pull
+requests](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md#pull-requests).
+
+## Support
+
+* [#universal-router](https://gitter.im/kriasoft/universal-router) on Gitter —
+  Watch announcements, share ideas and feedback
+* [GitHub Issues](https://github.com/kriasoft/universal-router/issues) —
+  Check open issues, send feature requests
+* [@koistya](https://twitter.com/koistya) on [Codementor](https://www.codementor.io/koistya),
+  [HackHands](https://hackhands.com/koistya/)
+  or [Skype](https://hatscripts.com/addskype?koistya) — Private consulting
+
+## Related Projects
+
+* [React Starter Kit](https://github.com/kriasoft/react-starter-kit) —
+  Boilerplate and tooling for building isomorphic web apps with React and Relay
+* [Node.js API Starter Kit](https://github.com/kriasoft/nodejs-api-starter) —
+  Boilerplate and tooling for building data APIs with Docker, Node.js and GraphQL
+* [ASP.NET Core Starter Kit](https://github.com/kriasoft/aspnet-starter-kit) —
+  Cross-platform single-page application boilerplate (ASP.NET Core, React, Redux)
+* [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit) —
+  Boilerplate for authoring JavaScript/React.js libraries
+* [React App SDK](https://github.com/kriasoft/react-app) —
+  Create React apps with just a single dev dependency and zero configuration
+* [React Static Boilerplate](https://github.com/kriasoft/react-static-boilerplate) —
+  Single-page application (SPA) starter kit (React, Redux, Webpack, Firebase)
+* [History](https://github.com/ReactTraining/history) —
+  HTML5 History API wrapper library that handle navigation in single-page apps
+* [Redux-First Routing](https://github.com/mksarge/redux-first-routing) —
+  A minimal, framework-agnostic API for accomplishing Redux-first routing
 
 ## Sponsors
 
@@ -180,73 +246,6 @@ Support us with a monthly donation and help us continue our activities.
 <a href="https://opencollective.com/universal-router/backer/9/website" target="_blank">
   <img src="https://opencollective.com/universal-router/backer/9/avatar.svg?2018-01-26">
 </a>
-
-## What users say about Universal Router
-
-> Just switched a project over to universal-router.
-> Love that the whole thing is a few hundred lines of flexible, easy-to-read code.
->
-> -- [Tweet](https://twitter.com/wincent/status/862115805378494464) by **Greg Hurrell** from Facebook
-
-
-> It does a great job at trying to be _universal_ — it's not tied to any framework,
-> it can be run on both server and client, and it's not even tied to history.
-> It's a great library which does one thing: routing.
->
-> -- [Comment on Reddit](https://www.reddit.com/r/reactjs/comments/5xhw3o#form-t1_dejkw4p367)
-> by **@everdimension**
-
-## Books and Tutorials
-
-* 🎓 **[ES6 Training Course](https://es6.io/friend/konstantin)**
-by [Wes Bos](https://twitter.com/wesbos)
-* 📗 **[You Don't Know JS: ES6 & Beyond](http://amzn.to/2bFss85)**
-by [Kyle Simpson](https://github.com/getify) (Dec, 2015)
-* 📄 **[You might not need React Router](https://medium.freecodecamp.org/38673620f3d)**
-by [Konstantin Tarkus](https://twitter.com/koistya)
-* 📄 **[An Introduction to the Redux-First Routing Model](https://medium.freecodecamp.org/98926ebf53cb)**
-by [Michael Sargent](https://twitter.com/michaelksarge)
-* 📄 **[Getting Started with Relay Modern for Building Isomorphic Web Apps](https://hackernoon.com/ae049e4e23c1)**
-by [Konstantin Tarkus](https://twitter.com/koistya)
-
-## Support
-
-* [#universal-router](https://gitter.im/kriasoft/universal-router) on Gitter —
-  Watch announcements, share ideas and feedback
-* [GitHub Issues](https://github.com/kriasoft/universal-router/issues) —
-  Check open issues, send feature requests
-* [@koistya](https://twitter.com/koistya) on [Codementor](https://www.codementor.io/koistya),
-  [HackHands](https://hackhands.com/koistya/)
-  or [Skype](https://hatscripts.com/addskype?koistya) — Private consulting
-
-## Contributing
-
-Anyone and everyone is welcome to
-[contribute](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md) to this project.
-The best way to start is by checking our [open issues](https://github.com/kriasoft/universal-router/issues),
-submit a [bug report](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md#bugs) or
-[feature request](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md#features),
-participate in discussions, upvote or downvote the issues you like or dislike, send [pull
-requests](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md#pull-requests).
-
-## Related Projects
-
-* [React Starter Kit](https://github.com/kriasoft/react-starter-kit) —
-  Boilerplate and tooling for building isomorphic web apps with React and Relay
-* [Node.js API Starter Kit](https://github.com/kriasoft/nodejs-api-starter) —
-  Boilerplate and tooling for building data APIs with Docker, Node.js and GraphQL
-* [ASP.NET Core Starter Kit](https://github.com/kriasoft/aspnet-starter-kit) —
-  Cross-platform single-page application boilerplate (ASP.NET Core, React, Redux)
-* [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit) —
-  Boilerplate for authoring JavaScript/React.js libraries
-* [React App SDK](https://github.com/kriasoft/react-app) —
-  Create React apps with just a single dev dependency and zero configuration
-* [React Static Boilerplate](https://github.com/kriasoft/react-static-boilerplate) —
-  Single-page application (SPA) starter kit (React, Redux, Webpack, Firebase)
-* [History](https://github.com/ReactTraining/history) —
-  HTML5 History API wrapper library that handle navigation in single-page apps
-* [Redux-First Routing](https://github.com/mksarge/redux-first-routing) —
-  A minimal, framework-agnostic API for accomplishing Redux-first routing
 
 ## License
 
