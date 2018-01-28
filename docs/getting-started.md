@@ -8,7 +8,7 @@ You can start by installing **Universal Router** library via [npm](https://www.n
 by running:
 
 ```sh
-$ npm install universal-router --save
+npm install universal-router --save
 ```
 
 This module contains a `UniversalRouter` class with a single `router.resolve` method that responsible for traversing

@@ -1,6 +1,6 @@
 <a href="https://www.kriasoft.com/universal-router/" target="_blank">
   <img width="64" height="64" align="right" alt="Visit Universal Router Website"
-  src="https://raw.githubusercontent.com/kriasoft/universal-router/master/docs/assets/img/tour.png" />
+  src="https://rawgit.com/kriasoft/universal-router/master/logo.svg" />
 </a>
 
 # Universal Router
@@ -21,16 +21,16 @@ Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Git
 ## Features
 
 * It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/UniversalRouter.js)
-  with only single [path-to-regexp](https://github.com/pillarjs/path-to-regexp) dependency
+  with only single [path-to-regexp](https://github.com/pillarjs/path-to-regexp) dependency.
 * It can be used with any JavaScript framework such as
-  [React](https://reactjs.org/), [Vue](https://vuejs.org/), [Hyperapp](https://hyperapp.js.org/) etc
+  [React](https://reactjs.org/), [Vue](https://vuejs.org/), [Hyperapp](https://hyperapp.js.org/) etc.
 * It uses the same middleware approach used in [Express](http://expressjs.com/) and [Koa](http://koajs.com/),
-  making it easy to learn
+  making it easy to learn.
 * It supports both [imperative](https://en.wikipedia.org/wiki/Imperative_programming) and
-  [declarative](https://en.wikipedia.org/wiki/Declarative_programming) routing style
+  [declarative](https://en.wikipedia.org/wiki/Declarative_programming) routing style.
 * Routes are plain JavaScript
   [objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer)
-  with which you can interact as you like
+  with which you can interact as you like.
 
 ## What users say about Universal Router
 
@@ -148,31 +148,31 @@ requests](https://github.com/kriasoft/universal-router/blob/master/.github/CONTR
 ## Support
 
 * [#universal-router](https://gitter.im/kriasoft/universal-router) on Gitter —
-  Watch announcements, share ideas and feedback
+  Watch announcements, share ideas and feedback.
 * [GitHub Issues](https://github.com/kriasoft/universal-router/issues) —
-  Check open issues, send feature requests
+  Check open issues, send feature requests.
 * [@koistya](https://twitter.com/koistya) on [Codementor](https://www.codementor.io/koistya),
   [HackHands](https://hackhands.com/koistya/)
-  or [Skype](https://hatscripts.com/addskype?koistya) — Private consulting
+  or [Skype](https://hatscripts.com/addskype?koistya) — Private consulting.
 
 ## Related Projects
 
 * [React Starter Kit](https://github.com/kriasoft/react-starter-kit) —
-  Boilerplate and tooling for building isomorphic web apps with React and Relay
+  Boilerplate and tooling for building isomorphic web apps with React and Relay.
 * [Node.js API Starter Kit](https://github.com/kriasoft/nodejs-api-starter) —
-  Boilerplate and tooling for building data APIs with Docker, Node.js and GraphQL
+  Boilerplate and tooling for building data APIs with Docker, Node.js and GraphQL.
 * [ASP.NET Core Starter Kit](https://github.com/kriasoft/aspnet-starter-kit) —
-  Cross-platform single-page application boilerplate (ASP.NET Core, React, Redux)
+  Cross-platform single-page application boilerplate (ASP.NET Core, React, Redux).
 * [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit) —
-  Boilerplate for authoring JavaScript/React.js libraries
+  Boilerplate for authoring JavaScript/React.js libraries.
 * [React App SDK](https://github.com/kriasoft/react-app) —
-  Create React apps with just a single dev dependency and zero configuration
+  Create React apps with just a single dev dependency and zero configuration.
 * [React Static Boilerplate](https://github.com/kriasoft/react-static-boilerplate) —
-  Single-page application (SPA) starter kit (React, Redux, Webpack, Firebase)
+  Single-page application (SPA) starter kit (React, Redux, Webpack, Firebase).
 * [History](https://github.com/ReactTraining/history) —
-  HTML5 History API wrapper library that handle navigation in single-page apps
+  HTML5 History API wrapper library that handle navigation in single-page apps.
 * [Redux-First Routing](https://github.com/mksarge/redux-first-routing) —
-  A minimal, framework-agnostic API for accomplishing Redux-first routing
+  A minimal, framework-agnostic API for accomplishing Redux-first routing.
 
 ## Sponsors
 

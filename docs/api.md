@@ -301,8 +301,8 @@ const routes = [
 const router = new UniversalRouter(routes, { baseUrl: '/base' })
 const url = generateUrls(router)
 
-url('users')                         // => '/base/users'
-url('user', { username: 'john' })    // => '/base/user/john'
+url('users')                          // => '/base/users'
+url('user', { username: 'john' })     // => '/base/user/john'
 ```
 
 This approach also works fine for dynamically added routes at runtime.
@@ -310,7 +310,7 @@ This approach also works fine for dynamically added routes at runtime.
 ```js
 routes.children.push({ path: '/world', name: 'hello' })
 
-url('hello')                         // => '/base/world'
+url('hello')                          // => '/base/world'
 ```
 
 Use `encode` option for custom encoding of URI path segments. By default
@@ -335,8 +335,8 @@ const urlWithQueryString = generateUrls(router, {
 })
 
 const params = { username: 'John', busy: 1 }
-url('user', params)                  // => /base/user/John
-urlWithQueryString('user', params)   // => /base/user/John?busy=1
+url('user', params)                   // => /base/user/John
+urlWithQueryString('user', params)    // => /base/user/John?busy=1
 ```
 
 Or use external library such as [qs](https://github.com/ljharb/qs),
