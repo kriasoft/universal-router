@@ -8,17 +8,17 @@
  */
 
 process.on('unhandledRejection', (error) => {
-  throw error;
-});
+  throw error
+})
 
-const fs = require('fs-extra');
-const path = require('path');
-const rollup = require('rollup');
-const babel = require('rollup-plugin-babel');
-const uglify = require('rollup-plugin-uglify');
-const commonjs = require('rollup-plugin-commonjs');
-const nodeResolve = require('rollup-plugin-node-resolve');
-const pkg = require('../package.json');
+const fs = require('fs-extra')
+const path = require('path')
+const rollup = require('rollup')
+const babel = require('rollup-plugin-babel')
+const uglify = require('rollup-plugin-uglify')
+const commonjs = require('rollup-plugin-commonjs')
+const nodeResolve = require('rollup-plugin-node-resolve')
+const pkg = require('../package.json')
 
 // The source files to be compiled by Rollup
 const files = [
@@ -80,18 +80,18 @@ const files = [
     paths: { [path.resolve('dist/src/UniversalRouter.js')]: './universal-router.min.js' },
     globals: { [path.resolve('dist/src/UniversalRouter.js')]: 'UniversalRouter' },
   },
-];
+]
 
 async function run() {
   // Clean up the output directory
-  await fs.remove('dist');
+  await fs.remove('dist')
 
   // Copy source code, readme and license
   await Promise.all([
     fs.copy('src', 'dist/src'),
     fs.copy('README.md', 'dist/README.md'),
     fs.copy('LICENSE.txt', 'dist/LICENSE.txt'),
-  ]);
+  ])
 
   // Compile source code into a distributable format with Babel
   await Promise.all(
@@ -117,7 +117,7 @@ async function run() {
           }),
           ...(file.output.endsWith('.min.js') ? [uglify({ output: { comments: '/^!/' } })] : []),
         ],
-      });
+      })
 
       bundle.write({
         file: file.output,
@@ -129,27 +129,27 @@ async function run() {
           '/*! Universal Router | MIT License | https://www.kriasoft.com/universal-router/ */\n',
         globals: file.globals,
         paths: file.paths,
-      });
+      })
     }),
-  );
+  )
 
   // Create package.json for npm publishing
-  const libPkg = Object.assign({}, pkg);
-  delete libPkg.private;
-  delete libPkg.devDependencies;
-  delete libPkg.scripts;
-  await fs.outputJson('dist/package.json', libPkg, { spaces: 2 });
+  const libPkg = Object.assign({}, pkg)
+  delete libPkg.private
+  delete libPkg.devDependencies
+  delete libPkg.scripts
+  await fs.outputJson('dist/package.json', libPkg, { spaces: 2 })
 
   // Create generateUrls/package.json for convenient import
   const generateUrlsPkg = Object.assign({}, pkg, {
     name: 'generateUrls',
     description: 'Universal Router Generate URLs Add-on',
     esnext: '../src/generateUrls.js',
-  });
-  delete generateUrlsPkg.dependencies;
-  delete generateUrlsPkg.devDependencies;
-  delete generateUrlsPkg.scripts;
-  await fs.outputJson('dist/generateUrls/package.json', generateUrlsPkg, { spaces: 2 });
+  })
+  delete generateUrlsPkg.dependencies
+  delete generateUrlsPkg.devDependencies
+  delete generateUrlsPkg.scripts
+  await fs.outputJson('dist/generateUrls/package.json', generateUrlsPkg, { spaces: 2 })
 }
 
-module.exports = run();
+module.exports = run()

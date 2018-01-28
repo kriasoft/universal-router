@@ -7,32 +7,32 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import pathToRegexp from 'path-to-regexp';
-import matchRoute from './matchRoute';
-import resolveRoute from './resolveRoute';
+import pathToRegexp from 'path-to-regexp'
+import matchRoute from './matchRoute'
+import resolveRoute from './resolveRoute'
 
 function isChildRoute(parentRoute, childRoute) {
-  let route = childRoute;
+  let route = childRoute
   while (route) {
-    route = route.parent;
+    route = route.parent
     if (route === parentRoute) {
-      return true;
+      return true
     }
   }
-  return false;
+  return false
 }
 
 class UniversalRouter {
   constructor(routes, options = {}) {
     if (Object(routes) !== routes) {
-      throw new TypeError('Invalid routes');
+      throw new TypeError('Invalid routes')
     }
 
-    this.baseUrl = options.baseUrl || '';
-    this.resolveRoute = options.resolveRoute || resolveRoute;
-    this.context = Object.assign({ router: this }, options.context);
-    this.root = Array.isArray(routes) ? { path: '', children: routes, parent: null } : routes;
-    this.root.parent = null;
+    this.baseUrl = options.baseUrl || ''
+    this.resolveRoute = options.resolveRoute || resolveRoute
+    this.context = Object.assign({ router: this }, options.context)
+    this.root = Array.isArray(routes) ? { path: '', children: routes, parent: null } : routes
+    this.root.parent = null
   }
 
   resolve(pathnameOrContext) {
@@ -40,53 +40,53 @@ class UniversalRouter {
       {},
       this.context,
       typeof pathnameOrContext === 'string' ? { pathname: pathnameOrContext } : pathnameOrContext,
-    );
+    )
     const match = matchRoute(
       this.root,
       this.baseUrl,
       context.pathname.substr(this.baseUrl.length),
       [],
       null,
-    );
-    const resolve = this.resolveRoute;
-    let matches = null;
-    let nextMatches = null;
+    )
+    const resolve = this.resolveRoute
+    let matches = null
+    let nextMatches = null
 
     function next(resume, parent = matches.value.route, prevResult) {
-      const routeToSkip = prevResult === null && matches.value.route;
-      matches = nextMatches || match.next(routeToSkip);
-      nextMatches = null;
+      const routeToSkip = prevResult === null && matches.value.route
+      matches = nextMatches || match.next(routeToSkip)
+      nextMatches = null
 
       if (!resume) {
         if (matches.done || !isChildRoute(parent, matches.value.route)) {
-          nextMatches = matches;
-          return Promise.resolve(null);
+          nextMatches = matches
+          return Promise.resolve(null)
         }
       }
 
       if (matches.done) {
         return Promise.reject(
           Object.assign(new Error('Page not found'), { context, status: 404, statusCode: 404 }),
-        );
+        )
       }
 
       return Promise.resolve(
         resolve(Object.assign({}, context, matches.value), matches.value.params),
       ).then((result) => {
         if (result !== null && result !== undefined) {
-          return result;
+          return result
         }
 
-        return next(resume, parent, result);
-      });
+        return next(resume, parent, result)
+      })
     }
 
-    context.next = next;
+    context.next = next
 
-    return next(true, this.root);
+    return next(true, this.root)
   }
 }
 
-UniversalRouter.pathToRegexp = pathToRegexp;
+UniversalRouter.pathToRegexp = pathToRegexp
 
-export default UniversalRouter;
+export default UniversalRouter

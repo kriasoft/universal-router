@@ -4,28 +4,28 @@ The easiest way to add a redirect to your route is to return from the action met
 that you can interpret as a redirect at the end of routes resolving, for example:
 
 ```js
-import UniversalRouter from 'universal-router';
+import UniversalRouter from 'universal-router'
 
 const router = new UniversalRouter([
   {
     path: '/redirect',
     action() {
-      return { redirect: '/target' }; // <== request a redirect
+      return { redirect: '/target' } // <== request a redirect
     },
   },
   {
     path: '/target',
     action() {
-      return { content: '<h1>Content</h1>' };
+      return { content: '<h1>Content</h1>' }
     },
   },
-]);
+])
 
 router.resolve('/redirect').then(page => {
   if (page.redirect) {
-    window.location = page.redirect; // <== actual redirect here
+    window.location = page.redirect // <== actual redirect here
   } else {
-    document.body.innerHTML = page.content;
+    document.body.innerHTML = page.content
   }
 })
 ```
@@ -37,30 +37,30 @@ const router = new UniversalRouter([
   {
     path: '/login',
     action() {
-      return { content: '<h1>Login</h1>' };
+      return { content: '<h1>Login</h1>' }
     },
   },
   {
     path: '/admin',
     action(context) {
       if (!context.user) {
-        return { redirect: '/login' };
+        return { redirect: '/login' }
       }
-      return { content: '<h1>Admin</h1>' };
+      return { content: '<h1>Admin</h1>' }
     },
   },
-]);
+])
 
 router.resolve({
   pathname: '/admin',
   user: null, // <== is the user logged in?
 }).then(page => {
   if (page.redirect) {
-    window.location = page.redirect;
+    window.location = page.redirect
   } else {
-    document.body.innerHTML = page.content;
+    document.body.innerHTML = page.content
   }
-});
+})
 ```
 
 You also can use [middleware](https://github.com/kriasoft/universal-router/blob/master/docs/api.md#middlewares)
@@ -71,16 +71,16 @@ const adminRoutes = {
   path: '/admin',
   action(context) {
     if (!context.user) {
-      return { redirect: '/login' }; // stop and redirect
+      return { redirect: '/login' } // stop and redirect
     }
-    return context.next(); // go to children
+    return context.next() // go to children
   },
   children: [
     { path: '',       action: () => ({ content: '<h1>Admin: Home</h1>'  }) },
     { path: '/users', action: () => ({ content: '<h1>Admin: Users</h1>' }) },
     { path: '/posts', action: () => ({ content: '<h1>Admin: Posts</h1>' }) },
   ],
-};
+}
 ```
 
 In case if you prefer [declarative](https://en.wikipedia.org/wiki/Declarative_programming) routing:
@@ -97,28 +97,28 @@ const routes = [
       { path: '/posts', content: '<h1>Admin: Posts</h1>' },
     ],
   },
-];
+]
 
 const router = new UniversalRouter(routes, {
   resolveRoute(context, params) {
     if (context.route.protected && !context.user) {
-      return { redirect: '/login', from: context.pathname }; // <== where the redirect come from?
+      return { redirect: '/login', from: context.pathname } // <== where the redirect come from?
     }
     if (context.route.content) {
-      return { content: context.route.content };
+      return { content: context.route.content }
     }
-    return null;
+    return null
   },
-});
+})
 
 router.resolve({ pathname: '/admin/users', user: null }).then(page => {
   if (page.redirect) {
-    console.log(`Redirect from ${page.from} to ${page.redirect}`);
-    window.location = page.redirect;
+    console.log(`Redirect from ${page.from} to ${page.redirect}`)
+    window.location = page.redirect
   } else {
-    document.body.innerHTML = page.content;
+    document.body.innerHTML = page.content
   }
-});
+})
 ```
 
 For client side redirects without a full page reload you may use the browser
@@ -128,35 +128,35 @@ For client side redirects without a full page reload you may use the browser
 ```js
 router.resolve('/redirect').then(page => {
   if (page.redirect) {
-    const state = { from: page.from };
-    window.history.pushState(state, '', page.redirect);
+    const state = { from: page.from }
+    window.history.pushState(state, '', page.redirect)
   } else {
-    document.body.innerHTML = page.content;
+    document.body.innerHTML = page.content
   }
-});
+})
 ```
 
 For server side redirect you need to respond with
 [3xx http status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection) and a new location:
 
 ```js
-import http from 'http';
-import url from 'url';
+import http from 'http'
+import url from 'url'
 
 const server = http.createServer(async (req, res) => {
-  const location = url.parse(req.url);
-  const page = await router.resolve(location.pathname);
+  const location = url.parse(req.url)
+  const page = await router.resolve(location.pathname)
 
   if (page.redirect) {
-    res.writeHead(301, { Location: page.redirect });
-    res.end();
+    res.writeHead(301, { Location: page.redirect })
+    res.end()
   } else {
-    res.write(`<!doctype html>${page.content}`);
-    res.end();
+    res.write(`<!doctype html>${page.content}`)
+    res.end()
   }
-});
+})
 
-server.listen(8080);
+server.listen(8080)
 ```
 
 Playground: [JSFiddle](https://jsfiddle.net/frenzzy/2nq9o896/)

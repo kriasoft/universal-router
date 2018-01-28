@@ -9,10 +9,9 @@
 
 function resolveRoute(context, params) {
   if (typeof context.route.action === 'function') {
-    return context.route.action(context, params);
+    return context.route.action(context, params)
   }
-
-  return undefined;
+  return undefined
 }
 
-export default resolveRoute;
+export default resolveRoute

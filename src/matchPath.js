@@ -7,50 +7,50 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import pathToRegexp from 'path-to-regexp';
+import pathToRegexp from 'path-to-regexp'
 
-const { hasOwnProperty } = Object.prototype;
-const cache = new Map();
+const { hasOwnProperty } = Object.prototype
+const cache = new Map()
 
 function decodeParam(val) {
   try {
-    return decodeURIComponent(val);
+    return decodeURIComponent(val)
   } catch (err) {
-    return val;
+    return val
   }
 }
 
 function matchPath(route, pathname, parentKeys, parentParams) {
-  const end = !route.children;
-  const cacheKey = `${route.path || ''}|${end}`;
-  let regexp = cache.get(cacheKey);
+  const end = !route.children
+  const cacheKey = `${route.path || ''}|${end}`
+  let regexp = cache.get(cacheKey)
 
   if (!regexp) {
-    const keys = [];
+    const keys = []
     regexp = {
       keys,
       pattern: pathToRegexp(route.path || '', keys, { end }),
-    };
-    cache.set(cacheKey, regexp);
+    }
+    cache.set(cacheKey, regexp)
   }
 
-  const m = regexp.pattern.exec(pathname);
+  const m = regexp.pattern.exec(pathname)
   if (!m) {
-    return null;
+    return null
   }
 
-  const path = m[0];
-  const params = Object.assign({}, parentParams);
+  const path = m[0]
+  const params = Object.assign({}, parentParams)
 
   for (let i = 1; i < m.length; i++) {
-    const key = regexp.keys[i - 1];
-    const prop = key.name;
-    const value = m[i];
+    const key = regexp.keys[i - 1]
+    const prop = key.name
+    const value = m[i]
     if (value !== undefined || !hasOwnProperty.call(params, prop)) {
       if (key.repeat) {
-        params[prop] = value ? value.split(key.delimiter).map(decodeParam) : [];
+        params[prop] = value ? value.split(key.delimiter).map(decodeParam) : []
       } else {
-        params[prop] = value ? decodeParam(value) : value;
+        params[prop] = value ? decodeParam(value) : value
       }
     }
   }
@@ -59,7 +59,7 @@ function matchPath(route, pathname, parentKeys, parentParams) {
     path: !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path,
     keys: parentKeys.concat(regexp.keys),
     params,
-  };
+  }
 }
 
-export default matchPath;
+export default matchPath

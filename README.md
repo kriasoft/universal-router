@@ -39,7 +39,6 @@ Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Git
 >
 > -- [Tweet](https://twitter.com/wincent/status/862115805378494464) by **Greg Hurrell** from Facebook
 
-
 > It does a great job at trying to be _universal_ — it's not tied to any framework,
 > it can be run on both server and client, and it's not even tied to history.
 > It's a great library which does one thing: routing.
@@ -69,7 +68,7 @@ You can find the library in `window.UniversalRouter`.
 ## How does it look like?
 
 ```js
-import UniversalRouter from 'universal-router';
+import UniversalRouter from 'universal-router'
 
 const routes = [
   {
@@ -90,13 +89,13 @@ const routes = [
       },
     ],
   },
-];
+]
 
-const router = new UniversalRouter(routes);
+const router = new UniversalRouter(routes)
 
 router.resolve('/posts').then(html => {
-  document.body.innerHTML = html; // renders: <h1>Posts</h1>
-});
+  document.body.innerHTML = html // renders: <h1>Posts</h1>
+})
 ```
 
 Play with an example on [JSFiddle](https://jsfiddle.net/frenzzy/b0w9mjck/84/),
