@@ -20,85 +20,73 @@ const commonjs = require('rollup-plugin-commonjs');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const pkg = require('../package.json');
 
-const name = 'UniversalRouter';
-const addons = [
-  {
-    file: 'generate-urls',
-    name: 'generateUrls',
-    description: 'Universal Router Generate URLs Add-on',
-  },
-];
-
 // The source files to be compiled by Rollup
 const files = [
   {
+    input: 'dist/src/UniversalRouter.js',
+    output: 'dist/index.js',
     format: 'cjs',
-    ext: '.js',
-    output: 'main',
+    external: ['path-to-regexp'],
   },
   {
+    input: 'dist/src/UniversalRouter.js',
+    output: 'dist/module.js',
     format: 'es',
-    ext: '.mjs',
-    output: 'main',
+    external: ['path-to-regexp'],
   },
   {
+    input: 'dist/src/generateUrls.js',
+    output: 'dist/generateUrls/index.js',
     format: 'cjs',
-    ext: '.js',
-    output: 'legacy',
-    presets: [['env', { modules: false }]],
+    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
+    paths: { [path.resolve('dist/src/UniversalRouter.js')]: '..' },
   },
   {
-    format: 'cjs',
-    ext: '.js',
-    output: 'browser',
-    presets: [['env', { modules: false }]],
-  },
-  {
+    input: 'dist/src/generateUrls.js',
+    output: 'dist/generateUrls/module.js',
     format: 'es',
-    ext: '.mjs',
-    output: 'browser',
-    presets: [['env', { modules: false }]],
+    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
+    paths: { [path.resolve('dist/src/UniversalRouter.js')]: '..' },
   },
   {
+    input: 'dist/src/UniversalRouter.js',
+    output: 'dist/universal-router.js',
     format: 'umd',
-    ext: '.js',
-    presets: [['env', { modules: false }]],
-    output: pkg.name,
-    name,
+    name: 'UniversalRouter',
     external: [],
   },
   {
+    input: 'dist/src/UniversalRouter.js',
+    output: 'dist/universal-router.min.js',
     format: 'umd',
-    ext: '.min.js',
-    presets: [['env', { modules: false }]],
-    output: pkg.name,
-    name,
+    name: 'UniversalRouter',
     external: [],
-    minify: true,
+  },
+  {
+    input: 'dist/src/generateUrls.js',
+    output: 'dist/universal-router-generate-urls.js',
+    format: 'umd',
+    name: 'generateUrls',
+    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
+    paths: { [path.resolve('dist/src/UniversalRouter.js')]: './universal-router.js' },
+    globals: { [path.resolve('dist/src/UniversalRouter.js')]: 'UniversalRouter' },
+  },
+  {
+    input: 'dist/src/generateUrls.js',
+    output: 'dist/universal-router-generate-urls.min.js',
+    format: 'umd',
+    name: 'generateUrls',
+    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
+    paths: { [path.resolve('dist/src/UniversalRouter.js')]: './universal-router.min.js' },
+    globals: { [path.resolve('dist/src/UniversalRouter.js')]: 'UniversalRouter' },
   },
 ];
-
-addons.forEach((addon) => {
-  files.push(
-    ...files.map((file) =>
-      Object.assign({}, file, {
-        input: `dist/src/${addon.name}.js`,
-        basePath: file.format === 'umd' ? '' : `/${addon.name}`,
-        output: file.output === pkg.name ? `${pkg.name}-${addon.file}` : file.output,
-        name: file.name ? addon.name : null,
-        external: Object.keys(pkg.dependencies).concat([
-          path.resolve('dist/src/UniversalRouter.js'),
-        ]),
-      }),
-    ),
-  );
-});
 
 async function run() {
   // Clean up the output directory
   await fs.remove('dist');
 
-  // Copy source code, package.json and LICENSE.txt
+  // Copy source code, readme and license
   await Promise.all([
     fs.copy('src', 'dist/src'),
     fs.copy('README.md', 'dist/README.md'),
@@ -109,58 +97,59 @@ async function run() {
   await Promise.all(
     files.map(async (file) => {
       const bundle = await rollup.rollup({
-        input: file.input || 'dist/src/UniversalRouter.js',
-        external: file.external || Object.keys(pkg.dependencies),
+        input: file.input,
+        external: file.external,
         plugins: [
           ...(file.format === 'umd' ? [nodeResolve({ browser: true }), commonjs()] : []),
           babel({
             babelrc: false,
-            exclude: 'node_modules/**',
-            presets: file.presets,
-            plugins: file.plugins,
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  modules: false,
+                  loose: true,
+                  exclude: ['transform-typeof-symbol'],
+                },
+              ],
+            ],
+            comments: false,
           }),
-          ...(file.minify ? [uglify({ output: { comments: '/^!/' } })] : []),
+          ...(file.output.endsWith('.min.js') ? [uglify({ output: { comments: '/^!/' } })] : []),
         ],
       });
 
       bundle.write({
-        file: `dist${file.basePath || ''}/${file.output}${file.ext}`,
+        file: file.output,
         format: file.format,
+        interop: false,
         sourcemap: true,
-        exports: 'default',
         name: file.name,
         banner:
           '/*! Universal Router | MIT License | https://www.kriasoft.com/universal-router/ */\n',
-        globals: {
-          [path.resolve('dist/src/UniversalRouter.js')]: name,
-        },
-        paths: {
-          [path.resolve('dist/src/UniversalRouter.js')]:
-            file.format === 'umd' ? `./${pkg.name}${file.ext}` : '..',
-        },
+        globals: file.globals,
+        paths: file.paths,
       });
     }),
   );
 
+  // Create package.json for npm publishing
   const libPkg = Object.assign({}, pkg);
   delete libPkg.private;
   delete libPkg.devDependencies;
   delete libPkg.scripts;
   await fs.outputJson('dist/package.json', libPkg, { spaces: 2 });
 
-  await Promise.all(
-    addons.map((addon) => {
-      const addonPkg = Object.assign({}, pkg, {
-        name: addon.name,
-        description: addon.description,
-        esnext: `../src/${addon.name}.js`,
-      });
-      delete addonPkg.dependencies;
-      delete addonPkg.devDependencies;
-      delete addonPkg.scripts;
-      return fs.outputJson(`dist/${addon.name}/package.json`, addonPkg, { spaces: 2 });
-    }),
-  );
+  // Create generateUrls/package.json for convenient import
+  const generateUrlsPkg = Object.assign({}, pkg, {
+    name: 'generateUrls',
+    description: 'Universal Router Generate URLs Add-on',
+    esnext: '../src/generateUrls.js',
+  });
+  delete generateUrlsPkg.dependencies;
+  delete generateUrlsPkg.devDependencies;
+  delete generateUrlsPkg.scripts;
+  await fs.outputJson('dist/generateUrls/package.json', generateUrlsPkg, { spaces: 2 });
 }
 
 module.exports = run();

@@ -8,7 +8,6 @@
  */
 
 import pathToRegexp from 'path-to-regexp';
-import matchPath from './matchPath';
 import matchRoute from './matchRoute';
 import resolveRoute from './resolveRoute';
 
@@ -89,8 +88,5 @@ class UniversalRouter {
 }
 
 UniversalRouter.pathToRegexp = pathToRegexp;
-UniversalRouter.matchPath = matchPath;
-UniversalRouter.matchRoute = matchRoute;
-UniversalRouter.resolveRoute = resolveRoute;
 
 export default UniversalRouter;

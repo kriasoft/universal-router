@@ -6,52 +6,22 @@
 	(global.UniversalRouter = factory());
 }(this, (function () { 'use strict';
 
-/**
- * Expose `pathToRegexp`.
- */
 var pathToRegexp_1 = pathToRegexp;
 var parse_1 = parse;
 var compile_1 = compile;
 var tokensToFunction_1 = tokensToFunction;
 var tokensToRegExp_1 = tokensToRegExp;
-
-/**
- * Default configs.
- */
 var DEFAULT_DELIMITER = '/';
 var DEFAULT_DELIMITERS = './';
+var PATH_REGEXP = new RegExp(['(\\\\.)', '(?:\\:(\\w+)(?:\\(((?:\\\\.|[^\\\\()])+)\\))?|\\(((?:\\\\.|[^\\\\()])+)\\))([+*?])?'].join('|'), 'g');
 
-/**
- * The main path matching regexp utility.
- *
- * @type {RegExp}
- */
-var PATH_REGEXP = new RegExp([
-  // Match escaped characters that would otherwise appear in future matches.
-  // This allows the user to escape special characters that won't transform.
-  '(\\\\.)',
-  // Match Express-style parameters and un-named parameters with a prefix
-  // and optional suffixes. Matches appear as:
-  //
-  // "/:test(\\d+)?" => ["/", "test", "\d+", undefined, "?"]
-  // "/route(\\d+)"  => [undefined, undefined, undefined, "\d+", undefined]
-  '(?:\\:(\\w+)(?:\\(((?:\\\\.|[^\\\\()])+)\\))?|\\(((?:\\\\.|[^\\\\()])+)\\))([+*?])?'
-].join('|'), 'g');
-
-/**
- * Parse a string for the raw tokens.
- *
- * @param  {string}  str
- * @param  {Object=} options
- * @return {!Array}
- */
-function parse (str, options) {
+function parse(str, options) {
   var tokens = [];
   var key = 0;
   var index = 0;
   var path = '';
-  var defaultDelimiter = (options && options.delimiter) || DEFAULT_DELIMITER;
-  var delimiters = (options && options.delimiters) || DEFAULT_DELIMITERS;
+  var defaultDelimiter = options && options.delimiter || DEFAULT_DELIMITER;
+  var delimiters = options && options.delimiters || DEFAULT_DELIMITERS;
   var pathEscaped = false;
   var res;
 
@@ -62,11 +32,10 @@ function parse (str, options) {
     path += str.slice(index, offset);
     index = offset + m.length;
 
-    // Ignore already escaped sequences.
     if (escaped) {
       path += escaped[1];
       pathEscaped = true;
-      continue
+      continue;
     }
 
     var prev = '';
@@ -85,7 +54,6 @@ function parse (str, options) {
       }
     }
 
-    // Push the current path onto the tokens.
     if (path) {
       tokens.push(path);
       path = '';
@@ -97,7 +65,6 @@ function parse (str, options) {
     var optional = modifier === '?' || modifier === '*';
     var delimiter = prev || defaultDelimiter;
     var pattern = capture || group;
-
     tokens.push({
       name: name || key++,
       prefix: prev,
@@ -109,33 +76,20 @@ function parse (str, options) {
     });
   }
 
-  // Push any remaining characters.
   if (path || index < str.length) {
     tokens.push(path + str.substr(index));
   }
 
-  return tokens
+  return tokens;
 }
 
-/**
- * Compile a string to a template function for the path.
- *
- * @param  {string}             str
- * @param  {Object=}            options
- * @return {!function(Object=, Object=)}
- */
-function compile (str, options) {
-  return tokensToFunction(parse(str, options))
+function compile(str, options) {
+  return tokensToFunction(parse(str, options));
 }
 
-/**
- * Expose a method for transforming tokens into the path function.
- */
-function tokensToFunction (tokens) {
-  // Compile all the tokens into regexps.
+function tokensToFunction(tokens) {
   var matches = new Array(tokens.length);
 
-  // Compile all the patterns before compilation.
   for (var i = 0; i < tokens.length; i++) {
     if (typeof tokens[i] === 'object') {
       matches[i] = new RegExp('^(?:' + tokens[i].pattern + ')$');
@@ -144,14 +98,14 @@ function tokensToFunction (tokens) {
 
   return function (data, options) {
     var path = '';
-    var encode = (options && options.encode) || encodeURIComponent;
+    var encode = options && options.encode || encodeURIComponent;
 
     for (var i = 0; i < tokens.length; i++) {
       var token = tokens[i];
 
       if (typeof token === 'string') {
         path += token;
-        continue
+        continue;
       }
 
       var value = data ? data[token.name] : undefined;
@@ -159,94 +113,64 @@ function tokensToFunction (tokens) {
 
       if (Array.isArray(value)) {
         if (!token.repeat) {
-          throw new TypeError('Expected "' + token.name + '" to not repeat, but got array')
+          throw new TypeError('Expected "' + token.name + '" to not repeat, but got array');
         }
 
         if (value.length === 0) {
-          if (token.optional) continue
-
-          throw new TypeError('Expected "' + token.name + '" to not be empty')
+          if (token.optional) continue;
+          throw new TypeError('Expected "' + token.name + '" to not be empty');
         }
 
         for (var j = 0; j < value.length; j++) {
           segment = encode(value[j]);
 
           if (!matches[i].test(segment)) {
-            throw new TypeError('Expected all "' + token.name + '" to match "' + token.pattern + '"')
+            throw new TypeError('Expected all "' + token.name + '" to match "' + token.pattern + '"');
           }
 
           path += (j === 0 ? token.prefix : token.delimiter) + segment;
         }
 
-        continue
+        continue;
       }
 
       if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
         segment = encode(String(value));
 
         if (!matches[i].test(segment)) {
-          throw new TypeError('Expected "' + token.name + '" to match "' + token.pattern + '", but got "' + segment + '"')
+          throw new TypeError('Expected "' + token.name + '" to match "' + token.pattern + '", but got "' + segment + '"');
         }
 
         path += token.prefix + segment;
-        continue
+        continue;
       }
 
       if (token.optional) {
-        // Prepend partial segment prefixes.
         if (token.partial) path += token.prefix;
-
-        continue
+        continue;
       }
 
-      throw new TypeError('Expected "' + token.name + '" to be ' + (token.repeat ? 'an array' : 'a string'))
+      throw new TypeError('Expected "' + token.name + '" to be ' + (token.repeat ? 'an array' : 'a string'));
     }
 
-    return path
-  }
+    return path;
+  };
 }
 
-/**
- * Escape a regular expression string.
- *
- * @param  {string} str
- * @return {string}
- */
-function escapeString (str) {
-  return str.replace(/([.+*?=^!:${}()[\]|/\\])/g, '\\$1')
+function escapeString(str) {
+  return str.replace(/([.+*?=^!:${}()[\]|/\\])/g, '\\$1');
 }
 
-/**
- * Escape the capturing group by escaping special characters and meaning.
- *
- * @param  {string} group
- * @return {string}
- */
-function escapeGroup (group) {
-  return group.replace(/([=!:$/()])/g, '\\$1')
+function escapeGroup(group) {
+  return group.replace(/([=!:$/()])/g, '\\$1');
 }
 
-/**
- * Get the flags for a regexp from the options.
- *
- * @param  {Object} options
- * @return {string}
- */
-function flags (options) {
-  return options && options.sensitive ? '' : 'i'
+function flags(options) {
+  return options && options.sensitive ? '' : 'i';
 }
 
-/**
- * Pull out keys from a regexp.
- *
- * @param  {!RegExp} path
- * @param  {Array=}  keys
- * @return {!RegExp}
- */
-function regexpToRegexp (path, keys) {
-  if (!keys) return path
-
-  // Use a negative lookahead to match only capturing groups.
+function regexpToRegexp(path, keys) {
+  if (!keys) return path;
   var groups = path.source.match(/\((?!\?)/g);
 
   if (groups) {
@@ -263,50 +187,25 @@ function regexpToRegexp (path, keys) {
     }
   }
 
-  return path
+  return path;
 }
 
-/**
- * Transform an array into a regexp.
- *
- * @param  {!Array}  path
- * @param  {Array=}  keys
- * @param  {Object=} options
- * @return {!RegExp}
- */
-function arrayToRegexp (path, keys, options) {
+function arrayToRegexp(path, keys, options) {
   var parts = [];
 
   for (var i = 0; i < path.length; i++) {
     parts.push(pathToRegexp(path[i], keys, options).source);
   }
 
-  return new RegExp('(?:' + parts.join('|') + ')', flags(options))
+  return new RegExp('(?:' + parts.join('|') + ')', flags(options));
 }
 
-/**
- * Create a path regexp from string input.
- *
- * @param  {string}  path
- * @param  {Array=}  keys
- * @param  {Object=} options
- * @return {!RegExp}
- */
-function stringToRegexp (path, keys, options) {
-  return tokensToRegExp(parse(path, options), keys, options)
+function stringToRegexp(path, keys, options) {
+  return tokensToRegExp(parse(path, options), keys, options);
 }
 
-/**
- * Expose a function for taking tokens and returning a RegExp.
- *
- * @param  {!Array}  tokens
- * @param  {Array=}  keys
- * @param  {Object=} options
- * @return {!RegExp}
- */
-function tokensToRegExp (tokens, keys, options) {
+function tokensToRegExp(tokens, keys, options) {
   options = options || {};
-
   var strict = options.strict;
   var end = options.end !== false;
   var delimiter = escapeString(options.delimiter || DEFAULT_DELIMITER);
@@ -315,7 +214,6 @@ function tokensToRegExp (tokens, keys, options) {
   var route = '';
   var isEndDelimited = false;
 
-  // Iterate over the tokens and create our regexp string.
   for (var i = 0; i < tokens.length; i++) {
     var token = tokens[i];
 
@@ -324,10 +222,7 @@ function tokensToRegExp (tokens, keys, options) {
       isEndDelimited = i === tokens.length - 1 && delimiters.indexOf(token[token.length - 1]) > -1;
     } else {
       var prefix = escapeString(token.prefix);
-      var capture = token.repeat
-        ? '(?:' + token.pattern + ')(?:' + prefix + '(?:' + token.pattern + '))*'
-        : token.pattern;
-
+      var capture = token.repeat ? '(?:' + token.pattern + ')(?:' + prefix + '(?:' + token.pattern + '))*' : token.pattern;
       if (keys) keys.push(token);
 
       if (token.optional) {
@@ -344,38 +239,25 @@ function tokensToRegExp (tokens, keys, options) {
 
   if (end) {
     if (!strict) route += '(?:' + delimiter + ')?';
-
     route += endsWith === '$' ? '$' : '(?=' + endsWith + ')';
   } else {
     if (!strict) route += '(?:' + delimiter + '(?=' + endsWith + '))?';
     if (!isEndDelimited) route += '(?=' + delimiter + '|' + endsWith + ')';
   }
 
-  return new RegExp('^' + route, flags(options))
+  return new RegExp('^' + route, flags(options));
 }
 
-/**
- * Normalize the given path string, returning a regular expression.
- *
- * An empty array can be passed in for the keys, which will hold the
- * placeholder key descriptions. For example, using `/user/:id`, `keys` will
- * contain `[{ name: 'id', delimiter: '/', optional: false, repeat: false }]`.
- *
- * @param  {(string|RegExp|Array)} path
- * @param  {Array=}                keys
- * @param  {Object=}               options
- * @return {!RegExp}
- */
-function pathToRegexp (path, keys, options) {
+function pathToRegexp(path, keys, options) {
   if (path instanceof RegExp) {
-    return regexpToRegexp(path, keys)
+    return regexpToRegexp(path, keys);
   }
 
   if (Array.isArray(path)) {
-    return arrayToRegexp(/** @type {!Array} */ (path), keys, options)
+    return arrayToRegexp(path, keys, options);
   }
 
-  return stringToRegexp(/** @type {string} */ (path), keys, options)
+  return stringToRegexp(path, keys, options);
 }
 
 pathToRegexp_1.parse = parse_1;
@@ -383,17 +265,7 @@ pathToRegexp_1.compile = compile_1;
 pathToRegexp_1.tokensToFunction = tokensToFunction_1;
 pathToRegexp_1.tokensToRegExp = tokensToRegExp_1;
 
-/**
- * Universal Router (https://www.kriasoft.com/universal-router/)
- *
- * Copyright (c) 2015-present Kriasoft.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 var hasOwnProperty = Object.prototype.hasOwnProperty;
-
 var cache = new Map();
 
 function decodeParam(val) {
@@ -406,19 +278,22 @@ function decodeParam(val) {
 
 function matchPath(route, pathname, parentKeys, parentParams) {
   var end = !route.children;
-  var cacheKey = (route.path || '') + '|' + end;
+  var cacheKey = (route.path || '') + "|" + end;
   var regexp = cache.get(cacheKey);
 
   if (!regexp) {
     var keys = [];
     regexp = {
       keys: keys,
-      pattern: pathToRegexp_1(route.path || '', keys, { end: end })
+      pattern: pathToRegexp_1(route.path || '', keys, {
+        end: end
+      })
     };
     cache.set(cacheKey, regexp);
   }
 
   var m = regexp.pattern.exec(pathname);
+
   if (!m) {
     return null;
   }
@@ -426,10 +301,11 @@ function matchPath(route, pathname, parentKeys, parentParams) {
   var path = m[0];
   var params = Object.assign({}, parentParams);
 
-  for (var i = 1; i < m.length; i += 1) {
+  for (var i = 1; i < m.length; i++) {
     var key = regexp.keys[i - 1];
     var prop = key.name;
     var value = m[i];
+
     if (value !== undefined || !hasOwnProperty.call(params, prop)) {
       if (key.repeat) {
         params[prop] = value ? value.split(key.delimiter).map(decodeParam) : [];
@@ -446,24 +322,16 @@ function matchPath(route, pathname, parentKeys, parentParams) {
   };
 }
 
-/**
- * Universal Router (https://www.kriasoft.com/universal-router/)
- *
- * Copyright (c) 2015-present Kriasoft.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 function matchRoute(route, baseUrl, pathname, parentKeys, parentParams) {
-  var match = void 0;
-  var childMatches = void 0;
+  var match;
+  var childMatches;
   var childIndex = 0;
-
   return {
     next: function next(routeToSkip) {
       if (route === routeToSkip) {
-        return { done: true };
+        return {
+          done: true
+        };
       }
 
       if (!match) {
@@ -488,11 +356,11 @@ function matchRoute(route, baseUrl, pathname, parentKeys, parentParams) {
           if (!childMatches) {
             var childRoute = route.children[childIndex];
             childRoute.parent = route;
-
             childMatches = matchRoute(childRoute, baseUrl + match.path, pathname.substr(match.path.length), match.keys, match.params);
           }
 
           var childMatch = childMatches.next(routeToSkip);
+
           if (!childMatch.done) {
             return {
               done: false,
@@ -501,23 +369,16 @@ function matchRoute(route, baseUrl, pathname, parentKeys, parentParams) {
           }
 
           childMatches = null;
-          childIndex += 1;
+          childIndex++;
         }
       }
 
-      return { done: true };
+      return {
+        done: true
+      };
     }
   };
 }
-
-/**
- * Universal Router (https://www.kriasoft.com/universal-router/)
- *
- * Copyright (c) 2015-present Kriasoft.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
 
 function resolveRoute(context, params) {
   if (typeof context.route.action === 'function') {
@@ -527,35 +388,25 @@ function resolveRoute(context, params) {
   return undefined;
 }
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * Universal Router (https://www.kriasoft.com/universal-router/)
- *
- * Copyright (c) 2015-present Kriasoft.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 function isChildRoute(parentRoute, childRoute) {
   var route = childRoute;
+
   while (route) {
     route = route.parent;
+
     if (route === parentRoute) {
       return true;
     }
   }
+
   return false;
 }
 
 var UniversalRouter = function () {
-  function UniversalRouter(routes) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    _classCallCheck(this, UniversalRouter);
+  function UniversalRouter(routes, options) {
+    if (options === void 0) {
+      options = {};
+    }
 
     if (Object(routes) !== routes) {
       throw new TypeError('Invalid routes');
@@ -563,61 +414,69 @@ var UniversalRouter = function () {
 
     this.baseUrl = options.baseUrl || '';
     this.resolveRoute = options.resolveRoute || resolveRoute;
-    this.context = Object.assign({ router: this }, options.context);
-    this.root = Array.isArray(routes) ? { path: '', children: routes, parent: null } : routes;
+    this.context = Object.assign({
+      router: this
+    }, options.context);
+    this.root = Array.isArray(routes) ? {
+      path: '',
+      children: routes,
+      parent: null
+    } : routes;
     this.root.parent = null;
   }
 
-  _createClass(UniversalRouter, [{
-    key: 'resolve',
-    value: function resolve(pathnameOrContext) {
-      var context = Object.assign({}, this.context, typeof pathnameOrContext === 'string' ? { pathname: pathnameOrContext } : pathnameOrContext);
-      var match = matchRoute(this.root, this.baseUrl, context.pathname.substr(this.baseUrl.length), [], null);
-      var resolve = this.resolveRoute;
-      var matches = null;
-      var nextMatches = null;
+  var _proto = UniversalRouter.prototype;
 
-      function next(resume) {
-        var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : matches.value.route;
-        var prevResult = arguments[2];
+  _proto.resolve = function resolve(pathnameOrContext) {
+    var context = Object.assign({}, this.context, typeof pathnameOrContext === 'string' ? {
+      pathname: pathnameOrContext
+    } : pathnameOrContext);
+    var match = matchRoute(this.root, this.baseUrl, context.pathname.substr(this.baseUrl.length), [], null);
+    var resolve = this.resolveRoute;
+    var matches = null;
+    var nextMatches = null;
 
-        var routeToSkip = prevResult === null && matches.value.route;
-        matches = nextMatches || match.next(routeToSkip);
-        nextMatches = null;
-
-        if (!resume) {
-          if (matches.done || !isChildRoute(parent, matches.value.route)) {
-            nextMatches = matches;
-            return Promise.resolve(null);
-          }
-        }
-
-        if (matches.done) {
-          return Promise.reject(Object.assign(new Error('Page not found'), { context: context, status: 404, statusCode: 404 }));
-        }
-
-        return Promise.resolve(resolve(Object.assign({}, context, matches.value), matches.value.params)).then(function (result) {
-          if (result !== null && result !== undefined) {
-            return result;
-          }
-
-          return next(resume, parent, result);
-        });
+    function next(resume, parent, prevResult) {
+      if (parent === void 0) {
+        parent = matches.value.route;
       }
 
-      context.next = next;
+      var routeToSkip = prevResult === null && matches.value.route;
+      matches = nextMatches || match.next(routeToSkip);
+      nextMatches = null;
 
-      return next(true, this.root);
+      if (!resume) {
+        if (matches.done || !isChildRoute(parent, matches.value.route)) {
+          nextMatches = matches;
+          return Promise.resolve(null);
+        }
+      }
+
+      if (matches.done) {
+        return Promise.reject(Object.assign(new Error('Page not found'), {
+          context: context,
+          status: 404,
+          statusCode: 404
+        }));
+      }
+
+      return Promise.resolve(resolve(Object.assign({}, context, matches.value), matches.value.params)).then(function (result) {
+        if (result !== null && result !== undefined) {
+          return result;
+        }
+
+        return next(resume, parent, result);
+      });
     }
-  }]);
+
+    context.next = next;
+    return next(true, this.root);
+  };
 
   return UniversalRouter;
 }();
 
 UniversalRouter.pathToRegexp = pathToRegexp_1;
-UniversalRouter.matchPath = matchPath;
-UniversalRouter.matchRoute = matchRoute;
-UniversalRouter.resolveRoute = resolveRoute;
 
 return UniversalRouter;
 

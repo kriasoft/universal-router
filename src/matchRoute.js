@@ -61,7 +61,7 @@ function matchRoute(route, baseUrl, pathname, parentKeys, parentParams) {
           }
 
           childMatches = null;
-          childIndex += 1;
+          childIndex++;
         }
       }
 

@@ -19,21 +19,16 @@
     "routes",
     "route"
   ],
-  "main": "main.js",
-  "module": "main.mjs",
-  "browser": {
-    "main.js": "./browser.js",
-    "main.mjs": "./browser.mjs"
-  },
+  "main": "index.js",
+  "module": "module.js",
   "esnext": "src/UniversalRouter.js",
   "dependencies": {
     "path-to-regexp": "^2.1.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-plugin-uglify": "^1.0.2",
-    "babel-preset-env": "^1.6.1",
-    "babel-register": "^6.26.0",
+    "@babel/core": "7.0.0-beta.38",
+    "@babel/preset-env": "7.0.0-beta.38",
+    "@babel/register": "7.0.0-beta.38",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
     "eslint": "^4.16.0",
@@ -47,16 +42,16 @@
     "nyc": "^11.3.0",
     "prettier": "^1.10.2",
     "rollup": "^0.55.1",
-    "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-babel": "4.0.0-beta.0",
+    "rollup-plugin-commonjs": "^8.3.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^3.0.0",
-    "sinon": "^4.2.1"
+    "sinon": "^4.2.2"
   },
   "scripts": {
     "lint": "eslint src test tools",
-    "test": "nyc mocha --require babel-register",
-    "watch": "mocha --require babel-register --reporter min --watch",
+    "test": "nyc mocha --require @babel/register",
+    "watch": "mocha --require @babel/register --reporter min --watch",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "node tools/build",
     "precommit": "node tools/precommit"

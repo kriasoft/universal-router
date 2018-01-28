@@ -42,7 +42,7 @@ function matchPath(route, pathname, parentKeys, parentParams) {
   const path = m[0];
   const params = Object.assign({}, parentParams);
 
-  for (let i = 1; i < m.length; i += 1) {
+  for (let i = 1; i < m.length; i++) {
     const key = regexp.keys[i - 1];
     const prop = key.name;
     const value = m[i];

@@ -7,8 +7,6 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-/* eslint no-param-reassign: ['error', { props: false }] */
-
 import UniversalRouter from './UniversalRouter';
 
 const { pathToRegexp } = UniversalRouter;
@@ -24,7 +22,7 @@ function cacheRoutes(routesByName, route, routes) {
   }
 
   if (routes) {
-    for (let i = 0; i < routes.length; i += 1) {
+    for (let i = 0; i < routes.length; i++) {
       const childRoute = routes[i];
       childRoute.parent = route;
       cacheRoutes(routesByName, childRoute, childRoute.children);
@@ -37,6 +35,7 @@ function generateUrls(router, options = {}) {
     throw new TypeError('An instance of UniversalRouter is expected');
   }
 
+  // eslint-disable-next-line no-param-reassign
   router.routesByName = router.routesByName || new Map();
 
   return (routeName, params) => {
@@ -65,7 +64,7 @@ function generateUrls(router, options = {}) {
       const tokens = pathToRegexp.parse(fullPath);
       const toPath = pathToRegexp.tokensToFunction(tokens);
       const keys = Object.create(null);
-      for (let i = 0; i < tokens.length; i += 1) {
+      for (let i = 0; i < tokens.length; i++) {
         if (typeof tokens[i] !== 'string') {
           keys[tokens[i].name] = true;
         }
@@ -80,7 +79,7 @@ function generateUrls(router, options = {}) {
     if (options.stringifyQueryParams && params) {
       const queryParams = {};
       const keys = Object.keys(params);
-      for (let i = 0; i < keys.length; i += 1) {
+      for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
         if (!regexp.keys[key]) {
           queryParams[key] = params[key];
@@ -95,7 +94,5 @@ function generateUrls(router, options = {}) {
     return url;
   };
 }
-
-UniversalRouter.generateUrls = generateUrls;
 
 export default generateUrls;
