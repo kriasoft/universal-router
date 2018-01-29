@@ -29,6 +29,7 @@ class UniversalRouter {
     }
 
     this.baseUrl = options.baseUrl || ''
+    this.errorHandler = options.errorHandler
     this.resolveRoute = options.resolveRoute || resolveRoute
     this.context = Object.assign({ router: this }, options.context)
     this.root = Array.isArray(routes) ? { path: '', children: routes, parent: null } : routes
@@ -51,6 +52,7 @@ class UniversalRouter {
     const resolve = this.resolveRoute
     let matches = null
     let nextMatches = null
+    let currentContext = context
 
     function next(resume, parent = matches.value.route, prevResult) {
       const routeToSkip = prevResult === null && matches.value.route
@@ -65,25 +67,34 @@ class UniversalRouter {
       }
 
       if (matches.done) {
-        return Promise.reject(
-          Object.assign(new Error('Page not found'), { context, status: 404, statusCode: 404 }),
-        )
+        const error = new Error('Page not found')
+        error.context = context
+        error.code = 404
+        return Promise.reject(error)
       }
 
-      return Promise.resolve(
-        resolve(Object.assign({}, context, matches.value), matches.value.params),
-      ).then((result) => {
+      currentContext = Object.assign({}, context, matches.value)
+
+      return Promise.resolve(resolve(currentContext, matches.value.params)).then((result) => {
         if (result !== null && result !== undefined) {
           return result
         }
-
         return next(resume, parent, result)
       })
     }
 
     context.next = next
 
-    return next(true, this.root)
+    return Promise.resolve()
+      .then(() => next(true, this.root))
+      .catch((error) => {
+        error.context = error.context || currentContext
+        error.code = error.code || 500
+        if (this.errorHandler) {
+          return this.errorHandler(error)
+        }
+        throw error
+      })
   }
 }
 

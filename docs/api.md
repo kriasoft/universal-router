@@ -8,13 +8,18 @@ Creates an universal router instance which have a single
 with any amount of params where only `path` is required, or array of such objects.
 Second `options` argument is optional where you can pass the following:
 
-* `context` - The object with any data which you want to pass to `resolveRoute` function.<br>
+* `context` - an object with any data which you want to pass to `resolveRoute` function.\
   See [Context](#context) section below for details.
-* `baseUrl` - The base URL of the app. By default is empty string `''`.<br>
+* `baseUrl` - the base URL of the app. By default is empty string `''`.\
   If all the URLs in your app are relative to some other "base" URL, use this option.
-* `resolveRoute` - The function for any custom route handling logic.<br>
-  For example you can define this option to work with routes in declarative manner.<br>
-  By default the router calls the `action` function of matched route.
+* `resolveRoute` - function for any custom route handling logic.\
+  For example you can define this option to work with routes in declarative manner.\
+  By default the router calls the `action` method of matched route.
+* `errorHandler` - function for global error handling. Called with a single
+  [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) 
+  argument every time the route is not found or threw an error which always contain
+  [http status `code`](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) and
+  [current `context`](#context) for your convenience.
 
 ```js
 import UniversalRouter from 'universal-router'
@@ -34,13 +39,20 @@ const routes = {
 }
 
 const options = {
-  context: { store: {} },
+  context: { user: null },
   baseUrl: '/base',
   resolveRoute(context, params) {
     if (typeof context.route.action === 'function') {
       return context.route.action(context, params)
     }
     return undefined
+  },
+  errorHandler(error) {
+    console.error(error)
+    console.dir(error.context)
+    return error.code === 404
+      ? '<h1>Page Not Found</h1>'
+      : '<h1>Oops! Something went wrong</h1>'
   }
 }
 

@@ -4,6 +4,10 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
+    "no-param-reassign": ["error", {
+      "props": true,
+      "ignorePropertyModificationsFor": ["router", "error"]
+    }],
     "no-plusplus": "off"
   }
 }

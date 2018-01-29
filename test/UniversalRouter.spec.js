@@ -38,6 +38,43 @@ describe('new UniversalRouter(routes, options)', () => {
     expect(action.called).to.be.false
     expect(result).to.be.equal('c')
   })
+
+  it('should support custom error handler option', async () => {
+    const errorHandler = sinon.spy(() => 'result')
+    const router = new UniversalRouter([], { errorHandler })
+    const result = await router.resolve('/')
+    expect(result).to.be.equal('result')
+    expect(errorHandler.calledOnce).to.be.true
+    const error = errorHandler.args[0][0]
+    expect(error).to.be.an('error')
+    expect(error.message).to.be.equal('Page not found')
+    expect(error.code).to.be.equal(404)
+    expect(error.context.pathname).to.be.equal('/')
+    expect(error.context.path).to.be.equal(undefined)
+    expect(error.context.router).to.be.equal(router)
+  })
+
+  it('should handle route errors', async () => {
+    const errorHandler = sinon.spy(() => 'result')
+    const route = {
+      path: '/',
+      action: () => {
+        throw new Error('custom')
+      },
+    }
+    const router = new UniversalRouter(route, { errorHandler })
+    const result = await router.resolve('/')
+    expect(result).to.be.equal('result')
+    expect(errorHandler.calledOnce).to.be.true
+    const error = errorHandler.args[0][0]
+    expect(error).to.be.an('error')
+    expect(error.message).to.be.equal('custom')
+    expect(error.code).to.be.equal(500)
+    expect(error.context.pathname).to.be.equal('/')
+    expect(error.context.path).to.be.equal('/')
+    expect(error.context.router).to.be.equal(router)
+    expect(error.context.route).to.be.equal(route)
+  })
 })
 
 describe('router.resolve({ pathname, ...context })', () => {
@@ -51,11 +88,10 @@ describe('router.resolve({ pathname, ...context })', () => {
     }
     expect(err).to.be.an('error')
     expect(err.message).to.be.equal('Page not found')
+    expect(err.code).to.be.equal(404)
     expect(err.context.pathname).to.be.equal('/')
     expect(err.context.path).to.be.equal(undefined)
     expect(err.context.router).to.be.equal(router)
-    expect(err.status).to.be.equal(404)
-    expect(err.statusCode).to.be.equal(404)
   })
 
   it("should execute the matching route's action method and return its result", async () => {
@@ -107,8 +143,7 @@ describe('router.resolve({ pathname, ...context })', () => {
     }
     expect(err).to.be.an('error')
     expect(err.message).to.be.equal('Page not found')
-    expect(err.status).to.be.equal(404)
-    expect(err.statusCode).to.be.equal(404)
+    expect(err.code).to.be.equal(404)
     expect(action.called).to.be.false
   })
 
@@ -535,11 +570,10 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(action.calledOnce).to.be.true
     expect(err).to.be.an('error')
     expect(err.message).to.be.equal('Page not found')
+    expect(err.code).to.be.equal(404)
     expect(err.context.pathname).to.be.equal('/a/b/c')
     expect(err.context.path).to.be.equal(undefined)
     expect(err.context.router).to.be.equal(router)
-    expect(err.status).to.be.equal(404)
-    expect(err.statusCode).to.be.equal(404)
   })
 
   it('should match routes with trailing slashes', async () => {
