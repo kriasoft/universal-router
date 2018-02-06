@@ -35,7 +35,6 @@ function generateUrls(router, options = {}) {
     throw new TypeError('An instance of UniversalRouter is expected')
   }
 
-  // eslint-disable-next-line no-param-reassign
   router.routesByName = router.routesByName || new Map()
 
   return (routeName, params) => {

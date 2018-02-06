@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+- Add an option for global error handling ([#147](https://github.com/kriasoft/universal-router/pull/147))
+
 ## [5.1.0] - 2018-01-16
 
 - Allow any string to be a valid route name ([#145](https://github.com/kriasoft/universal-router/pull/145))
@@ -41,7 +45,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   const routes = [
     { path: '/posts', ... },  // matches both "/posts" and "/posts/"
     { path: '/posts/', ... }, // matches only "/posts/"
-  ];
+  ]
   ```
 - Generate url from first path for routes with an array of paths
   ([#124](https://github.com/kriasoft/universal-router/pull/124))
@@ -49,9 +53,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   const router = new UniversalRouter({
     name: 'page',
     path: ['/one', '/two', /RegExp/], // only first path is used for url generation
-  });
-  const url = generateUrls(router);
-  url('page'); // => /one
+  })
+  const url = generateUrls(router)
+  url('page') // => /one
   ```
 
 ## [4.1.0] - 2017-09-20
@@ -61,10 +65,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   const router = new UniversalRouter({
     path: ['/one/:parameter', '/two/:parameter'],
     action: context => context.params,
-  });
+  })
 
-  router.resolve('/one/a'); // => { parameter: 'a' }
-  router.resolve('/two/b'); // => { parameter: 'b' }
+  router.resolve('/one/a') // => { parameter: 'a' }
+  router.resolve('/two/b') // => { parameter: 'b' }
   ```
 
 ## [4.0.0] - 2017-09-15
@@ -122,13 +126,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Update Router API (BREAKING CHANGE)
   ```js
-  import Router from 'universal-router';
-  const router = new Router(routes, options);
-  router.resolve({ path, ...context }); // => Promise<any>
+  import Router from 'universal-router'
+  const router = new Router(routes, options)
+  router.resolve({ path, ...context }) // => Promise<any>
 
   // previously
-  import { resolve } from 'universal-router';
-  resolve(routes, { path, ...context }); // => Promise<any>
+  import { resolve } from 'universal-router'
+  resolve(routes, { path, ...context }) // => Promise<any>
   ```
   See [#83](https://github.com/kriasoft/universal-router/pull/83) for more info and examples
 - `context.next()` now iterates only child routes by default (BREAKING CHANGE)<br>
@@ -140,9 +144,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
 - Add support for URL Generation
   ```js
-  import generateUrls from 'universal-router/generate-urls';
-  const url = generateUrls(router);
-  url(routeName, params); // => String
+  import generateUrls from 'universal-router/generate-urls'
+  const url = generateUrls(router)
+  url(routeName, params) // => String
   ```
 - Add support for Dynamic Breadcrumbs, use `context.route.parent` to iterate
 - Add support for Declarative Routes, `new Router(routes, { resolveRoute: customResolveRouteFn })`
@@ -207,7 +211,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Rename `react-routing` to `universal-router` (BREAKING CHANGE)
 - Remove `router.on(path, ...actions)` in favor of `router.route(path, ...actions)` (BREAKING CHANGE)
 - Remove `new Router(on => { ... })` initialization option in favor of `new Router(routes)` (BREAKING CHANGE)
-- Fix ESLint warnings; update unit tests
+- Fix ESLint warnings
+- Update unit tests
 - Remove build tools related to project's homepage in favor of [Easystatic](https://easystatic.com)
 - Refactor project's homepage layout. See `docs/assets`.
 - Clean up `package.json`, update Babel and its plug-ins to the latest versions

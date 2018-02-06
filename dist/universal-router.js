@@ -413,6 +413,7 @@ var UniversalRouter = function () {
     }
 
     this.baseUrl = options.baseUrl || '';
+    this.errorHandler = options.errorHandler;
     this.resolveRoute = options.resolveRoute || resolveRoute;
     this.context = Object.assign({
       router: this
@@ -428,6 +429,8 @@ var UniversalRouter = function () {
   var _proto = UniversalRouter.prototype;
 
   _proto.resolve = function resolve(pathnameOrContext) {
+    var _this = this;
+
     var context = Object.assign({}, this.context, typeof pathnameOrContext === 'string' ? {
       pathname: pathnameOrContext
     } : pathnameOrContext);
@@ -435,6 +438,7 @@ var UniversalRouter = function () {
     var resolve = this.resolveRoute;
     var matches = null;
     var nextMatches = null;
+    var currentContext = context;
 
     function next(resume, parent, prevResult) {
       if (parent === void 0) {
@@ -453,14 +457,14 @@ var UniversalRouter = function () {
       }
 
       if (matches.done) {
-        return Promise.reject(Object.assign(new Error('Page not found'), {
-          context: context,
-          status: 404,
-          statusCode: 404
-        }));
+        var error = new Error('Page not found');
+        error.context = context;
+        error.code = 404;
+        return Promise.reject(error);
       }
 
-      return Promise.resolve(resolve(Object.assign({}, context, matches.value), matches.value.params)).then(function (result) {
+      currentContext = Object.assign({}, context, matches.value);
+      return Promise.resolve(resolve(currentContext, matches.value.params)).then(function (result) {
         if (result !== null && result !== undefined) {
           return result;
         }
@@ -470,7 +474,18 @@ var UniversalRouter = function () {
     }
 
     context.next = next;
-    return next(true, this.root);
+    return Promise.resolve().then(function () {
+      return next(true, _this.root);
+    }).catch(function (error) {
+      error.context = error.context || currentContext;
+      error.code = error.code || 500;
+
+      if (_this.errorHandler) {
+        return _this.errorHandler(error);
+      }
+
+      throw error;
+    });
   };
 
   return UniversalRouter;
