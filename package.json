@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "universal-router",
-  "version": "5.1.0",
+  "version": "6.0.0",
   "description": "Isomorphic router for JavaScript web applications",
   "homepage": "https://www.kriasoft.com/universal-router/",
   "repository": "kriasoft/universal-router",
@@ -26,9 +26,9 @@
     "path-to-regexp": "^2.1.0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.38",
-    "@babel/preset-env": "7.0.0-beta.38",
-    "@babel/register": "7.0.0-beta.38",
+    "@babel/core": "7.0.0-beta.39",
+    "@babel/preset-env": "7.0.0-beta.39",
+    "@babel/register": "7.0.0-beta.39",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
     "eslint": "^4.16.0",

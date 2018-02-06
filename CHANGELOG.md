@@ -5,9 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [6.0.0] - 2018-02-06
 
-- Add an option for global error handling ([#147](https://github.com/kriasoft/universal-router/pull/147))
+- No special configuration is required for your bundler anymore (say hi to [parcel.js](https://parceljs.org/)).
+- Add an option for global error handling ([#147](https://github.com/kriasoft/universal-router/pull/147)).
+
+**Migration from v5 to v6:**
+- Use `error.code` instead of `error.status` or `error.statusCode` for error handling.
 
 ## [5.1.0] - 2018-01-16
 
@@ -223,7 +227,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Small bug fixes and improvements
 
-[Unreleased]: https://github.com/kriasoft/universal-router/compare/v5.1.0...HEAD
+[Unreleased]: https://github.com/kriasoft/universal-router/compare/v6.0.0...HEAD
+[6.0.0]: https://github.com/kriasoft/universal-router/compare/v5.1.0...v6.0.0
 [5.1.0]: https://github.com/kriasoft/universal-router/compare/v5.0.0...v5.1.0
 [5.0.0]: https://github.com/kriasoft/universal-router/compare/v4.3.0...v5.0.0
 [4.3.0]: https://github.com/kriasoft/universal-router/compare/v4.2.1...v4.3.0
