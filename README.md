@@ -98,10 +98,10 @@ router.resolve('/posts').then(html => {
 })
 ```
 
-Play with an example on [JSFiddle](https://jsfiddle.net/frenzzy/b0w9mjck/84/),
-[CodePen](https://codepen.io/frenzzy/pen/aWLKpb/),
-[JS Bin](https://jsbin.com/kaluden/1/edit?js,output) in your browser or try
-[RunKit](https://runkit.com/frenzzy/universal-router-v4-demo) node.js playground.
+Play with an example on [JSFiddle](https://jsfiddle.net/frenzzy/b0w9mjck/102/),
+[CodePen](https://codepen.io/frenzzy/pen/aWLKpb?editors=0010),
+[JS Bin](https://jsbin.com/kaluden/3/edit?js,output) in your browser or try
+[RunKit](https://runkit.com/frenzzy/universal-router-demo) node.js playground.
 
 ## Documentation
 
