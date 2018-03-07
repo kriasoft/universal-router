@@ -7,7 +7,6 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import { expect } from 'chai'
 import matchRoute from '../src/matchRoute'
 
 function toArray(gen) {
@@ -26,7 +25,7 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
       path: '/',
     }
     const result = toArray(matchRoute(route, '', '/a'))
-    expect(result).to.have.lengthOf(0)
+    expect(result).toHaveLength(0)
   })
 
   it('should match 0 routes (2)', () => {
@@ -34,7 +33,7 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
       path: '/a',
     }
     const result = toArray(matchRoute(route, '', '/b'))
-    expect(result).to.have.lengthOf(0)
+    expect(result).toHaveLength(0)
   })
 
   it('should match 0 routes (3)', () => {
@@ -47,7 +46,7 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
       ],
     }
     const result = toArray(matchRoute(route, '', '/b'))
-    expect(result).to.have.lengthOf(0)
+    expect(result).toHaveLength(0)
   })
 
   it('should match 0 routes (4)', () => {
@@ -60,7 +59,7 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
       ],
     }
     const result = toArray(matchRoute(route, '', 'ab'))
-    expect(result).to.have.lengthOf(0)
+    expect(result).toHaveLength(0)
   })
 
   it('should match 1 route (1)', () => {
@@ -68,10 +67,10 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
       path: '/',
     }
     const result = toArray(matchRoute(route, '', '/', []))
-    expect(result).to.have.lengthOf(1)
-    expect(result[0]).to.have.property('baseUrl', '')
-    expect(result[0]).to.have.property('path', '/')
-    expect(result[0]).to.have.nested.property('route.path', '/')
+    expect(result).toHaveLength(1)
+    expect(result[0]).toHaveProperty('baseUrl', '')
+    expect(result[0]).toHaveProperty('path', '/')
+    expect(result[0]).toHaveProperty('route.path', '/')
   })
 
   it('should match 1 route (2)', () => {
@@ -79,10 +78,10 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
       path: '/a',
     }
     const result = toArray(matchRoute(route, '', '/a', []))
-    expect(result).to.have.lengthOf(1)
-    expect(result[0]).to.have.property('baseUrl', '')
-    expect(result[0]).to.have.property('path', '/a')
-    expect(result[0]).to.have.nested.property('route.path', '/a')
+    expect(result).toHaveLength(1)
+    expect(result[0]).toHaveProperty('baseUrl', '')
+    expect(result[0]).toHaveProperty('path', '/a')
+    expect(result[0]).toHaveProperty('route.path', '/a')
   })
 
   it('should match 2 routes (1)', () => {
@@ -95,13 +94,13 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
       ],
     }
     const result = toArray(matchRoute(route, '', '/a', []))
-    expect(result).to.have.lengthOf(2)
-    expect(result[0]).to.have.property('baseUrl', '')
-    expect(result[0]).to.have.property('path', '')
-    expect(result[0]).to.have.nested.property('route.path', '')
-    expect(result[1]).to.have.property('baseUrl', '')
-    expect(result[1]).to.have.property('path', '/a')
-    expect(result[1]).to.have.nested.property('route.path', '/a')
+    expect(result).toHaveLength(2)
+    expect(result[0]).toHaveProperty('baseUrl', '')
+    expect(result[0]).toHaveProperty('path', '')
+    expect(result[0]).toHaveProperty('route.path', '')
+    expect(result[1]).toHaveProperty('baseUrl', '')
+    expect(result[1]).toHaveProperty('path', '/a')
+    expect(result[1]).toHaveProperty('route.path', '/a')
   })
 
   it('should match 2 routes (2)', () => {
@@ -119,13 +118,13 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
       ],
     }
     const result = toArray(matchRoute(route, '', '/a/b/c', []))
-    expect(result).to.have.lengthOf(3)
-    expect(result[0]).to.have.property('baseUrl', '')
-    expect(result[0]).to.have.nested.property('route.path', '/a')
-    expect(result[1]).to.have.property('baseUrl', '/a')
-    expect(result[1]).to.have.nested.property('route.path', '/b')
-    expect(result[2]).to.have.property('baseUrl', '/a/b')
-    expect(result[2]).to.have.nested.property('route.path', '/c')
+    expect(result).toHaveLength(3)
+    expect(result[0]).toHaveProperty('baseUrl', '')
+    expect(result[0]).toHaveProperty('route.path', '/a')
+    expect(result[1]).toHaveProperty('baseUrl', '/a')
+    expect(result[1]).toHaveProperty('route.path', '/b')
+    expect(result[2]).toHaveProperty('baseUrl', '/a/b')
+    expect(result[2]).toHaveProperty('route.path', '/c')
   })
 
   it('should match 2 routes (3)', () => {
@@ -138,10 +137,10 @@ describe('matchRoute(route, baseUrl, pathname)', () => {
       ],
     }
     const result = toArray(matchRoute(route, '', '/', []))
-    expect(result).to.have.lengthOf(2)
-    expect(result[0]).to.have.property('baseUrl', '')
-    expect(result[0]).to.have.nested.property('route.path', '')
-    expect(result[1]).to.have.property('baseUrl', '')
-    expect(result[1]).to.have.nested.property('route.path', '')
+    expect(result).toHaveLength(2)
+    expect(result[0]).toHaveProperty('baseUrl', '')
+    expect(result[0]).toHaveProperty('route.path', '')
+    expect(result[1]).toHaveProperty('baseUrl', '')
+    expect(result[1]).toHaveProperty('route.path', '')
   })
 })

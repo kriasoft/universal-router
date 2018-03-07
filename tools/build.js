@@ -82,7 +82,7 @@ const files = [
   },
 ]
 
-async function run() {
+async function build() {
   // Clean up the output directory
   await fs.remove('dist')
 
@@ -152,4 +152,4 @@ async function run() {
   await fs.outputJson('dist/generateUrls/package.json', generateUrlsPkg, { spaces: 2 })
 }
 
-module.exports = run()
+module.exports = build()
