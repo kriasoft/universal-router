@@ -7,8 +7,16 @@ node_js:
   - '9' # stable
   - '8' # lts
   - '6' # lts
+
+before_install:
+  - npm i -g codecov
+
+install:
+  - npm install
+
 script:
   - npm run lint
   - npm run test
+
 after_success:
-  - npm run coverage
+  - codecov

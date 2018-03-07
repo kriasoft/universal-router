@@ -23,36 +23,32 @@
   "module": "module.js",
   "esnext": "src/UniversalRouter.js",
   "dependencies": {
-    "path-to-regexp": "^2.1.0"
+    "path-to-regexp": "^2.2.0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.39",
-    "@babel/preset-env": "7.0.0-beta.39",
-    "@babel/register": "7.0.0-beta.39",
-    "chai": "^4.1.2",
-    "coveralls": "^3.0.0",
-    "eslint": "^4.16.0",
+    "@babel/core": "7.0.0-beta.40",
+    "@babel/preset-env": "7.0.0-beta.40",
+    "@babel/register": "7.0.0-beta.40",
+    "babel-core": "^7.0.0-0",
+    "babel-jest": "^22.4.1",
+    "eslint": "^4.18.2",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-prettier": "^2.5.0",
     "fs-extra": "^5.0.0",
     "husky": "^0.14.3",
-    "mocha": "^5.0.0",
-    "nyc": "^11.3.0",
-    "prettier": "^1.10.2",
-    "rollup": "^0.55.1",
-    "rollup-plugin-babel": "4.0.0-beta.0",
-    "rollup-plugin-commonjs": "^8.3.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-uglify": "^3.0.0",
-    "sinon": "^4.2.2"
+    "jest": "^22.4.2",
+    "prettier": "^1.11.1",
+    "rollup": "^0.56.5",
+    "rollup-plugin-babel": "4.0.0-beta.2",
+    "rollup-plugin-commonjs": "^9.0.0",
+    "rollup-plugin-node-resolve": "^3.2.0",
+    "rollup-plugin-uglify": "^3.0.0"
   },
   "scripts": {
     "lint": "eslint src test tools",
-    "test": "nyc mocha --require @babel/register",
-    "watch": "mocha --require @babel/register --reporter min --watch",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "test": "jest --coverage",
     "build": "node tools/build",
     "precommit": "node tools/precommit"
   }

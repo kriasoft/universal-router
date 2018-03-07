@@ -7,20 +7,18 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import sinon from 'sinon'
-import { expect } from 'chai'
 import UniversalRouter from '../src/UniversalRouter'
 
 describe('new UniversalRouter(routes, options)', () => {
   it('should throw an error in case of invalid routes', async () => {
-    expect(() => new UniversalRouter()).to.throw(TypeError, /Invalid routes/)
-    expect(() => new UniversalRouter(12)).to.throw(TypeError, /Invalid routes/)
-    expect(() => new UniversalRouter(null)).to.throw(TypeError, /Invalid routes/)
+    expect(() => new UniversalRouter()).toThrow(/Invalid routes/)
+    expect(() => new UniversalRouter(12)).toThrow(/Invalid routes/)
+    expect(() => new UniversalRouter(null)).toThrow(/Invalid routes/)
   })
 
   it('should support custom resolve option for declarative routes', async () => {
-    const resolveRoute = sinon.spy((context) => context.route.component || undefined)
-    const action = sinon.spy()
+    const resolveRoute = jest.fn((context) => context.route.component || undefined)
+    const action = jest.fn()
     const router = new UniversalRouter(
       {
         path: '/a',
@@ -34,28 +32,28 @@ describe('new UniversalRouter(routes, options)', () => {
       { resolveRoute },
     )
     const result = await router.resolve('/a/c')
-    expect(resolveRoute.calledThrice).to.be.true
-    expect(action.called).to.be.false
-    expect(result).to.be.equal('c')
+    expect(resolveRoute).toHaveBeenCalledTimes(3)
+    expect(action).not.toHaveBeenCalled()
+    expect(result).toBe('c')
   })
 
   it('should support custom error handler option', async () => {
-    const errorHandler = sinon.spy(() => 'result')
+    const errorHandler = jest.fn(() => 'result')
     const router = new UniversalRouter([], { errorHandler })
     const result = await router.resolve('/')
-    expect(result).to.be.equal('result')
-    expect(errorHandler.calledOnce).to.be.true
-    const error = errorHandler.args[0][0]
-    expect(error).to.be.an('error')
-    expect(error.message).to.be.equal('Page not found')
-    expect(error.code).to.be.equal(404)
-    expect(error.context.pathname).to.be.equal('/')
-    expect(error.context.path).to.be.equal(undefined)
-    expect(error.context.router).to.be.equal(router)
+    expect(result).toBe('result')
+    expect(errorHandler).toHaveBeenCalled()
+    const error = errorHandler.mock.calls[0][0]
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toBe('Page not found')
+    expect(error.code).toBe(404)
+    expect(error.context.pathname).toBe('/')
+    expect(error.context.path).toBe(undefined)
+    expect(error.context.router).toBe(router)
   })
 
   it('should handle route errors', async () => {
-    const errorHandler = sinon.spy(() => 'result')
+    const errorHandler = jest.fn(() => 'result')
     const route = {
       path: '/',
       action: () => {
@@ -64,16 +62,16 @@ describe('new UniversalRouter(routes, options)', () => {
     }
     const router = new UniversalRouter(route, { errorHandler })
     const result = await router.resolve('/')
-    expect(result).to.be.equal('result')
-    expect(errorHandler.calledOnce).to.be.true
-    const error = errorHandler.args[0][0]
-    expect(error).to.be.an('error')
-    expect(error.message).to.be.equal('custom')
-    expect(error.code).to.be.equal(500)
-    expect(error.context.pathname).to.be.equal('/')
-    expect(error.context.path).to.be.equal('/')
-    expect(error.context.router).to.be.equal(router)
-    expect(error.context.route).to.be.equal(route)
+    expect(result).toBe('result')
+    expect(errorHandler).toHaveBeenCalled()
+    const error = errorHandler.mock.calls[0][0]
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toBe('custom')
+    expect(error.code).toBe(500)
+    expect(error.context.pathname).toBe('/')
+    expect(error.context.path).toBe('/')
+    expect(error.context.router).toBe(router)
+    expect(error.context.route).toBe(route)
   })
 })
 
@@ -86,28 +84,28 @@ describe('router.resolve({ pathname, ...context })', () => {
     } catch (e) {
       err = e
     }
-    expect(err).to.be.an('error')
-    expect(err.message).to.be.equal('Page not found')
-    expect(err.code).to.be.equal(404)
-    expect(err.context.pathname).to.be.equal('/')
-    expect(err.context.path).to.be.equal(undefined)
-    expect(err.context.router).to.be.equal(router)
+    expect(err).toBeInstanceOf(Error)
+    expect(err.message).toBe('Page not found')
+    expect(err.code).toBe(404)
+    expect(err.context.pathname).toBe('/')
+    expect(err.context.path).toBe(undefined)
+    expect(err.context.router).toBe(router)
   })
 
   it("should execute the matching route's action method and return its result", async () => {
-    const action = sinon.spy(() => 'b')
+    const action = jest.fn(() => 'b')
     const router = new UniversalRouter({ path: '/a', action })
     const result = await router.resolve('/a')
-    expect(action.calledOnce).to.be.true
-    expect(action.args[0][0]).to.have.property('path', '/a')
-    expect(result).to.be.equal('b')
+    expect(action).toHaveBeenCalled()
+    expect(action.mock.calls[0][0]).toHaveProperty('path', '/a')
+    expect(result).toBe('b')
   })
 
   it('should find the first route whose action method !== undefined or null', async () => {
-    const action1 = sinon.spy(() => undefined)
-    const action2 = sinon.spy(() => null)
-    const action3 = sinon.spy(() => 'c')
-    const action4 = sinon.spy(() => 'd')
+    const action1 = jest.fn(() => undefined)
+    const action2 = jest.fn(() => null)
+    const action3 = jest.fn(() => 'c')
+    const action4 = jest.fn(() => 'd')
     const router = new UniversalRouter([
       { path: '/a', action: action1 },
       { path: '/a', action: action2 },
@@ -115,25 +113,25 @@ describe('router.resolve({ pathname, ...context })', () => {
       { path: '/a', action: action4 },
     ])
     const result = await router.resolve('/a')
-    expect(result).to.be.equal('c')
-    expect(action1.calledOnce).to.be.true
-    expect(action2.calledOnce).to.be.true
-    expect(action3.calledOnce).to.be.true
-    expect(action4.called).to.be.false
+    expect(result).toBe('c')
+    expect(action1).toHaveBeenCalled()
+    expect(action2).toHaveBeenCalled()
+    expect(action3).toHaveBeenCalled()
+    expect(action4).not.toHaveBeenCalled()
   })
 
   it('should be able to pass context variables to action methods', async () => {
-    const action = sinon.spy(() => true)
+    const action = jest.fn(() => true)
     const router = new UniversalRouter([{ path: '/a', action }])
     const result = await router.resolve({ pathname: '/a', test: 'b' })
-    expect(action.calledOnce).to.be.true
-    expect(action.args[0][0]).to.have.property('path', '/a')
-    expect(action.args[0][0]).to.have.property('test', 'b')
-    expect(result).to.be.true
+    expect(action).toHaveBeenCalled()
+    expect(action.mock.calls[0][0]).toHaveProperty('path', '/a')
+    expect(action.mock.calls[0][0]).toHaveProperty('test', 'b')
+    expect(result).toBe(true)
   })
 
   it("should not call action methods of routes that don't match the URL path", async () => {
-    const action = sinon.spy()
+    const action = jest.fn()
     const router = new UniversalRouter([{ path: '/a', action }])
     let err
     try {
@@ -141,32 +139,30 @@ describe('router.resolve({ pathname, ...context })', () => {
     } catch (e) {
       err = e
     }
-    expect(err).to.be.an('error')
-    expect(err.message).to.be.equal('Page not found')
-    expect(err.code).to.be.equal(404)
-    expect(action.called).to.be.false
+    expect(err).toBeInstanceOf(Error)
+    expect(err.message).toBe('Page not found')
+    expect(err.code).toBe(404)
+    expect(action).not.toHaveBeenCalled()
   })
 
   it('should support asynchronous route actions', async () => {
     const router = new UniversalRouter([{ path: '/a', action: async () => 'b' }])
     const result = await router.resolve('/a')
-    expect(result).to.be.equal('b')
+    expect(result).toBe('b')
   })
 
   it('URL parameters are captured and added to context.params', async () => {
-    const action = sinon.spy(() => true)
+    const action = jest.fn(() => true)
     const router = new UniversalRouter([{ path: '/:one/:two', action }])
     const result = await router.resolve({ pathname: '/a/b' })
-    expect(action.calledOnce).to.be.true
-    expect(action.args[0][0])
-      .to.have.property('params')
-      .that.deep.equals({ one: 'a', two: 'b' })
-    expect(result).to.be.true
+    expect(action).toHaveBeenCalled()
+    expect(action.mock.calls[0][0]).toHaveProperty('params', { one: 'a', two: 'b' })
+    expect(result).toBe(true)
   })
 
   it('should provide all URL parameters to each route', async () => {
-    const action1 = sinon.spy()
-    const action2 = sinon.spy(() => true)
+    const action1 = jest.fn()
+    const action2 = jest.fn(() => true)
     const router = new UniversalRouter([
       {
         path: '/:one',
@@ -180,20 +176,16 @@ describe('router.resolve({ pathname, ...context })', () => {
       },
     ])
     const result = await router.resolve({ pathname: '/a/b' })
-    expect(action1.calledOnce).to.be.true
-    expect(action1.args[0][0])
-      .to.have.property('params')
-      .that.deep.equals({ one: 'a' })
-    expect(action2.calledOnce).to.be.true
-    expect(action2.args[0][0])
-      .to.have.property('params')
-      .that.deep.equals({ one: 'a', two: 'b' })
-    expect(result).to.be.true
+    expect(action1).toHaveBeenCalled()
+    expect(action1.mock.calls[0][0]).toHaveProperty('params', { one: 'a' })
+    expect(action2).toHaveBeenCalled()
+    expect(action2.mock.calls[0][0]).toHaveProperty('params', { one: 'a', two: 'b' })
+    expect(result).toBe(true)
   })
 
   it('should override URL parameters with same name in child route', async () => {
-    const action1 = sinon.spy()
-    const action2 = sinon.spy(() => true)
+    const action1 = jest.fn()
+    const action2 = jest.fn(() => true)
     const router = new UniversalRouter([
       {
         path: '/:one',
@@ -211,24 +203,18 @@ describe('router.resolve({ pathname, ...context })', () => {
       },
     ])
     const result = await router.resolve({ pathname: '/a/b' })
-    expect(action1.calledTwice).to.be.true
-    expect(action1.args[0][0])
-      .to.have.property('params')
-      .that.deep.equals({ one: 'a' })
-    expect(action1.args[1][0])
-      .to.have.property('params')
-      .that.deep.equals({ one: 'b' })
-    expect(action2.calledOnce).to.be.true
-    expect(action2.args[0][0])
-      .to.have.property('params')
-      .that.deep.equals({ one: 'a', two: 'b' })
-    expect(result).to.be.true
+    expect(action1).toHaveBeenCalledTimes(2)
+    expect(action1.mock.calls[0][0]).toHaveProperty('params', { one: 'a' })
+    expect(action1.mock.calls[1][0]).toHaveProperty('params', { one: 'b' })
+    expect(action2).toHaveBeenCalled()
+    expect(action2.mock.calls[0][0]).toHaveProperty('params', { one: 'a', two: 'b' })
+    expect(result).toBe(true)
   })
 
   it('should not collect parameters from previous routes', async () => {
-    const action1 = sinon.spy(() => undefined)
-    const action2 = sinon.spy(() => undefined)
-    const action3 = sinon.spy(() => true)
+    const action1 = jest.fn(() => undefined)
+    const action2 = jest.fn(() => undefined)
+    const action3 = jest.fn(() => true)
     const router = new UniversalRouter([
       {
         path: '/:one',
@@ -256,25 +242,15 @@ describe('router.resolve({ pathname, ...context })', () => {
       },
     ])
     const result = await router.resolve({ pathname: '/a/b' })
-    expect(action1.calledTwice).to.be.true
-    expect(action1.args[0][0])
-      .to.have.property('params')
-      .that.deep.equals({ one: 'a' })
-    expect(action1.args[1][0])
-      .to.have.property('params')
-      .that.deep.equals({ one: 'a', two: 'b' })
-    expect(action2.calledTwice).to.be.true
-    expect(action2.args[0][0])
-      .to.have.property('params')
-      .that.deep.equals({ three: 'a' })
-    expect(action2.args[1][0])
-      .to.have.property('params')
-      .that.deep.equals({ three: 'a', four: 'b' })
-    expect(action3.calledOnce).to.be.true
-    expect(action3.args[0][0])
-      .to.have.property('params')
-      .that.deep.equals({ three: 'a', five: 'b' })
-    expect(result).to.be.true
+    expect(action1).toHaveBeenCalledTimes(2)
+    expect(action1.mock.calls[0][0]).toHaveProperty('params', { one: 'a' })
+    expect(action1.mock.calls[1][0]).toHaveProperty('params', { one: 'a', two: 'b' })
+    expect(action2).toHaveBeenCalledTimes(2)
+    expect(action2.mock.calls[0][0]).toHaveProperty('params', { three: 'a' })
+    expect(action2.mock.calls[1][0]).toHaveProperty('params', { three: 'a', four: 'b' })
+    expect(action3).toHaveBeenCalled()
+    expect(action3.mock.calls[0][0]).toHaveProperty('params', { three: 'a', five: 'b' })
+    expect(result).toBe(true)
   })
 
   it('should support next() across multiple routes', async () => {
@@ -361,8 +337,8 @@ describe('router.resolve({ pathname, ...context })', () => {
     ])
 
     const result = await router.resolve('/test')
-    expect(log).to.be.deep.equal([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
-    expect(result).to.be.equal('done')
+    expect(log).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+    expect(result).toBe('done')
   })
 
   it('should support next(true) across multiple routes', async () => {
@@ -423,25 +399,25 @@ describe('router.resolve({ pathname, ...context })', () => {
     })
 
     const result = await router.resolve('/a/b/c')
-    expect(log).to.be.deep.equal([1, 2, 3, 4, 5, 6, 7, 8, 9])
-    expect(result).to.be.equal('done')
+    expect(log).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    expect(result).toBe('done')
   })
 
   it('should support parametrized routes 1', async () => {
-    const action = sinon.spy(() => true)
+    const action = jest.fn(() => true)
     const router = new UniversalRouter([{ path: '/path/:a/other/:b', action }])
     const result = await router.resolve('/path/1/other/2')
-    expect(action.calledOnce).to.be.true
-    expect(action.args[0][0]).to.have.nested.property('params.a', '1')
-    expect(action.args[0][0]).to.have.nested.property('params.b', '2')
-    expect(action.args[0][1]).to.have.property('a', '1')
-    expect(action.args[0][1]).to.have.property('b', '2')
-    expect(result).to.be.true
+    expect(action).toHaveBeenCalled()
+    expect(action.mock.calls[0][0]).toHaveProperty('params.a', '1')
+    expect(action.mock.calls[0][0]).toHaveProperty('params.b', '2')
+    expect(action.mock.calls[0][1]).toHaveProperty('a', '1')
+    expect(action.mock.calls[0][1]).toHaveProperty('b', '2')
+    expect(result).toBe(true)
   })
 
   it('should support nested routes (1)', async () => {
-    const action1 = sinon.spy()
-    const action2 = sinon.spy(() => true)
+    const action1 = jest.fn()
+    const action2 = jest.fn(() => true)
     const router = new UniversalRouter([
       {
         path: '',
@@ -456,16 +432,16 @@ describe('router.resolve({ pathname, ...context })', () => {
     ])
 
     const result = await router.resolve('/a')
-    expect(action1.calledOnce).to.be.true
-    expect(action1.args[0][0]).to.have.property('path', '')
-    expect(action2.calledOnce).to.be.true
-    expect(action2.args[0][0]).to.have.property('path', '/a')
-    expect(result).to.be.true
+    expect(action1).toHaveBeenCalled()
+    expect(action1.mock.calls[0][0]).toHaveProperty('path', '')
+    expect(action2).toHaveBeenCalled()
+    expect(action2.mock.calls[0][0]).toHaveProperty('path', '/a')
+    expect(result).toBe(true)
   })
 
   it('should support nested routes (2)', async () => {
-    const action1 = sinon.spy()
-    const action2 = sinon.spy(() => true)
+    const action1 = jest.fn()
+    const action2 = jest.fn(() => true)
     const router = new UniversalRouter([
       {
         path: '/a',
@@ -480,17 +456,17 @@ describe('router.resolve({ pathname, ...context })', () => {
     ])
 
     const result = await router.resolve('/a/b')
-    expect(action1.calledOnce).to.be.true
-    expect(action1.args[0][0]).to.have.property('path', '/a')
-    expect(action2.calledOnce).to.be.true
-    expect(action2.args[0][0]).to.have.property('path', '/b')
-    expect(result).to.be.true
+    expect(action1).toHaveBeenCalled()
+    expect(action1.mock.calls[0][0]).toHaveProperty('path', '/a')
+    expect(action2).toHaveBeenCalled()
+    expect(action2.mock.calls[0][0]).toHaveProperty('path', '/b')
+    expect(result).toBe(true)
   })
 
   it('should support nested routes (3)', async () => {
-    const action1 = sinon.spy(() => undefined)
-    const action2 = sinon.spy(() => null)
-    const action3 = sinon.spy(() => true)
+    const action1 = jest.fn(() => undefined)
+    const action2 = jest.fn(() => null)
+    const action3 = jest.fn(() => true)
     const router = new UniversalRouter([
       {
         path: '/a',
@@ -509,16 +485,16 @@ describe('router.resolve({ pathname, ...context })', () => {
     ])
 
     const result = await router.resolve('/a/b')
-    expect(action1.calledOnce).to.be.true
-    expect(action1.args[0][0]).to.have.property('baseUrl', '')
-    expect(action1.args[0][0]).to.have.property('path', '/a')
-    expect(action2.calledOnce).to.be.true
-    expect(action2.args[0][0]).to.have.property('baseUrl', '/a')
-    expect(action2.args[0][0]).to.have.property('path', '/b')
-    expect(action3.calledOnce).to.be.true
-    expect(action3.args[0][0]).to.have.property('baseUrl', '')
-    expect(action3.args[0][0]).to.have.property('path', '/a/b')
-    expect(result).to.be.true
+    expect(action1).toHaveBeenCalled()
+    expect(action1.mock.calls[0][0]).toHaveProperty('baseUrl', '')
+    expect(action1.mock.calls[0][0]).toHaveProperty('path', '/a')
+    expect(action2).toHaveBeenCalled()
+    expect(action2.mock.calls[0][0]).toHaveProperty('baseUrl', '/a')
+    expect(action2.mock.calls[0][0]).toHaveProperty('path', '/b')
+    expect(action3).toHaveBeenCalled()
+    expect(action3.mock.calls[0][0]).toHaveProperty('baseUrl', '')
+    expect(action3.mock.calls[0][0]).toHaveProperty('path', '/a/b')
+    expect(result).toBe(true)
   })
 
   it('should re-throw an error', async () => {
@@ -537,11 +513,11 @@ describe('router.resolve({ pathname, ...context })', () => {
     } catch (e) {
       err = e
     }
-    expect(err).to.be.equal(error)
+    expect(err).toBe(error)
   })
 
   it('should respect baseUrl', async () => {
-    const action = sinon.spy(() => 17)
+    const action = jest.fn(() => 17)
     const routes = {
       path: '/a',
       children: [
@@ -553,13 +529,13 @@ describe('router.resolve({ pathname, ...context })', () => {
     }
     const router = new UniversalRouter(routes, { baseUrl: '/base' })
     const result = await router.resolve('/base/a/b/c')
-    expect(action.calledOnce).to.be.true
-    expect(action.args[0][0]).to.have.property('pathname', '/base/a/b/c')
-    expect(action.args[0][0]).to.have.property('path', '/c')
-    expect(action.args[0][0]).to.have.property('baseUrl', '/base/a/b')
-    expect(action.args[0][0]).to.have.property('route', routes.children[0].children[0])
-    expect(action.args[0][0]).to.have.property('router', router)
-    expect(result).to.be.equal(17)
+    expect(action).toHaveBeenCalled()
+    expect(action.mock.calls[0][0]).toHaveProperty('pathname', '/base/a/b/c')
+    expect(action.mock.calls[0][0]).toHaveProperty('path', '/c')
+    expect(action.mock.calls[0][0]).toHaveProperty('baseUrl', '/base/a/b')
+    expect(action.mock.calls[0][0]).toHaveProperty('route', routes.children[0].children[0])
+    expect(action.mock.calls[0][0]).toHaveProperty('router', router)
+    expect(result).toBe(17)
 
     let err
     try {
@@ -567,13 +543,13 @@ describe('router.resolve({ pathname, ...context })', () => {
     } catch (e) {
       err = e
     }
-    expect(action.calledOnce).to.be.true
-    expect(err).to.be.an('error')
-    expect(err.message).to.be.equal('Page not found')
-    expect(err.code).to.be.equal(404)
-    expect(err.context.pathname).to.be.equal('/a/b/c')
-    expect(err.context.path).to.be.equal(undefined)
-    expect(err.context.router).to.be.equal(router)
+    expect(action).toHaveBeenCalled()
+    expect(err).toBeInstanceOf(Error)
+    expect(err.message).toBe('Page not found')
+    expect(err.code).toBe(404)
+    expect(err.context.pathname).toBe('/a/b/c')
+    expect(err.context.path).toBe(undefined)
+    expect(err.context.router).toBe(router)
   })
 
   it('should match routes with trailing slashes', async () => {
@@ -585,15 +561,15 @@ describe('router.resolve({ pathname, ...context })', () => {
         children: [{ path: '/', action: () => 'c' }, { path: '/page/', action: () => 'd' }],
       },
     ])
-    expect(await router.resolve('/')).to.be.equal('a')
-    expect(await router.resolve('/page/')).to.be.equal('b')
-    expect(await router.resolve('/child/')).to.be.equal('c')
-    expect(await router.resolve('/child/page/')).to.be.equal('d')
+    expect(await router.resolve('/')).toBe('a')
+    expect(await router.resolve('/page/')).toBe('b')
+    expect(await router.resolve('/child/')).toBe('c')
+    expect(await router.resolve('/child/page/')).toBe('d')
   })
 
   it('should skip nested routes when middleware route returns null', async () => {
-    const middleware = sinon.spy(() => null)
-    const action = sinon.spy(() => 'skipped')
+    const middleware = jest.fn(() => null)
+    const action = jest.fn(() => 'skipped')
     const router = new UniversalRouter([
       {
         path: '/match',
@@ -607,14 +583,14 @@ describe('router.resolve({ pathname, ...context })', () => {
     ])
 
     const result = await router.resolve('/match')
-    expect(result).to.be.equal(404)
-    expect(action.called).to.be.false
-    expect(middleware.calledOnce).to.be.true
+    expect(result).toBe(404)
+    expect(action).not.toHaveBeenCalled()
+    expect(middleware).toHaveBeenCalled()
   })
 
   it('should match nested routes when middleware route returns undefined', async () => {
-    const middleware = sinon.spy(() => undefined)
-    const action = sinon.spy(() => null)
+    const middleware = jest.fn(() => undefined)
+    const action = jest.fn(() => null)
     const router = new UniversalRouter([
       {
         path: '/match',
@@ -628,8 +604,8 @@ describe('router.resolve({ pathname, ...context })', () => {
     ])
 
     const result = await router.resolve('/match')
-    expect(result).to.be.equal(404)
-    expect(action.calledOnce).to.be.true
-    expect(middleware.calledOnce).to.be.true
+    expect(result).toBe(404)
+    expect(action).toHaveBeenCalled()
+    expect(middleware).toHaveBeenCalled()
   })
 })

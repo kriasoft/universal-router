@@ -1,17 +1,14 @@
+# Universal Router
+
+[![NPM version](https://img.shields.io/npm/v/universal-router.svg?maxAge=3600)](https://www.npmjs.com/package/universal-router)
+[![Library Size](http://img.badgesize.io/kriasoft/universal-router/master/dist/universal-router.min.js.svg?compression=gzip&label=size&maxAge=3600)](https://bundlephobia.com/result?p=universal-router)
+[![NPM downloads](https://img.shields.io/npm/dm/universal-router.svg?maxAge=3600)](https://npm-stat.com/charts.html?package=universal-router)
+[![Online Chat](https://badges.gitter.im/kriasoft/universal-router.svg)](https://gitter.im/kriasoft/universal-router)
+
 <a href="https://www.kriasoft.com/universal-router/" target="_blank">
   <img width="64" height="64" align="right" alt="Visit Universal Router Website"
   src="https://rawgit.com/kriasoft/universal-router/master/logo.svg" />
 </a>
-
-# Universal Router
-
-[![NPM version](https://img.shields.io/npm/v/universal-router.svg?style=flat-square&maxAge=3600)](https://www.npmjs.com/package/universal-router)
-[![NPM downloads](https://img.shields.io/npm/dm/universal-router.svg?style=flat-square&maxAge=3600)](https://npm-stat.com/charts.html?package=universal-router)
-[![Build Status](https://img.shields.io/travis/kriasoft/universal-router/master.svg?style=flat-square&maxAge=3600)](https://travis-ci.org/kriasoft/universal-router)
-[![Coverage Status](https://img.shields.io/coveralls/kriasoft/universal-router.svg?style=flat-square&maxAge=3600)](https://coveralls.io/github/kriasoft/universal-router)
-[![Dependency Status](https://img.shields.io/david/kriasoft/universal-router.svg?style=flat-square&maxAge=3600)](https://david-dm.org/kriasoft/universal-router)
-[![Library Size](http://img.badgesize.io/kriasoft/universal-router/master/dist/universal-router.min.js.svg?compression=gzip&label=size&style=flat-square&maxAge=3600)](https://bundlephobia.com/result?p=universal-router)
-[![Online Chat](https://img.shields.io/badge/gitter-join_chat-753a88.svg?style=flat-square&maxAge=3600)](https://gitter.im/kriasoft/universal-router)
 
 A simple middleware-style router that can be used in both client-side and server-side applications.
 

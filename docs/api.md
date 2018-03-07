@@ -330,7 +330,7 @@ Use `encode` option for custom encoding of URI path segments. By default
 is used.
 
 ```js
-const prettyUrl = generateUrls(router, { encode: x => x })
+const prettyUrl = generateUrls(router, { encode: (value, token) => value })
 
 url('user', { username: ':/' })       // => '/base/user/%3A%2F'
 prettyUrl('user', { username: ':/' }) // => '/base/user/:/'
