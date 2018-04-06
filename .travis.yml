@@ -1,22 +1,26 @@
 # For more information about the configurations used
 # in this file, please see the Travis CI documentation:
 # https://docs.travis-ci.com/user/languages/javascript-with-nodejs
-sudo: false
+
 language: node_js
+
 node_js:
-  - '9' # stable
-  - '8' # lts
-  - '6' # lts
+  - "node"
+  - "lts/*"
 
 before_install:
-  - npm i -g codecov
+  - npm install --global codecov
 
 install:
-  - npm install
+  - npm install --no-save
 
 script:
   - npm run lint
-  - npm run test
+  - npm run test -- --coverage
+  - npm run build
 
 after_success:
   - codecov
+
+notifications:
+  email: false

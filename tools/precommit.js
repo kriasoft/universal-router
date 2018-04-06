@@ -26,8 +26,8 @@ function spawn(command, args) {
 }
 
 async function precommit() {
-  await spawn('npm', ['run', '-s', 'lint'])
-  await spawn('npm', ['run', '-s', 'test'])
+  await spawn('npm', ['run', '--silent', 'lint'])
+  await spawn('npm', ['run', '--silent', 'test'])
 }
 
 module.exports = precommit()

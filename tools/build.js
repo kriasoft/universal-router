@@ -84,7 +84,7 @@ const files = [
 
 async function build() {
   // Clean up the output directory
-  await fs.remove('dist')
+  await fs.emptyDir('dist')
 
   // Copy source code, readme and license
   await Promise.all([

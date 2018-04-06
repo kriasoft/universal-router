@@ -1,8 +1,8 @@
 # Universal Router
 
-[![NPM version](https://img.shields.io/npm/v/universal-router.svg?maxAge=3600)](https://www.npmjs.com/package/universal-router)
-[![Library Size](http://img.badgesize.io/kriasoft/universal-router/master/dist/universal-router.min.js.svg?compression=gzip&label=size&maxAge=3600)](https://bundlephobia.com/result?p=universal-router)
-[![NPM downloads](https://img.shields.io/npm/dm/universal-router.svg?maxAge=3600)](https://npm-stat.com/charts.html?package=universal-router)
+[![NPM version](https://img.shields.io/npm/v/universal-router.svg)](https://www.npmjs.com/package/universal-router)
+[![NPM downloads](https://img.shields.io/npm/dw/universal-router.svg)](https://www.npmjs.com/package/universal-router)
+[![Library Size](https://img.shields.io/bundlephobia/minzip/universal-router.svg)](https://bundlephobia.com/result?p=universal-router)
 [![Online Chat](https://badges.gitter.im/kriasoft/universal-router.svg)](https://gitter.im/kriasoft/universal-router)
 
 <a href="https://www.kriasoft.com/universal-router/" target="_blank">
@@ -177,34 +177,34 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 [[Become a sponsor](https://opencollective.com/universal-router#sponsor)]
 
 <a href="https://opencollective.com/universal-router/sponsor/0/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/0/avatar.svg?2018-01-26" height="64">
+  <img src="https://opencollective.com/universal-router/sponsor/0/avatar.svg" height="64">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/1/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/1/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/sponsor/1/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/2/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/2/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/sponsor/2/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/3/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/3/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/sponsor/3/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/4/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/4/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/sponsor/4/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/5/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/5/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/sponsor/5/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/6/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/6/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/sponsor/6/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/7/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/7/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/sponsor/7/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/8/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/8/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/sponsor/8/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/sponsor/9/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/sponsor/9/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/sponsor/9/avatar.svg">
 </a>
 
 ## Backers
@@ -213,34 +213,34 @@ Support us with a monthly donation and help us continue our activities.
 [[Become a backer](https://opencollective.com/universal-router#backer)]
 
 <a href="https://opencollective.com/universal-router/backer/0/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/0/avatar.svg?2018-01-26" height="64">
+  <img src="https://opencollective.com/universal-router/backer/0/avatar.svg" height="64">
 </a>
 <a href="https://opencollective.com/universal-router/backer/1/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/1/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/backer/1/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/backer/2/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/2/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/backer/2/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/backer/3/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/3/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/backer/3/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/backer/4/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/4/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/backer/4/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/backer/5/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/5/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/backer/5/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/backer/6/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/6/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/backer/6/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/backer/7/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/7/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/backer/7/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/backer/8/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/8/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/backer/8/avatar.svg">
 </a>
 <a href="https://opencollective.com/universal-router/backer/9/website" target="_blank">
-  <img src="https://opencollective.com/universal-router/backer/9/avatar.svg?2018-01-26">
+  <img src="https://opencollective.com/universal-router/backer/9/avatar.svg">
 </a>
 
 ## License

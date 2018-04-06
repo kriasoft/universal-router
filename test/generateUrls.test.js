@@ -199,7 +199,7 @@ describe('generateUrls(router, options)(routeName, params)', () => {
     const url = generateUrls(router, { stringifyQueryParams })
 
     expect(url('user', { user: 'tj', busy: 1 })).toBe('/tj?qs')
-    expect(stringifyQueryParams).toHaveBeenCalled()
+    expect(stringifyQueryParams.mock.calls.length).toBe(1)
     expect(stringifyQueryParams.mock.calls[0][0]).toEqual({ busy: 1 })
   })
 
@@ -210,7 +210,7 @@ describe('generateUrls(router, options)(routeName, params)', () => {
     const url = generateUrls(router, { stringifyQueryParams })
 
     expect(url('user', { username: 'tj', busy: 1 })).toBe('/user/tj')
-    expect(stringifyQueryParams).toHaveBeenCalled()
+    expect(stringifyQueryParams.mock.calls.length).toBe(1)
     expect(stringifyQueryParams.mock.calls[0][0]).toEqual({ busy: 1 })
   })
 
@@ -221,7 +221,7 @@ describe('generateUrls(router, options)(routeName, params)', () => {
     const url = generateUrls(router, { stringifyQueryParams })
 
     expect(url('me', { x: 'i', y: 'j', z: 'k' })).toBe('/me?x=i&y=j&z=k')
-    expect(stringifyQueryParams).toHaveBeenCalled()
+    expect(stringifyQueryParams.mock.calls.length).toBe(1)
     expect(stringifyQueryParams.mock.calls[0][0]).toEqual({ x: 'i', y: 'j', z: 'k' })
   })
 })
