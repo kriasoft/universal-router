@@ -38,15 +38,20 @@
 with any amount of params where only <code>path</code> is required, or array of such objects.
 Second <code>options</code> argument is optional where you can pass the following:</p>
 <ul>
-<li><code>context</code> - The object with any data which you want to pass to <code>resolveRoute</code> function.<br>
+<li><code>context</code> - an object with any data which you want to pass to <code>resolveRoute</code> function.<br>
 See <a href="#context">Context</a> section below for details.</li>
-<li><code>baseUrl</code> - The base URL of the app. By default is empty string <code>''</code>.<br>
+<li><code>baseUrl</code> - the base URL of the app. By default is empty string <code>''</code>.<br>
 If all the URLs in your app are relative to some other &quot;base&quot; URL, use this option.</li>
-<li><code>resolveRoute</code> - The function for any custom route handling logic.<br>
+<li><code>resolveRoute</code> - function for any custom route handling logic.<br>
 For example you can define this option to work with routes in declarative manner.<br>
-By default the router calls the <code>action</code> function of matched route.</li>
+By default the router calls the <code>action</code> method of matched route.</li>
+<li><code>errorHandler</code> - function for global error handling. Called with a single
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a>
+argument every time the route is not found or threw an error which always contain
+<a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">http status <code>code</code></a> and
+<a href="#context">current <code>context</code></a> for your convenience.</li>
 </ul>
-<pre><code class="language-js">import UniversalRouter from 'universal-router';
+<pre><code class="language-js">import UniversalRouter from 'universal-router'
 
 const routes = {
   path: '/page',            // string or regexp or array of them, optional
@@ -59,23 +64,30 @@ const routes = {
 
     // action method should return anything except `null` or `undefined` to be resolved by router
     // otherwise router will throw `Page not found` error if all matched routes returned nothing
-    return '&lt;h1&gt;The Page&lt;/h1&gt;';
+    return '&lt;h1&gt;The Page&lt;/h1&gt;'
   },
   // ...
-};
+}
 
 const options = {
-  context: { store: {} },
+  context: { user: null },
   baseUrl: '/base',
   resolveRoute(context, params) {
     if (typeof context.route.action === 'function') {
-      return context.route.action(context, params);
+      return context.route.action(context, params)
     }
-    return null;
+    return undefined
+  },
+  errorHandler(error) {
+    console.error(error)
+    console.dir(error.context)
+    return error.code === 404
+      ? '&lt;h1&gt;Page Not Found&lt;/h1&gt;'
+      : '&lt;h1&gt;Oops! Something went wrong&lt;/h1&gt;'
   }
-};
+}
 
-const router = new UniversalRouter(routes, options);
+const router = new UniversalRouter(routes, options)
 </code></pre>
 <h2 id="routerresolve-pathname-context---promiseany"><code>router.resolve({ pathname, ...context })</code> ⇒ <code>Promise&lt;any&gt;</code></h2>
 <p>Traverses the list of routes in the order they are defined until it finds the first route that
@@ -89,10 +101,10 @@ matches provided URL path string and whose <code>action</code> function returns 
     path: '/two',
     action: () =&gt; `Page Two`,
   },
-]);
+])
 
 router.resolve({ pathname: '/one' })
-  .then(result =&gt; console.log(result));
+  .then(result =&gt; console.log(result))
   // =&gt; Page One
 </code></pre>
 <p>Where <code>action</code> is just a regular function that may, or may not, return any arbitrary data
@@ -120,10 +132,10 @@ router.resolve({ pathname: '/one' })
       ],
     },
   ],
-});
+})
 
 router.resolve({ pathname: '/admin/users/john' })
-  .then(result =&gt; console.log(result));
+  .then(result =&gt; console.log(result))
   // =&gt; User Profile
 </code></pre>
 <h2 id="url-parameters">URL Parameters</h2>
@@ -131,20 +143,20 @@ router.resolve({ pathname: '/admin/users/john' })
 <pre><code class="language-js">const router = new UniversalRouter({
   path: '/hello/:username',
   action: (context) =&gt; `Welcome, ${context.params.username}!`,
-});
+})
 
 router.resolve({ pathname: '/hello/john' })
-  .then(result =&gt; console.log(result));
+  .then(result =&gt; console.log(result))
   // =&gt; Welcome, john!
 </code></pre>
 <p>Alternatively, captured parameters can be accessed via the second argument to an action method like so:</p>
 <pre><code class="language-js">const router = new UniversalRouter({
   path: '/hello/:username',
   action: (ctx, { username }) =&gt; `Welcome, ${username}!`,
-});
+})
 
 router.resolve({ pathname: '/hello/john' })
-  .then(result =&gt; console.log(result));
+  .then(result =&gt; console.log(result))
   // =&gt; Welcome, john!
 </code></pre>
 <p>Router preserves the <code>context.params</code> values from the parent router.
@@ -158,12 +170,12 @@ that becomes available inside <code>action</code> functions.</p>
 <pre><code class="language-js">const router = new UniversalRouter({
   path: '/hello',
   action(context) {
-    return `Welcome, ${context.user}!`;
+    return `Welcome, ${context.user}!`
   },
-});
+})
 
 router.resolve({ pathname: '/hello', user: 'admin' })
-  .then(result =&gt; console.log(result));
+  .then(result =&gt; console.log(result))
   // =&gt; Welcome, admin!
 </code></pre>
 <p>Router supports <code>context</code> option in the <code>UniversalRouter</code> constructor
@@ -172,9 +184,9 @@ to support for specify of custom context properties only once.</p>
   store: {},
   user: 'admin',
   // ...
-};
+}
 
-const router = new UniversalRouter(route, { context });
+const router = new UniversalRouter(route, { context })
 </code></pre>
 <p>Router always adds following parameters to the <code>context</code> object
 before passing it to the <code>resolveRoute</code> function:</p>
@@ -196,14 +208,14 @@ see <a href="https://github.com/pillarjs/path-to-regexp">path-to-regexp</a> docu
 <pre><code class="language-js">const router = new UniversalRouter({
   path: '/hello/:username',
   async action({ params }) {
-    const resp = await fetch(`/api/users/${params.username}`);
-    const user = await resp.json();
-    if (user) return `Welcome, ${user.displayName}!`;
+    const resp = await fetch(`/api/users/${params.username}`)
+    const user = await resp.json()
+    if (user) return `Welcome, ${user.displayName}!`
   },
-});
+})
 
 router.resolve({ pathname: '/hello/john' })
-  .then(result =&gt; console.log(result));
+  .then(result =&gt; console.log(result))
   // =&gt; Welcome, John Brown!
 </code></pre>
 <p>Use <a href="http://babeljs.io/">Babel</a> to transpile your code with <code>async</code> / <code>await</code> to normal JavaScript.
@@ -213,32 +225,32 @@ Alternatively, stick to ES6 Promises:</p>
   action({ params }) {
     return fetch(`/api/users/${params.username}`)
       .then(resp =&gt; resp.json())
-      .then(user =&gt; user &amp;&amp; `Welcome, ${user.displayName}!`);
+      .then(user =&gt; user &amp;&amp; `Welcome, ${user.displayName}!`)
   },
-};
+}
 </code></pre>
 <h2 id="middlewares">Middlewares</h2>
 <p>Any route action function may act as a <strong>middleware</strong> by calling <code>context.next()</code>.</p>
 <pre><code class="language-js">const router = new UniversalRouter({
   path: '', // optional
   async action({ next }) {
-    console.log('middleware: start');
-    const child = await next();
-    console.log('middleware: end');
-    return child;
+    console.log('middleware: start')
+    const child = await next()
+    console.log('middleware: end')
+    return child
   },
   children: [
     {
       path: '/hello',
       action() {
-        console.log('route: return a result');
-        return 'Hello, world!';
+        console.log('route: return a result')
+        return 'Hello, world!'
       },
     },
   ],
-});
+})
 
-router.resolve({ pathname: '/hello' });
+router.resolve({ pathname: '/hello' })
 // Prints:
 //   middleware: start
 //   route: return a result
@@ -253,15 +265,15 @@ then the router will try to match the child routes. This can be useful for permi
   path: '/admin',
   action(context) {
     if (!context.user) {
-      return null; // route does not match (skip all /admin* routes)
+      return null // route does not match (skip all /admin* routes)
     }
     if (context.user.role !== 'Admin') {
-      return 'Access denied!'; // return a page (for any /admin* urls)
+      return 'Access denied!' // return a page (for any /admin* urls)
     }
-    return undefined; // or `return context.next();` - try to match child routes
+    return undefined // or `return context.next()` - try to match child routes
   },
   children: [/* admin routes here */],
-};
+}
 </code></pre>
 <h2 id="url-generation">URL Generation</h2>
 <p>In most web applications it's much simpler to just use a string for hyperlinks.</p>
@@ -274,49 +286,49 @@ then the router will try to match the child routes. This can be useful for permi
 <p>However for some types of web applications it may be useful to generate URLs dynamically based on route name.
 That's why this feature is available as an add-on with simple API <code>generateUrls(router, options) ⇒ Function</code>
 where returned function is used for generating urls <code>url(routeName, params) ⇒ String</code>.</p>
-<pre><code class="language-js">import UniversalRouter from 'universal-router';
-import generateUrls from 'universal-router/generateUrls';
+<pre><code class="language-js">import UniversalRouter from 'universal-router'
+import generateUrls from 'universal-router/generateUrls'
 
 const routes = [
   { name: 'users', path: '/users' },
   { name: 'user', path: '/user/:username' },
-];
+]
 
-const router = new UniversalRouter(routes, { baseUrl: '/base' });
-const url = generateUrls(router);
+const router = new UniversalRouter(routes, { baseUrl: '/base' })
+const url = generateUrls(router)
 
-url('users');                         // =&gt; '/base/users'
-url('user', { username: 'john' });    // =&gt; '/base/user/john'
+url('users')                          // =&gt; '/base/users'
+url('user', { username: 'john' })     // =&gt; '/base/user/john'
 </code></pre>
 <p>This approach also works fine for dynamically added routes at runtime.</p>
-<pre><code class="language-js">routes.children.push({ path: '/world', name: 'hello' });
+<pre><code class="language-js">routes.children.push({ path: '/world', name: 'hello' })
 
-url('hello');                         // =&gt; '/base/world'
+url('hello')                          // =&gt; '/base/world'
 </code></pre>
 <p>Use <code>encode</code> option for custom encoding of URI path segments. By default
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent">encodeURIComponent</a>
 is used.</p>
-<pre><code class="language-js">const prettyUrl = generateUrls(router, { encode: x =&gt; x });
+<pre><code class="language-js">const prettyUrl = generateUrls(router, { encode: (value, token) =&gt; value })
 
-url('user', { username: ':/' });       // =&gt; '/base/user/%3A%2F'
-prettyUrl('user', { username: ':/' }); // =&gt; '/base/user/:/'
+url('user', { username: ':/' })       // =&gt; '/base/user/%3A%2F'
+prettyUrl('user', { username: ':/' }) // =&gt; '/base/user/:/'
 </code></pre>
 <p>Provide a function to <code>stringifyQueryParams</code> option to generate URL with
 <a href="http://en.wikipedia.org/wiki/Query_string">query string</a> from unknown route params.</p>
 <pre><code class="language-js">const urlWithQueryString = generateUrls(router, {
   stringifyQueryParams(params) {
-    return Object.keys(params).map(key =&gt; `${key}=${params[key]}`).join('&amp;');
+    return Object.keys(params).map(key =&gt; `${key}=${params[key]}`).join('&amp;')
   },
-});
+})
 
-const params = { username: 'John', busy: 1 };
-url('user', params);                  // =&gt; /base/user/John
-urlWithQueryString('user', params);   // =&gt; /base/user/John?busy=1
+const params = { username: 'John', busy: 1 }
+url('user', params)                   // =&gt; /base/user/John
+urlWithQueryString('user', params)    // =&gt; /base/user/John?busy=1
 </code></pre>
 <p>Or use external library such as <a href="https://github.com/ljharb/qs">qs</a>,
 <a href="https://github.com/sindresorhus/query-string">query-string</a>, etc.</p>
-<pre><code class="language-js">import qs from 'qs';
-generateUrls(router, { stringifyQueryParams: qs.stringify });
+<pre><code class="language-js">import qs from 'qs'
+generateUrls(router, { stringifyQueryParams: qs.stringify })
 </code></pre>
 <h2>Recipes</h2>
 <ul>

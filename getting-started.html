@@ -36,29 +36,26 @@ familiar with any of these frameworks, learning Universal Router should be a bre
 samples below assume that you're using ES2015 flavor of JavaScript via <a href="http://babeljs.io/">Babel</a>.</p>
 <p>You can start by installing <strong>Universal Router</strong> library via <a href="https://www.npmjs.com/package/universal-router">npm</a>
 by running:</p>
-<pre><code class="language-sh">$ npm install universal-router --save
+<pre><code class="language-sh">npm install universal-router --save
 </code></pre>
 <p>This module contains a <code>UniversalRouter</code> class with a single <code>router.resolve</code> method that responsible for traversing
 the list of routes, until it finds the first route matching the provided URL path string and whose action method
 returns anything other than <code>null</code> or <code>undefined</code>. Each route is just a plain JavaScript object having <code>path</code>,
 <code>action</code>, and <code>children</code> (optional) properties.</p>
-<pre><code class="language-js">import UniversalRouter from 'universal-router';
+<pre><code class="language-js">import UniversalRouter from 'universal-router'
 
 const routes = [
   { path: '/one', action: () =&gt; '&lt;h1&gt;Page One&lt;/h1&gt;' },
   { path: '/two', action: () =&gt; '&lt;h1&gt;Page Two&lt;/h1&gt;' },
   { path: '(.*)', action: () =&gt; '&lt;h1&gt;Not Found&lt;/h1&gt;' }
-];
+]
 
-const router = new UniversalRouter(routes);
+const router = new UniversalRouter(routes)
 
 router.resolve({ pathname: '/one' }).then(result =&gt; {
-  document.body.innerHTML = result;
+  document.body.innerHTML = result
   // renders: &lt;h1&gt;Page One&lt;/h1&gt;
-});
-</code></pre>
-<p>If you're using the router with Node v5 and below, import it as follows:</p>
-<pre><code class="language-js">import UniversalRouter from 'universal-router/legacy';
+})
 </code></pre>
 <p>If you don't want to use npm to manage client packages, the <code>universal-router</code> npm package
 also provide single-file distributions, which are hosted on a <a href="https://unpkg.com/">CDN</a>:</p>
@@ -73,22 +70,22 @@ also provide single-file distributions, which are hosted on a <a href="https://u
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign">Object.assign</a>
 polyfills for compatibility with older browsers.</p>
 <h2 id="use-with-react">Use with React</h2>
-<pre><code class="language-jsx">import React from 'react';
-import ReactDOM from 'react-dom';
-import UniversalRouter from 'universal-router';
+<pre><code class="language-jsx">import React from 'react'
+import ReactDOM from 'react-dom'
+import UniversalRouter from 'universal-router'
 
 const routes = [
   { path: '/one', action: () =&gt; &lt;h1&gt;Page One&lt;/h1&gt; },
   { path: '/two', action: () =&gt; &lt;h1&gt;Page Two&lt;/h1&gt; },
   { path: '(.*)', action: () =&gt; &lt;h1&gt;Not Found&lt;/h1&gt; }
-];
+]
 
-const router = new UniversalRouter(routes);
+const router = new UniversalRouter(routes)
 
 router.resolve({ pathname: '/one' }).then(component =&gt; {
-  ReactDOM.render(component, document.body);
+  ReactDOM.render(component, document.body)
   // renders: &lt;h1&gt;Page One&lt;/h1&gt;
-});
+})
 </code></pre>
 <h2 id="learn-more">Learn more</h2>
 <ul>
