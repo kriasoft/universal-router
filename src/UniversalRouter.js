@@ -94,7 +94,17 @@ class UniversalRouter {
 
     return Promise.resolve()
       .then(() => next(true, this.root))
-      .catch((error) => {
+      .catch((err) => {
+        const error = new Error(err)
+        if (err instanceof Error) {
+          try {
+            const props = Object.getOwnPropertyDescriptors(err)
+            for (const key in props) Object.defineProperty(error, key, props[key])
+            Object.setPrototypeOf(error, Object.getPrototypeOf(err))
+          } catch (e) {
+            // ignore
+          }
+        }
         error.context = error.context || currentContext
         error.code = error.code || 500
         if (this.errorHandler) {
