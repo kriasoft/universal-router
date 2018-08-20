@@ -1,7 +1,7 @@
 {
   "extends": [
     "airbnb-base",
-    "plugin:prettier/recommended"
+    "eslint-config-prettier"
   ],
   "rules": {
     "no-param-reassign": ["error", {

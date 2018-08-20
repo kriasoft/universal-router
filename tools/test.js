@@ -11,12 +11,15 @@ process.on('unhandledRejection', (error) => {
   throw error
 })
 
-const lint = require('./lint')
-const test = require('./test')
+const jest = require('jest')
 
-async function precommit() {
-  await lint()
-  await test()
+const jestConfig = {
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
+  testMatch: ['**/*.test.js'],
 }
 
-module.exports = precommit().catch(process.exit)
+async function test() {
+  await jest.run(['--config', JSON.stringify(jestConfig), ...process.argv.slice(2)])
+}
+
+module.exports = module.parent ? test : test().catch(process.exit)

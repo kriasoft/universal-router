@@ -212,7 +212,7 @@
     var delimiters = options.delimiters || DEFAULT_DELIMITERS;
     var endsWith = [].concat(options.endsWith || []).map(escapeString).concat('$').join('|');
     var route = '';
-    var isEndDelimited = false;
+    var isEndDelimited = tokens.length === 0;
 
     for (var i = 0; i < tokens.length; i++) {
       var token = tokens[i];

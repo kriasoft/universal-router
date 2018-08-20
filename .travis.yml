@@ -8,11 +8,12 @@ node_js:
   - "node"
   - "lts/*"
 
+cache:
+  directories:
+    - "node_modules"
+
 before_install:
   - npm install --global codecov
-
-install:
-  - npm install --no-save
 
 script:
   - npm run lint

@@ -52,12 +52,12 @@ npm install universal-router --save
 ```
 
 Or using a [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) like
-[unpkg.com](https://unpkg.com/universal-router@latest/universal-router.min.js) or
-[jsDelivr](https://cdn.jsdelivr.net/npm/universal-router@latest/universal-router.min.js)
+[unpkg.com](https://unpkg.com/universal-router/universal-router.min.js) or
+[jsDelivr](https://cdn.jsdelivr.net/npm/universal-router/universal-router.min.js)
 with the following script tag:
 
 ```html
-<script src="https://unpkg.com/universal-router@latest/universal-router.min.js"></script>
+<script src="https://unpkg.com/universal-router/universal-router.min.js"></script>
 ```
 
 You can find the library in `window.UniversalRouter`.
