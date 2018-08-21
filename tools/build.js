@@ -109,6 +109,7 @@ async function build() {
                 {
                   modules: false,
                   loose: true,
+                  useBuiltIns: 'entry',
                   exclude: ['transform-typeof-symbol'],
                 },
               ],
@@ -134,18 +135,19 @@ async function build() {
   )
 
   // Create package.json for npm publishing
-  const libPkg = Object.assign({}, pkg)
+  const libPkg = { ...pkg }
   delete libPkg.private
   delete libPkg.devDependencies
   delete libPkg.scripts
   await fs.outputJson('dist/package.json', libPkg, { spaces: 2 })
 
   // Create generateUrls/package.json for convenient import
-  const generateUrlsPkg = Object.assign({}, pkg, {
+  const generateUrlsPkg = {
+    ...pkg,
     name: 'generateUrls',
     description: 'Universal Router Generate URLs Add-on',
     esnext: '../src/generateUrls.js',
-  })
+  }
   delete generateUrlsPkg.dependencies
   delete generateUrlsPkg.devDependencies
   delete generateUrlsPkg.scripts

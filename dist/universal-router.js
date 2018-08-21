@@ -221,18 +221,17 @@
         route += escapeString(token);
         isEndDelimited = i === tokens.length - 1 && delimiters.indexOf(token[token.length - 1]) > -1;
       } else {
-        var prefix = escapeString(token.prefix);
-        var capture = token.repeat ? '(?:' + token.pattern + ')(?:' + prefix + '(?:' + token.pattern + '))*' : token.pattern;
+        var capture = token.repeat ? '(?:' + token.pattern + ')(?:' + escapeString(token.delimiter) + '(?:' + token.pattern + '))*' : token.pattern;
         if (keys) keys.push(token);
 
         if (token.optional) {
           if (token.partial) {
-            route += prefix + '(' + capture + ')?';
+            route += escapeString(token.prefix) + '(' + capture + ')?';
           } else {
-            route += '(?:' + prefix + '(' + capture + '))?';
+            route += '(?:' + escapeString(token.prefix) + '(' + capture + '))?';
           }
         } else {
-          route += prefix + '(' + capture + ')';
+          route += escapeString(token.prefix) + '(' + capture + ')';
         }
       }
     }
@@ -407,7 +406,7 @@
         options = {};
       }
 
-      if (Object(routes) !== routes) {
+      if (!routes || typeof routes !== 'object') {
         throw new TypeError('Invalid routes');
       }
 

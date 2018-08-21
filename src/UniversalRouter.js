@@ -24,24 +24,25 @@ function isChildRoute(parentRoute, childRoute) {
 
 class UniversalRouter {
   constructor(routes, options = {}) {
-    if (Object(routes) !== routes) {
+    if (!routes || typeof routes !== 'object') {
       throw new TypeError('Invalid routes')
     }
 
     this.baseUrl = options.baseUrl || ''
     this.errorHandler = options.errorHandler
     this.resolveRoute = options.resolveRoute || resolveRoute
-    this.context = Object.assign({ router: this }, options.context)
+    this.context = { router: this, ...options.context }
     this.root = Array.isArray(routes) ? { path: '', children: routes, parent: null } : routes
     this.root.parent = null
   }
 
   resolve(pathnameOrContext) {
-    const context = Object.assign(
-      {},
-      this.context,
-      typeof pathnameOrContext === 'string' ? { pathname: pathnameOrContext } : pathnameOrContext,
-    )
+    const context = {
+      ...this.context,
+      ...(typeof pathnameOrContext === 'string'
+        ? { pathname: pathnameOrContext }
+        : pathnameOrContext),
+    }
     const match = matchRoute(
       this.root,
       this.baseUrl,
@@ -73,7 +74,7 @@ class UniversalRouter {
         return Promise.reject(error)
       }
 
-      currentContext = Object.assign({}, context, matches.value)
+      currentContext = { ...context, ...matches.value }
 
       return Promise.resolve(resolve(currentContext, matches.value.params)).then((result) => {
         if (result !== null && result !== undefined) {
