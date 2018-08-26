@@ -57,7 +57,7 @@ describe('new UniversalRouter(routes, options)', () => {
     const route = {
       path: '/',
       action: () => {
-        throw new Error('custom')
+        throw Object.freeze(new Error('custom'))
       },
     }
     const router = new UniversalRouter(route, { errorHandler })
@@ -66,7 +66,7 @@ describe('new UniversalRouter(routes, options)', () => {
     expect(errorHandler.mock.calls.length).toBe(1)
     const error = errorHandler.mock.calls[0][0]
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toBe('custom')
+    expect(error.message).toContain('custom')
     expect(error.code).toBe(500)
     expect(error.context.pathname).toBe('/')
     expect(error.context.path).toBe('/')
@@ -514,6 +514,28 @@ describe('router.resolve({ pathname, ...context })', () => {
       err = e
     }
     expect(err).toBe(error)
+    expect(err.code).toBe(500)
+  })
+
+  it('should always reject with Error object', async () => {
+    const error = 'test error'
+    const router = new UniversalRouter([
+      {
+        path: '/a',
+        action() {
+          throw error
+        },
+      },
+    ])
+    let err
+    try {
+      await router.resolve('/a')
+    } catch (e) {
+      err = e
+    }
+    expect(err).toBeInstanceOf(Error)
+    expect(err.message).toBe(error)
+    expect(err.code).toBe(500)
   })
 
   it('should respect baseUrl', async () => {

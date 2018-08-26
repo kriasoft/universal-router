@@ -10,6 +10,8 @@
 import pathToRegexp from 'path-to-regexp'
 import matchRoute from './matchRoute'
 
+const { isExtensible } = Object
+
 function resolveRoute(context, params) {
   if (typeof context.route.action === 'function') {
     return context.route.action(context, params)
@@ -94,7 +96,8 @@ class UniversalRouter {
 
     return Promise.resolve()
       .then(() => next(true, this.root))
-      .catch((error) => {
+      .catch((err) => {
+        const error = err instanceof Error && isExtensible(err) ? err : new Error(err)
         error.context = error.context || currentContext
         error.code = error.code || 500
         if (this.errorHandler) {
