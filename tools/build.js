@@ -110,7 +110,6 @@ async function build() {
                   modules: false,
                   loose: true,
                   useBuiltIns: 'entry',
-                  exclude: ['transform-typeof-symbol'],
                 },
               ],
             ],

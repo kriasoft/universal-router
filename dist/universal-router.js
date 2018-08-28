@@ -207,11 +207,12 @@
   function tokensToRegExp(tokens, keys, options) {
     options = options || {};
     var strict = options.strict;
+    var start = options.start !== false;
     var end = options.end !== false;
     var delimiter = escapeString(options.delimiter || DEFAULT_DELIMITER);
     var delimiters = options.delimiters || DEFAULT_DELIMITERS;
     var endsWith = [].concat(options.endsWith || []).map(escapeString).concat('$').join('|');
-    var route = '';
+    var route = start ? '^' : '';
     var isEndDelimited = tokens.length === 0;
 
     for (var i = 0; i < tokens.length; i++) {
@@ -244,7 +245,7 @@
       if (!isEndDelimited) route += '(?=' + delimiter + '|' + endsWith + ')';
     }
 
-    return new RegExp('^' + route, flags(options));
+    return new RegExp(route, flags(options));
   }
 
   function pathToRegexp(path, keys, options) {

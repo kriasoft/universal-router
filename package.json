@@ -23,12 +23,12 @@
   "module": "module.js",
   "esnext": "src/UniversalRouter.js",
   "dependencies": {
-    "path-to-regexp": "^2.3.0"
+    "path-to-regexp": "^2.4.0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-rc.1",
-    "@babel/preset-env": "7.0.0-rc.1",
-    "@babel/register": "7.0.0-rc.1",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
     "babel-core": "^7.0.0-0",
     "babel-jest": "^23.4.2",
     "eslint": "^5.4.0",
@@ -39,9 +39,9 @@
     "husky": "^0.14.3",
     "jest": "^23.5.0",
     "prettier": "^1.14.2",
-    "rollup": "^0.64.1",
-    "rollup-plugin-babel": "4.0.0-beta.8",
-    "rollup-plugin-commonjs": "^9.1.5",
+    "rollup": "^0.65.0",
+    "rollup-plugin-babel": "^4.0.2",
+    "rollup-plugin-commonjs": "^9.1.6",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-uglify": "^4.0.0"
   },

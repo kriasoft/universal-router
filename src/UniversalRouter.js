@@ -9,7 +9,13 @@
 
 import pathToRegexp from 'path-to-regexp'
 import matchRoute from './matchRoute'
-import resolveRoute from './resolveRoute'
+
+function resolveRoute(context, params) {
+  if (typeof context.route.action === 'function') {
+    return context.route.action(context, params)
+  }
+  return undefined
+}
 
 function isChildRoute(parentRoute, childRoute) {
   let route = childRoute
