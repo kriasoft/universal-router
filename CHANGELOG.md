@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+- [BREAKING] The router no longer mutates errors to avoid issues with non-extensible objects.
+  ([#158](https://github.com/kriasoft/universal-router/pull/158)).
+
+**Migration from v6 to v7:**
+- If your code relies on `error.context` or `error.code` you still can access the same variables using `errorHandler` option:
+  ```js
+  errorHandler(error, context) {
+    const code = error.message === 'Route not found' ? 404 : 500
+    console.log(error, context, code)
+  }
+  ```
+
 ## [6.0.0] - 2018-02-06
 
 - No special configuration is required for your bundler anymore (say hi to [parcel.js](https://parceljs.org/)).

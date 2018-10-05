@@ -10,6 +10,8 @@
 import pathToRegexp from 'path-to-regexp'
 import matchRoute from './matchRoute'
 
+const notFound = 'Route not found'
+
 function resolveRoute(context, params) {
   if (typeof context.route.action === 'function') {
     return context.route.action(context, params)
@@ -74,10 +76,7 @@ class UniversalRouter {
       }
 
       if (matches.done) {
-        const error = new Error('Page not found')
-        error.context = context
-        error.code = 404
-        return Promise.reject(error)
+        return Promise.reject(new Error(notFound))
       }
 
       currentContext = { ...context, ...matches.value }
@@ -95,10 +94,8 @@ class UniversalRouter {
     return Promise.resolve()
       .then(() => next(true, this.root))
       .catch((error) => {
-        error.context = error.context || currentContext
-        error.code = error.code || 500
         if (this.errorHandler) {
-          return this.errorHandler(error)
+          return this.errorHandler(error, currentContext)
         }
         throw error
       })
