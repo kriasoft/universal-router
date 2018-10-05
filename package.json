@@ -26,29 +26,29 @@
     "path-to-regexp": "^2.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
     "@babel/register": "^7.0.0",
     "babel-core": "^7.0.0-0",
-    "babel-jest": "^23.4.2",
-    "eslint": "^5.4.0",
+    "babel-jest": "^23.6.0",
+    "eslint": "^5.6.1",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^3.0.1",
+    "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-import": "^2.14.0",
     "fs-extra": "^7.0.0",
-    "husky": "^0.14.3",
-    "jest": "^23.5.0",
-    "prettier": "^1.14.2",
-    "rollup": "^0.65.0",
-    "rollup-plugin-babel": "^4.0.2",
-    "rollup-plugin-commonjs": "^9.1.6",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-uglify": "^4.0.0"
+    "husky": "^1.1.1",
+    "jest": "^23.6.0",
+    "prettier": "^1.14.3",
+    "rollup": "^0.66.4",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-commonjs": "^9.1.8",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-uglify": "^6.0.0"
   },
   "scripts": {
     "lint": "node tools/lint",
     "test": "node tools/test",
     "build": "node tools/build",
-    "precommit": "node tools/precommit"
+    "pre-commit": "node tools/pre-commit"
   }
 }

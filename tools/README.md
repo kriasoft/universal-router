@@ -24,5 +24,5 @@ npm run test
 Run [pre-commit git hook](https://git-scm.com/docs/githooks#_pre_commit) manually:
 
 ```bash
-npm run precommit
+npm run pre-commit
 ```

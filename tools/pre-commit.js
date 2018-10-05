@@ -14,9 +14,9 @@ process.on('unhandledRejection', (error) => {
 const lint = require('./lint')
 const test = require('./test')
 
-async function precommit() {
+async function preCommit() {
   await lint()
   await test()
 }
 
-module.exports = precommit().catch(process.exit)
+module.exports = preCommit().catch(process.exit)
