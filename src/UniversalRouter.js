@@ -95,12 +95,14 @@ class UniversalRouter {
     return Promise.resolve()
       .then(() => next(true, this.root))
       .catch((error) => {
+        if (this.errorHandler) {
+          return this.errorHandler(error, currentContext)
+        }
+
         error.context = error.context || currentContext
         error.code = error.code || 500
-        if (this.errorHandler) {
-          return this.errorHandler(error)
-        }
-        throw error
+
+        return Promise.reject(error)
       })
   }
 }

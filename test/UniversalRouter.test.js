@@ -65,13 +65,13 @@ describe('new UniversalRouter(routes, options)', () => {
     expect(result).toBe('result')
     expect(errorHandler.mock.calls.length).toBe(1)
     const error = errorHandler.mock.calls[0][0]
+    const context = errorHandler.mock.calls[0][1]
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toBe('custom')
-    expect(error.code).toBe(500)
-    expect(error.context.pathname).toBe('/')
-    expect(error.context.path).toBe('/')
-    expect(error.context.router).toBe(router)
-    expect(error.context.route).toBe(route)
+    expect(context.pathname).toBe('/')
+    expect(context.path).toBe('/')
+    expect(context.router).toBe(router)
+    expect(context.route).toBe(route)
   })
 })
 
