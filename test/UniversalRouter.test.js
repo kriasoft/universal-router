@@ -497,8 +497,9 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(result).toBe(true)
   })
 
-  it('should re-throw an error', async () => {
-    const error = new Error('test error')
+  it('should not mutate error object', async () => {
+    class TestError extends Error {}
+    const error = new TestError('test error')
     const router = new UniversalRouter([
       {
         path: '/a',
@@ -513,7 +514,34 @@ describe('router.resolve({ pathname, ...context })', () => {
     } catch (e) {
       err = e
     }
-    expect(err).toBe(error)
+    expect(err).not.toBe(error)
+    expect(err).toBeInstanceOf(TestError)
+    expect(err.message).toBe('test error')
+    expect(err.stack).toBe(error.stack)
+    expect(err.code).toBe(500)
+    expect(err.context.pathname).toBe('/a')
+    expect(err.context.path).toBe('/a')
+  })
+
+  it('should always reject with error object', async () => {
+    const error = 'test error'
+    const router = new UniversalRouter([
+      {
+        path: '/a',
+        action() {
+          throw error
+        },
+      },
+    ])
+    let err
+    try {
+      await router.resolve('/a')
+    } catch (e) {
+      err = e
+    }
+    expect(err).toBeInstanceOf(Error)
+    expect(err.message).toBe(error)
+    expect(err.code).toBe(500)
   })
 
   it('should respect baseUrl', async () => {

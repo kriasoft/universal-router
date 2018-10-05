@@ -4,10 +4,12 @@
     "eslint-config-prettier"
   ],
   "rules": {
+    "guard-for-in": "off",
     "no-param-reassign": ["error", {
       "props": true,
       "ignorePropertyModificationsFor": ["router", "error"]
     }],
-    "no-plusplus": "off"
+    "no-plusplus": "off",
+    "no-restricted-syntax": "off"
   }
 }
