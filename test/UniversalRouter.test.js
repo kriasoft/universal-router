@@ -47,6 +47,7 @@ describe('new UniversalRouter(routes, options)', () => {
     const context = errorHandler.mock.calls[0][1]
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toBe('Route not found')
+    expect(error.status).toBe(404)
     expect(context.pathname).toBe('/')
     expect(context.router).toBe(router)
   })
@@ -85,6 +86,7 @@ describe('router.resolve({ pathname, ...context })', () => {
     }
     expect(err).toBeInstanceOf(Error)
     expect(err.message).toBe('Route not found')
+    expect(err.status).toBe(404)
   })
 
   it("should execute the matching route's action method and return its result", async () => {
@@ -136,6 +138,7 @@ describe('router.resolve({ pathname, ...context })', () => {
     }
     expect(err).toBeInstanceOf(Error)
     expect(err.message).toBe('Route not found')
+    expect(err.status).toBe(404)
     expect(action.mock.calls.length).toBe(0)
   })
 
@@ -540,6 +543,7 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(action.mock.calls.length).toBe(1)
     expect(err).toBeInstanceOf(Error)
     expect(err.message).toBe('Route not found')
+    expect(err.status).toBe(404)
   })
 
   it('should match routes with trailing slashes', async () => {

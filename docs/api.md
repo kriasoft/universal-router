@@ -48,7 +48,7 @@ const options = {
   errorHandler(error, context) {
     console.error(error)
     console.info(context)
-    return error.message === 'Route not found'
+    return error.status === 404
       ? '<h1>Page Not Found</h1>'
       : '<h1>Oops! Something went wrong</h1>'
   }

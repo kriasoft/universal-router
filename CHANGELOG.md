@@ -7,14 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-- [BREAKING] The router no longer mutates errors to avoid issues with non-extensible objects.
-  ([#158](https://github.com/kriasoft/universal-router/pull/158)).
+- The router no longer mutate errors to avoid issues with non-extensible objects.
+  (BREAKING CHANGE [#158](https://github.com/kriasoft/universal-router/pull/158)).
 
 **Migration from v6 to v7:**
-- If your code relies on `error.context` or `error.code` you still can access the same variables using `errorHandler` option:
+- If your code relies on `error.context` or `error.code` you still can access them
+  using `errorHandler` option:
   ```js
   errorHandler(error, context) {
-    const code = error.message === 'Route not found' ? 404 : 500
+    const code = error.status || 500
     console.log(error, context, code)
   }
   ```
