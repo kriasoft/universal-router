@@ -456,9 +456,8 @@
         }
 
         if (matches.done) {
-          var error = new Error('Page not found');
-          error.context = context;
-          error.code = 404;
+          var error = new Error('Route not found');
+          error.status = 404;
           return Promise.reject(error);
         }
 
@@ -476,11 +475,8 @@
       return Promise.resolve().then(function () {
         return next(true, _this.root);
       }).catch(function (error) {
-        error.context = error.context || currentContext;
-        error.code = error.code || 500;
-
         if (_this.errorHandler) {
-          return _this.errorHandler(error);
+          return _this.errorHandler(error, currentContext);
         }
 
         throw error;

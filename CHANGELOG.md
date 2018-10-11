@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [7.0.0] - 2018-10-11
 
 - The router no longer mutate errors to avoid issues with non-extensible objects.
   (BREAKING CHANGE [#158](https://github.com/kriasoft/universal-router/pull/158)).
@@ -242,7 +242,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Small bug fixes and improvements
 
-[Unreleased]: https://github.com/kriasoft/universal-router/compare/v6.0.0...HEAD
+[Unreleased]: https://github.com/kriasoft/universal-router/compare/v7.0.0...HEAD
+[7.0.0]: https://github.com/kriasoft/universal-router/compare/v6.0.0...v7.0.0
 [6.0.0]: https://github.com/kriasoft/universal-router/compare/v5.1.0...v6.0.0
 [5.1.0]: https://github.com/kriasoft/universal-router/compare/v5.0.0...v5.1.0
 [5.0.0]: https://github.com/kriasoft/universal-router/compare/v4.3.0...v5.0.0
