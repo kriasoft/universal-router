@@ -15,11 +15,9 @@ Second `options` argument is optional where you can pass the following:
 * `resolveRoute` - function for any custom route handling logic.\
   For example you can define this option to work with routes in declarative manner.\
   By default the router calls the `action` method of matched route.
-* `errorHandler` - function for global error handling. Called with a single
-  [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) 
-  argument every time the route is not found or threw an error which always contain
-  [http status `code`](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) and
-  [current `context`](#context) for your convenience.
+* `errorHandler` - function for global error handling. Called with an
+  [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error)
+  and [Context](#context) arguments every time the route is not found or threw an error.
 
 ```js
 import UniversalRouter from 'universal-router'
@@ -47,10 +45,10 @@ const options = {
     }
     return undefined
   },
-  errorHandler(error) {
+  errorHandler(error, context) {
     console.error(error)
-    console.dir(error.context)
-    return error.code === 404
+    console.info(context)
+    return error.status === 404
       ? '<h1>Page Not Found</h1>'
       : '<h1>Oops! Something went wrong</h1>'
   }

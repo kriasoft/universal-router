@@ -74,9 +74,8 @@ class UniversalRouter {
       }
 
       if (matches.done) {
-        const error = new Error('Page not found')
-        error.context = context
-        error.code = 404
+        const error = new Error('Route not found')
+        error.status = 404
         return Promise.reject(error)
       }
 
@@ -95,10 +94,8 @@ class UniversalRouter {
     return Promise.resolve()
       .then(() => next(true, this.root))
       .catch((error) => {
-        error.context = error.context || currentContext
-        error.code = error.code || 500
         if (this.errorHandler) {
-          return this.errorHandler(error)
+          return this.errorHandler(error, currentContext)
         }
         throw error
       })

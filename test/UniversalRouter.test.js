@@ -44,12 +44,12 @@ describe('new UniversalRouter(routes, options)', () => {
     expect(result).toBe('result')
     expect(errorHandler.mock.calls.length).toBe(1)
     const error = errorHandler.mock.calls[0][0]
+    const context = errorHandler.mock.calls[0][1]
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toBe('Page not found')
-    expect(error.code).toBe(404)
-    expect(error.context.pathname).toBe('/')
-    expect(error.context.path).toBe(undefined)
-    expect(error.context.router).toBe(router)
+    expect(error.message).toBe('Route not found')
+    expect(error.status).toBe(404)
+    expect(context.pathname).toBe('/')
+    expect(context.router).toBe(router)
   })
 
   it('should handle route errors', async () => {
@@ -65,13 +65,13 @@ describe('new UniversalRouter(routes, options)', () => {
     expect(result).toBe('result')
     expect(errorHandler.mock.calls.length).toBe(1)
     const error = errorHandler.mock.calls[0][0]
+    const context = errorHandler.mock.calls[0][1]
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toBe('custom')
-    expect(error.code).toBe(500)
-    expect(error.context.pathname).toBe('/')
-    expect(error.context.path).toBe('/')
-    expect(error.context.router).toBe(router)
-    expect(error.context.route).toBe(route)
+    expect(context.pathname).toBe('/')
+    expect(context.path).toBe('/')
+    expect(context.router).toBe(router)
+    expect(context.route).toBe(route)
   })
 })
 
@@ -85,11 +85,8 @@ describe('router.resolve({ pathname, ...context })', () => {
       err = e
     }
     expect(err).toBeInstanceOf(Error)
-    expect(err.message).toBe('Page not found')
-    expect(err.code).toBe(404)
-    expect(err.context.pathname).toBe('/')
-    expect(err.context.path).toBe(undefined)
-    expect(err.context.router).toBe(router)
+    expect(err.message).toBe('Route not found')
+    expect(err.status).toBe(404)
   })
 
   it("should execute the matching route's action method and return its result", async () => {
@@ -140,8 +137,8 @@ describe('router.resolve({ pathname, ...context })', () => {
       err = e
     }
     expect(err).toBeInstanceOf(Error)
-    expect(err.message).toBe('Page not found')
-    expect(err.code).toBe(404)
+    expect(err.message).toBe('Route not found')
+    expect(err.status).toBe(404)
     expect(action.mock.calls.length).toBe(0)
   })
 
@@ -545,11 +542,8 @@ describe('router.resolve({ pathname, ...context })', () => {
     }
     expect(action.mock.calls.length).toBe(1)
     expect(err).toBeInstanceOf(Error)
-    expect(err.message).toBe('Page not found')
-    expect(err.code).toBe(404)
-    expect(err.context.pathname).toBe('/a/b/c')
-    expect(err.context.path).toBe(undefined)
-    expect(err.context.router).toBe(router)
+    expect(err.message).toBe('Route not found')
+    expect(err.status).toBe(404)
   })
 
   it('should match routes with trailing slashes', async () => {
