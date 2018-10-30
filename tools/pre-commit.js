@@ -7,10 +7,6 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-process.on('unhandledRejection', (error) => {
-  throw error
-})
-
 const lint = require('./lint')
 const test = require('./test')
 

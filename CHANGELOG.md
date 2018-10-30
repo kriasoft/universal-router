@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+- Add [TypeScript](https://www.typescriptlang.org/) typings
+  ([#159](https://github.com/kriasoft/universal-router/pull/159))
+
 ## [7.0.0] - 2018-10-11
 
 - The router no longer mutate errors to avoid issues with non-extensible objects.

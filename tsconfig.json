@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "noEmit": true,
+    "strict": true,
+    "noImplicitAny": false
+  },
+  "include": ["src", "test"]
+}
