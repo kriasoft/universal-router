@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Update [path-to-regexp](https://github.com/pillarjs/path-to-regexp) from v2.4.0 to v3.0.0, see
+  [changelog](https://github.com/pillarjs/path-to-regexp/blob/4eee1e15ba72d93c996bac4ae649a846eb326562/History.md#300--2019-01-13)
+  (BREAKING CHANGE [#161](https://github.com/kriasoft/universal-router/pull/161))
 - Add [TypeScript](https://www.typescriptlang.org/) typings
   ([#159](https://github.com/kriasoft/universal-router/pull/159))
 
