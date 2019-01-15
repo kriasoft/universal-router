@@ -3,8 +3,8 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('./universal-router.js')) :
   typeof define === 'function' && define.amd ? define(['./universal-router.js'], factory) :
-  (global.generateUrls = factory(global.UniversalRouter));
-}(this, (function (UniversalRouter) { 'use strict';
+  (global = global || self, global.generateUrls = factory(global.UniversalRouter));
+}(this, function (UniversalRouter) { 'use strict';
 
   var pathToRegexp = UniversalRouter.pathToRegexp;
   var cache = new Map();
@@ -112,5 +112,5 @@
 
   return generateUrls;
 
-})));
+}));
 //# sourceMappingURL=universal-router-generate-urls.js.map

@@ -7,10 +7,6 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-process.on('unhandledRejection', (error) => {
-  throw error
-})
-
 const fs = require('fs-extra')
 const path = require('path')
 const rollup = require('rollup')
@@ -146,6 +142,7 @@ async function build() {
     name: 'generateUrls',
     description: 'Universal Router Generate URLs Add-on',
     esnext: '../src/generateUrls.js',
+    types: '../src/generateUrls.d.ts',
   }
   delete generateUrlsPkg.dependencies
   delete generateUrlsPkg.devDependencies
