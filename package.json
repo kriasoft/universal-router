@@ -24,7 +24,7 @@
   "esnext": "src/UniversalRouter.js",
   "types": "src/UniversalRouter.d.ts",
   "dependencies": {
-    "path-to-regexp": "^2.4.0"
+    "path-to-regexp": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
