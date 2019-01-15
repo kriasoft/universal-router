@@ -1,4 +1,13 @@
-import UniversalRouter from '../src/UniversalRouter'
+/**
+ * Universal Router (https://www.kriasoft.com/universal-router/)
+ *
+ * Copyright (c) 2015-present Kriasoft.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
+import UniversalRouter, { Params } from '../src/UniversalRouter'
 import generateUrls from '../src/generateUrls'
 
 const router = new UniversalRouter(
@@ -28,8 +37,8 @@ const path = generateUrls(router)
 path('home') // => '/base'
 
 const options = {
-  encode: (value) => value,
-  stringifyQueryParams(params) {
+  encode: (value: string) => value,
+  stringifyQueryParams(params: Params) {
     return Object.keys(params)
       .map((key) => `${key}=${params[key]}`)
       .join('&')
