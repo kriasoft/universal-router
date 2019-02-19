@@ -479,6 +479,8 @@
   }();
 
   UniversalRouter.pathToRegexp = pathToRegexp_1;
+  UniversalRouter.matchRoute = matchRoute;
+  UniversalRouter.isChildRoute = isChildRoute;
 
   return UniversalRouter;
 
