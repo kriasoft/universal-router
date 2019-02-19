@@ -103,5 +103,7 @@ class UniversalRouter {
 }
 
 UniversalRouter.pathToRegexp = pathToRegexp
+UniversalRouter.matchRoute = matchRoute
+UniversalRouter.isChildRoute = isChildRoute
 
 export default UniversalRouter

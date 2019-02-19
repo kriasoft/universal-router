@@ -45,6 +45,20 @@ const files = [
     paths: { [path.resolve('dist/src/UniversalRouter.js')]: '..' },
   },
   {
+    input: 'dist/src/sync.js',
+    output: 'dist/sync/index.js',
+    format: 'cjs',
+    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
+    paths: { [path.resolve('dist/src/UniversalRouter.js')]: '..' },
+  },
+  {
+    input: 'dist/src/sync.js',
+    output: 'dist/sync/module.js',
+    format: 'es',
+    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
+    paths: { [path.resolve('dist/src/UniversalRouter.js')]: '..' },
+  },
+  {
     input: 'dist/src/UniversalRouter.js',
     output: 'dist/universal-router.js',
     format: 'umd',
@@ -72,6 +86,24 @@ const files = [
     output: 'dist/universal-router-generate-urls.min.js',
     format: 'umd',
     name: 'generateUrls',
+    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
+    paths: { [path.resolve('dist/src/UniversalRouter.js')]: './universal-router.min.js' },
+    globals: { [path.resolve('dist/src/UniversalRouter.js')]: 'UniversalRouter' },
+  },
+  {
+    input: 'dist/src/sync.js',
+    output: 'dist/universal-router-sync.js',
+    format: 'umd',
+    name: 'sync',
+    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
+    paths: { [path.resolve('dist/src/UniversalRouter.js')]: './universal-router.js' },
+    globals: { [path.resolve('dist/src/UniversalRouter.js')]: 'UniversalRouter' },
+  },
+  {
+    input: 'dist/src/sync.js',
+    output: 'dist/universal-router-sync.min.js',
+    format: 'umd',
+    name: 'sync',
     external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
     paths: { [path.resolve('dist/src/UniversalRouter.js')]: './universal-router.min.js' },
     globals: { [path.resolve('dist/src/UniversalRouter.js')]: 'UniversalRouter' },
@@ -148,6 +180,19 @@ async function build() {
   delete generateUrlsPkg.devDependencies
   delete generateUrlsPkg.scripts
   await fs.outputJson('dist/generateUrls/package.json', generateUrlsPkg, { spaces: 2 })
+
+  // Create sync/package.json for convenient import
+  const syncPkg = {
+    ...pkg,
+    name: 'sync',
+    description: 'Universal Router Generate URLs Add-on',
+    esnext: '../src/sync.js',
+    types: '../src/sync.d.ts',
+  }
+  delete syncPkg.dependencies
+  delete syncPkg.devDependencies
+  delete syncPkg.scripts
+  await fs.outputJson('dist/sync/package.json', syncPkg, { spaces: 2 })
 }
 
 module.exports = build()
