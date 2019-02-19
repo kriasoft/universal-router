@@ -357,6 +357,41 @@ import qs from 'qs'
 generateUrls(router, { stringifyQueryParams: qs.stringify })
 ```
 
+## Synchronous mode
+
+For most application a Promise-based asynchronous API is the best choice.
+But if you absolutely have to resolve your routes synchronously, this option is available as an add-on.
+
+Simply import `universal-router/sync` instead of `universal-router` and you'll get almost the same API, but without the `Promise` support.
+
+```diff
+-import UniversalRouter from 'universal-router'
++import UniversalRouter from 'universal-router/sync'
+```
+
+Now the `resolve` method will synchronously return whatever the matching route action returned (or throw an error).
+
+```js
+const router = new UniversalRouter([
+  {
+    path: '/one',
+    action: () => 'Page One',
+  },
+  {
+    path: '/two',
+    action: () => `Page Two`,
+  },
+])
+
+const result = router.resolve({ pathname: '/one' })
+console.log(result)
+  // => Page One
+```
+
+This implies that your `action` functions have to be synchronous too.
+
+The `context.next` function will be synchronous too and will return whatever the matching action returned.
+
 ## Recipes
 
 * [Redirects](https://github.com/kriasoft/universal-router/blob/master/docs/redirects.md)
