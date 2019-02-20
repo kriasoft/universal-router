@@ -15,7 +15,7 @@ This module contains a `UniversalRouter` class with a single `router.resolve` me
 the list of routes, until it finds the first route matching the provided URL path string and whose action method
 returns anything other than `null` or `undefined`. Each route is just a plain JavaScript object having `path`,
 `action`, and `children` (optional) properties.
- 
+
 ```js
 import UniversalRouter from 'universal-router'
 
@@ -39,6 +39,8 @@ also provide single-file distributions, which are hosted on a [CDN](https://unpk
 ```html
 <script src="https://unpkg.com/universal-router/universal-router.js"></script>
 <script src="https://unpkg.com/universal-router/universal-router.min.js"></script>
+<script src="https://unpkg.com/universal-router/universal-router-sync.js"></script>
+<script src="https://unpkg.com/universal-router/universal-router-sync.min.js"></script>
 <script src="https://unpkg.com/universal-router/universal-router-generate-urls.js"></script>
 <script src="https://unpkg.com/universal-router/universal-router-generate-urls.min.js"></script>
 ```

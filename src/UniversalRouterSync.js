@@ -12,7 +12,7 @@ import matchRoute from './matchRoute'
 import resolveRoute from './resolveRoute'
 import isChildRoute from './isChildRoute'
 
-class UniversalRouter {
+class UniversalRouterSync {
   constructor(routes, options = {}) {
     if (!routes || typeof routes !== 'object') {
       throw new TypeError('Invalid routes')
@@ -53,39 +53,38 @@ class UniversalRouter {
       if (!resume) {
         if (matches.done || !isChildRoute(parent, matches.value.route)) {
           nextMatches = matches
-          return Promise.resolve(null)
+          return null
         }
       }
 
       if (matches.done) {
         const error = new Error('Route not found')
         error.status = 404
-        return Promise.reject(error)
+        throw error
       }
 
       currentContext = { ...context, ...matches.value }
 
-      return Promise.resolve(resolve(currentContext, matches.value.params)).then((result) => {
-        if (result !== null && result !== undefined) {
-          return result
-        }
-        return next(resume, parent, result)
-      })
+      const result = resolve(currentContext, matches.value.params)
+      if (result !== null && result !== undefined) {
+        return result
+      }
+      return next(resume, parent, result)
     }
 
     context.next = next
 
-    return Promise.resolve()
-      .then(() => next(true, this.root))
-      .catch((error) => {
-        if (this.errorHandler) {
-          return this.errorHandler(error, currentContext)
-        }
-        throw error
-      })
+    try {
+      return next(true, this.root)
+    } catch (error) {
+      if (this.errorHandler) {
+        return this.errorHandler(error, currentContext)
+      }
+      throw error
+    }
   }
 }
 
-UniversalRouter.pathToRegexp = pathToRegexp
+UniversalRouterSync.pathToRegexp = pathToRegexp
 
-export default UniversalRouter
+export default UniversalRouterSync
