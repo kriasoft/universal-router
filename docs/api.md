@@ -23,10 +23,10 @@ Second `options` argument is optional where you can pass the following:
 import UniversalRouter from 'universal-router'
 
 const routes = {
-  path: '/page',            // string or regexp or array of them, optional 
+  path: '/page',            // string or regexp or array of them, optional
   name: 'page',             // unique string, optional
   parent: null,             // route object or null, automatically filled by the router
-  children: [],             // array of route objects or null, optional 
+  children: [],             // array of route objects or null, optional
   action(context, params) { // function, optional
 
     // action method should return anything except `null` or `undefined` to be resolved by router
@@ -59,8 +59,9 @@ const router = new UniversalRouter(routes, options)
 
 ## `router.resolve({ pathname, ...context })` ⇒ `Promise<any>`
 
-Traverses the list of routes in the order they are defined until it finds the first route that
-matches provided URL path string and whose `action` function returns anything other than `null` or `undefined`.
+Traverses the list of routes in the order they are defined until it finds the first route
+that matches provided URL path string and whose `action` function returns anything
+other than `null` or `undefined`.
 
 ```js
 const router = new UniversalRouter([
@@ -70,7 +71,7 @@ const router = new UniversalRouter([
   },
   {
     path: '/two',
-    action: () => `Page Two`,
+    action: () => 'Page Two',
   },
 ])
 
@@ -130,7 +131,8 @@ router.resolve({ pathname: '/hello/john' })
   // => Welcome, john!
 ```
 
-Alternatively, captured parameters can be accessed via the second argument to an action method like so:
+Alternatively, captured parameters can be accessed via the second argument
+to an action method like so:
 
 ```js
 const router = new UniversalRouter({
@@ -146,8 +148,9 @@ router.resolve({ pathname: '/hello/john' })
 Router preserves the `context.params` values from the parent router.
 If the parent and the child have conflicting param names, the child's value take precedence.
 
-This functionality is powered by [path-to-regexp](https://github.com/pillarjs/path-to-regexp) npm module
-and works the same way as the routing solutions in many popular JavaScript frameworks such as Express and Koa.
+This functionality is powered by [path-to-regexp](https://github.com/pillarjs/path-to-regexp)
+npm module and works the same way as the routing solutions in many popular JavaScript frameworks
+such as [Express](https://expressjs.com/) and [Koa](https://koajs.com/).
 Also check out online [router tester](http://forbeslindesay.github.io/express-route-tester/).
 
 ## Context
@@ -283,6 +286,44 @@ const middlewareRoute = {
 }
 ```
 
+## Synchronous mode
+
+For most application a Promise-based asynchronous API is the best choice.
+But if you absolutely have to resolve your routes synchronously,
+this option is available as an add-on.
+
+Simply import `universal-router/sync` instead of `universal-router`
+and you'll get almost the same API, but without the `Promise` support.
+
+```diff
+-import UniversalRouter from 'universal-router'
++import UniversalRouter from 'universal-router/sync'
+```
+
+Now the `resolve` method will synchronously return whatever
+the matching route action returned (or throw an error).
+
+```js
+const router = new UniversalRouter([
+  {
+    path: '/one',
+    action: () => 'Page One',
+  },
+  {
+    path: '/two',
+    action: () => 'Page Two',
+  },
+])
+
+const result = router.resolve({ pathname: '/one' })
+
+console.log(result) // => Page One
+```
+
+This implies that your `action` functions have to be synchronous too.
+
+The `context.next` function will be synchronous too and will return whatever the matching action returned.
+
 ## URL Generation
 
 In most web applications it's much simpler to just use a string for hyperlinks.
@@ -356,41 +397,6 @@ Or use external library such as [qs](https://github.com/ljharb/qs),
 import qs from 'qs'
 generateUrls(router, { stringifyQueryParams: qs.stringify })
 ```
-
-## Synchronous mode
-
-For most application a Promise-based asynchronous API is the best choice.
-But if you absolutely have to resolve your routes synchronously, this option is available as an add-on.
-
-Simply import `universal-router/sync` instead of `universal-router` and you'll get almost the same API, but without the `Promise` support.
-
-```diff
--import UniversalRouter from 'universal-router'
-+import UniversalRouter from 'universal-router/sync'
-```
-
-Now the `resolve` method will synchronously return whatever the matching route action returned (or throw an error).
-
-```js
-const router = new UniversalRouter([
-  {
-    path: '/one',
-    action: () => 'Page One',
-  },
-  {
-    path: '/two',
-    action: () => `Page Two`,
-  },
-])
-
-const result = router.resolve({ pathname: '/one' })
-console.log(result)
-  // => Page One
-```
-
-This implies that your `action` functions have to be synchronous too.
-
-The `context.next` function will be synchronous too and will return whatever the matching action returned.
 
 ## Recipes
 

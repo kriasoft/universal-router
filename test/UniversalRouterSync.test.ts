@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import UniversalRouter from '../src/sync'
+import UniversalRouter from '../src/UniversalRouterSync'
 
 const result1 = new UniversalRouter({
   path: '/users',

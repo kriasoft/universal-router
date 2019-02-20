@@ -39,10 +39,10 @@ also provide single-file distributions, which are hosted on a [CDN](https://unpk
 ```html
 <script src="https://unpkg.com/universal-router/universal-router.js"></script>
 <script src="https://unpkg.com/universal-router/universal-router.min.js"></script>
-<script src="https://unpkg.com/universal-router/universal-router-generate-urls.js"></script>
-<script src="https://unpkg.com/universal-router/universal-router-generate-urls.min.js"></script>
 <script src="https://unpkg.com/universal-router/universal-router-sync.js"></script>
 <script src="https://unpkg.com/universal-router/universal-router-sync.min.js"></script>
+<script src="https://unpkg.com/universal-router/universal-router-generate-urls.js"></script>
+<script src="https://unpkg.com/universal-router/universal-router-generate-urls.min.js"></script>
 ```
 
 **Note**: You may need to include

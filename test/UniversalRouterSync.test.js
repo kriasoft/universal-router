@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import UniversalRouterSync from '../src/sync'
+import UniversalRouterSync from '../src/UniversalRouterSync'
 
 describe('new UniversalRouterSync(routes, options)', () => {
   it('should throw an error in case of invalid routes', () => {
