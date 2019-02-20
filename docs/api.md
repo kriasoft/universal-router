@@ -65,14 +65,8 @@ other than `null` or `undefined`.
 
 ```js
 const router = new UniversalRouter([
-  {
-    path: '/one',
-    action: () => 'Page One',
-  },
-  {
-    path: '/two',
-    action: () => 'Page Two',
-  },
+  { path: '/one', action: () => 'Page One' },
+  { path: '/two', action: () => 'Page Two' },
 ])
 
 router.resolve({ pathname: '/one' })
@@ -297,22 +291,16 @@ and you'll get almost the same API, but without the `Promise` support.
 
 ```diff
 -import UniversalRouter from 'universal-router'
-+import UniversalRouter from 'universal-router/sync'
++import UniversalRouterSync from 'universal-router/sync'
 ```
 
 Now the `resolve` method will synchronously return whatever
 the matching route action returned (or throw an error).
 
 ```js
-const router = new UniversalRouter([
-  {
-    path: '/one',
-    action: () => 'Page One',
-  },
-  {
-    path: '/two',
-    action: () => 'Page Two',
-  },
+const router = new UniversalRouterSync([
+  { path: '/one', action: () => 'Page One' },
+  { path: '/two', action: () => 'Page Two' },
 ])
 
 const result = router.resolve({ pathname: '/one' })

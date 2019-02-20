@@ -62,14 +62,14 @@ const files = [
     input: 'dist/src/UniversalRouterSync.js',
     output: 'dist/universal-router-sync.js',
     format: 'umd',
-    name: 'UniversalRouter',
+    name: 'UniversalRouterSync',
     external: [],
   },
   {
     input: 'dist/src/UniversalRouterSync.js',
     output: 'dist/universal-router-sync.min.js',
     format: 'umd',
-    name: 'UniversalRouter',
+    name: 'UniversalRouterSync',
     external: [],
   },
 
