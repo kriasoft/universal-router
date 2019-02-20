@@ -45,21 +45,17 @@ If all the URLs in your app are relative to some other &quot;base&quot; URL, use
 <li><code>resolveRoute</code> - function for any custom route handling logic.<br>
 For example you can define this option to work with routes in declarative manner.<br>
 By default the router calls the <code>action</code> method of matched route.</li>
-<li><code>errorHandler</code> - function for global error handling. Called with a single
+<li><code>errorHandler</code> - function for global error handling. Called with an
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a>
-argument every time the route is not found or threw an error which always contain
-<a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">http status <code>code</code></a> and
-<a href="#context">current <code>context</code></a> for your convenience.</li>
+and <a href="#context">Context</a> arguments every time the route is not found or threw an error.</li>
 </ul>
 <pre><code class="language-js">import UniversalRouter from 'universal-router'
 
 const routes = {
   path: '/page',            // string or regexp or array of them, optional
-
   name: 'page',             // unique string, optional
   parent: null,             // route object or null, automatically filled by the router
   children: [],             // array of route objects or null, optional
-
   action(context, params) { // function, optional
 
     // action method should return anything except `null` or `undefined` to be resolved by router
@@ -78,10 +74,10 @@ const options = {
     }
     return undefined
   },
-  errorHandler(error) {
+  errorHandler(error, context) {
     console.error(error)
-    console.dir(error.context)
-    return error.code === 404
+    console.info(context)
+    return error.status === 404
       ? '&lt;h1&gt;Page Not Found&lt;/h1&gt;'
       : '&lt;h1&gt;Oops! Something went wrong&lt;/h1&gt;'
   }
@@ -90,17 +86,12 @@ const options = {
 const router = new UniversalRouter(routes, options)
 </code></pre>
 <h2 id="routerresolve-pathname-context---promiseany"><code>router.resolve({ pathname, ...context })</code> ⇒ <code>Promise&lt;any&gt;</code></h2>
-<p>Traverses the list of routes in the order they are defined until it finds the first route that
-matches provided URL path string and whose <code>action</code> function returns anything other than <code>null</code> or <code>undefined</code>.</p>
+<p>Traverses the list of routes in the order they are defined until it finds the first route
+that matches provided URL path string and whose <code>action</code> function returns anything
+other than <code>null</code> or <code>undefined</code>.</p>
 <pre><code class="language-js">const router = new UniversalRouter([
-  {
-    path: '/one',
-    action: () =&gt; 'Page One',
-  },
-  {
-    path: '/two',
-    action: () =&gt; `Page Two`,
-  },
+  { path: '/one', action: () =&gt; 'Page One' },
+  { path: '/two', action: () =&gt; 'Page Two' },
 ])
 
 router.resolve({ pathname: '/one' })
@@ -149,7 +140,8 @@ router.resolve({ pathname: '/hello/john' })
   .then(result =&gt; console.log(result))
   // =&gt; Welcome, john!
 </code></pre>
-<p>Alternatively, captured parameters can be accessed via the second argument to an action method like so:</p>
+<p>Alternatively, captured parameters can be accessed via the second argument
+to an action method like so:</p>
 <pre><code class="language-js">const router = new UniversalRouter({
   path: '/hello/:username',
   action: (ctx, { username }) =&gt; `Welcome, ${username}!`,
@@ -161,8 +153,9 @@ router.resolve({ pathname: '/hello/john' })
 </code></pre>
 <p>Router preserves the <code>context.params</code> values from the parent router.
 If the parent and the child have conflicting param names, the child's value take precedence.</p>
-<p>This functionality is powered by <a href="https://github.com/pillarjs/path-to-regexp">path-to-regexp</a> npm module
-and works the same way as the routing solutions in many popular JavaScript frameworks such as Express and Koa.
+<p>This functionality is powered by <a href="https://github.com/pillarjs/path-to-regexp">path-to-regexp</a>
+npm module and works the same way as the routing solutions in many popular JavaScript frameworks
+such as <a href="https://expressjs.com/">Express</a> and <a href="https://koajs.com/">Koa</a>.
 Also check out online <a href="http://forbeslindesay.github.io/express-route-tester/">router tester</a>.</p>
 <h2 id="context">Context</h2>
 <p>In addition to a URL path string, any arbitrary data can be passed to the <code>router.resolve()</code> method,
@@ -275,6 +268,28 @@ then the router will try to match the child routes. This can be useful for permi
   children: [/* admin routes here */],
 }
 </code></pre>
+<h2 id="synchronous-mode">Synchronous mode</h2>
+<p>For most application a Promise-based asynchronous API is the best choice.
+But if you absolutely have to resolve your routes synchronously,
+this option is available as an add-on.</p>
+<p>Simply import <code>universal-router/sync</code> instead of <code>universal-router</code>
+and you'll get almost the same API, but without the <code>Promise</code> support.</p>
+<pre><code class="language-diff">-import UniversalRouter from 'universal-router'
++import UniversalRouterSync from 'universal-router/sync'
+</code></pre>
+<p>Now the <code>resolve</code> method will synchronously return whatever
+the matching route action returned (or throw an error).</p>
+<pre><code class="language-js">const router = new UniversalRouterSync([
+  { path: '/one', action: () =&gt; 'Page One' },
+  { path: '/two', action: () =&gt; 'Page Two' },
+])
+
+const result = router.resolve({ pathname: '/one' })
+
+console.log(result) // =&gt; Page One
+</code></pre>
+<p>This implies that your <code>action</code> functions have to be synchronous too.</p>
+<p>The <code>context.next</code> function will be synchronous too and will return whatever the matching action returned.</p>
 <h2 id="url-generation">URL Generation</h2>
 <p>In most web applications it's much simpler to just use a string for hyperlinks.</p>
 <pre><code class="language-js">`&lt;a href=&quot;/page&quot;&gt;Page&lt;/a&gt;`
