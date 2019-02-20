@@ -9,24 +9,8 @@
 
 import pathToRegexp from 'path-to-regexp'
 import matchRoute from './matchRoute'
-
-function resolveRoute(context, params) {
-  if (typeof context.route.action === 'function') {
-    return context.route.action(context, params)
-  }
-  return undefined
-}
-
-function isChildRoute(parentRoute, childRoute) {
-  let route = childRoute
-  while (route) {
-    route = route.parent
-    if (route === parentRoute) {
-      return true
-    }
-  }
-  return false
-}
+import resolveRoute from './resolveRoute'
+import isChildRoute from './isChildRoute'
 
 class UniversalRouter {
   constructor(routes, options = {}) {
@@ -103,7 +87,5 @@ class UniversalRouter {
 }
 
 UniversalRouter.pathToRegexp = pathToRegexp
-UniversalRouter.matchRoute = matchRoute
-UniversalRouter.isChildRoute = isChildRoute
 
 export default UniversalRouter

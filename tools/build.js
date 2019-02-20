@@ -50,33 +50,27 @@ const files = [
     input: 'dist/src/UniversalRouterSync.js',
     output: 'dist/sync/index.js',
     format: 'cjs',
-    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
-    paths: { [path.resolve('dist/src/UniversalRouter.js')]: '..' },
+    external: ['path-to-regexp'],
   },
   {
     input: 'dist/src/UniversalRouterSync.js',
     output: 'dist/sync/module.js',
     format: 'es',
-    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
-    paths: { [path.resolve('dist/src/UniversalRouter.js')]: '..' },
+    external: ['path-to-regexp'],
   },
   {
     input: 'dist/src/UniversalRouterSync.js',
     output: 'dist/universal-router-sync.js',
     format: 'umd',
-    name: 'sync',
-    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
-    paths: { [path.resolve('dist/src/UniversalRouter.js')]: './universal-router.js' },
-    globals: { [path.resolve('dist/src/UniversalRouter.js')]: 'UniversalRouter' },
+    name: 'UniversalRouter',
+    external: [],
   },
   {
     input: 'dist/src/UniversalRouterSync.js',
     output: 'dist/universal-router-sync.min.js',
     format: 'umd',
-    name: 'sync',
-    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
-    paths: { [path.resolve('dist/src/UniversalRouter.js')]: './universal-router.min.js' },
-    globals: { [path.resolve('dist/src/UniversalRouter.js')]: 'UniversalRouter' },
+    name: 'UniversalRouter',
+    external: [],
   },
 
   // generateUrls add-on
@@ -177,8 +171,8 @@ async function build() {
     ...pkg,
     name: 'sync',
     description: 'Universal Router Sync Add-on',
-    esnext: '../src/sync.js',
-    types: '../src/sync.d.ts',
+    esnext: '../src/UniversalRouterSync.js',
+    types: '../src/UniversalRouterSync.d.ts',
   }
   delete syncPkg.dependencies
   delete syncPkg.devDependencies

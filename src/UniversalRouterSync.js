@@ -7,11 +7,25 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import UniversalRouter from './UniversalRouter'
+import pathToRegexp from 'path-to-regexp'
+import matchRoute from './matchRoute'
+import resolveRoute from './resolveRoute'
+import isChildRoute from './isChildRoute'
 
-const { matchRoute, isChildRoute } = UniversalRouter
+class UniversalRouterSync {
+  constructor(routes, options = {}) {
+    if (!routes || typeof routes !== 'object') {
+      throw new TypeError('Invalid routes')
+    }
 
-export default class UniversalRouterSync extends UniversalRouter {
+    this.baseUrl = options.baseUrl || ''
+    this.errorHandler = options.errorHandler
+    this.resolveRoute = options.resolveRoute || resolveRoute
+    this.context = { router: this, ...options.context }
+    this.root = Array.isArray(routes) ? { path: '', children: routes, parent: null } : routes
+    this.root.parent = null
+  }
+
   resolve(pathnameOrContext) {
     const context = {
       ...this.context,
@@ -70,3 +84,7 @@ export default class UniversalRouterSync extends UniversalRouter {
     }
   }
 }
+
+UniversalRouterSync.pathToRegexp = pathToRegexp
+
+export default UniversalRouterSync

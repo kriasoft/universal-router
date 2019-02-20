@@ -9,7 +9,7 @@
 
 import UniversalRouter from '../src/UniversalRouterSync'
 
-const result1 = new UniversalRouter({
+const router1 = new UniversalRouter({
   path: '/users',
   children: [
     {
@@ -24,10 +24,11 @@ const result1 = new UniversalRouter({
       },
     },
   ],
-}).resolve({ pathname: '/users/john', search: '?busy=1' })
+})
+const result1 = router1.resolve({ pathname: '/users/john', search: '?busy=1' })
 console.log(result1)
 
-const result2 = new UniversalRouter(
+const router2 = new UniversalRouter(
   {
     name: 'root',
     action: (context) => context.path,
@@ -49,10 +50,11 @@ const result2 = new UniversalRouter(
       return error.status === 404 ? 'Not Found' : 'Something went wrong'
     },
   },
-).resolve('/')
+)
+const result2 = router2.resolve('/')
 console.log(result2)
 
-const result3 = new UniversalRouter([
+const router3 = new UniversalRouter([
   {
     action({ next }) {
       console.log('middleware: start')
@@ -70,5 +72,6 @@ const result3 = new UniversalRouter([
       },
     ],
   },
-]).resolve('/hello')
+])
+const result3 = router3.resolve('/hello')
 console.log(result3.foo)
