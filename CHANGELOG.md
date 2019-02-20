@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [8.1.0] - 2019-02-20
+
+- Add [synchronous mode](https://github.com/kriasoft/universal-router/blob/v8.1.0/docs/api.md#synchronous-mode)
+  as an add-on ([#164](https://github.com/kriasoft/universal-router/pull/164))
+
 ## [8.0.0] - 2019-01-15
 
 - Update [path-to-regexp](https://github.com/pillarjs/path-to-regexp) from v2.4.0 to v3.0.0, see
@@ -250,7 +255,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Small bug fixes and improvements
 
-[Unreleased]: https://github.com/kriasoft/universal-router/compare/v8.0.0...HEAD
+[Unreleased]: https://github.com/kriasoft/universal-router/compare/v8.1.0...HEAD
+[8.1.0]: https://github.com/kriasoft/universal-router/compare/v8.0.0...v8.1.0
 [8.0.0]: https://github.com/kriasoft/universal-router/compare/v7.0.0...v8.0.0
 [7.0.0]: https://github.com/kriasoft/universal-router/compare/v6.0.0...v7.0.0
 [6.0.0]: https://github.com/kriasoft/universal-router/compare/v5.1.0...v6.0.0
