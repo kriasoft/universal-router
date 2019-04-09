@@ -7,10 +7,15 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import UniversalRouter from '../src/UniversalRouter';
-import generateUrls from '../src/generateUrls';
+const UniversalRouter = require('../dist/universal-router');
+const generateUrls = require('../dist/generate-urls');
 
 describe('generateUrls(router, options)(routeName, params)', () => {
+  it('should be a function', () => {
+    expect(generateUrls).toBeDefined();
+    expect(generateUrls).toBeInstanceOf(Function);
+  });
+
   it('should throw an error in case of invalid router', async () => {
     expect(() => generateUrls()).toThrow(/An instance of UniversalRouter is expected/);
     expect(() => generateUrls([])).toThrow(/An instance of UniversalRouter is expected/);

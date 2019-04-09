@@ -7,7 +7,16 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-function isChildRoute(parentRoute, childRoute) {
+type WithParent = {
+  parent?: WithParent | null | undefined;
+};
+
+export function isChildRoute(
+  parentRoute: WithParent | null,
+  childRoute: WithParent | null | undefined,
+): boolean {
+  if (parentRoute === null) return false;
+
   let route = childRoute;
   while (route) {
     route = route.parent;
@@ -15,7 +24,6 @@ function isChildRoute(parentRoute, childRoute) {
       return true;
     }
   }
+
   return false;
 }
-
-export default isChildRoute;

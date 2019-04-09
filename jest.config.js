@@ -5,8 +5,9 @@ const config = {
   preset: 'ts-jest',
   rootDir: '.',
   testMatch: [
-    '<rootDir>/src/**/__tests__/**/*.ts?(x)',
-    '<rootDir>/src/**/?(*.)+(spec|test).ts?(x)',
+    '<rootDir>/__tests__/**/*.[tj]s?(x)',
+    '<rootDir>/src/**/__tests__/**/*.[tj]s?(x)',
+    '<rootDir>/src/**/?(*.)+(spec|test).[tj]s?(x)',
   ],
   modulePathIgnorePatterns: ['dist'],
   testPathIgnorePatterns: ['dist'],
@@ -20,6 +21,11 @@ const config = {
   },
   setupFiles: ['<rootDir>/config/setup-tests.js'],
   watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
+  globals: {
+    'ts-jest': {
+      tsConfig: '<rootDir>/src/__tests__/tsconfig.json',
+    },
+  },
 };
 
 module.exports = config;

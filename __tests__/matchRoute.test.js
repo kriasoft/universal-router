@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import matchRoute from '../src/matchRoute';
+const { matchRoute } = require('../dist');
 
 function toArray(gen) {
   const arr = [];
@@ -20,6 +20,11 @@ function toArray(gen) {
 }
 
 describe('matchRoute(route, baseUrl, pathname)', () => {
+  it('should be a function', () => {
+    expect(matchRoute).toBeDefined();
+    expect(matchRoute).toBeInstanceOf(Function);
+  });
+
   it('should match 0 routes (1)', () => {
     const route = {
       path: '/',

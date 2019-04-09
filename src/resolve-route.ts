@@ -7,11 +7,15 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-function resolveRoute(context, params) {
+import { Params, ResultReturn, RouteContext } from './types';
+
+export function resolveRoute<Context extends object, Result>(
+  context: RouteContext<Context, Result>,
+  params: Params,
+): ResultReturn<Result> {
   if (typeof context.route.action === 'function') {
     return context.route.action(context, params);
   }
+
   return undefined;
 }
-
-export default resolveRoute;

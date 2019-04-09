@@ -7,19 +7,19 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import UniversalRouterSync from '../src/UniversalRouterSync';
+const UniversalRouter = require('../dist/universal-router');
 
-describe('new UniversalRouterSync(routes, options)', () => {
-  it('should throw an error in case of invalid routes', () => {
-    expect(() => new UniversalRouterSync()).toThrow(/Invalid routes/);
-    expect(() => new UniversalRouterSync(12)).toThrow(/Invalid routes/);
-    expect(() => new UniversalRouterSync(null)).toThrow(/Invalid routes/);
+describe('new UniversalRouter(routes, options)', () => {
+  it('should throw an error in case of invalid routes', async () => {
+    expect(() => new UniversalRouter()).toThrow(/Invalid routes/);
+    expect(() => new UniversalRouter(12)).toThrow(/Invalid routes/);
+    expect(() => new UniversalRouter(null)).toThrow(/Invalid routes/);
   });
 
-  it('should support custom resolve option for declarative routes', () => {
+  it('should support custom resolve option for declarative routes', async () => {
     const resolveRoute = jest.fn((context) => context.route.component || undefined);
     const action = jest.fn();
-    const router = new UniversalRouterSync(
+    const router = new UniversalRouter(
       {
         path: '/a',
         action,
@@ -31,16 +31,16 @@ describe('new UniversalRouterSync(routes, options)', () => {
       },
       { resolveRoute }
     );
-    const result = router.resolve('/a/c');
+    const result = await router.resolve('/a/c');
     expect(resolveRoute.mock.calls.length).toBe(3);
     expect(action.mock.calls.length).toBe(0);
     expect(result).toBe('c');
   });
 
-  it('should support custom error handler option', () => {
+  it('should support custom error handler option', async () => {
     const errorHandler = jest.fn(() => 'result');
-    const router = new UniversalRouterSync([], { errorHandler });
-    const result = router.resolve('/');
+    const router = new UniversalRouter([], { errorHandler });
+    const result = await router.resolve('/');
     expect(result).toBe('result');
     expect(errorHandler.mock.calls.length).toBe(1);
     const error = errorHandler.mock.calls[0][0];
@@ -52,7 +52,7 @@ describe('new UniversalRouterSync(routes, options)', () => {
     expect(context.router).toBe(router);
   });
 
-  it('should handle route errors', () => {
+  it('should handle route errors', async () => {
     const errorHandler = jest.fn(() => 'result');
     const route = {
       path: '/',
@@ -60,8 +60,8 @@ describe('new UniversalRouterSync(routes, options)', () => {
         throw new Error('custom');
       },
     };
-    const router = new UniversalRouterSync(route, { errorHandler });
-    const result = router.resolve('/');
+    const router = new UniversalRouter(route, { errorHandler });
+    const result = await router.resolve('/');
     expect(result).toBe('result');
     expect(errorHandler.mock.calls.length).toBe(1);
     const error = errorHandler.mock.calls[0][0];
@@ -76,11 +76,11 @@ describe('new UniversalRouterSync(routes, options)', () => {
 });
 
 describe('router.resolve({ pathname, ...context })', () => {
-  it('should throw an error if no route found', () => {
-    const router = new UniversalRouterSync([]);
+  it('should throw an error if no route found', async () => {
+    const router = new UniversalRouter([]);
     let err;
     try {
-      router.resolve('/');
+      await router.resolve('/');
     } catch (e) {
       err = e;
     }
@@ -89,27 +89,27 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(err.status).toBe(404);
   });
 
-  it("should execute the matching route's action method and return its result", () => {
+  it("should execute the matching route's action method and return its result", async () => {
     const action = jest.fn(() => 'b');
-    const router = new UniversalRouterSync({ path: '/a', action });
-    const result = router.resolve('/a');
+    const router = new UniversalRouter({ path: '/a', action });
+    const result = await router.resolve('/a');
     expect(action.mock.calls.length).toBe(1);
     expect(action.mock.calls[0][0]).toHaveProperty('path', '/a');
     expect(result).toBe('b');
   });
 
-  it('should find the first route whose action method !== undefined or null', () => {
+  it('should find the first route whose action method !== undefined or null', async () => {
     const action1 = jest.fn(() => undefined);
     const action2 = jest.fn(() => null);
     const action3 = jest.fn(() => 'c');
     const action4 = jest.fn(() => 'd');
-    const router = new UniversalRouterSync([
+    const router = new UniversalRouter([
       { path: '/a', action: action1 },
       { path: '/a', action: action2 },
       { path: '/a', action: action3 },
       { path: '/a', action: action4 },
     ]);
-    const result = router.resolve('/a');
+    const result = await router.resolve('/a');
     expect(result).toBe('c');
     expect(action1.mock.calls.length).toBe(1);
     expect(action2.mock.calls.length).toBe(1);
@@ -117,22 +117,22 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(action4.mock.calls.length).toBe(0);
   });
 
-  it('should be able to pass context variables to action methods', () => {
+  it('should be able to pass context variables to action methods', async () => {
     const action = jest.fn(() => true);
-    const router = new UniversalRouterSync([{ path: '/a', action }]);
-    const result = router.resolve({ pathname: '/a', test: 'b' });
+    const router = new UniversalRouter([{ path: '/a', action }]);
+    const result = await router.resolve({ pathname: '/a', test: 'b' });
     expect(action.mock.calls.length).toBe(1);
     expect(action.mock.calls[0][0]).toHaveProperty('path', '/a');
     expect(action.mock.calls[0][0]).toHaveProperty('test', 'b');
     expect(result).toBe(true);
   });
 
-  it("should not call action methods of routes that don't match the URL path", () => {
+  it("should not call action methods of routes that don't match the URL path", async () => {
     const action = jest.fn();
-    const router = new UniversalRouterSync([{ path: '/a', action }]);
+    const router = new UniversalRouter([{ path: '/a', action }]);
     let err;
     try {
-      router.resolve('/b');
+      await router.resolve('/b');
     } catch (e) {
       err = e;
     }
@@ -142,25 +142,25 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(action.mock.calls.length).toBe(0);
   });
 
-  it('should support asynchronous route actions', () => {
-    const router = new UniversalRouterSync([{ path: '/a', action: () => 'b' }]);
-    const result = router.resolve('/a');
+  it('should support asynchronous route actions', async () => {
+    const router = new UniversalRouter([{ path: '/a', action: async () => 'b' }]);
+    const result = await router.resolve('/a');
     expect(result).toBe('b');
   });
 
-  it('URL parameters are captured and added to context.params', () => {
+  it('URL parameters are captured and added to context.params', async () => {
     const action = jest.fn(() => true);
-    const router = new UniversalRouterSync([{ path: '/:one/:two', action }]);
-    const result = router.resolve({ pathname: '/a/b' });
+    const router = new UniversalRouter([{ path: '/:one/:two', action }]);
+    const result = await router.resolve({ pathname: '/a/b' });
     expect(action.mock.calls.length).toBe(1);
     expect(action.mock.calls[0][0]).toHaveProperty('params', { one: 'a', two: 'b' });
     expect(result).toBe(true);
   });
 
-  it('should provide all URL parameters to each route', () => {
+  it('should provide all URL parameters to each route', async () => {
     const action1 = jest.fn();
     const action2 = jest.fn(() => true);
-    const router = new UniversalRouterSync([
+    const router = new UniversalRouter([
       {
         path: '/:one',
         action: action1,
@@ -172,7 +172,7 @@ describe('router.resolve({ pathname, ...context })', () => {
         ],
       },
     ]);
-    const result = router.resolve({ pathname: '/a/b' });
+    const result = await router.resolve({ pathname: '/a/b' });
     expect(action1.mock.calls.length).toBe(1);
     expect(action1.mock.calls[0][0]).toHaveProperty('params', { one: 'a' });
     expect(action2.mock.calls.length).toBe(1);
@@ -180,10 +180,10 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(result).toBe(true);
   });
 
-  it('should override URL parameters with same name in child route', () => {
+  it('should override URL parameters with same name in child route', async () => {
     const action1 = jest.fn();
     const action2 = jest.fn(() => true);
-    const router = new UniversalRouterSync([
+    const router = new UniversalRouter([
       {
         path: '/:one',
         action: action1,
@@ -199,7 +199,7 @@ describe('router.resolve({ pathname, ...context })', () => {
         ],
       },
     ]);
-    const result = router.resolve({ pathname: '/a/b' });
+    const result = await router.resolve({ pathname: '/a/b' });
     expect(action1.mock.calls.length).toBe(2);
     expect(action1.mock.calls[0][0]).toHaveProperty('params', { one: 'a' });
     expect(action1.mock.calls[1][0]).toHaveProperty('params', { one: 'b' });
@@ -208,11 +208,11 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(result).toBe(true);
   });
 
-  it('should not collect parameters from previous routes', () => {
+  it('should not collect parameters from previous routes', async () => {
     const action1 = jest.fn(() => undefined);
     const action2 = jest.fn(() => undefined);
     const action3 = jest.fn(() => true);
-    const router = new UniversalRouterSync([
+    const router = new UniversalRouter([
       {
         path: '/:one',
         action: action1,
@@ -238,7 +238,7 @@ describe('router.resolve({ pathname, ...context })', () => {
         ],
       },
     ]);
-    const result = router.resolve({ pathname: '/a/b' });
+    const result = await router.resolve({ pathname: '/a/b' });
     expect(action1.mock.calls.length).toBe(2);
     expect(action1.mock.calls[0][0]).toHaveProperty('params', { one: 'a' });
     expect(action1.mock.calls[1][0]).toHaveProperty('params', { one: 'a', two: 'b' });
@@ -250,9 +250,9 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(result).toBe(true);
   });
 
-  it('should support next() across multiple routes', () => {
+  it('should support next() across multiple routes', async () => {
     const log = [];
-    const router = new UniversalRouterSync([
+    const router = new UniversalRouter([
       {
         path: '/test',
         children: [
@@ -266,16 +266,18 @@ describe('router.resolve({ pathname, ...context })', () => {
                 path: '',
                 action({ next }) {
                   log.push(3);
-                  next();
-                  log.push(6);
+                  return next().then(() => {
+                    log.push(6);
+                  });
                 },
                 children: [
                   {
                     path: '',
                     action({ next }) {
                       log.push(4);
-                      next();
-                      log.push(5);
+                      return next().then(() => {
+                        log.push(5);
+                      });
                     },
                   },
                 ],
@@ -303,9 +305,9 @@ describe('router.resolve({ pathname, ...context })', () => {
             ],
           },
         ],
-        action({ next }) {
+        async action({ next }) {
           log.push(1);
-          const result = next();
+          const result = await next();
           log.push(10);
           return result;
         },
@@ -331,28 +333,30 @@ describe('router.resolve({ pathname, ...context })', () => {
       },
     ]);
 
-    const result = router.resolve('/test');
+    const result = await router.resolve('/test');
     expect(log).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
     expect(result).toBe('done');
   });
 
-  it('should support next(true) across multiple routes', () => {
+  it('should support next(true) across multiple routes', async () => {
     const log = [];
-    const router = new UniversalRouterSync({
+    const router = new UniversalRouter({
       action({ next }) {
         log.push(1);
-        const result = next();
-        log.push(9);
-        return result;
+        return next().then((result) => {
+          log.push(9);
+          return result;
+        });
       },
       children: [
         {
           path: '/a/b/c',
           action({ next }) {
             log.push(2);
-            const result = next(true);
-            log.push(8);
-            return result;
+            return next(true).then((result) => {
+              log.push(8);
+              return result;
+            });
           },
         },
         {
@@ -365,9 +369,10 @@ describe('router.resolve({ pathname, ...context })', () => {
               path: '/b',
               action({ next }) {
                 log.push(4);
-                const result = next();
-                log.push(6);
-                return result;
+                return next().then((result) => {
+                  log.push(6);
+                  return result;
+                });
               },
               children: [
                 {
@@ -390,15 +395,15 @@ describe('router.resolve({ pathname, ...context })', () => {
       ],
     });
 
-    const result = router.resolve('/a/b/c');
+    const result = await router.resolve('/a/b/c');
     expect(log).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     expect(result).toBe('done');
   });
 
-  it('should support parametrized routes 1', () => {
+  it('should support parametrized routes 1', async () => {
     const action = jest.fn(() => true);
-    const router = new UniversalRouterSync([{ path: '/path/:a/other/:b', action }]);
-    const result = router.resolve('/path/1/other/2');
+    const router = new UniversalRouter([{ path: '/path/:a/other/:b', action }]);
+    const result = await router.resolve('/path/1/other/2');
     expect(action.mock.calls.length).toBe(1);
     expect(action.mock.calls[0][0]).toHaveProperty('params.a', '1');
     expect(action.mock.calls[0][0]).toHaveProperty('params.b', '2');
@@ -407,10 +412,10 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(result).toBe(true);
   });
 
-  it('should support nested routes (1)', () => {
+  it('should support nested routes (1)', async () => {
     const action1 = jest.fn();
     const action2 = jest.fn(() => true);
-    const router = new UniversalRouterSync([
+    const router = new UniversalRouter([
       {
         path: '',
         action: action1,
@@ -423,7 +428,7 @@ describe('router.resolve({ pathname, ...context })', () => {
       },
     ]);
 
-    const result = router.resolve('/a');
+    const result = await router.resolve('/a');
     expect(action1.mock.calls.length).toBe(1);
     expect(action1.mock.calls[0][0]).toHaveProperty('path', '');
     expect(action2.mock.calls.length).toBe(1);
@@ -431,10 +436,10 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(result).toBe(true);
   });
 
-  it('should support nested routes (2)', () => {
+  it('should support nested routes (2)', async () => {
     const action1 = jest.fn();
     const action2 = jest.fn(() => true);
-    const router = new UniversalRouterSync([
+    const router = new UniversalRouter([
       {
         path: '/a',
         action: action1,
@@ -447,7 +452,7 @@ describe('router.resolve({ pathname, ...context })', () => {
       },
     ]);
 
-    const result = router.resolve('/a/b');
+    const result = await router.resolve('/a/b');
     expect(action1.mock.calls.length).toBe(1);
     expect(action1.mock.calls[0][0]).toHaveProperty('path', '/a');
     expect(action2.mock.calls.length).toBe(1);
@@ -455,11 +460,11 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(result).toBe(true);
   });
 
-  it('should support nested routes (3)', () => {
+  it('should support nested routes (3)', async () => {
     const action1 = jest.fn(() => undefined);
     const action2 = jest.fn(() => null);
     const action3 = jest.fn(() => true);
-    const router = new UniversalRouterSync([
+    const router = new UniversalRouter([
       {
         path: '/a',
         action: action1,
@@ -476,7 +481,7 @@ describe('router.resolve({ pathname, ...context })', () => {
       },
     ]);
 
-    const result = router.resolve('/a/b');
+    const result = await router.resolve('/a/b');
     expect(action1.mock.calls.length).toBe(1);
     expect(action1.mock.calls[0][0]).toHaveProperty('baseUrl', '');
     expect(action1.mock.calls[0][0]).toHaveProperty('path', '/a');
@@ -489,9 +494,9 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(result).toBe(true);
   });
 
-  it('should re-throw an error', () => {
+  it('should re-throw an error', async () => {
     const error = new Error('test error');
-    const router = new UniversalRouterSync([
+    const router = new UniversalRouter([
       {
         path: '/a',
         action() {
@@ -501,14 +506,14 @@ describe('router.resolve({ pathname, ...context })', () => {
     ]);
     let err;
     try {
-      router.resolve('/a');
+      await router.resolve('/a');
     } catch (e) {
       err = e;
     }
     expect(err).toBe(error);
   });
 
-  it('should respect baseUrl', () => {
+  it('should respect baseUrl', async () => {
     const action = jest.fn(() => 17);
     const routes = {
       path: '/a',
@@ -519,8 +524,8 @@ describe('router.resolve({ pathname, ...context })', () => {
         },
       ],
     };
-    const router = new UniversalRouterSync(routes, { baseUrl: '/base' });
-    const result = router.resolve('/base/a/b/c');
+    const router = new UniversalRouter(routes, { baseUrl: '/base' });
+    const result = await router.resolve('/base/a/b/c');
     expect(action.mock.calls.length).toBe(1);
     expect(action.mock.calls[0][0]).toHaveProperty('pathname', '/base/a/b/c');
     expect(action.mock.calls[0][0]).toHaveProperty('path', '/c');
@@ -531,7 +536,7 @@ describe('router.resolve({ pathname, ...context })', () => {
 
     let err;
     try {
-      router.resolve('/a/b/c');
+      await router.resolve('/a/b/c');
     } catch (e) {
       err = e;
     }
@@ -541,8 +546,8 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(err.status).toBe(404);
   });
 
-  it('should match routes with trailing slashes', () => {
-    const router = new UniversalRouterSync([
+  it('should match routes with trailing slashes', async () => {
+    const router = new UniversalRouter([
       { path: '/', action: () => 'a' },
       { path: '/page/', action: () => 'b' },
       {
@@ -550,16 +555,16 @@ describe('router.resolve({ pathname, ...context })', () => {
         children: [{ path: '/', action: () => 'c' }, { path: '/page/', action: () => 'd' }],
       },
     ]);
-    expect(router.resolve('/')).toBe('a');
-    expect(router.resolve('/page/')).toBe('b');
-    expect(router.resolve('/child/')).toBe('c');
-    expect(router.resolve('/child/page/')).toBe('d');
+    expect(await router.resolve('/')).toBe('a');
+    expect(await router.resolve('/page/')).toBe('b');
+    expect(await router.resolve('/child/')).toBe('c');
+    expect(await router.resolve('/child/page/')).toBe('d');
   });
 
-  it('should skip nested routes when middleware route returns null', () => {
+  it('should skip nested routes when middleware route returns null', async () => {
     const middleware = jest.fn(() => null);
     const action = jest.fn(() => 'skipped');
-    const router = new UniversalRouterSync([
+    const router = new UniversalRouter([
       {
         path: '/match',
         action: middleware,
@@ -571,16 +576,16 @@ describe('router.resolve({ pathname, ...context })', () => {
       },
     ]);
 
-    const result = router.resolve('/match');
+    const result = await router.resolve('/match');
     expect(result).toBe(404);
     expect(action.mock.calls.length).toBe(0);
     expect(middleware.mock.calls.length).toBe(1);
   });
 
-  it('should match nested routes when middleware route returns undefined', () => {
+  it('should match nested routes when middleware route returns undefined', async () => {
     const middleware = jest.fn(() => undefined);
     const action = jest.fn(() => null);
-    const router = new UniversalRouterSync([
+    const router = new UniversalRouter([
       {
         path: '/match',
         action: middleware,
@@ -592,7 +597,7 @@ describe('router.resolve({ pathname, ...context })', () => {
       },
     ]);
 
-    const result = router.resolve('/match');
+    const result = await router.resolve('/match');
     expect(result).toBe(404);
     expect(action.mock.calls.length).toBe(1);
     expect(middleware.mock.calls.length).toBe(1);

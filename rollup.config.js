@@ -81,32 +81,66 @@ const CommonConfig = {
 /**
  * @type {Config}
  */
-const UMDconfig = {
+const UMDconfig = ({ input, out }) => ({
   ...CommonConfig,
-  input: resolve(PATHS.entry.esm5, 'index.js'),
+  input,
   output: {
-    file: getOutputFileName(resolve(PATHS.bundles, 'index.umd.js'), ifProduction()),
+    file: getOutputFileName(out, ifProduction()),
     format: 'umd',
     name: LIB_NAME,
     sourcemap: true,
   },
   plugins: removeEmpty(/** @type {Plugin[]} */ ([...plugins, ifProduction(uglify())])),
-};
+});
 
 /**
  * @type {Config}
  */
-const FESMconfig = {
+const FESMconfig = ({ input, out }) => ({
   ...CommonConfig,
-  input: resolve(PATHS.entry.esm2015, 'index.js'),
+  input,
   output: [
     {
-      file: getOutputFileName(resolve(PATHS.bundles, 'index.esm.js'), ifProduction()),
+      file: getOutputFileName(out, ifProduction()),
       format: 'es',
       sourcemap: true,
     },
   ],
   plugins: removeEmpty(/** @type {Plugin[]} */ ([...plugins, ifProduction(terser())])),
-};
+});
 
-export default [UMDconfig, FESMconfig];
+export default [
+  UMDconfig({
+    input: resolve(PATHS.entry.esm5, 'index.js'),
+    out: resolve(PATHS.bundles, 'index.js'),
+  }),
+  UMDconfig({
+    input: resolve(PATHS.entry.esm5, 'universal-router.js'),
+    out: resolve(PATHS.bundles, 'universal-router.js'),
+  }),
+  UMDconfig({
+    input: resolve(PATHS.entry.esm5, 'universal-router-sync.js'),
+    out: resolve(PATHS.bundles, 'universal-router-sync.js'),
+  }),
+  UMDconfig({
+    input: resolve(PATHS.entry.esm5, 'generate-urls.js'),
+    out: resolve(PATHS.bundles, 'generate-urls.js'),
+  }),
+
+  FESMconfig({
+    input: resolve(PATHS.entry.esm2015, 'index.js'),
+    out: resolve(PATHS.bundles, 'index.esm.js'),
+  }),
+  FESMconfig({
+    input: resolve(PATHS.entry.esm2015, 'universal-router.js'),
+    out: resolve(PATHS.bundles, 'universal-router.esm.js'),
+  }),
+  FESMconfig({
+    input: resolve(PATHS.entry.esm2015, 'universal-router-sync.js'),
+    out: resolve(PATHS.bundles, 'universal-router-sync.esm.js'),
+  }),
+  FESMconfig({
+    input: resolve(PATHS.entry.esm2015, 'generate-urls.js'),
+    out: resolve(PATHS.bundles, 'generate-urls.esm.js'),
+  }),
+];

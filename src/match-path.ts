@@ -8,11 +8,18 @@
  */
 
 import pathToRegexp from 'path-to-regexp';
+import { MatchedKeys, MatchedPath, Params, Route } from './types';
+
+type RegexpCache = {
+  keys: MatchedKeys;
+  pattern: RegExp;
+};
 
 const { hasOwnProperty } = Object.prototype;
-const cache = new Map();
 
-function decodeParam(val) {
+const cache = new Map<string, RegexpCache>();
+
+function decodeParam(val: string): string {
   try {
     return decodeURIComponent(val);
   } catch (err) {
@@ -20,13 +27,18 @@ function decodeParam(val) {
   }
 }
 
-function matchPath(route, pathname, parentKeys, parentParams) {
+export function matchPath<Context extends object, Result>(
+  route: Route<Context, Result>,
+  pathname: string,
+  parentKeys: MatchedKeys,
+  parentParams?: Params | null,
+): MatchedPath | null {
   const end = !route.children;
   const cacheKey = `${route.path || ''}|${end}`;
   let regexp = cache.get(cacheKey);
 
   if (!regexp) {
-    const keys = [];
+    const keys: MatchedKeys = [];
     regexp = {
       keys,
       pattern: pathToRegexp(route.path || '', keys, { end }),
@@ -39,8 +51,8 @@ function matchPath(route, pathname, parentKeys, parentParams) {
     return null;
   }
 
-  const path = m[0];
-  const params = { ...parentParams };
+  const path: string = m[0];
+  const params: Params = { ...parentParams };
 
   for (let i = 1; i < m.length; i++) {
     const key = regexp.keys[i - 1];
@@ -61,5 +73,3 @@ function matchPath(route, pathname, parentKeys, parentParams) {
     params,
   };
 }
-
-export default matchPath;

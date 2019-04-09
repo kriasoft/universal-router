@@ -8,16 +8,15 @@
   ],
   "rules": {
     // types related rules
+    "strict-type-predicates": false,
     "no-inferrable-types": true,
     "no-namespace": {
-      "options": [
-        "allow-declarations"
-      ]
+      "options": ["allow-declarations"]
     },
     "interface-name": {
       "options": "never-prefix"
     },
-    "no-unsafe-any": true,
+    // "no-unsafe-any": true,
     // core lint rules
     "ban": {
       "options": [
@@ -34,22 +33,17 @@
           "message": "use #array-constructor"
         },
         {
-          "name": [
-            "describe",
-            "only"
-          ],
+          "name": ["describe", "only"],
           "message": "don't focus spec blocks"
         },
         {
-          "name": [
-            "it",
-            "only"
-          ],
+          "name": ["it", "only"],
           "message": "don't focus tests"
         }
       ]
     },
-    "no-magic-numbers": true,
+    // "no-magic-numbers": true,
+    "prefer-for-of": false,
     "no-require-imports": true,
     "no-boolean-literal-compare": true,
     "no-invalid-this": {
@@ -61,18 +55,11 @@
     "newline-before-return": true,
     "match-default-export-name": true,
     "no-parameter-reassignment": true,
-    "file-name-casing": {
-      "options": [
-        "kebab-case"
-      ]
-    },
     "switch-default": true,
     // tslint:recommended overrides
-    "no-any": true,
+    // "no-any": true,
     "member-access": {
-      "options": [
-        "no-public"
-      ]
+      "options": ["no-public"]
     },
     "object-literal-sort-keys": false,
     "interface-over-type-literal": false,

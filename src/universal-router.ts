@@ -8,12 +8,41 @@
  */
 
 import pathToRegexp from 'path-to-regexp';
-import matchRoute from './matchRoute';
-import resolveRoute from './resolveRoute';
-import isChildRoute from './isChildRoute';
+import { isChildRoute } from './is-child-route';
+import { matchRoute } from './match-route';
+import { resolveRoute } from './resolve-route';
+import {
+  ErrorHandler,
+  MatchedRoute,
+  Options,
+  ResolveContext,
+  ResolveRoute,
+  ResultReturn,
+  Route,
+  RouteContext,
+  RouteNameMap,
+  RouteOrRoutes,
+} from './types';
 
-class UniversalRouter {
-  constructor(routes, options = {}) {
+type RouterContext<Context extends object, Result> = Context & {
+  router: UniversalRouter<Context, Result>;
+};
+
+export default class UniversalRouter<Context extends object, Result> {
+  static pathToRegexp = pathToRegexp;
+
+  routesByName?: RouteNameMap;
+
+  baseUrl: string;
+  errorHandler?: ErrorHandler<Context, Result>;
+  resolveRoute: ResolveRoute<Context, Result>;
+  context: RouterContext<Context, Result>;
+  root: Route<Context, Result>;
+
+  constructor(
+    routes: RouteOrRoutes<Context, Result>,
+    options: Options<Context, Result> = { context: {} as Context },
+  ) {
     if (!routes || typeof routes !== 'object') {
       throw new TypeError('Invalid routes');
     }
@@ -21,18 +50,18 @@ class UniversalRouter {
     this.baseUrl = options.baseUrl || '';
     this.errorHandler = options.errorHandler;
     this.resolveRoute = options.resolveRoute || resolveRoute;
-    this.context = { router: this, ...options.context };
+    this.context = { router: this, ...options.context } as RouterContext<Context, Result>;
     this.root = Array.isArray(routes) ? { path: '', children: routes, parent: null } : routes;
     this.root.parent = null;
   }
 
-  resolve(pathnameOrContext) {
+  resolve(pathnameOrContext: string | (ResolveContext & Context)): ResultReturn<Result> {
     const context = {
       ...this.context,
       ...(typeof pathnameOrContext === 'string'
         ? { pathname: pathnameOrContext }
         : pathnameOrContext),
-    };
+    } as RouteContext<Context, Result>;
     const match = matchRoute(
       this.root,
       this.baseUrl,
@@ -41,34 +70,43 @@ class UniversalRouter {
       null,
     );
     const resolve = this.resolveRoute;
-    let matches = null;
-    let nextMatches = null;
+    let matches: MatchedRoute<Context, Result> | null = null;
+    let nextMatches: MatchedRoute<Context, Result> | null = null;
     let currentContext = context;
 
-    function next(resume, parent = matches.value.route, prevResult) {
-      const routeToSkip = prevResult === null && matches.value.route;
+    function next(
+      resume?: boolean,
+      parent: Route<Context, Result> | null = matches && matches.value ? matches.value.route : null,
+      prevResult?: Result | null | undefined,
+    ): ResultReturn<Result> {
+      const lastRoute = matches && matches.value ? matches.value.route : null;
+      const routeToSkip = prevResult === null ? lastRoute : null;
       matches = nextMatches || match.next(routeToSkip);
       nextMatches = null;
 
       if (!resume) {
         if (matches.done || !isChildRoute(parent, matches.value.route)) {
           nextMatches = matches;
+
           return Promise.resolve(null);
         }
       }
 
       if (matches.done) {
         const error = new Error('Route not found');
-        error.status = 404;
+        (error as any).status = 404;
+
         return Promise.reject(error);
       }
 
-      currentContext = { ...context, ...matches.value };
+      const resolveContext = { ...context, ...matches.value };
+      currentContext = resolveContext;
 
-      return Promise.resolve(resolve(currentContext, matches.value.params)).then((result) => {
+      return Promise.resolve(resolve(resolveContext, matches.value.params)).then((result) => {
         if (result !== null && result !== undefined) {
           return result;
         }
+
         return next(resume, parent, result);
       });
     }
@@ -85,7 +123,3 @@ class UniversalRouter {
       });
   }
 }
-
-UniversalRouter.pathToRegexp = pathToRegexp;
-
-export default UniversalRouter;

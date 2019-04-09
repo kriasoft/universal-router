@@ -6,5 +6,8 @@
   // "typescript.implementationsCodeLens.enabled": true,
   // "typescript.referencesCodeLens.enabled": true,
   // "javascript.referencesCodeLens.enabled": true,
-  "editor.rulers": [100]
+  "editor.rulers": [
+    100
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

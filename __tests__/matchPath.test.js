@@ -7,9 +7,14 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import matchPath from '../src/matchPath';
+const { matchPath } = require('../dist');
 
 describe('matchPath(route, pathname)', () => {
+  it('should be a function', () => {
+    expect(matchPath).toBeDefined();
+    expect(matchPath).toBeInstanceOf(Function);
+  });
+
   it('should return null if path not fond (1)', () => {
     const result = matchPath({ path: '/' }, '/a');
     expect(result).toBe(null);

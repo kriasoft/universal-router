@@ -7,13 +7,18 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import UniversalRouter from './UniversalRouter';
+import { Params, Route, RouteNameMap, Routes } from './types';
+import UniversalRouter from './universal-router';
 
 const { pathToRegexp } = UniversalRouter;
 const cache = new Map();
 
-function cacheRoutes(routesByName, route, routes) {
-  if (routesByName.has(route.name)) {
+function cacheRoutes(
+  routesByName: RouteNameMap,
+  route: Route<any, any>,
+  routes?: Routes<any, any> | null | undefined,
+): void {
+  if (routesByName.has(route.name as string)) {
     throw new Error(`Route "${route.name}" already exists`);
   }
 
@@ -30,20 +35,24 @@ function cacheRoutes(routesByName, route, routes) {
   }
 }
 
-function generateUrls(router, options = {}) {
+export default function generateUrls(router: UniversalRouter<any, any>, options: any = {}) {
   if (!(router instanceof UniversalRouter)) {
-    throw new TypeError('An instance of UniversalRouter is expected');
+    const duck: any = router;
+    if (typeof duck !== 'object' || !duck || !duck.root) {
+      throw new TypeError('An instance of UniversalRouter is expected');
+    }
   }
 
   router.routesByName = router.routesByName || new Map();
 
-  return (routeName, params) => {
-    let route = router.routesByName.get(routeName);
+  return (routeName: string, params: Params) => {
+    const map = router.routesByName as RouteNameMap;
+    let route = map.get(routeName);
     if (!route) {
-      router.routesByName.clear(); // clear cache
-      cacheRoutes(router.routesByName, router.root, router.root.children);
+      map.clear(); // clear cache
+      cacheRoutes(map, router.root, router.root.children);
 
-      route = router.routesByName.get(routeName);
+      route = map.get(routeName);
       if (!route) {
         throw new Error(`Route "${routeName}" not found`);
       }
@@ -62,10 +71,11 @@ function generateUrls(router, options = {}) {
       }
       const tokens = pathToRegexp.parse(fullPath);
       const toPath = pathToRegexp.tokensToFunction(tokens);
-      const keys = Object.create(null);
+      const keys: any = Object.create(null);
       for (let i = 0; i < tokens.length; i++) {
-        if (typeof tokens[i] !== 'string') {
-          keys[tokens[i].name] = true;
+        const token = tokens[i];
+        if (typeof token !== 'string') {
+          keys[token.name] = true;
         }
       }
       regexp = { toPath, keys };
@@ -76,7 +86,7 @@ function generateUrls(router, options = {}) {
     let url = router.baseUrl + regexp.toPath(params, options) || '/';
 
     if (options.stringifyQueryParams && params) {
-      const queryParams = {};
+      const queryParams: any = {};
       const keys = Object.keys(params);
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
@@ -93,5 +103,3 @@ function generateUrls(router, options = {}) {
     return url;
   };
 }
-
-export default generateUrls;
