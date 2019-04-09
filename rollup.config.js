@@ -1,4 +1,5 @@
 import { resolve } from 'path';
+import autoExternal from 'rollup-plugin-auto-external';
 import sourceMaps from 'rollup-plugin-sourcemaps';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import json from 'rollup-plugin-json';
@@ -8,8 +9,7 @@ import { uglify } from 'rollup-plugin-uglify';
 import { terser } from 'rollup-plugin-terser';
 import { getIfUtils, removeEmpty } from 'webpack-config-utils';
 
-import pkg from './package.json';
-const { pascalCase, normalizePackageName, getOutputFileName } = require('./config/helpers');
+const { getOutputFileName } = require('./config/helpers');
 
 /**
  * @typedef {import('./config/types').RollupConfig} Config
@@ -21,7 +21,7 @@ const { pascalCase, normalizePackageName, getOutputFileName } = require('./confi
 const env = process.env.NODE_ENV || 'development';
 const { ifProduction } = getIfUtils(env);
 
-const LIB_NAME = pascalCase(normalizePackageName(pkg.name));
+const LIB_NAME = 'UniversalRouter';
 const ROOT = resolve(__dirname);
 const DIST = resolve(ROOT, 'dist');
 
@@ -34,13 +34,18 @@ const PATHS = {
     esm5: resolve(DIST, 'esm5'),
     esm2015: resolve(DIST, 'esm2015'),
   },
-  bundles: resolve(DIST, 'bundles'),
+  bundles: DIST,
 };
 
 /**
  * @type {string[]}
  */
-const external = Object.keys(pkg.peerDependencies) || [];
+// const external = Object.keys(pkg.peerDependencies) || [];
+
+const autoExternalPlugin = autoExternal({
+  dependencies: true,
+  peerDependencies: false,
+});
 
 /**
  *  @type {Plugin[]}
@@ -67,6 +72,10 @@ const plugins = /** @type {Plugin[]} */ ([
   }),
 ]);
 
+const globalNames = {
+  'path-to-regexp': 'pathToRegexp',
+};
+
 /**
  * @type {Config}
  */
@@ -75,72 +84,81 @@ const CommonConfig = {
   output: {},
   inlineDynamicImports: true,
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
-  external,
+  // external,
 };
 
 /**
- * @type {Config}
+ * @returns {Config}
  */
 const UMDconfig = ({ input, out }) => ({
   ...CommonConfig,
   input,
   output: {
-    file: getOutputFileName(out, ifProduction()),
+    file: getOutputFileName(out + '.umd.js', ifProduction()),
     format: 'umd',
     name: LIB_NAME,
+    globals: globalNames,
     sourcemap: true,
   },
+
   plugins: removeEmpty(/** @type {Plugin[]} */ ([...plugins, ifProduction(uglify())])),
 });
 
 /**
- * @type {Config}
+ * @returns {Config}
  */
 const FESMconfig = ({ input, out }) => ({
   ...CommonConfig,
   input,
   output: [
     {
-      file: getOutputFileName(out, ifProduction()),
+      file: getOutputFileName(out + '.esm.js', ifProduction()),
       format: 'es',
       sourcemap: true,
     },
+    {
+      file: getOutputFileName(out + '.js', ifProduction()),
+      format: 'cjs',
+      sourcemap: true,
+    },
   ],
-  plugins: removeEmpty(/** @type {Plugin[]} */ ([...plugins, ifProduction(terser())])),
+  plugins: removeEmpty(
+    /** @type {Plugin[]} */ ([autoExternalPlugin, ...plugins, ifProduction(terser())])
+  ),
 });
 
 export default [
   UMDconfig({
     input: resolve(PATHS.entry.esm5, 'index.js'),
-    out: resolve(PATHS.bundles, 'index.js'),
+    out: resolve(PATHS.bundles, 'index'),
   }),
   UMDconfig({
     input: resolve(PATHS.entry.esm5, 'universal-router.js'),
-    out: resolve(PATHS.bundles, 'universal-router.js'),
+    out: resolve(PATHS.bundles, 'universal-router'),
   }),
   UMDconfig({
     input: resolve(PATHS.entry.esm5, 'universal-router-sync.js'),
-    out: resolve(PATHS.bundles, 'universal-router-sync.js'),
+    out: resolve(PATHS.bundles, 'universal-router-sync'),
   }),
   UMDconfig({
-    input: resolve(PATHS.entry.esm5, 'generate-urls.js'),
-    out: resolve(PATHS.bundles, 'generate-urls.js'),
+    input: resolve(PATHS.entry.esm5, 'universal-router-generate-urls.js'),
+    out: resolve(PATHS.bundles, 'universal-router-generate-urls'),
   }),
 
   FESMconfig({
     input: resolve(PATHS.entry.esm2015, 'index.js'),
-    out: resolve(PATHS.bundles, 'index.esm.js'),
+    out: resolve(PATHS.bundles, 'index'),
   }),
   FESMconfig({
     input: resolve(PATHS.entry.esm2015, 'universal-router.js'),
-    out: resolve(PATHS.bundles, 'universal-router.esm.js'),
+    out: resolve(PATHS.bundles, 'universal-router'),
   }),
   FESMconfig({
     input: resolve(PATHS.entry.esm2015, 'universal-router-sync.js'),
-    out: resolve(PATHS.bundles, 'universal-router-sync.esm.js'),
+    out: resolve(PATHS.bundles, 'universal-router-sync'),
   }),
   FESMconfig({
-    input: resolve(PATHS.entry.esm2015, 'generate-urls.js'),
-    out: resolve(PATHS.bundles, 'generate-urls.esm.js'),
+    input: resolve(PATHS.entry.esm2015, 'universal-router-generate-urls.js'),
+    out: resolve(PATHS.bundles, 'universal-router-generate-urls'),
   }),
 ];

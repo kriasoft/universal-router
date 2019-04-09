@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   (BREAKING CHANGE [#158](https://github.com/kriasoft/universal-router/pull/158)).
 
 **Migration from v6 to v7:**
+
 - If your code relies on `error.context` or `error.code` you still can access them
   using `errorHandler` option:
   ```js
@@ -39,6 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add an option for global error handling ([#147](https://github.com/kriasoft/universal-router/pull/147)).
 
 **Migration from v5 to v6:**
+
 - Use `error.code` instead of `error.status` or `error.statusCode` for error handling.
 
 ## [5.1.0] - 2018-01-16
@@ -51,6 +53,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   (BREAKING CHANGE [#140](https://github.com/kriasoft/universal-router/pull/140))
 
 **Migration from v4 to v5:**
+
 - If you are using `resolveRoute` option for custom route handling logic then you need
   to return `undefined` instead of `null` in cases when a route should not match
 - Make sure that your middleware routes which return `null` are working as you expect,
@@ -85,22 +88,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   const router = new UniversalRouter({
     name: 'page',
     path: ['/one', '/two', /RegExp/], // only first path is used for url generation
-  })
-  const url = generateUrls(router)
-  url('page') // => /one
+  });
+  const url = generateUrls(router);
+  url('page'); // => /one
   ```
 
 ## [4.1.0] - 2017-09-20
 
 - Support for using the same param name in array of paths ([#122](https://github.com/kriasoft/universal-router/pull/122))
+
   ```js
   const router = new UniversalRouter({
     path: ['/one/:parameter', '/two/:parameter'],
-    action: context => context.params,
-  })
+    action: (context) => context.params,
+  });
 
-  router.resolve('/one/a') // => { parameter: 'a' }
-  router.resolve('/two/b') // => { parameter: 'b' }
+  router.resolve('/one/a'); // => { parameter: 'a' }
+  router.resolve('/two/b'); // => { parameter: 'b' }
   ```
 
 ## [4.0.0] - 2017-09-15
@@ -128,6 +132,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   ([#110](https://github.com/kriasoft/universal-router/pull/110))
 
 **Migration from v3 to v4:**
+
 - Change `router.resolve({ path, ... })` to `router.resolve({ pathname, ... })`
 - Remove trailing slashes from all paths of your routes, i.e.
   - `path: '/posts/:uri/'` => `path: '/posts/:uri'`
@@ -157,16 +162,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [3.0.0] - 2017-03-25
 
 - Update Router API (BREAKING CHANGE)
+
   ```js
-  import Router from 'universal-router'
-  const router = new Router(routes, options)
-  router.resolve({ path, ...context }) // => Promise<any>
+  import Router from 'universal-router';
+  const router = new Router(routes, options);
+  router.resolve({ path, ...context }); // => Promise<any>
 
   // previously
-  import { resolve } from 'universal-router'
-  resolve(routes, { path, ...context }) // => Promise<any>
+  import { resolve } from 'universal-router';
+  resolve(routes, { path, ...context }); // => Promise<any>
   ```
+
   See [#83](https://github.com/kriasoft/universal-router/pull/83) for more info and examples
+
 - `context.next()` now iterates only child routes by default (BREAKING CHANGE)<br>
   use `context.next(true)` to iterate through the all remaining routes
 - Remove `babel-runtime` dependency to decrease library size (BREAKING CHANGE)<br>
@@ -176,9 +184,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
 - Add support for URL Generation
   ```js
-  import generateUrls from 'universal-router/generate-urls'
-  const url = generateUrls(router)
-  url(routeName, params) // => String
+  import generateUrls from 'universal-router/generate-urls';
+  const url = generateUrls(router);
+  url(routeName, params); // => String
   ```
 - Add support for Dynamic Breadcrumbs, use `context.route.parent` to iterate
 - Add support for Declarative Routes, `new Router(routes, { resolveRoute: customResolveRouteFn })`
@@ -233,8 +241,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.1.0-beta.1] - 2016-04-05
 
 - Remove `Router` class and `router.dispatch()` method in favor of
- `match(routes, { path, ...context })`, where `routes` is just a plain JavaScript objects containing
- the list of routes (BREAKING CHANGE)
+  `match(routes, { path, ...context })`, where `routes` is just a plain JavaScript objects containing
+  the list of routes (BREAKING CHANGE)
 - Add `context.end()` method to be used from inside route actions
 - Update documentation and code samples
 
@@ -255,7 +263,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Small bug fixes and improvements
 
-[Unreleased]: https://github.com/kriasoft/universal-router/compare/v8.1.0...HEAD
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v8.1.0...HEAD
 [8.1.0]: https://github.com/kriasoft/universal-router/compare/v8.0.0...v8.1.0
 [8.0.0]: https://github.com/kriasoft/universal-router/compare/v7.0.0...v8.0.0
 [7.0.0]: https://github.com/kriasoft/universal-router/compare/v6.0.0...v7.0.0

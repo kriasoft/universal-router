@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "universal-router",
   "version": "9.0.0-rc1",
   "description": "Isomorphic router for JavaScript web applications",
@@ -20,7 +21,7 @@
     "route",
     "typescript"
   ],
-  "main": "./dist/index.js",
+  "main": "./index.js",
   "module": "./esm5/index.js",
   "es2015": "./esm2015/index.js",
   "typings": "./types/index.d.ts",
@@ -75,9 +76,8 @@
   "scripts": {
     "cleanup": "shx rm -rf dist",
     "prebuild": "yarn run cleanup && yarn run verify",
-    "build:cjs": "tsc --module commonjs --outDir dist",
-    "build": "yarn run build:cjs && tsc && tsc --target es2018 --outDir dist/esm2015 && rollup -c && rollup -c --environment NODE_ENV:production && yarn run test:ci",
-    "postbuild": "node scripts/copy.js && yarn run size",
+    "build": "tsc && tsc --target es2018 --outDir dist/esm2015 && rollup -c && rollup -c --environment NODE_ENV:production",
+    "postbuild": "yarn run test && node scripts/copy.js && yarn run size",
     "docs": "typedoc -p . --theme minimal --target 'es6' --excludeNotExported --excludePrivate --ignoreCompilerErrors --exclude \"**/src/**/__tests__/*.*\" --out docs src/",
     "test": "jest",
     "test:watch": "yarn test --watch",
@@ -99,8 +99,9 @@
     "release:github": "git push --no-verify --follow-tags origin master",
     "release:npm": "cd dist && npm publish",
     "release:preflight": "cd dist && npm pack",
-    "size": "node scripts/file-size.js ./dist/bundles/index.umd.min.js ./dist/bundles/index.esm.min.js",
-    "size:umd": "node scripts/file-size.js ./dist/bundles/index.umd.min.js",
-    "size:fesm": "node scripts/file-size.js ./dist/bundles/index.esm.min.js"
+    "size": "node scripts/file-size.js ./dist/universal-router.esm.min.js ./dist/universal-router.min.js ./dist/universal-router.umd.min.js ",
+    "size:fesm": "node scripts/file-size.js ./dist/universal-router.esm.min.js",
+    "size:cjs": "node scripts/file-size.js ./dist/universal-router.min.js",
+    "size:umd": "node scripts/file-size.js ./dist/universal-router.umd.min.js"
   }
 }

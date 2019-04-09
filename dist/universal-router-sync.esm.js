@@ -1,8 +1,4 @@
-'use strict';
-
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var pathToRegexp = _interopDefault(require('path-to-regexp'));
+import pathToRegexp from 'path-to-regexp';
 
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
@@ -220,5 +216,5 @@ class UniversalRouterSync {
 }
 UniversalRouterSync.pathToRegexp = pathToRegexp;
 
-module.exports = UniversalRouterSync;
-//# sourceMappingURL=universal-router-sync.js.map
+export default UniversalRouterSync;
+//# sourceMappingURL=universal-router-sync.esm.js.map

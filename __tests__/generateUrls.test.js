@@ -7,8 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-const UniversalRouter = require('../dist/universal-router');
-const generateUrls = require('../dist/generate-urls');
+const { UniversalRouter, generateUrls } = require('../dist/universal-router-generate-urls');
 
 describe('generateUrls(router, options)(routeName, params)', () => {
   it('should be a function', () => {

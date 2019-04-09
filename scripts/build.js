@@ -21,7 +21,7 @@ function writeDtsHeader() {
     pkg.name,
     pkg.version,
     pkg.author,
-    pkg.repository.url,
+    pkg.repository,
     pkg.devDependencies.typescript
   );
 

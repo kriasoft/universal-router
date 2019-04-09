@@ -1,8 +1,4 @@
-'use strict';
-
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var pathToRegexp = _interopDefault(require('path-to-regexp'));
+import pathToRegexp$1 from 'path-to-regexp';
 
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
@@ -51,7 +47,7 @@ function matchPath(route, pathname, parentKeys, parentParams) {
         const keys = [];
         regexp = {
             keys,
-            pattern: pathToRegexp(route.path || '', keys, { end }),
+            pattern: pathToRegexp$1(route.path || '', keys, { end }),
         };
         cache.set(cacheKey, regexp);
     }
@@ -159,7 +155,7 @@ function resolveRoute(context, params) {
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
-class UniversalRouterSync {
+class UniversalRouter {
     constructor(routes, options = { context: {} }) {
         if (!routes || typeof routes !== 'object') {
             throw new TypeError('Invalid routes');
@@ -191,34 +187,123 @@ class UniversalRouterSync {
             if (!resume) {
                 if (matches.done || !isChildRoute(parent, matches.value.route)) {
                     nextMatches = matches;
-                    return null;
+                    return Promise.resolve(null);
                 }
             }
             if (matches.done) {
                 const error = new Error('Route not found');
                 error.status = 404;
-                throw error;
+                return Promise.reject(error);
             }
-            currentContext = { ...context, ...matches.value };
-            const result = resolve(currentContext, matches.value.params);
-            if (result !== null && result !== undefined) {
-                return result;
-            }
-            return next(resume, parent, result);
+            const resolveContext = { ...context, ...matches.value };
+            currentContext = resolveContext;
+            return Promise.resolve(resolve(resolveContext, matches.value.params)).then((result) => {
+                if (result !== null && result !== undefined) {
+                    return result;
+                }
+                return next(resume, parent, result);
+            });
         }
         context.next = next;
-        try {
-            return next(true, this.root);
-        }
-        catch (error) {
+        return Promise.resolve()
+            .then(() => next(true, this.root))
+            .catch((error) => {
             if (this.errorHandler) {
                 return this.errorHandler(error, currentContext);
             }
             throw error;
+        });
+    }
+}
+UniversalRouter.pathToRegexp = pathToRegexp$1;
+
+const { pathToRegexp } = UniversalRouter;
+const cache$1 = new Map();
+function cacheRoutes(routesByName, route, routes) {
+    if (routesByName.has(route.name)) {
+        throw new Error(`Route "${route.name}" already exists`);
+    }
+    if (route.name) {
+        routesByName.set(route.name, route);
+    }
+    if (routes) {
+        for (let i = 0; i < routes.length; i++) {
+            const childRoute = routes[i];
+            childRoute.parent = route;
+            cacheRoutes(routesByName, childRoute, childRoute.children);
         }
     }
 }
-UniversalRouterSync.pathToRegexp = pathToRegexp;
+function generateUrls(router, options = {}) {
+    if (!(router instanceof UniversalRouter)) {
+        const duck = router;
+        if (typeof duck !== 'object' || !duck || !duck.root) {
+            throw new TypeError('An instance of UniversalRouter is expected');
+        }
+    }
+    router.routesByName = router.routesByName || new Map();
+    return (routeName, params) => {
+        const map = router.routesByName;
+        let route = map.get(routeName);
+        if (!route) {
+            map.clear(); // clear cache
+            cacheRoutes(map, router.root, router.root.children);
+            route = map.get(routeName);
+            if (!route) {
+                throw new Error(`Route "${routeName}" not found`);
+            }
+        }
+        let regexp = cache$1.get(route.fullPath);
+        if (!regexp) {
+            let fullPath = '';
+            let rt = route;
+            while (rt) {
+                const path = Array.isArray(rt.path) ? rt.path[0] : rt.path;
+                if (path) {
+                    fullPath = path + fullPath;
+                }
+                rt = rt.parent;
+            }
+            const tokens = pathToRegexp.parse(fullPath);
+            const toPath = pathToRegexp.tokensToFunction(tokens);
+            const keys = Object.create(null);
+            for (let i = 0; i < tokens.length; i++) {
+                const token = tokens[i];
+                if (typeof token !== 'string') {
+                    keys[token.name] = true;
+                }
+            }
+            regexp = { toPath, keys };
+            cache$1.set(fullPath, regexp);
+            route.fullPath = fullPath;
+        }
+        let url = router.baseUrl + regexp.toPath(params, options) || '/';
+        if (options.stringifyQueryParams && params) {
+            const queryParams = {};
+            const keys = Object.keys(params);
+            for (let i = 0; i < keys.length; i++) {
+                const key = keys[i];
+                if (!regexp.keys[key]) {
+                    queryParams[key] = params[key];
+                }
+            }
+            const query = options.stringifyQueryParams(queryParams);
+            if (query) {
+                url += query.charAt(0) === '?' ? query : `?${query}`;
+            }
+        }
+        return url;
+    };
+}
 
-module.exports = UniversalRouterSync;
-//# sourceMappingURL=universal-router-sync.js.map
+/**
+ * Universal Router (https://www.kriasoft.com/universal-router/)
+ *
+ * Copyright (c) 2015-present Kriasoft.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
+export { UniversalRouter, generateUrls };
+//# sourceMappingURL=universal-router-generate-urls.esm.js.map

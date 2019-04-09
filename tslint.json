@@ -44,7 +44,7 @@
     },
     // "no-magic-numbers": true,
     "prefer-for-of": false,
-    "no-require-imports": true,
+    // "no-require-imports": true,
     "no-boolean-literal-compare": true,
     "no-invalid-this": {
       "options": "check-function-in-method"

@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "module": "commonjs",
+    "module": "esnext",
     "target": "es5",
     "lib": ["dom", "es2018"],
     "strict": true,
     "esModuleInterop": true,
-    // "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
     "stripInternal": true,
     "declaration": true,
@@ -14,7 +14,8 @@
     "declarationDir": "dist/types",
     "outDir": "dist/esm5",
     "resolveJsonModule": true,
-    "importHelpers": true
+    "importHelpers": true,
+    "newLine": "LF"
   },
   "include": ["./src", "./test"],
   "compileOnSave": false

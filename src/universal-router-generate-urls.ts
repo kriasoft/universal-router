@@ -7,11 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-function resolveRoute(context, params) {
-  if (typeof context.route.action === 'function') {
-    return context.route.action(context, params)
-  }
-  return undefined
-}
+export * from './types';
 
-export default resolveRoute
+export { default as generateUrls } from './generate-urls';
+export { default as UniversalRouter } from './universal-router';

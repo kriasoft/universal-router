@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import pathToRegexp from 'path-to-regexp';
+import pathToRegexp from 'path-to-regexp'; // keep require
 import { MatchedKeys, MatchedPath, Params, Route } from './types';
 
 type RegexpCache = {

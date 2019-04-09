@@ -1,4 +1,3 @@
-import pathToRegexp from 'path-to-regexp';
 import UniversalRouter from './universal-router';
 
 export interface Params {
@@ -6,7 +5,7 @@ export interface Params {
   [paramIndex: number]: string | string[];
 }
 
-export type MatchedKeys = pathToRegexp.Key[];
+export type MatchedKeys = Array<import('path-to-regexp').Key>;
 
 export type MatchedPath = {
   path: string;

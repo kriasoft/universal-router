@@ -1,8 +1,4 @@
-'use strict';
-
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var pathToRegexp = _interopDefault(require('path-to-regexp'));
+import pathToRegexp from 'path-to-regexp';
 
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
@@ -159,7 +155,7 @@ function resolveRoute(context, params) {
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
-class UniversalRouterSync {
+class UniversalRouter {
     constructor(routes, options = { context: {} }) {
         if (!routes || typeof routes !== 'object') {
             throw new TypeError('Invalid routes');
@@ -191,34 +187,35 @@ class UniversalRouterSync {
             if (!resume) {
                 if (matches.done || !isChildRoute(parent, matches.value.route)) {
                     nextMatches = matches;
-                    return null;
+                    return Promise.resolve(null);
                 }
             }
             if (matches.done) {
                 const error = new Error('Route not found');
                 error.status = 404;
-                throw error;
+                return Promise.reject(error);
             }
-            currentContext = { ...context, ...matches.value };
-            const result = resolve(currentContext, matches.value.params);
-            if (result !== null && result !== undefined) {
-                return result;
-            }
-            return next(resume, parent, result);
+            const resolveContext = { ...context, ...matches.value };
+            currentContext = resolveContext;
+            return Promise.resolve(resolve(resolveContext, matches.value.params)).then((result) => {
+                if (result !== null && result !== undefined) {
+                    return result;
+                }
+                return next(resume, parent, result);
+            });
         }
         context.next = next;
-        try {
-            return next(true, this.root);
-        }
-        catch (error) {
+        return Promise.resolve()
+            .then(() => next(true, this.root))
+            .catch((error) => {
             if (this.errorHandler) {
                 return this.errorHandler(error, currentContext);
             }
             throw error;
-        }
+        });
     }
 }
-UniversalRouterSync.pathToRegexp = pathToRegexp;
+UniversalRouter.pathToRegexp = pathToRegexp;
 
-module.exports = UniversalRouterSync;
-//# sourceMappingURL=universal-router-sync.js.map
+export default UniversalRouter;
+//# sourceMappingURL=universal-router.esm.js.map

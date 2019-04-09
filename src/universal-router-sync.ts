@@ -8,6 +8,7 @@
  */
 
 import pathToRegexp from 'path-to-regexp';
+
 import { isChildRoute } from './is-child-route';
 import { matchRoute } from './match-route';
 import { resolveRoute } from './resolve-route';

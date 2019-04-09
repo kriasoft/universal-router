@@ -15,7 +15,7 @@ function main() {
   const distPath = resolve(projectRoot, 'dist');
   const distPackageJson = createDistPackageJson(packageJson);
 
-  const cpFiles = ['README.md', 'CHANGELOG.md', 'LICENSE.md', '.npmignore'].map((file) =>
+  const cpFiles = ['README.md', 'CHANGELOG.md', 'LICENSE.txt', '.npmignore'].map((file) =>
     resolve(projectRoot, file)
   );
 
@@ -51,12 +51,13 @@ function cp(source, target) {
  */
 function createDistPackageJson(packageConfig) {
   const {
+    // enumerate what to remove
     devDependencies,
     scripts,
-    engines,
-    config,
-    husky,
-    'lint-staged': lintStaged,
+    // engines,
+    // config,
+    // husky,
+    // 'lint-staged': lintStaged,
     ...distPackageJson
   } = packageConfig;
 
