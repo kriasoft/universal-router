@@ -1,137 +1,152 @@
-# Contributing
+# Contributing to Universal Router
 
-First of all, thanks for your interest in contributing to the universal-router-ts! 🎉
+♥ [Universal Router](https://github.com/kriasoft/universal-router) and want to
+get involved? Thanks! There are plenty of ways you can help!
 
-PRs are the preferred way to spike ideas and address issues, if you have time. If you plan on contributing frequently, please feel free to ask to become a maintainer; the more the merrier. 🤙
+Please take a moment to review this document in order to make the contribution
+process easy and effective for everyone involved.
 
-## Technical overview
+Following these guidelines helps to communicate that you respect the time of
+the developers managing and developing this open source project. In return,
+they should reciprocate that respect in addressing your issue or assessing
+patches and features.
 
-This library uses following libraries for development:
+## Using the issue tracker
 
-- [typescript](http://www.typescriptlang.org/) for typed JavaScript and transpilation
-- [jest](https://jestjs.io/) for unit testing
-  - run `yarn test:watch` during development
-- [rollup](https://rollupjs.org/guide/en) for creating UMD bundles
-- [yarn](https://yarnpkg.com/lang/en/) for package management
-- [npm scripts](https://docs.npmjs.com/misc/scripts) for executing tasks
+The [issue tracker](https://github.com/kriasoft/universal-router/issues) is
+the preferred channel for [bug reports](#bugs), [features requests](#features)
+and [submitting pull requests](#pull-requests), but please respect the following
+restrictions:
 
-### 🧪 Tests
+- Please **do not** use the issue tracker for personal support requests (use
+  [Gitter](https://gitter.im/kriasoft/universal-router),
+  [HackHands](https://hackhands.com/koistya) or
+  [Codementor](https://www.codementor.io/koistya)).
 
-Test are written and run via Jest 💪
+- Please **do not** derail or troll issues. Keep the discussion on topic and
+  respect the opinions of others.
 
-```sh
-# Run whole test suite once
-yarn test
-# Run test in watch mode
-yarn test:watch
-# Ged code coverage
-yarn test:coverage
-```
+- Please **do not** open issues or pull requests regarding the code in
+  [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
+  (open them in their respective repositories).
 
-### 💅 Style guides
+<a name="bugs"></a>
 
-Style guides are enforced by robots _(I meant prettier and tslint of course 🤖 )_, so they'll let you know if you screwed something, but most of the time, they'll autofix things for you. Magic right ?
+## Bug reports
 
-Lint and format codebase via npm-script:
+A bug is a _demonstrable problem_ that is caused by the code in the repository.
+Good bug reports are extremely helpful - thank you!
 
-```sh
-#Format and fix lint errors
-yarn ts:style:fix
-```
+Guidelines for bug reports:
 
-#### Commit conventions (via commitizen)
+1. **Use the GitHub issue search** &mdash; check if the issue has already been
+   reported.
 
-- this is preferred way how to create conventional-changelog valid commits
-- if you prefer your custom tool we provide a commit hook linter which will error out, it you provide invalid commit message
-- if you are in rush and just wanna skip commit message validation just prefix your message with `WIP: something done` ( if you do this please squash your work when you're done with proper commit message so standard-version can create Changelog and bump version of your library appropriately )
+2. **Check if the issue has been fixed** &mdash; try to reproduce it using the
+   latest `master` or development branch in the repository.
 
-```sh
-# invoke [commitizen CLI](https://github.com/commitizen/cz-cli)
-yarn commit
-```
+3. **Isolate the problem** &mdash; ideally create a [reduced test
+   case](https://css-tricks.com/reduced-test-cases/) and a live example.
 
-### 📖 Documentation
+A good bug report shouldn't leave others needing to chase you up for more
+information. Please try to be as detailed as possible in your report. What is
+your environment? What steps will reproduce the issue? What browser(s) and OS
+experience the problem? What would you expect to be the outcome? All these
+details will help people to fix any potential bugs.
 
-```sh
-yarn docs
-```
+Example:
 
-## Getting started
-
-### Creating a Pull Request
-
-If you've never submitted a Pull request before please visit http://makeapullrequest.com/ to learn everything you need to know.
-
-#### Setup
-
-1.  Fork the repo.
-1.  `git clone` your fork.
-1.  Make a `git checkout -b branch-name` branch for your change.
-1.  Run `yarn install --ignore-scripts` (make sure you have node and yarn installed first)
-    Updates
-
-1.  Make sure to add unit tests
-1.  If there is a `*.spec.ts` file, update it to include a test for your change, if needed. If this file doesn't exist, please create it.
-1.  Run `yarn test` or `yarn test:watch` to make sure all tests are working, regardless if a test was added.
-
----
-
-## 🚀 Publishing
-
-> releases are handled by awesome [standard-version](https://github.com/conventional-changelog/standard-version)
-
-> #### NOTE:
+> Short and descriptive example bug report title
 >
-> you have to create npm account and register token on your machine
-> 👉 `npm adduser`
+> A summary of the issue and the browser/OS environment in which it occurs. If
+> suitable, include the steps required to reproduce the bug.
 >
-> If you are using scope (you definitely should 👌) don't forget to [`--scope`](https://docs.npmjs.com/cli/adduser#scope)
+> 1. This is the first step
+> 2. This is the second step
+> 3. Further steps, etc.
+>
+> `<url>` - a link to the reduced test case
+>
+> Any other information you want to share that is relevant to the issue being
+> reported. This might include the lines of code that you have identified as
+> causing the bug, and potential solutions (and your opinions on their
+> merits).
 
-Execute `yarn release` which will handle following tasks:
+<a name="features"></a>
 
-- bump package version and git tag
-- update/(create if it doesn't exist) CHANGELOG.md
-- push to github master branch + push tags
-- publish build packages to npm
+## Feature requests
 
-> releases are handled by awesome [standard-version](https://github.com/conventional-changelog/standard-version)
+Feature requests are welcome. But take a moment to find out whether your idea
+fits with the scope and aims of the project. It's up to _you_ to make a strong
+case to convince the project's developers of the merits of this feature. Please
+provide as much detail and context as possible.
 
-### Initial Release (no package.json version bump):
+<a name="pull-requests"></a>
 
-```sh
-yarn release --first-release
-```
+## Pull requests
 
-### Pre-release
+Good pull requests - patches, improvements, new features - are a fantastic
+help. They should remain focused in scope and avoid containing unrelated
+commits.
 
-- To get from `1.1.2` to `1.1.2-0`:
+**Please ask first** before embarking on any significant pull request (e.g.
+implementing features, refactoring code, porting to a different language),
+otherwise you risk spending a lot of time working on something that the
+project's developers might not want to merge into the project.
 
-`yarn release --prerelease`
+Please adhere to the coding conventions used throughout a project (indentation,
+accurate comments, etc.) and any other requirements (such as test coverage).
 
-- **Alpha**: To get from `1.1.2` to `1.1.2-alpha.0`:
+Adhering to the following process is the best way to get your work
+included in the project:
 
-`yarn release --prerelease alpha`
+1. [Fork](https://help.github.com/articles/fork-a-repo/) the project, clone your
+   fork, and configure the remotes:
 
-- **Beta**: To get from `1.1.2` to `1.1.2-beta.0`:
+   ```bash
+   # Clone your fork of the repo into the current directory
+   git clone https://github.com/<your-username>/universal-router.git
+   # Navigate to the newly cloned directory
+   cd universal-router
+   # Assign the original repo to a remote called "upstream"
+   git remote add upstream https://github.com/kriasoft/universal-router.git
+   ```
 
-`yarn release --prerelease beta`
+2. If you cloned a while ago, get the latest changes from upstream:
 
-### Dry run
+   ```bash
+   git checkout master
+   git pull upstream master
+   ```
 
-#### version bump + changelog
+3. Create a new topic branch (off the main project development branch) to
+   contain your feature, change, or fix:
 
-```sh
-# See what next release version would be with updated changelog
-yarn standard-version --dry-run
-```
+   ```bash
+   git checkout -b <topic-branch-name>
+   ```
 
-#### npm publish
+4. Commit your changes in logical chunks. Please adhere to these [git commit
+   message guidelines](https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)
+   or your code is unlikely be merged into the main project. Use Git's
+   [interactive rebase](https://help.github.com/articles/about-git-rebase/)
+   feature to tidy up your commits before making them public.
 
-```sh
-# check what files are gonna be published to npm
-yarn release:preflight
-```
+5. Locally merge (or rebase) the upstream development branch into your topic branch:
 
-## License
+   ```bash
+   git pull [--rebase] upstream master
+   ```
 
-By contributing your code to the universal-router-ts GitHub Repository, you agree to license your contribution under the MIT license.
+6. Push your topic branch up to your fork:
+
+   ```bash
+   git push origin <topic-branch-name>
+   ```
+
+7. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/)
+   with a clear title and description.
+
+**IMPORTANT**: By submitting a patch, you agree to allow the project
+owners to license your work under the terms of the
+[MIT License](https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt).

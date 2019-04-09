@@ -88,7 +88,9 @@
   "peerDependencies": {
     "tslib": "^1.9.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "path-to-regexp": "^3.0.0"
+  },
   "scripts": {
     "cleanup": "shx rm -rf dist",
     "prebuild": "yarn run cleanup && yarn run verify",

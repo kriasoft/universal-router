@@ -1,0 +1,12 @@
+{
+  "env": {
+    "jest": true
+  },
+  "rules": {
+    "import/no-extraneous-dependencies": ["error", {
+      "optionalDependencies": false,
+      "peerDependencies": false
+    }],
+    "no-unused-expressions": "off"
+  }
+}

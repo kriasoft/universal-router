@@ -1,32 +1,19 @@
-_If there is a linked issue, mention it here._
+## Types of changes
 
-- [ ] Bug
-- [ ] Feature
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
 
-## Requirements
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
 
-- [ ] Read the [contribution guidelines](./.github/CONTRIBUTING.md).
-- [ ] Wrote tests.
-- [ ] Updated docs and upgrade instructions, if necessary.
+## Checklist:
 
-## Rationale
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
 
-_Why is this PR necessary?_
-
-## Implementation
-
-_Why have you implemented it this way? Did you try any other methods?_
-
-## Open questions
-
-_Are there any open questions about this implementation that need answers?_
-
-## Other
-
-_Is there anything else we should know? Delete this section if you don't need it._
-
-## Tasks
-
-_List any tasks you need to do here, if any. Delete this section if you don't need it._
-
-- [ ] _Example task._
+- [ ] My code follows the code style of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+- [ ] I have read the **CONTRIBUTING** document.
+- [ ] I have added tests to cover my changes.
+- [ ] All new and existing tests passed.
