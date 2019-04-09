@@ -1,0 +1,19 @@
+<div class="header">
+  <div class="container">
+    <a class="header__logo" href=".">
+      Universal <img class="header__logo-img" src="img/tour.svg" alt="Universal Router" /> Router
+    </a>
+    <span class="header_author">
+      made with &nbsp;♥&nbsp; by&nbsp; <a href="https://twitter.com/koistya" rel="author" title="Konstantin Tarkus on Twitter">@koistya</a>
+    </span>
+    <% if (path === '/') { %><%- include('hero'); %><% } %>
+  </div>
+</div>
+<% if (path === '/') { %>
+<div class="header__version">
+  <div class="container">
+    <span><%= npm.time[npm['dist-tags'].latest].substr(0, 10) %> &nbsp; | &nbsp; <a href="https://www.npmjs.com/package/universal-router">v<%= npm['dist-tags'].latest %></a></span> &nbsp; | &nbsp;
+    <span class="pull-right">Join <a href="https://gitter.im/kriasoft/universal-router">#universal-router</a> chat room on Gitter to stay up to date</span>
+  </div>
+</div>
+<% } %>

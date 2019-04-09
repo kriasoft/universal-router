@@ -1,0 +1,59 @@
+/**
+ * Universal Router (https://www.kriasoft.com/universal-router/)
+ *
+ * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
+ *
+ * This source code is licensed under the Apache 2.0 license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
+.header {
+  padding: 1.5rem 0;
+  background: var(--header-bg-color);
+  color: var(--header-color);
+}
+
+.header__logo {
+  color: var(--logo-color);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 2.5rem;
+  font-family: 'Lato', sans-serif;
+}
+
+.header__logo-img {
+  width: 45px;
+  height: 45px;
+  vertical-align: middle;
+}
+
+.header_author {
+  float: right;
+  padding: 18px 0;
+  color: rgba(255, 255, 255, .6);
+  font-size: 18px;
+}
+.header_author a {
+  color: rgba(255, 255, 255, .8);
+  text-decoration: none;
+}
+.header_author a:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.header__version {
+  padding: 15px 0;
+  background: #bdd5ea;
+  color: #495867;
+  font-size: 16px;
+}
+
+.header__version a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.header__version a:hover,
+.header__version a:active {
+  color: color(var(--link-color) blackness(10%));
+}

@@ -1,49 +1,35 @@
 {
-  "name": "universal-router-ts",
-  "version": "0.0.0",
-  "description": "A library written in TypeScript",
-  "keywords": [],
-  "main": "./bundles/index.umd.js",
+  "name": "universal-router",
+  "version": "9.0.0-rc1",
+  "description": "Isomorphic router for JavaScript web applications",
+  "homepage": "https://www.kriasoft.com/universal-router/",
+  "repository": "kriasoft/universal-router",
+  "author": "Kriasoft <support@kriasoft.com> (https://www.kriasoft.com)",
+  "contributors": [
+    "Konstantin Tarkus <hello@tarkus.me> (https://tarkus.me)",
+    "Vladimir Kutepov",
+    "Pavel Lang <langpavel@phpskelet.org>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "isomorphic",
+    "universal",
+    "router",
+    "routing",
+    "routes",
+    "route",
+    "typescript"
+  ],
+  "main": "./dist/index.js",
   "module": "./esm5/index.js",
   "es2015": "./esm2015/index.js",
   "typings": "./types/index.d.ts",
   "sideEffects": false,
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/langpavel/universal-router-ts"
+  "dependencies": {
+    "path-to-regexp": "^3.0.0"
   },
-  "author": "Pavel Lang <langpavel@phpskelet.org>",
-  "contributors": [],
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
-  "engines": {
-    "node": ">=8.5",
-    "npm": ">=6.0",
-    "yarn": ">=1.0"
-  },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
-    }
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint --config config/commitlint.config.js -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "**/*.{ts,tsx,js,jsx,css,scss,sass,less,md}": [
-      "prettier --write",
-      "git add"
-    ],
-    "src/**/*.{ts,tsx}": [
-      "yarn run lint:fix",
-      "git add"
-    ]
+  "peerDependencies": {
+    "tslib": "^1.9.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^7.5.2",
@@ -85,12 +71,6 @@
     "typedoc": "^0.14.2",
     "typescript": "^3.4.2",
     "webpack-config-utils": "^2.3.1"
-  },
-  "peerDependencies": {
-    "tslib": "^1.9.0"
-  },
-  "dependencies": {
-    "path-to-regexp": "^3.0.0"
   },
   "scripts": {
     "cleanup": "shx rm -rf dist",

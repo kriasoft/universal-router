@@ -1,22 +1,20 @@
 **I'm submitting a ...**
-
 <!-- (check one with "x") -->
-
-- [ ] bug report
-- [ ] feature request
-- [ ] other (Please do not submit support requests here (below))
+* [ ] bug report
+* [ ] feature request
+* [ ] other (Please do not submit support requests here (below))
 
 ## Notes:
 
-- Please **do not** use the issue tracker for personal support requests (use
+* Please **do not** use the issue tracker for personal support requests (use
   [Gitter](https://gitter.im/kriasoft/universal-router),
   [HackHands](https://hackhands.com/koistya) or
   [Codementor](https://www.codementor.io/koistya)).
 
-- Please **do not** derail or troll issues. Keep the discussion on topic and
+* Please **do not** derail or troll issues. Keep the discussion on topic and
   respect the opinions of others.
 
-- Please **do not** open issues or pull requests regarding the code in
+* Please **do not** open issues or pull requests regarding the code in
   [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
   (open them in their respective repositories).
 

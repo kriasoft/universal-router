@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "module": "esnext",
+    "module": "commonjs",
     "target": "es5",
     "lib": ["dom", "es2018"],
     "strict": true,
@@ -16,6 +16,6 @@
     "resolveJsonModule": true,
     "importHelpers": true
   },
-  "include": ["./src"],
+  "include": ["./src", "./test"],
   "compileOnSave": false
 }

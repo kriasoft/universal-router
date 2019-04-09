@@ -1,17 +1,23 @@
+# For more information about the configurations used
+# in this file, please see the Travis CI documentation:
+# https://docs.travis-ci.com/user/languages/javascript-with-nodejs
 language: node_js
 node_js:
+  - '6'
   - '8'
   - '10'
-  - '11'
 cache: yarn
-notifications:
-  email: false
 env:
   - CI=true
 before_install:
   - npm config set scripts-prepend-node-path true
+  - npm install --global codecov
   - npm i -g yarn
 install:
   - yarn
 script:
   - yarn build
+after_success:
+  - codecov
+notifications:
+  email: false

@@ -1,0 +1,27 @@
+/**
+ * Universal Router (https://www.kriasoft.com/universal-router/)
+ *
+ * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
+ *
+ * This source code is licensed under the Apache 2.0 license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
+.github-info {
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.github-info__link {
+  color: rgba(255, 255, 255, .8);
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.github-info__link:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.github-info__icon {
+  padding-right: 6px;
+}

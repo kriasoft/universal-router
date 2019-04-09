@@ -7,12 +7,11 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-const lint = require('./lint');
-const test = require('./test');
-
-async function preCommit() {
-  await lint();
-  await test();
+function resolveRoute(context, params) {
+  if (typeof context.route.action === 'function') {
+    return context.route.action(context, params)
+  }
+  return undefined
 }
 
-module.exports = preCommit().catch(process.exit);
+export default resolveRoute

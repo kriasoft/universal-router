@@ -1,0 +1,48 @@
+<!doctype html>
+<html class="no-js" lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title><%= title %></title>
+    <meta name="description" content="Routing and navigation solution for React.js applications">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="canonical" href="https://www.kriasoft.com/universal-router<%= path %>">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
+    <link rel="stylesheet" href="main.css">
+  </head>
+  <body>
+  <%- include('header'); %>
+  <div class="content">
+    <div class="content-left">
+      <a class="edit-btn" target="_blank" href="https://github.com/kriasoft/universal-router/edit/master/<%= file %>" title="Edit on GitHub">
+        <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" width="612" height="612" viewBox="0 0 612 612"><path d="M545.062 286.875c-15.854 0-28.688 12.852-28.688 28.688v239.062h-459v-459h239.062c15.854 0 28.688-12.852 28.688-28.688S312.292 38.25 296.438 38.25H38.25C17.136 38.25 0 55.367 0 76.5v497.25C0 594.883 17.136 612 38.25 612H535.5c21.114 0 38.25-17.117 38.25-38.25V315.562c0-15.835-12.833-28.687-28.688-28.687zM605.325 88.95L523.03 6.655C518.556 2.18 512.684 0 506.812 0s-11.743 2.18-16.218 6.675l-318.47 318.45v114.75h114.75l318.45-318.45c4.494-4.495 6.675-10.366 6.675-16.237 0-5.89-2.18-11.743-6.675-16.238zM267.75 382.5H229.5v-38.25L506.812 66.938l38.25 38.25L267.75 382.5z"/></svg>
+      </a>
+      <%- content %>
+      <% if (path !== '/') {%>
+      <div id="disqus_thread"></div>
+      <% } %>
+    </div>
+  </div>
+  <%- include('footer'); %>
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-33821884-1','auto');ga('send','pageview');
+    <% if (path === '/') { %>
+    (function(){var r=new XMLHttpRequest;r.onreadystatechange=function(){if(4===r.readyState&&200===r.status){
+    var d=JSON.parse(r.responseText);['subscribers_count','stargazers_count','network_count','open_issues_count']
+    .forEach(function(i){document.getElementById(i).innerHTML=d[i]})}};
+    r.open('GET','https://api.github.com/repos/kriasoft/universal-router',true);r.send(null)})();
+    <% } else { %>
+    window.disqus_shortname = 'kriasoft';
+    window.disqus_identifier = 'universal-router<%= path %>';
+    window.disqus_title = '<%= title %>';
+    window.disqus_url = 'https://www.kriasoft.com/universal-router<%= path %>';
+    <% } %>
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+  <% if (path !== '/') { %>
+  <script src="https://kriasoft.disqus.com/embed.js" async defer></script>
+  <% } %>
+  </body>
+</html>
