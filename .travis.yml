@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - '8'
+  - '10'
+  - '11'
+cache: yarn
+notifications:
+  email: false
+env:
+  - CI=true
+before_install:
+  - npm config set scripts-prepend-node-path true
+  - npm i -g yarn
+install:
+  - yarn
+script:
+  - yarn build
