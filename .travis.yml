@@ -3,7 +3,6 @@
 # https://docs.travis-ci.com/user/languages/javascript-with-nodejs
 language: node_js
 node_js:
-  - '6'
   - '8'
   - '10'
 cache: yarn
@@ -17,6 +16,7 @@ install:
   - yarn
 script:
   - yarn build
+  - yarn test --ci --coverage
 after_success:
   - codecov
 notifications:
