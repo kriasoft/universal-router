@@ -466,7 +466,7 @@
       context.next = next;
       return Promise.resolve().then(function () {
         return next(true, _this.root);
-      }).catch(function (error) {
+      })["catch"](function (error) {
         if (_this.errorHandler) {
           return _this.errorHandler(error, currentContext);
         }
