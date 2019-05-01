@@ -8,7 +8,11 @@
  */
 
 import { PathFunctionOptions } from 'path-to-regexp'
-import UniversalRouter, { Params } from './UniversalRouter'
+import UniversalRouter from './UniversalRouter'
+
+export interface Params {
+  [paramName: string]: any
+}
 
 export interface GenerateUrlsOptions extends PathFunctionOptions {
   stringifyQueryParams?: (params: Params) => string

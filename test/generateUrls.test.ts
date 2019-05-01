@@ -7,8 +7,8 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import UniversalRouter, { Params } from '../src/UniversalRouter'
-import generateUrls from '../src/generateUrls'
+import UniversalRouter from '../src/UniversalRouter'
+import generateUrls, { Params } from '../src/generateUrls'
 
 const router = new UniversalRouter(
   [
