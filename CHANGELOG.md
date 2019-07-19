@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [8.2.1] - 2019-07-20
+
+- Fix `context.next()` to throw `Route not found` instead of `TypeError` ([#169](https://github.com/kriasoft/universal-router/pull/169))
+
 ## [8.2.0] - 2019-05-10
 
 - Improve TypeScript typings ([#167](https://github.com/kriasoft/universal-router/pull/167))

@@ -422,7 +422,7 @@
     _proto.resolve = function resolve(pathnameOrContext) {
       var _this = this;
 
-      var context = Object.assign({}, this.context, typeof pathnameOrContext === 'string' ? {
+      var context = Object.assign({}, this.context, {}, typeof pathnameOrContext === 'string' ? {
         pathname: pathnameOrContext
       } : pathnameOrContext);
       var match = matchRoute(this.root, this.baseUrl, context.pathname.substr(this.baseUrl.length), [], null);
@@ -436,7 +436,7 @@
           parent = matches.value.route;
         }
 
-        var routeToSkip = prevResult === null && matches.value.route;
+        var routeToSkip = prevResult === null && !matches.done && matches.value.route;
         matches = nextMatches || match.next(routeToSkip);
         nextMatches = null;
 
@@ -453,7 +453,7 @@
           return Promise.reject(error);
         }
 
-        currentContext = Object.assign({}, context, matches.value);
+        currentContext = Object.assign({}, context, {}, matches.value);
         return Promise.resolve(resolve(currentContext, matches.value.params)).then(function (result) {
           if (result !== null && result !== undefined) {
             return result;

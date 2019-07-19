@@ -602,4 +602,24 @@ describe('router.resolve({ pathname, ...context })', () => {
     expect(action.mock.calls.length).toBe(1)
     expect(middleware.mock.calls.length).toBe(1)
   })
+
+  it('should handle route not found error correctly', async () => {
+    const router = new UniversalRouter({
+      path: '/',
+      action({ next }) {
+        return next()
+      },
+      children: [{ path: '/child' }],
+    })
+
+    let err
+    try {
+      await router.resolve('/404')
+    } catch (e) {
+      err = e
+    }
+    expect(err).toBeInstanceOf(Error)
+    expect(err.message).toBe('Route not found')
+    expect(err.status).toBe(404)
+  })
 })

@@ -19,7 +19,6 @@ yarn-error.log*
 
 # Editors and IDEs
 .idea/
-.vscode/
 
 # Misc
 .DS_Store

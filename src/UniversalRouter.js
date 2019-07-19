@@ -46,7 +46,7 @@ class UniversalRouter {
     let currentContext = context
 
     function next(resume, parent = matches.value.route, prevResult) {
-      const routeToSkip = prevResult === null && matches.value.route
+      const routeToSkip = prevResult === null && !matches.done && matches.value.route
       matches = nextMatches || match.next(routeToSkip)
       nextMatches = null
 
