@@ -420,7 +420,7 @@
     var _proto = UniversalRouterSync.prototype;
 
     _proto.resolve = function resolve(pathnameOrContext) {
-      var context = Object.assign({}, this.context, typeof pathnameOrContext === 'string' ? {
+      var context = Object.assign({}, this.context, {}, typeof pathnameOrContext === 'string' ? {
         pathname: pathnameOrContext
       } : pathnameOrContext);
       var match = matchRoute(this.root, this.baseUrl, context.pathname.substr(this.baseUrl.length), [], null);
@@ -434,7 +434,7 @@
           parent = matches.value.route;
         }
 
-        var routeToSkip = prevResult === null && matches.value.route;
+        var routeToSkip = prevResult === null && !matches.done && matches.value.route;
         matches = nextMatches || match.next(routeToSkip);
         nextMatches = null;
 
@@ -451,7 +451,7 @@
           throw error;
         }
 
-        currentContext = Object.assign({}, context, matches.value);
+        currentContext = Object.assign({}, context, {}, matches.value);
         var result = resolve(currentContext, matches.value.params);
 
         if (result !== null && result !== undefined) {
