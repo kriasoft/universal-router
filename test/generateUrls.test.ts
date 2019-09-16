@@ -8,7 +8,7 @@
  */
 
 import UniversalRouter from '../src/UniversalRouter'
-import generateUrls, { Params } from '../src/generateUrls'
+import generateUrls, { GenerateUrlsOptions, Params } from '../src/generateUrls'
 
 const router = new UniversalRouter(
   [
@@ -36,7 +36,7 @@ const path = generateUrls(router)
 
 path('home') // => '/base'
 
-const options = {
+const options: GenerateUrlsOptions = {
   encode: (value: string) => value,
   stringifyQueryParams(params: Params) {
     return Object.keys(params)

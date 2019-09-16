@@ -7,9 +7,8 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import UniversalRouter from './UniversalRouter'
+import pathToRegexp from 'path-to-regexp'
 
-const { pathToRegexp } = UniversalRouter
 const cache = new Map()
 
 function cacheRoutes(routesByName, route, routes) {
@@ -31,8 +30,8 @@ function cacheRoutes(routesByName, route, routes) {
 }
 
 function generateUrls(router, options = {}) {
-  if (!(router instanceof UniversalRouter)) {
-    throw new TypeError('An instance of UniversalRouter is expected')
+  if (!router) {
+    throw new ReferenceError('Router is not defined')
   }
 
   router.routesByName = router.routesByName || new Map()
@@ -60,8 +59,8 @@ function generateUrls(router, options = {}) {
         }
         rt = rt.parent
       }
-      const tokens = pathToRegexp.parse(fullPath)
-      const toPath = pathToRegexp.tokensToFunction(tokens)
+      const tokens = pathToRegexp.parse(fullPath, options)
+      const toPath = pathToRegexp.tokensToFunction(tokens, options)
       const keys = Object.create(null)
       for (let i = 0; i < tokens.length; i++) {
         if (typeof tokens[i] !== 'string') {
