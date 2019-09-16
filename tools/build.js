@@ -8,7 +8,6 @@
  */
 
 const fs = require('fs-extra')
-const path = require('path')
 const rollup = require('rollup')
 const babel = require('rollup-plugin-babel')
 const { uglify } = require('rollup-plugin-uglify')
@@ -78,33 +77,29 @@ const files = [
     input: 'dist/src/generateUrls.js',
     output: 'dist/generateUrls/index.js',
     format: 'cjs',
-    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
-    paths: { [path.resolve('dist/src/UniversalRouter.js')]: '..' },
+    external: ['path-to-regexp'],
   },
   {
     input: 'dist/src/generateUrls.js',
     output: 'dist/generateUrls/module.js',
     format: 'es',
-    external: ['path-to-regexp', path.resolve('dist/src/UniversalRouter.js')],
-    paths: { [path.resolve('dist/src/UniversalRouter.js')]: '..' },
+    external: ['path-to-regexp'],
   },
   {
     input: 'dist/src/generateUrls.js',
     output: 'dist/universal-router-generate-urls.js',
     format: 'umd',
     name: 'generateUrls',
-    external: ['path-to-regexp', './UniversalRouter'],
-    paths: { [path.resolve('dist/src/UniversalRouter')]: './universal-router.js' },
-    globals: { [path.resolve('dist/src/UniversalRouter')]: 'UniversalRouter' },
+    external: ['path-to-regexp'],
+    globals: { 'path-to-regexp': 'UniversalRouter.pathToRegexp' },
   },
   {
     input: 'dist/src/generateUrls.js',
     output: 'dist/universal-router-generate-urls.min.js',
     format: 'umd',
     name: 'generateUrls',
-    external: ['path-to-regexp', './UniversalRouter'],
-    paths: { [path.resolve('dist/src/UniversalRouter')]: './universal-router.min.js' },
-    globals: { [path.resolve('dist/src/UniversalRouter')]: 'UniversalRouter' },
+    external: ['path-to-regexp'],
+    globals: { 'path-to-regexp': 'UniversalRouter.pathToRegexp' },
   },
 ]
 
@@ -155,7 +150,6 @@ async function build() {
         banner:
           '/*! Universal Router | MIT License | https://www.kriasoft.com/universal-router/ */\n',
         globals: file.globals,
-        paths: file.paths,
       })
     }),
   )

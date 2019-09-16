@@ -1,12 +1,11 @@
 /*! Universal Router | MIT License | https://www.kriasoft.com/universal-router/ */
 
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('./universal-router.js')) :
-  typeof define === 'function' && define.amd ? define(['./universal-router.js'], factory) :
-  (global = global || self, global.generateUrls = factory(global.UniversalRouter));
-}(this, function (UniversalRouter) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('path-to-regexp')) :
+  typeof define === 'function' && define.amd ? define(['path-to-regexp'], factory) :
+  (global = global || self, global.generateUrls = factory(global.UniversalRouter.pathToRegexp));
+}(this, function (pathToRegexp) { 'use strict';
 
-  var pathToRegexp = UniversalRouter.pathToRegexp;
   var cache = new Map();
 
   function cacheRoutes(routesByName, route, routes) {
@@ -32,8 +31,8 @@
       options = {};
     }
 
-    if (!(router instanceof UniversalRouter)) {
-      throw new TypeError('An instance of UniversalRouter is expected');
+    if (!router) {
+      throw new ReferenceError('Router is not defined');
     }
 
     router.routesByName = router.routesByName || new Map();

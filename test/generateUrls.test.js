@@ -8,17 +8,12 @@
  */
 
 import UniversalRouter from '../src/UniversalRouter'
+import UniversalRouterSync from '../src/UniversalRouterSync'
 import generateUrls from '../src/generateUrls'
 
 describe('generateUrls(router, options)(routeName, params)', () => {
-  it('should throw an error in case of invalid router', async () => {
-    expect(() => generateUrls()).toThrow(/An instance of UniversalRouter is expected/)
-    expect(() => generateUrls([])).toThrow(/An instance of UniversalRouter is expected/)
-    expect(() => generateUrls(123)).toThrow(/An instance of UniversalRouter is expected/)
-    expect(() => generateUrls(null)).toThrow(/An instance of UniversalRouter is expected/)
-    expect(() => generateUrls(UniversalRouter)).toThrow(
-      /An instance of UniversalRouter is expected/,
-    )
+  it('should throw an error if router is not specified', async () => {
+    expect(() => generateUrls()).toThrow(/Router is not defined/)
   })
 
   it('should throw an error if no route found', async () => {
@@ -223,5 +218,11 @@ describe('generateUrls(router, options)(routeName, params)', () => {
     expect(url('me', { x: 'i', y: 'j', z: 'k' })).toBe('/me?x=i&y=j&z=k')
     expect(stringifyQueryParams.mock.calls.length).toBe(1)
     expect(stringifyQueryParams.mock.calls[0][0]).toEqual({ x: 'i', y: 'j', z: 'k' })
+  })
+
+  it('should be compatible with UniversalRouterSync', async () => {
+    const router = new UniversalRouterSync({ path: '/foo', name: 'bar' })
+    const url = generateUrls(router)
+    expect(url('bar')).toBe('/foo')
   })
 })
