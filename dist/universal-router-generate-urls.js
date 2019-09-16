@@ -65,8 +65,8 @@
           rt = rt.parent;
         }
 
-        var tokens = pathToRegexp.parse(fullPath);
-        var toPath = pathToRegexp.tokensToFunction(tokens);
+        var tokens = pathToRegexp.parse(fullPath, options);
+        var toPath = pathToRegexp.tokensToFunction(tokens, options);
         var keys = Object.create(null);
 
         for (var i = 0; i < tokens.length; i++) {
