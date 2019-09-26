@@ -369,7 +369,7 @@ Provide a function to `stringifyQueryParams` option to generate URL with
 ```js
 const urlWithQueryString = generateUrls(router, {
   stringifyQueryParams(params) {
-    return Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
+    return new URLSearchParams(params).toString()
   },
 })
 

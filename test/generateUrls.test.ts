@@ -39,9 +39,7 @@ path('home') // => '/base'
 const options: GenerateUrlsOptions = {
   encode: (value: string) => value,
   stringifyQueryParams(params: Params) {
-    return Object.keys(params)
-      .map((key) => `${key}=${params[key]}`)
-      .join('&')
+    return new URLSearchParams(params).toString()
   },
 }
 
