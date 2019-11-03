@@ -4,7 +4,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('path-to-regexp')) :
   typeof define === 'function' && define.amd ? define(['path-to-regexp'], factory) :
   (global = global || self, global.generateUrls = factory(global.UniversalRouter.pathToRegexp));
-}(this, function (pathToRegexp) { 'use strict';
+}(this, (function (pathToRegexp) { 'use strict';
 
   var cache = new Map();
 
@@ -111,5 +111,5 @@
 
   return generateUrls;
 
-}));
+})));
 //# sourceMappingURL=universal-router-generate-urls.js.map

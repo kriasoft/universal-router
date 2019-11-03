@@ -4,7 +4,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.UniversalRouter = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   var pathToRegexp_1 = pathToRegexp;
   var parse_1 = parse;
@@ -483,5 +483,5 @@
 
   return UniversalRouter;
 
-}));
+})));
 //# sourceMappingURL=universal-router.js.map
