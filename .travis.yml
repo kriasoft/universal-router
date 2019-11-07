@@ -8,8 +8,7 @@ node_js:
   - "node"
   - "lts/*"
 
-install:
-  - npm ci
+before_install:
   - npm install --global codecov
 
 script:
