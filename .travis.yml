@@ -8,16 +8,13 @@ node_js:
   - "node"
   - "lts/*"
 
-cache:
-  directories:
-    - "node_modules"
-
-before_install:
+install:
+  - npm ci
   - npm install --global codecov
 
 script:
   - npm run lint
-  - npm run test -- --coverage
+  - npm run test -- --coverage --verbose --ci
   - npm run build
 
 after_success:
