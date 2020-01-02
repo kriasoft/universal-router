@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 9.0.0 - [Unreleased][unreleased]
+
+- Update [path-to-regexp](https://github.com/pillarjs/path-to-regexp) from v3 to v6, see
+  [changelog](https://github.com/pillarjs/path-to-regexp/releases)
+  (BREAKING CHANGE)
+
 ## [8.3.0] - 2019-09-17
 
 - Make `generateUrls` compatible with `UniversalRouterSync`
@@ -38,6 +44,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   (BREAKING CHANGE [#158](https://github.com/kriasoft/universal-router/pull/158)).
 
 **Migration from v6 to v7:**
+
 - If your code relies on `error.context` or `error.code` you still can access them
   using `errorHandler` option:
   ```js
@@ -53,6 +60,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add an option for global error handling ([#147](https://github.com/kriasoft/universal-router/pull/147)).
 
 **Migration from v5 to v6:**
+
 - Use `error.code` instead of `error.status` or `error.statusCode` for error handling.
 
 ## [5.1.0] - 2018-01-16
@@ -65,6 +73,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   (BREAKING CHANGE [#140](https://github.com/kriasoft/universal-router/pull/140))
 
 **Migration from v4 to v5:**
+
 - If you are using `resolveRoute` option for custom route handling logic then you need
   to return `undefined` instead of `null` in cases when a route should not match
 - Make sure that your middleware routes which return `null` are working as you expect,
@@ -107,6 +116,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [4.1.0] - 2017-09-20
 
 - Support for using the same param name in array of paths ([#122](https://github.com/kriasoft/universal-router/pull/122))
+
   ```js
   const router = new UniversalRouter({
     path: ['/one/:parameter', '/two/:parameter'],
@@ -142,6 +152,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   ([#110](https://github.com/kriasoft/universal-router/pull/110))
 
 **Migration from v3 to v4:**
+
 - Change `router.resolve({ path, ... })` to `router.resolve({ pathname, ... })`
 - Remove trailing slashes from all paths of your routes, i.e.
   - `path: '/posts/:uri/'` => `path: '/posts/:uri'`
@@ -171,6 +182,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [3.0.0] - 2017-03-25
 
 - Update Router API (BREAKING CHANGE)
+
   ```js
   import Router from 'universal-router'
   const router = new Router(routes, options)
@@ -180,7 +192,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   import { resolve } from 'universal-router'
   resolve(routes, { path, ...context }) // => Promise<any>
   ```
+
   See [#83](https://github.com/kriasoft/universal-router/pull/83) for more info and examples
+
 - `context.next()` now iterates only child routes by default (BREAKING CHANGE)<br>
   use `context.next(true)` to iterate through the all remaining routes
 - Remove `babel-runtime` dependency to decrease library size (BREAKING CHANGE)<br>
@@ -247,8 +261,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.1.0-beta.1] - 2016-04-05
 
 - Remove `Router` class and `router.dispatch()` method in favor of
- `match(routes, { path, ...context })`, where `routes` is just a plain JavaScript objects containing
- the list of routes (BREAKING CHANGE)
+  `match(routes, { path, ...context })`, where `routes` is just a plain JavaScript objects containing
+  the list of routes (BREAKING CHANGE)
 - Add `context.end()` method to be used from inside route actions
 - Update documentation and code samples
 
@@ -269,7 +283,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Small bug fixes and improvements
 
-[Unreleased]: https://github.com/kriasoft/universal-router/compare/v8.3.0...HEAD
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v8.3.0...HEAD
 [8.3.0]: https://github.com/kriasoft/universal-router/compare/v8.2.1...v8.3.0
 [8.2.1]: https://github.com/kriasoft/universal-router/compare/v8.2.0...v8.2.1
 [8.2.0]: https://github.com/kriasoft/universal-router/compare/v8.1.0...v8.2.0

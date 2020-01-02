@@ -74,5 +74,5 @@ router.resolve({ pathname: '/one' }).then(component => {
 
 ## Learn more
 
-* [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)
-* [Redirects](https://github.com/kriasoft/universal-router/blob/master/docs/redirects.md)
+- [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)
+- [Redirects](https://github.com/kriasoft/universal-router/blob/master/docs/redirects.md)

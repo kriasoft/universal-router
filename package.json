@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "universal-router",
-  "version": "8.3.0",
+  "version": "9.0.0",
   "description": "Isomorphic router for JavaScript web applications",
   "homepage": "https://www.kriasoft.com/universal-router/",
   "repository": "kriasoft/universal-router",
@@ -21,35 +21,39 @@
   ],
   "main": "index.js",
   "module": "module.js",
-  "esnext": "src/UniversalRouter.js",
   "types": "src/UniversalRouter.d.ts",
   "dependencies": {
-    "path-to-regexp": "^3.1.0"
+    "path-to-regexp": "^6.1.0"
   },
   "devDependencies": {
     "@babel/core": "",
     "@babel/preset-env": "",
-    "@babel/register": "",
+    "@rollup/plugin-commonjs": "",
+    "@rollup/plugin-node-resolve": "",
+    "@rollup/plugin-typescript": "",
+    "@types/jest": "",
+    "@typescript-eslint/eslint-plugin": "",
+    "@typescript-eslint/parser": "",
     "babel-jest": "",
     "eslint": "",
     "eslint-config-airbnb-base": "",
     "eslint-config-prettier": "",
     "eslint-plugin-import": "",
-    "fs-extra": "",
+    "eslint-plugin-jest": "",
+    "eslint-plugin-prettier": "",
     "husky": "",
     "jest": "",
     "prettier": "",
     "rollup": "",
     "rollup-plugin-babel": "",
-    "rollup-plugin-commonjs": "",
-    "rollup-plugin-node-resolve": "",
+    "rollup-plugin-sourcemaps": "",
     "rollup-plugin-uglify": "",
+    "ts-jest": "",
     "typescript": ""
   },
   "scripts": {
-    "lint": "node tools/lint",
-    "test": "node tools/test",
-    "build": "node tools/build",
-    "pre-commit": "node tools/pre-commit"
+    "lint": "eslint . --ext .ts,.js",
+    "test": "jest",
+    "build": "node tools/build.js"
   }
 }

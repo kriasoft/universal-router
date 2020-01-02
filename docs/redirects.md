@@ -51,16 +51,18 @@ const router = new UniversalRouter([
   },
 ])
 
-router.resolve({
-  pathname: '/admin',
-  user: null, // <== is the user logged in?
-}).then(page => {
-  if (page.redirect) {
-    window.location = page.redirect
-  } else {
-    document.body.innerHTML = page.content
-  }
-})
+router
+  .resolve({
+    pathname: '/admin',
+    user: null, // <== is the user logged in?
+  })
+  .then(page => {
+    if (page.redirect) {
+      window.location = page.redirect
+    } else {
+      document.body.innerHTML = page.content
+    }
+  })
 ```
 
 You also can use [middleware](https://github.com/kriasoft/universal-router/blob/master/docs/api.md#middlewares)
@@ -163,4 +165,4 @@ Playground: [JSFiddle](https://jsfiddle.net/frenzzy/2nq9o896/)
 
 ## Learn more
 
-* [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)
+- [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)

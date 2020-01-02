@@ -8,14 +8,14 @@ Creates an universal router instance which have a single
 with any amount of params where only `path` is required, or array of such objects.
 Second `options` argument is optional where you can pass the following:
 
-* `context` - an object with any data which you want to pass to `resolveRoute` function.\
+- `context` - an object with any data which you want to pass to `resolveRoute` function.\
   See [Context](#context) section below for details.
-* `baseUrl` - the base URL of the app. By default is empty string `''`.\
+- `baseUrl` - the base URL of the app. By default is empty string `''`.\
   If all the URLs in your app are relative to some other "base" URL, use this option.
-* `resolveRoute` - function for any custom route handling logic.\
+- `resolveRoute` - function for any custom route handling logic.\
   For example you can define this option to work with routes in declarative manner.\
   By default the router calls the `action` method of matched route.
-* `errorHandler` - function for global error handling. Called with an
+- `errorHandler` - function for global error handling. Called with an
   [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error)
   and [Context](#context) arguments every time the route is not found or threw an error.
 
@@ -26,7 +26,7 @@ const routes = {
   path: '/page',            // string or regexp or array of them, optional
   name: 'page',             // unique string, optional
   parent: null,             // route object or null, automatically filled by the router
-  children: [],             // array of route objects or null, optional
+  children: [],             // array of route objects, optional
   action(context, params) { // function, optional
 
     // action method should return anything except `null` or `undefined` to be resolved by router
@@ -66,7 +66,7 @@ other than `null` or `undefined`.
 ```js
 const router = new UniversalRouter([
   { path: '/one', action: () => 'Page One' },
-  { path: '/two', action: () => 'Page Two' },
+  { path: '/two', action: () => 'Page Two' }
 ])
 
 router.resolve({ pathname: '/one' })
@@ -87,22 +87,22 @@ const router = new UniversalRouter({
   children: [
     {
       path: '',                        // www.example.com/admin
-      action: () => 'Admin Page',
+      action: () => 'Admin Page'
     },
     {
       path: '/users',
       children: [
         {
           path: '',                    // www.example.com/admin/users
-          action: () => 'User List',
+          action: () => 'User List'
         },
         {
           path: '/:username',          // www.example.com/admin/users/john
-          action: () => 'User Profile',
-        },
-      ],
-    },
-  ],
+          action: () => 'User Profile'
+        }
+      ]
+    }
+  ]
 })
 
 router.resolve({ pathname: '/admin/users/john' })
@@ -117,7 +117,7 @@ router.resolve({ pathname: '/admin/users/john' })
 ```js
 const router = new UniversalRouter({
   path: '/hello/:username',
-  action: (context) => `Welcome, ${context.params.username}!`,
+  action: context => `Welcome, ${context.params.username}!`
 })
 
 router.resolve({ pathname: '/hello/john' })
@@ -131,7 +131,7 @@ to an action method like so:
 ```js
 const router = new UniversalRouter({
   path: '/hello/:username',
-  action: (ctx, { username }) => `Welcome, ${username}!`,
+  action: (ctx, { username }) => `Welcome, ${username}!`
 })
 
 router.resolve({ pathname: '/hello/john' })
@@ -157,7 +157,7 @@ const router = new UniversalRouter({
   path: '/hello',
   action(context) {
     return `Welcome, ${context.user}!`
-  },
+  }
 })
 
 router.resolve({ pathname: '/hello', user: 'admin' })
@@ -181,17 +181,15 @@ const router = new UniversalRouter(route, { context })
 Router always adds following parameters to the `context` object
 before passing it to the `resolveRoute` function:
 
-* `router` - Current router instance.
-* `route` - Matched route object.
-* `next` - Middleware style function which can continue resolving,
+- `router` - Current router instance.
+- `route` - Matched route object.
+- `next` - Middleware style function which can continue resolving,
   see [Middlewares](#middlewares) section below for details.
-* `pathname` - URL which was transmitted to `router.resolve()`.
-* `baseUrl` - Base URL path relative to the path of the current route.
-* `path` - Matched path.
-* `params` - Matched path params,
+- `pathname` - URL which was transmitted to `router.resolve()`.
+- `baseUrl` - Base URL path relative to the path of the current route.
+- `path` - Matched path.
+- `params` - Matched path params,
   see [URL Parameters](#url-parameters) section above for details.
-* `keys` - An array of keys found in the path,
-  see [path-to-regexp](https://github.com/pillarjs/path-to-regexp) documentation for details.
 
 ## Async Routes
 
@@ -204,7 +202,7 @@ const router = new UniversalRouter({
     const resp = await fetch(`/api/users/${params.username}`)
     const user = await resp.json()
     if (user) return `Welcome, ${user.displayName}!`
-  },
+  }
 })
 
 router.resolve({ pathname: '/hello/john' })
@@ -222,7 +220,7 @@ const route = {
     return fetch(`/api/users/${params.username}`)
       .then(resp => resp.json())
       .then(user => user && `Welcome, ${user.displayName}!`)
-  },
+  }
 }
 ```
 
@@ -245,9 +243,9 @@ const router = new UniversalRouter({
       action() {
         console.log('route: return a result')
         return 'Hello, world!'
-      },
-    },
-  ],
+      }
+    }
+  ]
 })
 
 router.resolve({ pathname: '/hello' })
@@ -276,7 +274,7 @@ const middlewareRoute = {
     }
     return undefined // or `return context.next()` - try to match child routes
   },
-  children: [/* admin routes here */],
+  children: [/* admin routes here */]
 }
 ```
 
@@ -300,7 +298,7 @@ the matching route action returned (or throw an error).
 ```js
 const router = new UniversalRouterSync([
   { path: '/one', action: () => 'Page One' },
-  { path: '/two', action: () => 'Page Two' },
+  { path: '/two', action: () => 'Page Two' }
 ])
 
 const result = router.resolve({ pathname: '/one' })
@@ -334,7 +332,7 @@ import generateUrls from 'universal-router/generateUrls'
 
 const routes = [
   { name: 'users', path: '/users' },
-  { name: 'user', path: '/user/:username' },
+  { name: 'user', path: '/user/:username' }
 ]
 
 const router = new UniversalRouter(routes, { baseUrl: '/base' })
@@ -368,9 +366,7 @@ Provide a function to `stringifyQueryParams` option to generate URL with
 
 ```js
 const urlWithQueryString = generateUrls(router, {
-  stringifyQueryParams(params) {
-    return new URLSearchParams(params).toString()
-  },
+  stringifyQueryParams: (params) => new URLSearchParams(params).toString()
 })
 
 const params = { username: 'John', busy: 1 }
@@ -388,5 +384,5 @@ generateUrls(router, { stringifyQueryParams: qs.stringify })
 
 ## Recipes
 
-* [Redirects](https://github.com/kriasoft/universal-router/blob/master/docs/redirects.md)
-* [Request a recipe](https://github.com/kriasoft/universal-router/issues/new)
+- [Redirects](https://github.com/kriasoft/universal-router/blob/master/docs/redirects.md)
+- [Request a recipe](https://github.com/kriasoft/universal-router/issues/new)

@@ -6,11 +6,11 @@ package-lock.json
 yarn.lock
 
 # Compiled output
-dist/*
-!dist/universal-router*
+/dist/*
+!/dist/universal-router*
 
 # Test coverage
-coverage/
+/coverage/
 
 # Logs
 npm-debug.log*
