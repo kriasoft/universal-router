@@ -21,8 +21,18 @@ export interface UrlParams {
 }
 
 export interface GenerateUrlsOptions extends ParseOptions, TokensToFunctionOptions {
+  /**
+   * Add a query string to generated url based on unknown route params.
+   */
   stringifyQueryParams?: (params: UrlParams) => string
 }
+
+/**
+ * Create a url by route name from route path.
+ */
+declare const generateUrl: (routeName: string, params?: UrlParams) => string
+
+type GenerateUrl = typeof generateUrl
 
 type Keys = { [key: string]: boolean }
 
@@ -48,10 +58,10 @@ function cacheRoutes(
   }
 }
 
-function generateUrls(
-  router: UniversalRouter,
-  options?: GenerateUrlsOptions,
-): (routeName: string, params?: UrlParams) => string {
+/**
+ * Create a function to generate urls by route names.
+ */
+function generateUrls(router: UniversalRouter, options?: GenerateUrlsOptions): GenerateUrl {
   if (!router) {
     throw new ReferenceError('Router is not defined')
   }
