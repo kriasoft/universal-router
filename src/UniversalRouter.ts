@@ -62,10 +62,6 @@ export interface RouteContext<R = any, C extends RouterContext = RouterContext>
    */
   params: RouteParams
   /**
-   * The 0-based index of the match in the input string.
-   */
-  index: number
-  /**
    * Middleware style function which can continue resolving.
    */
   next: (resume?: boolean) => Promise<R>
@@ -139,7 +135,6 @@ export interface RouteMatch<R = any, C extends RouterContext = RouterContext> {
   route: Route<R, C>
   baseUrl: string
   path: string
-  index: number
   params: RouteParams
 }
 
@@ -186,7 +181,6 @@ function matchRoute<R, C>(
               route,
               baseUrl,
               path: matchResult.path,
-              index: matchResult.index,
               params: matchResult.params,
             },
           }

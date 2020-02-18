@@ -434,7 +434,6 @@
                   route: route,
                   baseUrl: baseUrl,
                   path: matchResult.path,
-                  index: matchResult.index,
                   params: matchResult.params
                 }
               };
