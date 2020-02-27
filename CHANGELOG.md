@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased][unreleased]
+## [9.0.0] - 2020-02-27
 
 - Update [path-to-regexp](https://github.com/pillarjs/path-to-regexp) from v3 to v6, see
   [changelog](https://github.com/pillarjs/path-to-regexp/releases)
@@ -286,7 +286,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/universal-router/compare/v8.3.0...HEAD
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v9.0.0...HEAD
+[8.3.0]: https://github.com/kriasoft/universal-router/compare/v8.3.0...v9.0.0
 [8.3.0]: https://github.com/kriasoft/universal-router/compare/v8.2.1...v8.3.0
 [8.2.1]: https://github.com/kriasoft/universal-router/compare/v8.2.0...v8.2.1
 [8.2.0]: https://github.com/kriasoft/universal-router/compare/v8.1.0...v8.2.0
