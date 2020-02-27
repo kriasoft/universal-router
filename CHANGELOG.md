@@ -287,7 +287,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Small bug fixes and improvements
 
 [unreleased]: https://github.com/kriasoft/universal-router/compare/v9.0.0...HEAD
-[8.3.0]: https://github.com/kriasoft/universal-router/compare/v8.3.0...v9.0.0
+[9.0.0]: https://github.com/kriasoft/universal-router/compare/v8.3.0...v9.0.0
 [8.3.0]: https://github.com/kriasoft/universal-router/compare/v8.2.1...v8.3.0
 [8.2.1]: https://github.com/kriasoft/universal-router/compare/v8.2.0...v8.2.1
 [8.2.0]: https://github.com/kriasoft/universal-router/compare/v8.1.0...v8.2.0
