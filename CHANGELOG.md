@@ -5,13 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## 9.0.0 - [Unreleased][unreleased]
+## [Unreleased][unreleased]
 
 - Update [path-to-regexp](https://github.com/pillarjs/path-to-regexp) from v3 to v6, see
   [changelog](https://github.com/pillarjs/path-to-regexp/releases)
   (BREAKING CHANGE)
 - Remove `context.keys` (BREAKING CHANGE)
 - Migrate to [TypeScript](https://www.typescriptlang.org/)
+  ([#183](https://github.com/kriasoft/universal-router/pull/183))
 
 ## [8.3.0] - 2019-09-17
 
