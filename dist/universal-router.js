@@ -1,487 +1,579 @@
 /*! Universal Router | MIT License | https://www.kriasoft.com/universal-router/ */
 
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.UniversalRouter = factory());
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global = global || self, global.UniversalRouter = factory());
 }(this, (function () { 'use strict';
 
-  var pathToRegexp_1 = pathToRegexp;
-  var parse_1 = parse;
-  var compile_1 = compile;
-  var tokensToFunction_1 = tokensToFunction;
-  var tokensToRegExp_1 = tokensToRegExp;
-  var DEFAULT_DELIMITER = '/';
-  var PATH_REGEXP = new RegExp(['(\\\\.)', '(?:\\:(\\w+)(?:\\(((?:\\\\.|[^\\\\()])+)\\))?|\\(((?:\\\\.|[^\\\\()])+)\\))([+*?])?'].join('|'), 'g');
+    function lexer(str) {
+      var tokens = [];
+      var i = 0;
 
-  function parse(str, options) {
-    var tokens = [];
-    var key = 0;
-    var index = 0;
-    var path = '';
-    var defaultDelimiter = options && options.delimiter || DEFAULT_DELIMITER;
-    var whitelist = options && options.whitelist || undefined;
-    var pathEscaped = false;
-    var res;
+      while (i < str.length) {
+        var _char = str[i];
 
-    while ((res = PATH_REGEXP.exec(str)) !== null) {
-      var m = res[0];
-      var escaped = res[1];
-      var offset = res.index;
-      path += str.slice(index, offset);
-      index = offset + m.length;
-
-      if (escaped) {
-        path += escaped[1];
-        pathEscaped = true;
-        continue;
-      }
-
-      var prev = '';
-      var name = res[2];
-      var capture = res[3];
-      var group = res[4];
-      var modifier = res[5];
-
-      if (!pathEscaped && path.length) {
-        var k = path.length - 1;
-        var c = path[k];
-        var matches = whitelist ? whitelist.indexOf(c) > -1 : true;
-
-        if (matches) {
-          prev = c;
-          path = path.slice(0, k);
-        }
-      }
-
-      if (path) {
-        tokens.push(path);
-        path = '';
-        pathEscaped = false;
-      }
-
-      var repeat = modifier === '+' || modifier === '*';
-      var optional = modifier === '?' || modifier === '*';
-      var pattern = capture || group;
-      var delimiter = prev || defaultDelimiter;
-      tokens.push({
-        name: name || key++,
-        prefix: prev,
-        delimiter: delimiter,
-        optional: optional,
-        repeat: repeat,
-        pattern: pattern ? escapeGroup(pattern) : '[^' + escapeString(delimiter === defaultDelimiter ? delimiter : delimiter + defaultDelimiter) + ']+?'
-      });
-    }
-
-    if (path || index < str.length) {
-      tokens.push(path + str.substr(index));
-    }
-
-    return tokens;
-  }
-
-  function compile(str, options) {
-    return tokensToFunction(parse(str, options), options);
-  }
-
-  function tokensToFunction(tokens, options) {
-    var matches = new Array(tokens.length);
-
-    for (var i = 0; i < tokens.length; i++) {
-      if (typeof tokens[i] === 'object') {
-        matches[i] = new RegExp('^(?:' + tokens[i].pattern + ')$', flags(options));
-      }
-    }
-
-    return function (data, options) {
-      var path = '';
-      var encode = options && options.encode || encodeURIComponent;
-      var validate = options ? options.validate !== false : true;
-
-      for (var i = 0; i < tokens.length; i++) {
-        var token = tokens[i];
-
-        if (typeof token === 'string') {
-          path += token;
+        if (_char === "*" || _char === "+" || _char === "?") {
+          tokens.push({
+            type: "MODIFIER",
+            index: i,
+            value: str[i++]
+          });
           continue;
         }
 
-        var value = data ? data[token.name] : undefined;
-        var segment;
+        if (_char === "\\") {
+          tokens.push({
+            type: "ESCAPED_CHAR",
+            index: i++,
+            value: str[i++]
+          });
+          continue;
+        }
 
-        if (Array.isArray(value)) {
-          if (!token.repeat) {
-            throw new TypeError('Expected "' + token.name + '" to not repeat, but got array');
-          }
+        if (_char === "{") {
+          tokens.push({
+            type: "OPEN",
+            index: i,
+            value: str[i++]
+          });
+          continue;
+        }
 
-          if (value.length === 0) {
-            if (token.optional) continue;
-            throw new TypeError('Expected "' + token.name + '" to not be empty');
-          }
+        if (_char === "}") {
+          tokens.push({
+            type: "CLOSE",
+            index: i,
+            value: str[i++]
+          });
+          continue;
+        }
 
-          for (var j = 0; j < value.length; j++) {
-            segment = encode(value[j], token);
+        if (_char === ":") {
+          var name = "";
+          var j = i + 1;
 
-            if (validate && !matches[i].test(segment)) {
-              throw new TypeError('Expected all "' + token.name + '" to match "' + token.pattern + '"');
+          while (j < str.length) {
+            var code = str.charCodeAt(j);
+
+            if (code >= 48 && code <= 57 || code >= 65 && code <= 90 || code >= 97 && code <= 122 || code === 95) {
+              name += str[j++];
+              continue;
             }
 
-            path += (j === 0 ? token.prefix : token.delimiter) + segment;
+            break;
           }
 
+          if (!name) throw new TypeError("Missing parameter name at " + i);
+          tokens.push({
+            type: "NAME",
+            index: i,
+            value: name
+          });
+          i = j;
           continue;
         }
 
-        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-          segment = encode(String(value), token);
+        if (_char === "(") {
+          var count = 1;
+          var pattern = "";
+          var j = i + 1;
 
-          if (validate && !matches[i].test(segment)) {
-            throw new TypeError('Expected "' + token.name + '" to match "' + token.pattern + '", but got "' + segment + '"');
+          if (str[j] === "?") {
+            throw new TypeError("Pattern cannot start with \"?\" at " + j);
           }
 
-          path += token.prefix + segment;
+          while (j < str.length) {
+            if (str[j] === "\\") {
+              pattern += str[j++] + str[j++];
+              continue;
+            }
+
+            if (str[j] === ")") {
+              count--;
+
+              if (count === 0) {
+                j++;
+                break;
+              }
+            } else if (str[j] === "(") {
+              count++;
+
+              if (str[j + 1] !== "?") {
+                throw new TypeError("Capturing groups are not allowed at " + j);
+              }
+            }
+
+            pattern += str[j++];
+          }
+
+          if (count) throw new TypeError("Unbalanced pattern at " + i);
+          if (!pattern) throw new TypeError("Missing pattern at " + i);
+          tokens.push({
+            type: "PATTERN",
+            index: i,
+            value: pattern
+          });
+          i = j;
           continue;
         }
 
-        if (token.optional) continue;
-        throw new TypeError('Expected "' + token.name + '" to be ' + (token.repeat ? 'an array' : 'a string'));
-      }
-
-      return path;
-    };
-  }
-
-  function escapeString(str) {
-    return str.replace(/([.+*?=^!:${}()[\]|/\\])/g, '\\$1');
-  }
-
-  function escapeGroup(group) {
-    return group.replace(/([=!:$/()])/g, '\\$1');
-  }
-
-  function flags(options) {
-    return options && options.sensitive ? '' : 'i';
-  }
-
-  function regexpToRegexp(path, keys) {
-    if (!keys) return path;
-    var groups = path.source.match(/\((?!\?)/g);
-
-    if (groups) {
-      for (var i = 0; i < groups.length; i++) {
-        keys.push({
-          name: i,
-          prefix: null,
-          delimiter: null,
-          optional: false,
-          repeat: false,
-          pattern: null
+        tokens.push({
+          type: "CHAR",
+          index: i,
+          value: str[i++]
         });
       }
+
+      tokens.push({
+        type: "END",
+        index: i,
+        value: ""
+      });
+      return tokens;
     }
 
-    return path;
-  }
-
-  function arrayToRegexp(path, keys, options) {
-    var parts = [];
-
-    for (var i = 0; i < path.length; i++) {
-      parts.push(pathToRegexp(path[i], keys, options).source);
-    }
-
-    return new RegExp('(?:' + parts.join('|') + ')', flags(options));
-  }
-
-  function stringToRegexp(path, keys, options) {
-    return tokensToRegExp(parse(path, options), keys, options);
-  }
-
-  function tokensToRegExp(tokens, keys, options) {
-    options = options || {};
-    var strict = options.strict;
-    var start = options.start !== false;
-    var end = options.end !== false;
-    var delimiter = options.delimiter || DEFAULT_DELIMITER;
-    var endsWith = [].concat(options.endsWith || []).map(escapeString).concat('$').join('|');
-    var route = start ? '^' : '';
-
-    for (var i = 0; i < tokens.length; i++) {
-      var token = tokens[i];
-
-      if (typeof token === 'string') {
-        route += escapeString(token);
-      } else {
-        var capture = token.repeat ? '(?:' + token.pattern + ')(?:' + escapeString(token.delimiter) + '(?:' + token.pattern + '))*' : token.pattern;
-        if (keys) keys.push(token);
-
-        if (token.optional) {
-          if (!token.prefix) {
-            route += '(' + capture + ')?';
-          } else {
-            route += '(?:' + escapeString(token.prefix) + '(' + capture + '))?';
-          }
-        } else {
-          route += escapeString(token.prefix) + '(' + capture + ')';
-        }
-      }
-    }
-
-    if (end) {
-      if (!strict) route += '(?:' + escapeString(delimiter) + ')?';
-      route += endsWith === '$' ? '$' : '(?=' + endsWith + ')';
-    } else {
-      var endToken = tokens[tokens.length - 1];
-      var isEndDelimited = typeof endToken === 'string' ? endToken[endToken.length - 1] === delimiter : endToken === undefined;
-      if (!strict) route += '(?:' + escapeString(delimiter) + '(?=' + endsWith + '))?';
-      if (!isEndDelimited) route += '(?=' + escapeString(delimiter) + '|' + endsWith + ')';
-    }
-
-    return new RegExp(route, flags(options));
-  }
-
-  function pathToRegexp(path, keys, options) {
-    if (path instanceof RegExp) {
-      return regexpToRegexp(path, keys);
-    }
-
-    if (Array.isArray(path)) {
-      return arrayToRegexp(path, keys, options);
-    }
-
-    return stringToRegexp(path, keys, options);
-  }
-  pathToRegexp_1.parse = parse_1;
-  pathToRegexp_1.compile = compile_1;
-  pathToRegexp_1.tokensToFunction = tokensToFunction_1;
-  pathToRegexp_1.tokensToRegExp = tokensToRegExp_1;
-
-  var hasOwnProperty = Object.prototype.hasOwnProperty;
-  var cache = new Map();
-
-  function decodeParam(val) {
-    try {
-      return decodeURIComponent(val);
-    } catch (err) {
-      return val;
-    }
-  }
-
-  function matchPath(route, pathname, parentKeys, parentParams) {
-    var end = !route.children;
-    var cacheKey = (route.path || '') + "|" + end;
-    var regexp = cache.get(cacheKey);
-
-    if (!regexp) {
-      var keys = [];
-      regexp = {
-        keys: keys,
-        pattern: pathToRegexp_1(route.path || '', keys, {
-          end: end
-        })
-      };
-      cache.set(cacheKey, regexp);
-    }
-
-    var m = regexp.pattern.exec(pathname);
-
-    if (!m) {
-      return null;
-    }
-
-    var path = m[0];
-    var params = Object.assign({}, parentParams);
-
-    for (var i = 1; i < m.length; i++) {
-      var key = regexp.keys[i - 1];
-      var prop = key.name;
-      var value = m[i];
-
-      if (value !== undefined || !hasOwnProperty.call(params, prop)) {
-        if (key.repeat) {
-          params[prop] = value ? value.split(key.delimiter).map(decodeParam) : [];
-        } else {
-          params[prop] = value ? decodeParam(value) : value;
-        }
-      }
-    }
-
-    return {
-      path: !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path,
-      keys: parentKeys.concat(regexp.keys),
-      params: params
-    };
-  }
-
-  function matchRoute(route, baseUrl, pathname, parentKeys, parentParams) {
-    var match;
-    var childMatches;
-    var childIndex = 0;
-    return {
-      next: function next(routeToSkip) {
-        if (route === routeToSkip) {
-          return {
-            done: true
-          };
-        }
-
-        if (!match) {
-          match = matchPath(route, pathname, parentKeys, parentParams);
-
-          if (match) {
-            return {
-              done: false,
-              value: {
-                route: route,
-                baseUrl: baseUrl,
-                path: match.path,
-                keys: match.keys,
-                params: match.params
-              }
-            };
-          }
-        }
-
-        if (match && route.children) {
-          while (childIndex < route.children.length) {
-            if (!childMatches) {
-              var childRoute = route.children[childIndex];
-              childRoute.parent = route;
-              childMatches = matchRoute(childRoute, baseUrl + match.path, pathname.substr(match.path.length), match.keys, match.params);
-            }
-
-            var childMatch = childMatches.next(routeToSkip);
-
-            if (!childMatch.done) {
-              return {
-                done: false,
-                value: childMatch.value
-              };
-            }
-
-            childMatches = null;
-            childIndex++;
-          }
-        }
-
-        return {
-          done: true
-        };
-      }
-    };
-  }
-
-  function resolveRoute(context, params) {
-    if (typeof context.route.action === 'function') {
-      return context.route.action(context, params);
-    }
-
-    return undefined;
-  }
-
-  function isChildRoute(parentRoute, childRoute) {
-    var route = childRoute;
-
-    while (route) {
-      route = route.parent;
-
-      if (route === parentRoute) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  var UniversalRouter = function () {
-    function UniversalRouter(routes, options) {
+    function parse(str, options) {
       if (options === void 0) {
         options = {};
       }
 
-      if (!routes || typeof routes !== 'object') {
-        throw new TypeError('Invalid routes');
+      var tokens = lexer(str);
+      var _a = options.prefixes,
+          prefixes = _a === void 0 ? "./" : _a;
+      var defaultPattern = "[^" + escapeString(options.delimiter || "/#?") + "]+?";
+      var result = [];
+      var key = 0;
+      var i = 0;
+      var path = "";
+
+      var tryConsume = function tryConsume(type) {
+        if (i < tokens.length && tokens[i].type === type) return tokens[i++].value;
+      };
+
+      var mustConsume = function mustConsume(type) {
+        var value = tryConsume(type);
+        if (value !== undefined) return value;
+        var _a = tokens[i],
+            nextType = _a.type,
+            index = _a.index;
+        throw new TypeError("Unexpected " + nextType + " at " + index + ", expected " + type);
+      };
+
+      var consumeText = function consumeText() {
+        var result = "";
+        var value;
+
+        while (value = tryConsume("CHAR") || tryConsume("ESCAPED_CHAR")) {
+          result += value;
+        }
+
+        return result;
+      };
+
+      while (i < tokens.length) {
+        var _char2 = tryConsume("CHAR");
+
+        var name = tryConsume("NAME");
+        var pattern = tryConsume("PATTERN");
+
+        if (name || pattern) {
+          var prefix = _char2 || "";
+
+          if (prefixes.indexOf(prefix) === -1) {
+            path += prefix;
+            prefix = "";
+          }
+
+          if (path) {
+            result.push(path);
+            path = "";
+          }
+
+          result.push({
+            name: name || key++,
+            prefix: prefix,
+            suffix: "",
+            pattern: pattern || defaultPattern,
+            modifier: tryConsume("MODIFIER") || ""
+          });
+          continue;
+        }
+
+        var value = _char2 || tryConsume("ESCAPED_CHAR");
+
+        if (value) {
+          path += value;
+          continue;
+        }
+
+        if (path) {
+          result.push(path);
+          path = "";
+        }
+
+        var open = tryConsume("OPEN");
+
+        if (open) {
+          var prefix = consumeText();
+          var name_1 = tryConsume("NAME") || "";
+          var pattern_1 = tryConsume("PATTERN") || "";
+          var suffix = consumeText();
+          mustConsume("CLOSE");
+          result.push({
+            name: name_1 || (pattern_1 ? key++ : ""),
+            pattern: name_1 && !pattern_1 ? defaultPattern : pattern_1,
+            prefix: prefix,
+            suffix: suffix,
+            modifier: tryConsume("MODIFIER") || ""
+          });
+          continue;
+        }
+
+        mustConsume("END");
       }
 
-      this.baseUrl = options.baseUrl || '';
-      this.errorHandler = options.errorHandler;
-      this.resolveRoute = options.resolveRoute || resolveRoute;
-      this.context = Object.assign({
-        router: this
-      }, options.context);
-      this.root = Array.isArray(routes) ? {
-        path: '',
-        children: routes,
-        parent: null
-      } : routes;
-      this.root.parent = null;
+      return result;
+    }
+    function match(str, options) {
+      var keys = [];
+      var re = pathToRegexp(str, keys, options);
+      return regexpToFunction(re, keys, options);
+    }
+    function regexpToFunction(re, keys, options) {
+      if (options === void 0) {
+        options = {};
+      }
+
+      var _a = options.decode,
+          decode = _a === void 0 ? function (x) {
+        return x;
+      } : _a;
+      return function (pathname) {
+        var m = re.exec(pathname);
+        if (!m) return false;
+        var path = m[0],
+            index = m.index;
+        var params = Object.create(null);
+
+        var _loop_1 = function _loop_1(i) {
+          if (m[i] === undefined) return "continue";
+          var key = keys[i - 1];
+
+          if (key.modifier === "*" || key.modifier === "+") {
+            params[key.name] = m[i].split(key.prefix + key.suffix).map(function (value) {
+              return decode(value, key);
+            });
+          } else {
+            params[key.name] = decode(m[i], key);
+          }
+        };
+
+        for (var i = 1; i < m.length; i++) {
+          _loop_1(i);
+        }
+
+        return {
+          path: path,
+          index: index,
+          params: params
+        };
+      };
     }
 
-    var _proto = UniversalRouter.prototype;
+    function escapeString(str) {
+      return str.replace(/([.+*?=^!:${}()[\]|/\\])/g, "\\$1");
+    }
 
-    _proto.resolve = function resolve(pathnameOrContext) {
-      var _this = this;
+    function flags(options) {
+      return options && options.sensitive ? "" : "i";
+    }
 
-      var context = Object.assign({}, this.context, {}, typeof pathnameOrContext === 'string' ? {
-        pathname: pathnameOrContext
-      } : pathnameOrContext);
-      var match = matchRoute(this.root, this.baseUrl, context.pathname.substr(this.baseUrl.length), [], null);
-      var resolve = this.resolveRoute;
-      var matches = null;
-      var nextMatches = null;
-      var currentContext = context;
+    function regexpToRegexp(path, keys) {
+      if (!keys) return path;
+      var groups = path.source.match(/\((?!\?)/g);
 
-      function next(resume, parent, prevResult) {
-        if (parent === void 0) {
-          parent = matches.value.route;
+      if (groups) {
+        for (var i = 0; i < groups.length; i++) {
+          keys.push({
+            name: i,
+            prefix: "",
+            suffix: "",
+            modifier: "",
+            pattern: ""
+          });
         }
-
-        var routeToSkip = prevResult === null && !matches.done && matches.value.route;
-        matches = nextMatches || match.next(routeToSkip);
-        nextMatches = null;
-
-        if (!resume) {
-          if (matches.done || !isChildRoute(parent, matches.value.route)) {
-            nextMatches = matches;
-            return Promise.resolve(null);
-          }
-        }
-
-        if (matches.done) {
-          var error = new Error('Route not found');
-          error.status = 404;
-          return Promise.reject(error);
-        }
-
-        currentContext = Object.assign({}, context, {}, matches.value);
-        return Promise.resolve(resolve(currentContext, matches.value.params)).then(function (result) {
-          if (result !== null && result !== undefined) {
-            return result;
-          }
-
-          return next(resume, parent, result);
-        });
       }
 
-      context.next = next;
-      return Promise.resolve().then(function () {
-        return next(true, _this.root);
-      })["catch"](function (error) {
-        if (_this.errorHandler) {
-          return _this.errorHandler(error, currentContext);
+      return path;
+    }
+
+    function arrayToRegexp(paths, keys, options) {
+      var parts = paths.map(function (path) {
+        return pathToRegexp(path, keys, options).source;
+      });
+      return new RegExp("(?:" + parts.join("|") + ")", flags(options));
+    }
+
+    function stringToRegexp(path, keys, options) {
+      return tokensToRegexp(parse(path, options), keys, options);
+    }
+
+    function tokensToRegexp(tokens, keys, options) {
+      if (options === void 0) {
+        options = {};
+      }
+
+      var _a = options.strict,
+          strict = _a === void 0 ? false : _a,
+          _b = options.start,
+          start = _b === void 0 ? true : _b,
+          _c = options.end,
+          end = _c === void 0 ? true : _c,
+          _d = options.encode,
+          encode = _d === void 0 ? function (x) {
+        return x;
+      } : _d;
+      var endsWith = "[" + escapeString(options.endsWith || "") + "]|$";
+      var delimiter = "[" + escapeString(options.delimiter || "/#?") + "]";
+      var route = start ? "^" : "";
+
+      for (var _i = 0, tokens_1 = tokens; _i < tokens_1.length; _i++) {
+        var token = tokens_1[_i];
+
+        if (typeof token === "string") {
+          route += escapeString(encode(token));
+        } else {
+          var prefix = escapeString(encode(token.prefix));
+          var suffix = escapeString(encode(token.suffix));
+
+          if (token.pattern) {
+            if (keys) keys.push(token);
+
+            if (prefix || suffix) {
+              if (token.modifier === "+" || token.modifier === "*") {
+                var mod = token.modifier === "*" ? "?" : "";
+                route += "(?:" + prefix + "((?:" + token.pattern + ")(?:" + suffix + prefix + "(?:" + token.pattern + "))*)" + suffix + ")" + mod;
+              } else {
+                route += "(?:" + prefix + "(" + token.pattern + ")" + suffix + ")" + token.modifier;
+              }
+            } else {
+              route += "(" + token.pattern + ")" + token.modifier;
+            }
+          } else {
+            route += "(?:" + prefix + suffix + ")" + token.modifier;
+          }
+        }
+      }
+
+      if (end) {
+        if (!strict) route += delimiter + "?";
+        route += !options.endsWith ? "$" : "(?=" + endsWith + ")";
+      } else {
+        var endToken = tokens[tokens.length - 1];
+        var isEndDelimited = typeof endToken === "string" ? delimiter.indexOf(endToken[endToken.length - 1]) > -1 : endToken === undefined;
+
+        if (!strict) {
+          route += "(?:" + delimiter + "(?=" + endsWith + "))?";
         }
 
-        throw error;
-      });
-    };
+        if (!isEndDelimited) {
+          route += "(?=" + delimiter + "|" + endsWith + ")";
+        }
+      }
+
+      return new RegExp(route, flags(options));
+    }
+    function pathToRegexp(path, keys, options) {
+      if (path instanceof RegExp) return regexpToRegexp(path, keys);
+      if (Array.isArray(path)) return arrayToRegexp(path, keys, options);
+      return stringToRegexp(path, keys, options);
+    }
+
+    function decode(val) {
+      try {
+        return decodeURIComponent(val);
+      } catch (err) {
+        return val;
+      }
+    }
+
+    function matchRoute(route, baseUrl, options, pathname, parentParams) {
+      var matchResult;
+      var childMatches;
+      var childIndex = 0;
+      return {
+        next: function next(routeToSkip) {
+          if (route === routeToSkip) {
+            return {
+              done: true,
+              value: false
+            };
+          }
+
+          if (!matchResult) {
+            var rt = route;
+            var end = !rt.children;
+
+            if (!rt.match) {
+              rt.match = match(rt.path || '', Object.assign({
+                end: end
+              }, options));
+            }
+
+            matchResult = rt.match(pathname);
+
+            if (matchResult) {
+              var _matchResult = matchResult,
+                  path = _matchResult.path;
+              matchResult.path = !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path;
+              matchResult.params = Object.assign({}, parentParams, {}, matchResult.params);
+              return {
+                done: false,
+                value: {
+                  route: route,
+                  baseUrl: baseUrl,
+                  path: matchResult.path,
+                  params: matchResult.params
+                }
+              };
+            }
+          }
+
+          if (matchResult && route.children) {
+            while (childIndex < route.children.length) {
+              if (!childMatches) {
+                var childRoute = route.children[childIndex];
+                childRoute.parent = route;
+                childMatches = matchRoute(childRoute, baseUrl + matchResult.path, options, pathname.substr(matchResult.path.length), matchResult.params);
+              }
+
+              var childMatch = childMatches.next(routeToSkip);
+
+              if (!childMatch.done) {
+                return {
+                  done: false,
+                  value: childMatch.value
+                };
+              }
+
+              childMatches = null;
+              childIndex++;
+            }
+          }
+
+          return {
+            done: true,
+            value: false
+          };
+        }
+      };
+    }
+
+    function resolveRoute(context, params) {
+      if (typeof context.route.action === 'function') {
+        return context.route.action(context, params);
+      }
+
+      return undefined;
+    }
+
+    function isChildRoute(parentRoute, childRoute) {
+      var route = childRoute;
+
+      while (route) {
+        route = route.parent;
+
+        if (route === parentRoute) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    var UniversalRouter = function () {
+      function UniversalRouter(routes, options) {
+        if (!routes || typeof routes !== 'object') {
+          throw new TypeError('Invalid routes');
+        }
+
+        this.options = Object.assign({
+          decode: decode
+        }, options);
+        this.baseUrl = this.options.baseUrl || '';
+        this.root = Array.isArray(routes) ? {
+          path: '',
+          children: routes,
+          parent: null
+        } : routes;
+        this.root.parent = null;
+      }
+
+      var _proto = UniversalRouter.prototype;
+
+      _proto.resolve = function resolve(pathnameOrContext) {
+        var _this = this;
+
+        var context = Object.assign({
+          router: this
+        }, this.options.context, {}, typeof pathnameOrContext === 'string' ? {
+          pathname: pathnameOrContext
+        } : pathnameOrContext);
+        var matchResult = matchRoute(this.root, this.baseUrl, this.options, context.pathname.substr(this.baseUrl.length));
+        var resolve = this.options.resolveRoute || resolveRoute;
+        var matches;
+        var nextMatches;
+        var currentContext = context;
+
+        function next(resume, parent, prevResult) {
+          if (parent === void 0) {
+            parent = !matches.done && matches.value.route;
+          }
+
+          var routeToSkip = prevResult === null && !matches.done && matches.value.route;
+          matches = nextMatches || matchResult.next(routeToSkip);
+          nextMatches = null;
+
+          if (!resume) {
+            if (matches.done || !isChildRoute(parent, matches.value.route)) {
+              nextMatches = matches;
+              return Promise.resolve(null);
+            }
+          }
+
+          if (matches.done) {
+            var error = new Error('Route not found');
+            error.status = 404;
+            return Promise.reject(error);
+          }
+
+          currentContext = Object.assign({}, context, {}, matches.value);
+          return Promise.resolve(resolve(currentContext, matches.value.params)).then(function (result) {
+            if (result !== null && result !== undefined) {
+              return result;
+            }
+
+            return next(resume, parent, result);
+          });
+        }
+
+        context.next = next;
+        return Promise.resolve().then(function () {
+          return next(true, _this.root);
+        })["catch"](function (error) {
+          if (_this.options.errorHandler) {
+            return _this.options.errorHandler(error, currentContext);
+          }
+
+          throw error;
+        });
+      };
+
+      return UniversalRouter;
+    }();
 
     return UniversalRouter;
-  }();
-
-  UniversalRouter.pathToRegexp = pathToRegexp_1;
-
-  return UniversalRouter;
 
 })));
 //# sourceMappingURL=universal-router.js.map

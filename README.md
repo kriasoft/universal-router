@@ -17,15 +17,15 @@ Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Git
 
 ## Features
 
-* It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/UniversalRouter.js)
+- It has [simple code](https://github.com/kriasoft/universal-router/blob/master/src/UniversalRouter.ts)
   with only single [path-to-regexp](https://github.com/pillarjs/path-to-regexp) dependency.
-* It can be used with any JavaScript framework such as
+- It can be used with any JavaScript framework such as
   [React](https://reactjs.org/), [Vue](https://vuejs.org/), [Hyperapp](https://hyperapp.dev/) etc.
-* It uses the same middleware approach used in [Express](http://expressjs.com/) and [Koa](http://koajs.com/),
+- It uses the same middleware approach used in [Express](http://expressjs.com/) and [Koa](http://koajs.com/),
   making it easy to learn.
-* It supports both [imperative](https://en.wikipedia.org/wiki/Imperative_programming) and
+- It supports both [imperative](https://en.wikipedia.org/wiki/Imperative_programming) and
   [declarative](https://en.wikipedia.org/wiki/Declarative_programming) routing style.
-* Routes are plain JavaScript
+- Routes are plain JavaScript
   [objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer)
   with which you can interact as you like.
 
@@ -70,7 +70,7 @@ import UniversalRouter from 'universal-router'
 const routes = [
   {
     path: '', // optional
-    action: () => `<h1>Home</h1>`,
+    action: () => `<h1>Home</h1>`
   },
   {
     path: '/posts',
@@ -78,14 +78,14 @@ const routes = [
     children: [
       {
         path: '', // optional, matches both "/posts" and "/posts/"
-        action: () => `<h1>Posts</h1>`,
+        action: () => `<h1>Posts</h1>`
       },
       {
         path: '/:id',
-        action: (context) => `<h1>Post #${context.params.id}</h1>`,
-      },
-    ],
-  },
+        action: (context) => `<h1>Post #${context.params.id}</h1>`
+      }
+    ]
+  }
 ]
 
 const router = new UniversalRouter(routes)
@@ -102,27 +102,27 @@ Play with an example on [JSFiddle](https://jsfiddle.net/frenzzy/b0w9mjck/102/),
 
 ## Documentation
 
-* [Getting Started](https://github.com/kriasoft/universal-router/blob/master/docs/getting-started.md)
-* [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)
+- [Getting Started](https://github.com/kriasoft/universal-router/blob/master/docs/getting-started.md)
+- [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)
 
 ## Books and Tutorials
 
-* 🎓 **[ES6 Training Course](https://es6.io/friend/konstantin)**
-by [Wes Bos](https://twitter.com/wesbos)
-* 📗 **[You Don't Know JS: ES6 & Beyond](http://amzn.to/2bFss85)**
-by [Kyle Simpson](https://github.com/getify) (Dec, 2015)
-* 📄 **[You might not need React Router](https://medium.freecodecamp.org/38673620f3d)**
-by [Konstantin Tarkus](https://twitter.com/koistya)
-* 📄 **[An Introduction to the Redux-First Routing Model](https://medium.freecodecamp.org/98926ebf53cb)**
-by [Michael Sargent](https://twitter.com/michaelksarge)
-* 📄 **[Getting Started with Relay Modern for Building Isomorphic Web Apps](https://hackernoon.com/ae049e4e23c1)**
-by [Konstantin Tarkus](https://twitter.com/koistya)
+- 🎓 **[ES6 Training Course](https://es6.io/friend/konstantin)**
+  by [Wes Bos](https://twitter.com/wesbos)
+- 📗 **[You Don't Know JS: ES6 & Beyond](http://amzn.to/2bFss85)**
+  by [Kyle Simpson](https://github.com/getify) (Dec, 2015)
+- 📄 **[You might not need React Router](https://medium.freecodecamp.org/38673620f3d)**
+  by [Konstantin Tarkus](https://twitter.com/koistya)
+- 📄 **[An Introduction to the Redux-First Routing Model](https://medium.freecodecamp.org/98926ebf53cb)**
+  by [Michael Sargent](https://twitter.com/michaelksarge)
+- 📄 **[Getting Started with Relay Modern for Building Isomorphic Web Apps](https://hackernoon.com/ae049e4e23c1)**
+  by [Konstantin Tarkus](https://twitter.com/koistya)
 
 ## Browser Support
 
 We support all ES5-compliant browsers, including Internet Explorer 9 and above,
 but depending on your target browsers you may need to include
-[polyfills](https://en.wikipedia.org/wiki/Polyfill_(programming)) for
+[polyfills](<https://en.wikipedia.org/wiki/Polyfill_(programming)>) for
 [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map),
 [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and
 [`Object.assign`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
@@ -144,31 +144,31 @@ requests](https://github.com/kriasoft/universal-router/blob/master/.github/CONTR
 
 ## Support
 
-* [#universal-router](https://gitter.im/kriasoft/universal-router) on Gitter —
+- [#universal-router](https://gitter.im/kriasoft/universal-router) on Gitter —
   Watch announcements, share ideas and feedback.
-* [GitHub Issues](https://github.com/kriasoft/universal-router/issues) —
+- [GitHub Issues](https://github.com/kriasoft/universal-router/issues) —
   Check open issues, send feature requests.
-* [@koistya](https://twitter.com/koistya) on [Codementor](https://www.codementor.io/koistya),
+- [@koistya](https://twitter.com/koistya) on [Codementor](https://www.codementor.io/koistya),
   [HackHands](https://hackhands.com/koistya/)
   or [Skype](https://hatscripts.com/addskype?koistya) — Private consulting.
 
 ## Related Projects
 
-* [React Starter Kit](https://github.com/kriasoft/react-starter-kit) —
+- [React Starter Kit](https://github.com/kriasoft/react-starter-kit) —
   Boilerplate and tooling for building isomorphic web apps with React and Relay.
-* [Node.js API Starter Kit](https://github.com/kriasoft/nodejs-api-starter) —
+- [Node.js API Starter Kit](https://github.com/kriasoft/nodejs-api-starter) —
   Boilerplate and tooling for building data APIs with Docker, Node.js and GraphQL.
-* [ASP.NET Core Starter Kit](https://github.com/kriasoft/aspnet-starter-kit) —
+- [ASP.NET Core Starter Kit](https://github.com/kriasoft/aspnet-starter-kit) —
   Cross-platform single-page application boilerplate (ASP.NET Core, React, Redux).
-* [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit) —
+- [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit) —
   Boilerplate for authoring JavaScript/React.js libraries.
-* [React App SDK](https://github.com/kriasoft/react-app) —
+- [React App SDK](https://github.com/kriasoft/react-app) —
   Create React apps with just a single dev dependency and zero configuration.
-* [React Static Boilerplate](https://github.com/kriasoft/react-static-boilerplate) —
+- [React Static Boilerplate](https://github.com/kriasoft/react-static-boilerplate) —
   Single-page application (SPA) starter kit (React, Redux, Webpack, Firebase).
-* [History](https://github.com/ReactTraining/history) —
+- [History](https://github.com/ReactTraining/history) —
   HTML5 History API wrapper library that handle navigation in single-page apps.
-* [Redux-First Routing](https://github.com/mksarge/redux-first-routing) —
+- [Redux-First Routing](https://github.com/mksarge/redux-first-routing) —
   A minimal, framework-agnostic API for accomplishing Redux-first routing.
 
 ## Sponsors
@@ -252,6 +252,7 @@ The documentation to the project is licensed under the
 [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/) license.
 
 ---
+
 Made with ♥ by
 [Konstantin Tarkus](https://github.com/koistya)
 ([@koistya](https://twitter.com/koistya), [blog](https://medium.com/@tarkus)),

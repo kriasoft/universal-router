@@ -1,5 +1,9 @@
 # Build Automation Tools
 
+[![Build Status](https://img.shields.io/travis/kriasoft/universal-router/master.svg)](https://travis-ci.org/kriasoft/universal-router)
+[![Coverage Status](https://img.shields.io/codecov/c/github/kriasoft/universal-router.svg)](https://codecov.io/gh/kriasoft/universal-router)
+[![Dependency Status](https://img.shields.io/david/kriasoft/universal-router.svg)](https://david-dm.org/kriasoft/universal-router)
+
 Compile the lib into the **./dist** folder:
 
 ```bash
@@ -19,10 +23,4 @@ Run unit tests using [Jest](https://jestjs.io/):
 
 ```bash
 npm run test
-```
-
-Run [pre-commit git hook](https://git-scm.com/docs/githooks#_pre_commit) manually:
-
-```bash
-npm run pre-commit
 ```

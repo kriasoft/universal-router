@@ -1,9 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2020",
+    "rootDir": "src",
+    "outDir": "dist/src",
     "module": "commonjs",
-    "noEmit": true,
-    "strict": true
+    "moduleResolution": "node",
+    "strict": true,
+    "declaration": true,
+    "noEmitOnError": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "sourceMap": true,
+    "inlineSources": true
   },
-  "include": ["src", "test"]
+  "include": ["src"]
 }
