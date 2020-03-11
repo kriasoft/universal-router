@@ -18,13 +18,6 @@ import {
 } from 'path-to-regexp'
 
 /**
- * Params is a key/value object that represents extracted URL parameters.
- */
-export interface RouteParams {
-  [paramName: string]: string | string[]
-}
-
-/**
  * In addition to a URL path string, any arbitrary data can be passed to
  * the `router.resolve()` method, that becomes available inside action functions.
  */
@@ -38,6 +31,15 @@ export interface ResolveContext extends RouterContext {
    */
   pathname: string
 }
+
+/**
+ * Params is a key/value object that represents extracted URL parameters.
+ */
+export interface RouteParams {
+  [paramName: string]: string | string[]
+}
+
+export type RouteResultSync<T> = T | null | undefined
 
 export interface RouteContext<R = any, C extends RouterContext = RouterContext>
   extends ResolveContext {
@@ -64,10 +66,8 @@ export interface RouteContext<R = any, C extends RouterContext = RouterContext>
   /**
    * Middleware style function which can continue resolving.
    */
-  next: (resume?: boolean) => R
+  next: (resume?: boolean) => RouteResultSync<R>
 }
-
-export type RouteResultSync<T> = T | null | undefined
 
 /**
  * A Route is a singular route in your application. It contains a path, an

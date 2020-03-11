@@ -18,13 +18,6 @@ import {
 } from 'path-to-regexp'
 
 /**
- * Params is a key/value object that represents extracted URL parameters.
- */
-export interface RouteParams {
-  [paramName: string]: string | string[]
-}
-
-/**
  * In addition to a URL path string, any arbitrary data can be passed to
  * the `router.resolve()` method, that becomes available inside action functions.
  */
@@ -38,6 +31,15 @@ export interface ResolveContext extends RouterContext {
    */
   pathname: string
 }
+
+/**
+ * Params is a key/value object that represents extracted URL parameters.
+ */
+export interface RouteParams {
+  [paramName: string]: string | string[]
+}
+
+export type RouteResult<T> = T | null | undefined | Promise<T | null | undefined>
 
 export interface RouteContext<R = any, C extends RouterContext = RouterContext>
   extends ResolveContext {
@@ -66,8 +68,6 @@ export interface RouteContext<R = any, C extends RouterContext = RouterContext>
    */
   next: (resume?: boolean) => Promise<R>
 }
-
-export type RouteResult<T> = T | Promise<T | null | undefined> | null | undefined
 
 /**
  * A Route is a singular route in your application. It contains a path, an
@@ -267,7 +267,7 @@ class UniversalRouter<R = any, C extends RouterContext = RouterContext> {
    * the first route that matches provided URL path string and whose action function
    * returns anything other than `null` or `undefined`.
    */
-  resolve(pathnameOrContext: string | ResolveContext): RouteResult<R> {
+  resolve(pathnameOrContext: string | ResolveContext): Promise<RouteResult<R>> {
     const context: ResolveContext = {
       router: this,
       ...this.options.context,
@@ -290,7 +290,7 @@ class UniversalRouter<R = any, C extends RouterContext = RouterContext> {
       resume: boolean,
       parent: Route<R, C> | false = !matches.done && matches.value.route,
       prevResult?: RouteResult<R>,
-    ): RouteResult<R> {
+    ): Promise<RouteResult<R>> {
       const routeToSkip = prevResult === null && !matches.done && matches.value.route
       matches = nextMatches || matchResult.next(routeToSkip)
       nextMatches = null
