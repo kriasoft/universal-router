@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased][unreleased]
+## [9.0.1] - 2020-03-11
 
 - Fix typings: `router.resolve()` and `context.next()` always return a promise now
   ([#187](https://github.com/kriasoft/universal-router/pull/187))
@@ -291,7 +291,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/universal-router/compare/v9.0.0...HEAD
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v9.0.1...HEAD
+[9.0.1]: https://github.com/kriasoft/universal-router/compare/v9.0.0...v9.0.1
 [9.0.0]: https://github.com/kriasoft/universal-router/compare/v8.3.0...v9.0.0
 [8.3.0]: https://github.com/kriasoft/universal-router/compare/v8.2.1...v8.3.0
 [8.2.1]: https://github.com/kriasoft/universal-router/compare/v8.2.0...v8.2.1
