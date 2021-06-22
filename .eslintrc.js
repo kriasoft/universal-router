@@ -1,7 +1,7 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
   extends: ['airbnb-base', 'plugin:jest/recommended', 'plugin:prettier/recommended'],
   rules: {
+    'no-nested-ternary': 'off',
     'no-param-reassign': [
       'error',
       {
@@ -10,6 +10,7 @@ module.exports = {
       },
     ],
     'no-plusplus': 'off',
+    'no-use-before-define': 'off',
   },
   settings: {
     'import/resolver': {
@@ -21,9 +22,10 @@ module.exports = {
   overrides: [
     {
       files: ['**/*.ts'],
-      extends: ['plugin:@typescript-eslint/recommended', 'prettier/@typescript-eslint'],
+      extends: ['plugin:@typescript-eslint/recommended'],
       rules: {
-        '@typescript-eslint/ban-ts-ignore': 'off',
+        '@typescript-eslint/ban-types': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
         'import/extensions': [
           'error',
           'ignorePackages',

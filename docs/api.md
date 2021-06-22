@@ -382,6 +382,19 @@ import qs from 'qs'
 generateUrls(router, { stringifyQueryParams: qs.stringify })
 ```
 
+Option `uniqueRouteNameSep` allows using non-unique route names among different branches of nested routes.
+The router will automatically generate unique names based on parent routes using the specified separator:
+
+```js
+const router = new UniversalRouter([
+  { name: 'users', path: '/users', children: [{ name: 'list', path: '/list' }] },
+  { name: 'pages', path: '/pages', children: [{ name: 'list', path: '/list' }] },
+])
+const url = generateUrls(router, { uniqueRouteNameSep: '.' })
+url('users.list')                     // => /users/list
+url('pages.list')                     // => /pages/list
+```
+
 ## Recipes
 
 - [Redirects](https://github.com/kriasoft/universal-router/blob/master/docs/redirects.md)

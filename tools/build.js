@@ -14,7 +14,7 @@ const sourcemaps = require('rollup-plugin-sourcemaps')
 const babel = require('rollup-plugin-babel')
 const { uglify } = require('rollup-plugin-uglify')
 const commonjs = require('@rollup/plugin-commonjs')
-const nodeResolve = require('@rollup/plugin-node-resolve')
+const { nodeResolve } = require('@rollup/plugin-node-resolve')
 const pkg = require('../package.json')
 
 // The source files to be compiled by Rollup
@@ -151,6 +151,7 @@ async function build() {
       bundle.write({
         file: file.output,
         format: file.format,
+        exports: 'default',
         interop: false,
         sourcemap: true,
         name: file.name,

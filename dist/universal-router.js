@@ -3,7 +3,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, global.UniversalRouter = factory());
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.UniversalRouter = factory());
 }(this, (function () { 'use strict';
 
     function lexer(str) {
@@ -291,18 +291,19 @@
 
     function regexpToRegexp(path, keys) {
       if (!keys) return path;
-      var groups = path.source.match(/\((?!\?)/g);
+      var groupsRegex = /\((?:\?<(.*?)>)?(?!\?)/g;
+      var index = 0;
+      var execResult = groupsRegex.exec(path.source);
 
-      if (groups) {
-        for (var i = 0; i < groups.length; i++) {
-          keys.push({
-            name: i,
-            prefix: "",
-            suffix: "",
-            modifier: "",
-            pattern: ""
-          });
-        }
+      while (execResult) {
+        keys.push({
+          name: execResult[1] || index++,
+          prefix: "",
+          suffix: "",
+          modifier: "",
+          pattern: ""
+        });
+        execResult = groupsRegex.exec(path.source);
       }
 
       return path;
@@ -427,7 +428,7 @@
               var _matchResult = matchResult,
                   path = _matchResult.path;
               matchResult.path = !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path;
-              matchResult.params = Object.assign({}, parentParams, {}, matchResult.params);
+              matchResult.params = Object.assign({}, parentParams, matchResult.params);
               return {
                 done: false,
                 value: {
@@ -517,7 +518,7 @@
 
         var context = Object.assign({
           router: this
-        }, this.options.context, {}, typeof pathnameOrContext === 'string' ? {
+        }, this.options.context, typeof pathnameOrContext === 'string' ? {
           pathname: pathnameOrContext
         } : pathnameOrContext);
         var matchResult = matchRoute(this.root, this.baseUrl, this.options, context.pathname.substr(this.baseUrl.length));
@@ -548,7 +549,7 @@
             return Promise.reject(error);
           }
 
-          currentContext = Object.assign({}, context, {}, matches.value);
+          currentContext = Object.assign({}, context, matches.value);
           return Promise.resolve(resolve(currentContext, matches.value.params)).then(function (result) {
             if (result !== null && result !== undefined) {
               return result;

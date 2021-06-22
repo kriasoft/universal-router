@@ -25,6 +25,10 @@ export interface GenerateUrlsOptions extends ParseOptions, TokensToFunctionOptio
    * Add a query string to generated url based on unknown route params.
    */
   stringifyQueryParams?: (params: UrlParams) => string
+  /**
+   * Generates a unique route name based on all parent routes with the specified separator.
+   */
+  uniqueRouteNameSep?: string
 }
 
 /**
@@ -40,20 +44,29 @@ function cacheRoutes(
   routesByName: Map<string, Route>,
   route: Route,
   routes: Routes | null | undefined,
+  name?: string,
+  sep?: string,
 ): void {
-  if (route.name && routesByName.has(route.name)) {
-    throw new Error(`Route "${route.name}" already exists`)
+  if (route.name && name && routesByName.has(name)) {
+    throw new Error(`Route "${name}" already exists`)
   }
 
-  if (route.name) {
-    routesByName.set(route.name, route)
+  if (route.name && name) {
+    routesByName.set(name, route)
   }
 
   if (routes) {
     for (let i = 0; i < routes.length; i++) {
       const childRoute = routes[i]
+      const childName = childRoute.name
       childRoute.parent = route
-      cacheRoutes(routesByName, childRoute, childRoute.children)
+      cacheRoutes(
+        routesByName,
+        childRoute,
+        childRoute.children,
+        name && sep ? (childName ? name + sep + childName : name) : childName,
+        sep,
+      )
     }
   }
 }
@@ -74,7 +87,13 @@ function generateUrls(router: UniversalRouter, options?: GenerateUrlsOptions): G
     if (!route) {
       routesByName.clear()
       regexpByRoute.clear()
-      cacheRoutes(routesByName, router.root, router.root.children)
+      cacheRoutes(
+        routesByName,
+        router.root,
+        router.root.children,
+        router.root.name,
+        opts.uniqueRouteNameSep,
+      )
 
       route = routesByName.get(routeName)
       if (!route) {

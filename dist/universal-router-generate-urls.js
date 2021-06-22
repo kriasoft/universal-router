@@ -3,7 +3,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, global.generateUrls = factory());
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.generateUrls = factory());
 }(this, (function () { 'use strict';
 
     function lexer(str) {
@@ -318,20 +318,21 @@
       return options && options.sensitive ? "" : "i";
     }
 
-    function cacheRoutes(routesByName, route, routes) {
-      if (route.name && routesByName.has(route.name)) {
-        throw new Error("Route \"" + route.name + "\" already exists");
+    function cacheRoutes(routesByName, route, routes, name, sep) {
+      if (route.name && name && routesByName.has(name)) {
+        throw new Error("Route \"" + name + "\" already exists");
       }
 
-      if (route.name) {
-        routesByName.set(route.name, route);
+      if (route.name && name) {
+        routesByName.set(name, route);
       }
 
       if (routes) {
         for (var i = 0; i < routes.length; i++) {
           var childRoute = routes[i];
+          var childName = childRoute.name;
           childRoute.parent = route;
-          cacheRoutes(routesByName, childRoute, childRoute.children);
+          cacheRoutes(routesByName, childRoute, childRoute.children, name && sep ? childName ? name + sep + childName : name : childName, sep);
         }
       }
     }
@@ -352,7 +353,7 @@
         if (!route) {
           routesByName.clear();
           regexpByRoute.clear();
-          cacheRoutes(routesByName, router.root, router.root.children);
+          cacheRoutes(routesByName, router.root, router.root.children, router.root.name, opts.uniqueRouteNameSep);
           route = routesByName.get(routeName);
 
           if (!route) {
