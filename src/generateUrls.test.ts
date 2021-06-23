@@ -12,7 +12,7 @@ import UniversalRouterSync from './UniversalRouterSync'
 import generateUrls from './generateUrls'
 
 test('requires router', () => {
-  // @ts-ignore
+  // @ts-expect-error missing argument
   expect(() => generateUrls()).toThrow(/Router is not defined/)
 })
 
@@ -173,11 +173,7 @@ test('encodes params', () => {
       expect(token.name).toBe('user')
       return encodeURI(str).replace(
         /[/?#]/g,
-        (c) =>
-          `%${c
-            .charCodeAt(0)
-            .toString(16)
-            .toUpperCase()}`,
+        (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`,
       )
     },
   })
@@ -223,4 +219,28 @@ test('compatible with UniversalRouterSync', () => {
   const router = new UniversalRouterSync({ path: '/foo', name: 'bar' })
   const url = generateUrls(router)
   expect(url('bar')).toBe('/foo')
+})
+
+test('unique nested rout names', () => {
+  const router = new UniversalRouter([
+    {
+      path: '/a',
+      name: 'a',
+      children: [{ path: '/x', name: 'x' }],
+    },
+    {
+      path: '/b',
+      name: 'b',
+      children: [
+        { path: '/x', name: 'x' },
+        { path: '/o', children: [{ path: '/y', name: 'y' }] },
+      ],
+    },
+  ])
+  const url = generateUrls(router, { uniqueRouteNameSep: '.' })
+  expect(url('a')).toBe('/a')
+  expect(url('a.x')).toBe('/a/x')
+  expect(url('b')).toBe('/b')
+  expect(url('b.x')).toBe('/b/x')
+  expect(url('b.y')).toBe('/b/o/y')
 })

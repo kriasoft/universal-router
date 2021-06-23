@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased][unreleased]
+
+- Add `uniqueRouteNameSep` option to `generateUrls(router, options)` to allow non-unique route names
+  among different branches of nested routes and access them by uniquely generated name
+  ([#194](https://github.com/kriasoft/universal-router/pull/194))
+
 ## [9.0.1] - 2020-03-11
 
 - Fix typings: `router.resolve()` and `context.next()` always return a promise now

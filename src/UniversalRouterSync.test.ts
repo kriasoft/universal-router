@@ -10,11 +10,11 @@
 import UniversalRouter, { Route } from './UniversalRouterSync'
 
 test('requires routes', () => {
-  // @ts-ignore
+  // @ts-expect-error missing argument
   expect(() => new UniversalRouter()).toThrow(/Invalid routes/)
-  // @ts-ignore
+  // @ts-expect-error wrong argument
   expect(() => new UniversalRouter(12)).toThrow(/Invalid routes/)
-  // @ts-ignore
+  // @ts-expect-error wrong argument
   expect(() => new UniversalRouter(null)).toThrow(/Invalid routes/)
 })
 
