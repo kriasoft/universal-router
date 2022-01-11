@@ -102,7 +102,7 @@ const routes = [
 ]
 
 const router = new UniversalRouter(routes, {
-  resolveRoute(context, params) {
+  resolveRoute(context) {
     if (context.route.protected && !context.user) {
       return { redirect: '/login', from: context.pathname } // <== where the redirect come from?
     }
