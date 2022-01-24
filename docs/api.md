@@ -110,6 +110,23 @@ router.resolve({ pathname: '/admin/users/john' })
   // => User Profile
 ```
 
+Setting the `children` property to an empty list will act as a catch-all capture all routes beneath that path
+
+```js
+const router = new UniversalRouter({
+  path: '/admin',
+  children: [],
+  action: () => 'Admin Page'
+})
+
+router.resolve({ pathname: '/admin/users/john' })
+  .then(result => console.log(result))
+  // => Admin Page
+router.resolve({ pathname: '/admin/some/other/page' })
+  .then(result => console.log(result))
+  // => Admin Page
+```
+
 ## URL Parameters
 
 **Named route parameters** are captured and added to `context.params`.
