@@ -11,6 +11,7 @@ module.exports = {
     ],
     'no-plusplus': 'off',
     'no-use-before-define': 'off',
+    'default-param-last': 'off',
   },
   settings: {
     'import/resolver': {

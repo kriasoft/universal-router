@@ -118,7 +118,7 @@ async function build() {
   fs.copyFileSync('LICENSE.txt', 'dist/LICENSE.txt')
 
   // Compile .ts to .js
-  cp.execSync('tsc --project tools/build.tsconfig.json')
+  cp.execSync('npm run prebuild')
 
   // Compile source code into a distributable format with Babel
   await Promise.all(

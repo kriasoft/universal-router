@@ -23,6 +23,7 @@
   "module": "module.js",
   "types": "src/UniversalRouter.d.ts",
   "dependencies": {
+    "@types/node": "^18.11.18",
     "path-to-regexp": "^6.2.0"
   },
   "devDependencies": {
@@ -32,14 +33,14 @@
     "@rollup/plugin-node-resolve": "13.0.0",
     "@rollup/plugin-typescript": "8.2.1",
     "@types/jest": "26.0.23",
-    "@typescript-eslint/eslint-plugin": "4.28.0",
-    "@typescript-eslint/parser": "4.28.0",
+    "@typescript-eslint/eslint-plugin": "5.48.2",
+    "@typescript-eslint/parser": "5.48.2",
     "babel-jest": "27.0.5",
-    "eslint": "7.29.0",
-    "eslint-config-airbnb-base": "14.2.1",
+    "eslint": "8.32.0",
+    "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-import": "2.23.4",
-    "eslint-plugin-jest": "24.3.6",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-jest": "27.2.1",
     "eslint-plugin-prettier": "3.4.0",
     "jest": "27.0.5",
     "prettier": "2.3.1",
@@ -48,11 +49,12 @@
     "rollup-plugin-sourcemaps": "0.6.3",
     "rollup-plugin-uglify": "6.0.4",
     "ts-jest": "27.0.3",
-    "typescript": "4.3.4"
+    "typescript": "4.9.4"
   },
   "scripts": {
     "lint": "eslint . --ext .ts,.js",
     "test": "jest",
+    "prebuild": "tsc --project tools/build.tsconfig.json",
     "build": "node tools/build.js"
   }
 }

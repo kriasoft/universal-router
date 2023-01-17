@@ -75,7 +75,7 @@ test('handles route errors', () => {
 
 test('throws when route not found', () => {
   const router = new UniversalRouter([])
-  let err
+  let err: any
   try {
     router.resolve('/')
   } catch (e) {
@@ -124,7 +124,7 @@ test('allows to pass context variables to action methods', () => {
 test('skips action methods of routes that do not match the URL path', () => {
   const action: jest.Mock = jest.fn()
   const router = new UniversalRouter([{ path: '/a', action }])
-  let err
+  let err: any
   try {
     router.resolve('/b')
   } catch (e) {
@@ -253,7 +253,7 @@ test('supports next() across multiple routes', () => {
           children: [
             {
               path: '',
-              action({ next }): Promise<void> {
+              action({ next }) {
                 log.push(3)
                 const result = next()
                 log.push(6)
@@ -262,7 +262,7 @@ test('supports next() across multiple routes', () => {
               children: [
                 {
                   path: '',
-                  action({ next }): Promise<void> {
+                  action({ next }) {
                     log.push(4)
                     const result = next()
                     log.push(5)
@@ -294,7 +294,7 @@ test('supports next() across multiple routes', () => {
           ],
         },
       ],
-      action({ next }): unknown {
+      action({ next }) {
         log.push(1)
         const result = next()
         log.push(10)
@@ -513,7 +513,7 @@ test('respects baseUrl', () => {
   expect(action.mock.calls[0][0]).toHaveProperty('route', routes.children[0].children[0])
   expect(action.mock.calls[0][0]).toHaveProperty('router', router)
 
-  let err
+  let err: any
   try {
     router.resolve('/a/b/c')
   } catch (e) {
@@ -592,7 +592,7 @@ test('handles route not found error correctly', () => {
     children: [{ path: '/child' }],
   })
 
-  let err
+  let err: any
   try {
     router.resolve('/404')
   } catch (e) {
