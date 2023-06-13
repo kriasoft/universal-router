@@ -8,6 +8,7 @@
  */
 
 import UniversalRouter, { Route } from './UniversalRouterSync'
+import type { RouteError } from './UniversalRouterSync'
 
 test('requires routes', () => {
   // @ts-expect-error missing argument
@@ -79,11 +80,11 @@ test('throws when route not found', () => {
   try {
     router.resolve('/')
   } catch (e) {
-    err = e
+    err = e as RouteError
   }
   expect(err).toBeInstanceOf(Error)
-  expect(err.message).toBe('Route not found')
-  expect(err.status).toBe(404)
+  expect(err?.message).toBe('Route not found')
+  expect(err?.status).toBe(404)
 })
 
 test("executes the matching route's action method and return its result", () => {
@@ -128,11 +129,11 @@ test('skips action methods of routes that do not match the URL path', () => {
   try {
     router.resolve('/b')
   } catch (e) {
-    err = e
+    err = e as RouteError
   }
   expect(err).toBeInstanceOf(Error)
-  expect(err.message).toBe('Route not found')
-  expect(err.status).toBe(404)
+  expect(err?.message).toBe('Route not found')
+  expect(err?.status).toBe(404)
   expect(action.mock.calls.length).toBe(0)
 })
 
@@ -253,7 +254,7 @@ test('supports next() across multiple routes', () => {
           children: [
             {
               path: '',
-              action({ next }): Promise<void> {
+              action({ next }) {
                 log.push(3)
                 const result = next()
                 log.push(6)
@@ -262,7 +263,7 @@ test('supports next() across multiple routes', () => {
               children: [
                 {
                   path: '',
-                  action({ next }): Promise<void> {
+                  action({ next }) {
                     log.push(4)
                     const result = next()
                     log.push(5)
@@ -294,7 +295,7 @@ test('supports next() across multiple routes', () => {
           ],
         },
       ],
-      action({ next }): unknown {
+      action({ next }) {
         log.push(1)
         const result = next()
         log.push(10)
@@ -517,12 +518,12 @@ test('respects baseUrl', () => {
   try {
     router.resolve('/a/b/c')
   } catch (e) {
-    err = e
+    err = e as RouteError
   }
   expect(action.mock.calls.length).toBe(1)
   expect(err).toBeInstanceOf(Error)
-  expect(err.message).toBe('Route not found')
-  expect(err.status).toBe(404)
+  expect(err?.message).toBe('Route not found')
+  expect(err?.status).toBe(404)
 })
 
 test('matches routes with trailing slashes', () => {
@@ -596,11 +597,11 @@ test('handles route not found error correctly', () => {
   try {
     router.resolve('/404')
   } catch (e) {
-    err = e
+    err = e as RouteError
   }
   expect(err).toBeInstanceOf(Error)
-  expect(err.message).toBe('Route not found')
-  expect(err.status).toBe(404)
+  expect(err?.message).toBe('Route not found')
+  expect(err?.status).toBe(404)
 })
 
 test('handles malformed URI params', () => {

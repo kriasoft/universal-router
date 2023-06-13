@@ -8,6 +8,7 @@
  */
 
 import UniversalRouter, { Route } from './UniversalRouter'
+import type { RouteError } from './UniversalRouter'
 
 test('requires routes', () => {
   // @ts-expect-error missing argument
@@ -79,11 +80,11 @@ test('throws when route not found', async () => {
   try {
     await router.resolve('/')
   } catch (e) {
-    err = e
+    err = e as RouteError
   }
   expect(err).toBeInstanceOf(Error)
-  expect(err.message).toBe('Route not found')
-  expect(err.status).toBe(404)
+  expect(err?.message).toBe('Route not found')
+  expect(err?.status).toBe(404)
 })
 
 test("executes the matching route's action method and return its result", async () => {
@@ -128,11 +129,11 @@ test('skips action methods of routes that do not match the URL path', async () =
   try {
     await router.resolve('/b')
   } catch (e) {
-    err = e
+    err = e as RouteError
   }
   expect(err).toBeInstanceOf(Error)
-  expect(err.message).toBe('Route not found')
-  expect(err.status).toBe(404)
+  expect(err?.message).toBe('Route not found')
+  expect(err?.status).toBe(404)
   expect(action.mock.calls.length).toBe(0)
 })
 
@@ -294,7 +295,7 @@ test('supports next() across multiple routes', async () => {
           ],
         },
       ],
-      async action({ next }): Promise<unknown> {
+      async action({ next }) {
         log.push(1)
         const result = await next()
         log.push(10)
@@ -520,12 +521,12 @@ test('respects baseUrl', async () => {
   try {
     await router.resolve('/a/b/c')
   } catch (e) {
-    err = e
+    err = e as RouteError
   }
   expect(action.mock.calls.length).toBe(1)
   expect(err).toBeInstanceOf(Error)
-  expect(err.message).toBe('Route not found')
-  expect(err.status).toBe(404)
+  expect(err?.message).toBe('Route not found')
+  expect(err?.status).toBe(404)
 })
 
 test('matches routes with trailing slashes', async () => {
@@ -599,11 +600,11 @@ test('handles route not found error correctly', async () => {
   try {
     await router.resolve('/404')
   } catch (e) {
-    err = e
+    err = e as RouteError
   }
   expect(err).toBeInstanceOf(Error)
-  expect(err.message).toBe('Route not found')
-  expect(err.status).toBe(404)
+  expect(err?.message).toBe('Route not found')
+  expect(err?.status).toBe(404)
 })
 
 test('handles malformed URI params', async () => {
