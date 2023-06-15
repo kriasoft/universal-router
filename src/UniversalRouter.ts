@@ -146,7 +146,7 @@ function decode(val: string): string {
   }
 }
 
-function matchRoute<R, C>(
+function matchRoute<R, C extends RouterContext>(
   route: Route<R, C>,
   baseUrl: string,
   options: RouterOptions<R, C>,

@@ -147,7 +147,7 @@ function decode(val: string): string {
   }
 }
 
-function matchRoute<R, C>(
+function matchRoute<R, C extends RouterContext>(
   route: Route<R, C>,
   baseUrl: string,
   options: RouterOptions<R, C>,
@@ -324,7 +324,7 @@ class UniversalRouterSync<R = any, C extends RouterContext = RouterContext> {
       return next(true, this.root)
     } catch (error) {
       if (this.options.errorHandler) {
-        return this.options.errorHandler(error, currentContext)
+        return this.options.errorHandler(error as RouteError, currentContext)
       }
       throw error
     }
