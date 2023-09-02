@@ -208,6 +208,41 @@ before passing it to the `resolveRoute` function:
 - `params` - Matched path params,
   see [URL Parameters](#url-parameters) section above for details.
 
+## Use with GraphQL and Relay Modern
+
+To accomplish named queries with GraphQL and Relay you must pass in a object after your GraphQL query with the variables you need access to.  In this example adding context was also needed
+
+```jsx
+import React from 'react';
+import { graphql } from 'relay-runtime';
+import MyiWorlds from './MyiWorlds';
+
+export default {
+  path: '/myiworlds/:path',
+
+  async action({ api }, context) {
+    const data = await api.fetchQuery(graphql`
+      query myiWorldsQuery($path: String) {
+        n0deByPath (path: $path) {
+          id
+          type
+          n0deEdge {
+          ...MyiWorlds_n0deEdge
+          }
+        }
+      }
+    `, {
+      path: context.path,
+    });
+    return {
+      title: 'MyiWorlds',
+      component: <MyiWorlds n0deEdge={data.n0deByPath.n0deEdge} />,
+    };
+  },
+};
+```
+
+
 ## Async Routes
 
 The router works great with asynchronous functions out of the box!
