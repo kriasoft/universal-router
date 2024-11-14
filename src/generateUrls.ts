@@ -57,7 +57,7 @@ function cacheRoutes(
 
   if (routes) {
     for (let i = 0; i < routes.length; i++) {
-      const childRoute = routes[i]
+      const childRoute = routes[i]!
       const childName = childRoute.name
       childRoute.parent = route
       cacheRoutes(
@@ -117,7 +117,7 @@ function generateUrls(router: UniversalRouter, options?: GenerateUrlsOptions): G
       const keys: Keys = Object.create(null)
       for (let i = 0; i < tokens.length; i++) {
         const token = tokens[i]
-        if (typeof token !== 'string') {
+        if (token && typeof token !== 'string') {
           keys[token.name] = true
         }
       }
@@ -132,8 +132,8 @@ function generateUrls(router: UniversalRouter, options?: GenerateUrlsOptions): G
       const keys = Object.keys(params)
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i]
-        if (!regexp.keys[key]) {
-          queryParams[key] = params[key]
+        if (key && !regexp.keys[key]) {
+          queryParams[key] = params[key] ?? ''
         }
       }
       const query = opts.stringifyQueryParams(queryParams)

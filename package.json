@@ -54,6 +54,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts,.js",
     "test": "jest",
-    "build": "node tools/build.js"
+    "build": "node tools/build.js",
+    "tsc": "tsc --noEmit"
   }
 }
