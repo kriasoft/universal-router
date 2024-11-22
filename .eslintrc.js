@@ -1,6 +1,7 @@
 module.exports = {
   extends: ['airbnb-base', 'plugin:jest/recommended', 'plugin:prettier/recommended'],
   rules: {
+    'dot-notation': 'off',
     'no-nested-ternary': 'off',
     'no-param-reassign': [
       'error',
@@ -26,6 +27,7 @@ module.exports = {
       rules: {
         '@typescript-eslint/ban-types': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off',
         'import/extensions': [
           'error',
           'ignorePackages',
