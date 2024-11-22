@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [9.2.1] - 2024-11-22
+
+- Enable `noPropertyAccessFromIndexSignature` and `noUncheckedIndexedAccess` checks ([#216](https://github.com/kriasoft/universal-router/pull/216))
+
 ## [9.2.0] - 2023-06-23
 
 - Bump TypeScript to 4.9.5 and fix types ([#215](https://github.com/kriasoft/universal-router/pull/215))
@@ -301,7 +305,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/universal-router/compare/v9.2.0...HEAD
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v9.2.1...HEAD
+[9.2.1]: https://github.com/kriasoft/universal-router/compare/v9.2.0...v9.2.1
 [9.2.0]: https://github.com/kriasoft/universal-router/compare/v9.1.0...v9.2.0
 [9.1.0]: https://github.com/kriasoft/universal-router/compare/v9.0.1...v9.1.0
 [9.0.1]: https://github.com/kriasoft/universal-router/compare/v9.0.0...v9.0.1
