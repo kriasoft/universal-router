@@ -191,7 +191,7 @@ function matchRoute<R, C extends RouterContext>(
       if (matchResult && route.children) {
         while (childIndex < route.children.length) {
           if (!childMatches) {
-            const childRoute = route.children[childIndex]
+            const childRoute = route.children[childIndex]!
             childRoute.parent = route
 
             childMatches = matchRoute<R, C>(
@@ -318,7 +318,7 @@ class UniversalRouterSync<R = any, C extends RouterContext = RouterContext> {
       return next(resume, parent, result)
     }
 
-    context.next = next
+    context['next'] = next
 
     try {
       return next(true, this.root)

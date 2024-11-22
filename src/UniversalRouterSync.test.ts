@@ -511,7 +511,7 @@ test('respects baseUrl', () => {
   expect(action.mock.calls[0][0]).toHaveProperty('pathname', '/base/a/b/c')
   expect(action.mock.calls[0][0]).toHaveProperty('path', '/c')
   expect(action.mock.calls[0][0]).toHaveProperty('baseUrl', '/base/a/b')
-  expect(action.mock.calls[0][0]).toHaveProperty('route', routes.children[0].children[0])
+  expect(action.mock.calls[0][0]).toHaveProperty('route', routes.children[0]?.children[0])
   expect(action.mock.calls[0][0]).toHaveProperty('router', router)
 
   let err
