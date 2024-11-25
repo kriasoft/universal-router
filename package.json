@@ -48,6 +48,7 @@
     "@rollup/plugin-typescript": "^12.1.1",
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.9.3",
+    "@vitest/coverage-v8": "^2.1.5",
     "eslint": "^9.15.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.31.0",
