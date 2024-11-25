@@ -345,10 +345,10 @@
           var queryParams = {};
           var _keys = Object.keys(params);
           for (var _i = 0; _i < _keys.length; _i++) {
-            var key = _keys[_i];
-            if (key && !regexp.keys[key]) {
-              var _params$key;
-              queryParams[key] = (_params$key = params[key]) != null ? _params$key : '';
+            var _key = _keys[_i];
+            if (_key && !regexp.keys[_key]) {
+              var _params$_key;
+              queryParams[_key] = (_params$_key = params[_key]) != null ? _params$_key : '';
             }
           }
           var query = opts.stringifyQueryParams(queryParams);

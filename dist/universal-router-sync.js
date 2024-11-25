@@ -384,7 +384,7 @@
             if (matchResult) {
               var _matchResult = matchResult,
                 path = _matchResult.path;
-              matchResult.path = !end && path.endsWith('/') ? path.substr(1) : path;
+              matchResult.path = !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path;
               matchResult.params = Object.assign({}, parentParams, matchResult.params);
               return {
                 done: false,

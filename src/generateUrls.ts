@@ -16,7 +16,9 @@ import {
 } from 'path-to-regexp'
 import UniversalRouter, { Route, Routes } from './UniversalRouter'
 
-export type UrlParams = Record<string, string | number | (string | number)[]>
+export interface UrlParams {
+  [paramName: string]: string | number | (string | number)[]
+}
 
 export interface GenerateUrlsOptions
   extends ParseOptions,
@@ -36,7 +38,7 @@ export interface GenerateUrlsOptions
  */
 type GenerateUrl = (routeName: string, params?: UrlParams) => string
 
-type Keys = Record<string, boolean>
+type Keys = { [key: string]: boolean }
 
 function cacheRoutes(
   routesByName: Map<string, Route>,

@@ -27,13 +27,14 @@ const routes = {
   name: 'page', // unique string, optional
   parent: null, // route object or null, automatically filled by the router
   children: [], // array of route objects, optional
-  action(context, params) {
-    // function, optional
 
+  // function, optional
+  action(context, params) {
     // action method should return anything except `null` or `undefined` to be resolved by router
     // otherwise router will throw `Page not found` error if all matched routes returned nothing
     return '<h1>The Page</h1>'
   },
+
   // ...
 }
 
@@ -341,7 +342,10 @@ The `context.next` function will be synchronous too and will return whatever the
 In most web applications it's much simpler to just use a string for hyperlinks.
 
 ```js
-;`<a href="/page">Page</a>``<a href="/user/${username}">Profile</a>``<a href="/search?q=${query}">Search</a>``<a href="/faq#question">Question</a>`
+const link1 = `<a href="/page">Page</a>`
+const link2 = `<a href="/user/${username}">Profile</a>`
+const link3 = `<a href="/search?q=${query}">Search</a>`
+const link4 = `<a href="/faq#question">Question</a>`
 // etc.
 ```
 

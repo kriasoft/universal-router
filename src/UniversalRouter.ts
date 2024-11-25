@@ -21,7 +21,9 @@ import {
  * In addition to a URL path string, any arbitrary data can be passed to
  * the `router.resolve()` method, that becomes available inside action functions.
  */
-export type RouterContext = Record<string, any>
+export interface RouterContext {
+  [propName: string]: any
+}
 
 export interface ResolveContext extends RouterContext {
   /**
@@ -33,7 +35,9 @@ export interface ResolveContext extends RouterContext {
 /**
  * Params is a key/value object that represents extracted URL parameters.
  */
-export type RouteParams = Record<string, string | string[]>
+export interface RouteParams {
+  [paramName: string]: string | string[]
+}
 
 export type RouteResult<T> =
   | T
@@ -185,7 +189,7 @@ function matchRoute<R, C extends RouterContext>(
 
         if (matchResult) {
           const { path } = matchResult
-          matchResult.path = !end && path.endsWith('/') ? path.substr(1) : path
+          matchResult.path = !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path
           matchResult.params = { ...parentParams, ...matchResult.params }
           return {
             done: false,

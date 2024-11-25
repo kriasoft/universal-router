@@ -30,7 +30,7 @@
     "lint": "eslint .",
     "sort": "npx sort-package-json",
     "sortcheck": "npx sort-package-json --check",
-    "test": "vitest",
+    "test": "vitest --reporter=junit",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
