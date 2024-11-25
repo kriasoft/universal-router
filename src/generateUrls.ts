@@ -138,8 +138,8 @@ function generateUrls(
       const keys = Object.keys(params)
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i]
-        if (key && !regexp.keys[key]) {
-          queryParams[key] = params[key] ?? ''
+        if (key && !regexp.keys[key] && params[key] != null) {
+          queryParams[key] = params[key]
         }
       }
       const query = opts.stringifyQueryParams(queryParams)

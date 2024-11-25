@@ -30,7 +30,8 @@
     "lint": "eslint .",
     "sort": "npx sort-package-json",
     "sortcheck": "npx sort-package-json --check",
-    "test": "vitest --reporter=junit",
+    "test": "vitest",
+    "testcheck": "vitest run --coverage --reporter=default --reporter=junit --outputFile=coverage/junit.xml",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -43,7 +43,7 @@ test('generates url for named routes', () => {
 
   const router2 = new UniversalRouter({ path: '/user/:id', name: 'user' })
   const url2 = generateUrls(router2)
-  expect(url2('user', { id: 123 })).toBe('/user/123')
+  expect(url2('user', { id: 123 })).toBe('/user/123XXX')
   expect(() => url2('user')).toThrow(/Expected "id" to be a string/)
 
   const router3 = new UniversalRouter({ path: '/user/:id' })

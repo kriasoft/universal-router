@@ -19,7 +19,7 @@ export default config(
     languageOptions: {
       parserOptions: {
         projectService: {
-          allowDefaultProject: ['*.js', '*.mjs', 'tools/*.js'],
+          allowDefaultProject: ['*.ts', '*.js', '*.mjs', 'tools/*.js'],
         },
         tsconfigRootDir: import.meta.name,
       },
