@@ -4,5 +4,6 @@
     "module": "es6",
     "rootDir": "../dist/src"
   },
-  "include": ["../dist/src"]
+  "include": ["../dist/src"],
+  "exclude": []
 }

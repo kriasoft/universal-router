@@ -23,11 +23,12 @@ Second `options` argument is optional where you can pass the following:
 import UniversalRouter from 'universal-router'
 
 const routes = {
-  path: '/page',            // string, array of strings, or a regular expression, optional
-  name: 'page',             // unique string, optional
-  parent: null,             // route object or null, automatically filled by the router
-  children: [],             // array of route objects, optional
-  action(context, params) { // function, optional
+  path: '/page', // string, array of strings, or a regular expression, optional
+  name: 'page', // unique string, optional
+  parent: null, // route object or null, automatically filled by the router
+  children: [], // array of route objects, optional
+  action(context, params) {
+    // function, optional
 
     // action method should return anything except `null` or `undefined` to be resolved by router
     // otherwise router will throw `Page not found` error if all matched routes returned nothing
@@ -51,7 +52,7 @@ const options = {
     return error.status === 404
       ? '<h1>Page Not Found</h1>'
       : '<h1>Oops! Something went wrong</h1>'
-  }
+  },
 }
 
 const router = new UniversalRouter(routes, options)
@@ -66,12 +67,11 @@ other than `null` or `undefined`.
 ```js
 const router = new UniversalRouter([
   { path: '/one', action: () => 'Page One' },
-  { path: '/two', action: () => 'Page Two' }
+  { path: '/two', action: () => 'Page Two' },
 ])
 
-router.resolve({ pathname: '/one' })
-  .then(result => console.log(result))
-  // => Page One
+router.resolve({ pathname: '/one' }).then((result) => console.log(result))
+// => Page One
 ```
 
 Where `action` is just a regular function that may, or may not, return any arbitrary data
@@ -86,28 +86,29 @@ const router = new UniversalRouter({
   path: '/admin',
   children: [
     {
-      path: '',                        // www.example.com/admin
-      action: () => 'Admin Page'
+      path: '', // www.example.com/admin
+      action: () => 'Admin Page',
     },
     {
       path: '/users',
       children: [
         {
-          path: '',                    // www.example.com/admin/users
-          action: () => 'User List'
+          path: '', // www.example.com/admin/users
+          action: () => 'User List',
         },
         {
-          path: '/:username',          // www.example.com/admin/users/john
-          action: () => 'User Profile'
-        }
-      ]
-    }
-  ]
+          path: '/:username', // www.example.com/admin/users/john
+          action: () => 'User Profile',
+        },
+      ],
+    },
+  ],
 })
 
-router.resolve({ pathname: '/admin/users/john' })
-  .then(result => console.log(result))
-  // => User Profile
+router
+  .resolve({ pathname: '/admin/users/john' })
+  .then((result) => console.log(result))
+// => User Profile
 ```
 
 Setting the `children` property to an empty list will act as a catch-all capture all routes beneath that path
@@ -116,15 +117,17 @@ Setting the `children` property to an empty list will act as a catch-all capture
 const router = new UniversalRouter({
   path: '/admin',
   children: [],
-  action: () => 'Admin Page'
+  action: () => 'Admin Page',
 })
 
-router.resolve({ pathname: '/admin/users/john' })
-  .then(result => console.log(result))
-  // => Admin Page
-router.resolve({ pathname: '/admin/some/other/page' })
-  .then(result => console.log(result))
-  // => Admin Page
+router
+  .resolve({ pathname: '/admin/users/john' })
+  .then((result) => console.log(result))
+// => Admin Page
+router
+  .resolve({ pathname: '/admin/some/other/page' })
+  .then((result) => console.log(result))
+// => Admin Page
 ```
 
 ## URL Parameters
@@ -134,12 +137,13 @@ router.resolve({ pathname: '/admin/some/other/page' })
 ```js
 const router = new UniversalRouter({
   path: '/hello/:username',
-  action: context => `Welcome, ${context.params.username}!`
+  action: (context) => `Welcome, ${context.params.username}!`,
 })
 
-router.resolve({ pathname: '/hello/john' })
-  .then(result => console.log(result))
-  // => Welcome, john!
+router
+  .resolve({ pathname: '/hello/john' })
+  .then((result) => console.log(result))
+// => Welcome, john!
 ```
 
 Alternatively, captured parameters can be accessed via the second argument
@@ -148,12 +152,13 @@ to an action method like so:
 ```js
 const router = new UniversalRouter({
   path: '/hello/:username',
-  action: (ctx, { username }) => `Welcome, ${username}!`
+  action: (ctx, { username }) => `Welcome, ${username}!`,
 })
 
-router.resolve({ pathname: '/hello/john' })
-  .then(result => console.log(result))
-  // => Welcome, john!
+router
+  .resolve({ pathname: '/hello/john' })
+  .then((result) => console.log(result))
+// => Welcome, john!
 ```
 
 Router preserves the `context.params` values from the parent router.
@@ -174,12 +179,13 @@ const router = new UniversalRouter({
   path: '/hello',
   action(context) {
     return `Welcome, ${context.user}!`
-  }
+  },
 })
 
-router.resolve({ pathname: '/hello', user: 'admin' })
-  .then(result => console.log(result))
-  // => Welcome, admin!
+router
+  .resolve({ pathname: '/hello', user: 'admin' })
+  .then((result) => console.log(result))
+// => Welcome, admin!
 ```
 
 Router supports `context` option in the `UniversalRouter` constructor
@@ -219,12 +225,13 @@ const router = new UniversalRouter({
     const resp = await fetch(`/api/users/${params.username}`)
     const user = await resp.json()
     if (user) return `Welcome, ${user.displayName}!`
-  }
+  },
 })
 
-router.resolve({ pathname: '/hello/john' })
-  .then(result => console.log(result))
-  // => Welcome, John Brown!
+router
+  .resolve({ pathname: '/hello/john' })
+  .then((result) => console.log(result))
+// => Welcome, John Brown!
 ```
 
 Use [Babel](http://babeljs.io/) to transpile your code with `async` / `await` to normal JavaScript.
@@ -235,9 +242,9 @@ const route = {
   path: '/hello/:username',
   action({ params }) {
     return fetch(`/api/users/${params.username}`)
-      .then(resp => resp.json())
-      .then(user => user && `Welcome, ${user.displayName}!`)
-  }
+      .then((resp) => resp.json())
+      .then((user) => user && `Welcome, ${user.displayName}!`)
+  },
 }
 ```
 
@@ -260,9 +267,9 @@ const router = new UniversalRouter({
       action() {
         console.log('route: return a result')
         return 'Hello, world!'
-      }
-    }
-  ]
+      },
+    },
+  ],
 })
 
 router.resolve({ pathname: '/hello' })
@@ -291,7 +298,9 @@ const middlewareRoute = {
     }
     return undefined // or `return context.next()` - try to match child routes
   },
-  children: [/* admin routes here */]
+  children: [
+    /* admin routes here */
+  ],
 }
 ```
 
@@ -315,7 +324,7 @@ the matching route action returned (or throw an error).
 ```js
 const router = new UniversalRouterSync([
   { path: '/one', action: () => 'Page One' },
-  { path: '/two', action: () => 'Page Two' }
+  { path: '/two', action: () => 'Page Two' },
 ])
 
 const result = router.resolve({ pathname: '/one' })
@@ -332,10 +341,7 @@ The `context.next` function will be synchronous too and will return whatever the
 In most web applications it's much simpler to just use a string for hyperlinks.
 
 ```js
-`<a href="/page">Page</a>`
-`<a href="/user/${username}">Profile</a>`
-`<a href="/search?q=${query}">Search</a>`
-`<a href="/faq#question">Question</a>`
+;`<a href="/page">Page</a>``<a href="/user/${username}">Profile</a>``<a href="/search?q=${query}">Search</a>``<a href="/faq#question">Question</a>`
 // etc.
 ```
 
@@ -349,14 +355,14 @@ import generateUrls from 'universal-router/generateUrls'
 
 const routes = [
   { name: 'users', path: '/users' },
-  { name: 'user', path: '/user/:username' }
+  { name: 'user', path: '/user/:username' },
 ]
 
 const router = new UniversalRouter(routes, { baseUrl: '/base' })
 const url = generateUrls(router)
 
-url('users')                          // => '/base/users'
-url('user', { username: 'john' })     // => '/base/user/john'
+url('users') // => '/base/users'
+url('user', { username: 'john' }) // => '/base/user/john'
 ```
 
 This approach also works fine for dynamically added routes at runtime.
@@ -364,7 +370,7 @@ This approach also works fine for dynamically added routes at runtime.
 ```js
 routes.children.push({ path: '/world', name: 'hello' })
 
-url('hello')                          // => '/base/world'
+url('hello') // => '/base/world'
 ```
 
 Use `encode` option for custom encoding of URI path segments. By default
@@ -374,7 +380,7 @@ is used.
 ```js
 const prettyUrl = generateUrls(router, { encode: (value, token) => value })
 
-url('user', { username: ':/' })       // => '/base/user/%3A%2F'
+url('user', { username: ':/' }) // => '/base/user/%3A%2F'
 prettyUrl('user', { username: ':/' }) // => '/base/user/:/'
 ```
 
@@ -383,12 +389,12 @@ Provide a function to `stringifyQueryParams` option to generate URL with
 
 ```js
 const urlWithQueryString = generateUrls(router, {
-  stringifyQueryParams: (params) => new URLSearchParams(params).toString()
+  stringifyQueryParams: (params) => new URLSearchParams(params).toString(),
 })
 
 const params = { username: 'John', busy: 1 }
-url('user', params)                   // => /base/user/John
-urlWithQueryString('user', params)    // => /base/user/John?busy=1
+url('user', params) // => /base/user/John
+urlWithQueryString('user', params) // => /base/user/John?busy=1
 ```
 
 Or use external library such as [qs](https://github.com/ljharb/qs),
@@ -404,12 +410,20 @@ The router will automatically generate unique names based on parent routes using
 
 ```js
 const router = new UniversalRouter([
-  { name: 'users', path: '/users', children: [{ name: 'list', path: '/list' }] },
-  { name: 'pages', path: '/pages', children: [{ name: 'list', path: '/list' }] },
+  {
+    name: 'users',
+    path: '/users',
+    children: [{ name: 'list', path: '/list' }],
+  },
+  {
+    name: 'pages',
+    path: '/pages',
+    children: [{ name: 'list', path: '/list' }],
+  },
 ])
 const url = generateUrls(router, { uniqueRouteNameSep: '.' })
-url('users.list')                     // => /users/list
-url('pages.list')                     // => /pages/list
+url('users.list') // => /users/list
+url('pages.list') // => /pages/list
 ```
 
 ## Recipes

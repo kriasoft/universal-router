@@ -16,11 +16,11 @@ import {
 } from 'path-to-regexp'
 import UniversalRouter, { Route, Routes } from './UniversalRouter'
 
-export interface UrlParams {
-  [paramName: string]: string | number | (string | number)[]
-}
+export type UrlParams = Record<string, string | number | (string | number)[]>
 
-export interface GenerateUrlsOptions extends ParseOptions, TokensToFunctionOptions {
+export interface GenerateUrlsOptions
+  extends ParseOptions,
+    TokensToFunctionOptions {
   /**
    * Add a query string to generated url based on unknown route params.
    */
@@ -34,11 +34,9 @@ export interface GenerateUrlsOptions extends ParseOptions, TokensToFunctionOptio
 /**
  * Create a url by route name from route path.
  */
-declare const generateUrl: (routeName: string, params?: UrlParams) => string
+type GenerateUrl = (routeName: string, params?: UrlParams) => string
 
-type GenerateUrl = typeof generateUrl
-
-type Keys = { [key: string]: boolean }
+type Keys = Record<string, boolean>
 
 function cacheRoutes(
   routesByName: Map<string, Route>,
@@ -74,13 +72,19 @@ function cacheRoutes(
 /**
  * Create a function to generate urls by route names.
  */
-function generateUrls(router: UniversalRouter, options?: GenerateUrlsOptions): GenerateUrl {
+function generateUrls(
+  router: UniversalRouter,
+  options?: GenerateUrlsOptions,
+): GenerateUrl {
   if (!router) {
     throw new ReferenceError('Router is not defined')
   }
 
   const routesByName = new Map<string, Route>()
-  const regexpByRoute = new Map<Route, { toPath: PathFunction<UrlParams>; keys: Keys }>()
+  const regexpByRoute = new Map<
+    Route,
+    { toPath: PathFunction<UrlParams>; keys: Keys }
+  >()
   const opts: GenerateUrlsOptions = { encode: encodeURIComponent, ...options }
   return (routeName: string, params?: UrlParams): string => {
     let route = routesByName.get(routeName)

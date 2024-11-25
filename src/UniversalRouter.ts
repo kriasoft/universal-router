@@ -21,9 +21,7 @@ import {
  * In addition to a URL path string, any arbitrary data can be passed to
  * the `router.resolve()` method, that becomes available inside action functions.
  */
-export interface RouterContext {
-  [propName: string]: any
-}
+export type RouterContext = Record<string, any>
 
 export interface ResolveContext extends RouterContext {
   /**
@@ -35,11 +33,13 @@ export interface ResolveContext extends RouterContext {
 /**
  * Params is a key/value object that represents extracted URL parameters.
  */
-export interface RouteParams {
-  [paramName: string]: string | string[]
-}
+export type RouteParams = Record<string, string | string[]>
 
-export type RouteResult<T> = T | null | undefined | Promise<T | null | undefined>
+export type RouteResult<T> =
+  | T
+  | null
+  | undefined
+  | Promise<T | null | undefined>
 
 export interface RouteContext<R = any, C extends RouterContext = RouterContext>
   extends ResolveContext {
@@ -110,7 +110,10 @@ export interface Route<R = any, C extends RouterContext = RouterContext> {
  * @template R Result that every action function resolves to.
  * If the action returns a Promise, R can be the type the Promise resolves to.
  */
-export type Routes<R = any, C extends RouterContext = RouterContext> = Array<Route<R, C>>
+export type Routes<R = any, C extends RouterContext = RouterContext> = Route<
+  R,
+  C
+>[]
 
 export type ResolveRoute<R = any, C extends RouterContext = RouterContext> = (
   context: RouteContext<R, C>,
@@ -119,7 +122,10 @@ export type ResolveRoute<R = any, C extends RouterContext = RouterContext> = (
 
 export type RouteError = Error & { status?: number }
 
-export type ErrorHandler<R = any> = (error: RouteError, context: ResolveContext) => RouteResult<R>
+export type ErrorHandler<R = any> = (
+  error: RouteError,
+  context: ResolveContext,
+) => RouteResult<R>
 
 export interface RouterOptions<R = any, C extends RouterContext = RouterContext>
   extends ParseOptions,
@@ -141,7 +147,7 @@ export interface RouteMatch<R = any, C extends RouterContext = RouterContext> {
 function decode(val: string): string {
   try {
     return decodeURIComponent(val)
-  } catch (err) {
+  } catch {
     return val
   }
 }
@@ -154,11 +160,17 @@ function matchRoute<R, C extends RouterContext>(
   parentParams?: RouteParams,
 ): Iterator<RouteMatch<R, C>, false, Route<R, C> | false> {
   let matchResult: Match<RouteParams>
-  let childMatches: Iterator<RouteMatch<R, C>, false, Route<R, C> | false> | null
+  let childMatches: Iterator<
+    RouteMatch<R, C>,
+    false,
+    Route<R, C> | false
+  > | null
   let childIndex = 0
 
   return {
-    next(routeToSkip: Route<R, C> | false): IteratorResult<RouteMatch<R, C>, false> {
+    next(
+      routeToSkip: Route<R, C> | false,
+    ): IteratorResult<RouteMatch<R, C>, false> {
       if (route === routeToSkip) {
         return { done: true, value: false }
       }
@@ -173,7 +185,7 @@ function matchRoute<R, C extends RouterContext>(
 
         if (matchResult) {
           const { path } = matchResult
-          matchResult.path = !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path
+          matchResult.path = !end && path.endsWith('/') ? path.substr(1) : path
           matchResult.params = { ...parentParams, ...matchResult.params }
           return {
             done: false,
@@ -251,14 +263,19 @@ class UniversalRouter<R = any, C extends RouterContext = RouterContext> {
 
   options: RouterOptions<R, C>
 
-  constructor(routes: Routes<R, C> | Route<R, C>, options?: RouterOptions<R, C>) {
+  constructor(
+    routes: Routes<R, C> | Route<R, C>,
+    options?: RouterOptions<R, C>,
+  ) {
     if (!routes || typeof routes !== 'object') {
       throw new TypeError('Invalid routes')
     }
 
     this.options = { decode, ...options }
     this.baseUrl = this.options.baseUrl || ''
-    this.root = Array.isArray(routes) ? { path: '', children: routes, parent: null } : routes
+    this.root = Array.isArray(routes)
+      ? { path: '', children: routes, parent: null }
+      : routes
     this.root.parent = null
   }
 
@@ -291,7 +308,8 @@ class UniversalRouter<R = any, C extends RouterContext = RouterContext> {
       parent: Route<R, C> | false = !matches.done && matches.value.route,
       prevResult?: RouteResult<R>,
     ): Promise<RouteResult<R>> {
-      const routeToSkip = prevResult === null && !matches.done && matches.value.route
+      const routeToSkip =
+        prevResult === null && !matches.done && matches.value.route
       matches = nextMatches || matchResult.next(routeToSkip)
       nextMatches = null
 
@@ -324,7 +342,7 @@ class UniversalRouter<R = any, C extends RouterContext = RouterContext> {
 
     return Promise.resolve()
       .then(() => next(true, this.root))
-      .catch((error) => {
+      .catch((error: RouteError) => {
         if (this.options.errorHandler) {
           return this.options.errorHandler(error, currentContext)
         }
