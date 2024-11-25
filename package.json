@@ -1,16 +1,8 @@
 {
-  "private": true,
   "name": "universal-router",
   "version": "10.0.0",
+  "private": true,
   "description": "Isomorphic router for JavaScript web applications",
-  "homepage": "https://www.kriasoft.com/universal-router/",
-  "repository": "kriasoft/universal-router",
-  "author": "Kriasoft <support@kriasoft.com> (https://www.kriasoft.com)",
-  "contributors": [
-    "Konstantin Tarkus <hello@tarkus.me> (https://tarkus.me)",
-    "Vladimir Kutepov"
-  ],
-  "license": "MIT",
   "keywords": [
     "isomorphic",
     "universal",
@@ -19,42 +11,64 @@
     "routes",
     "route"
   ],
-  "main": "index.js",
-  "module": "module.js",
-  "types": "src/UniversalRouter.d.ts",
-  "dependencies": {
-    "path-to-regexp": "^8.2.0"
+  "homepage": "https://www.kriasoft.com/universal-router/",
+  "repository": "github:kriasoft/universal-router",
+  "license": "MIT",
+  "author": "Kriasoft <support@kriasoft.com> (https://www.kriasoft.com)",
+  "contributors": [
+    "Konstantin Tarkus <hello@tarkus.me> (https://tarkus.me)",
+    "Vladimir Kutepov"
+  ],
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./universal-router.d.ts",
+      "import": "./universal-router.js",
+      "require": "./cjs/universal-router.js"
+    },
+    "./sync": {
+      "types": "./universal-router-sync.d.ts",
+      "import": "./universal-router-sync.js",
+      "require": "./cjs/universal-router-sync.js"
+    },
+    "./generateUrls": {
+      "types": "./generate-urls.d.ts",
+      "import": "./generate-urls.js",
+      "require": "./cjs/generate-urls.js"
+    },
+    "./path-to-regexp": {
+      "types": "./path-to-regexp.d.ts",
+      "import": "./path-to-regexp.js",
+      "require": "./cjs/path-to-regexp.js"
+    }
+  },
+  "main": "universal-router.js",
+  "scripts": {
+    "build": "node tools/build.js",
+    "coverage": "vitest run --coverage",
+    "format": "prettier . --write",
+    "formatcheck": "prettier . --check",
+    "postinstall": "node tools/install.js https://raw.githubusercontent.com/pillarjs/path-to-regexp/v8.2.0/src/index.ts",
+    "lint": "eslint .",
+    "sort": "npx sort-package-json",
+    "sortcheck": "npx sort-package-json --check",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@babel/core": "7.14.6",
-    "@babel/preset-env": "7.14.7",
-    "@rollup/plugin-commonjs": "19.0.0",
-    "@rollup/plugin-node-resolve": "13.0.0",
-    "@rollup/plugin-typescript": "8.2.1",
-    "@types/jest": "26.0.23",
-    "@types/node": "18.11.19",
-    "@typescript-eslint/eslint-plugin": "4.28.0",
-    "@typescript-eslint/parser": "4.28.0",
-    "babel-jest": "27.0.5",
-    "eslint": "7.29.0",
-    "eslint-config-airbnb-base": "14.2.1",
-    "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-import": "2.23.4",
-    "eslint-plugin-jest": "24.3.6",
-    "eslint-plugin-prettier": "3.4.0",
-    "jest": "27.0.5",
-    "prettier": "2.3.1",
-    "rollup": "2.52.2",
-    "rollup-plugin-babel": "4.4.0",
-    "rollup-plugin-sourcemaps": "0.6.3",
-    "rollup-plugin-uglify": "6.0.4",
-    "ts-jest": "27.0.3",
-    "typescript": "4.9.5"
-  },
-  "scripts": {
-    "lint": "eslint . --ext .ts,.js",
-    "test": "jest",
-    "build": "node tools/build.js",
-    "tsc": "tsc --noEmit"
+    "@eslint/js": "^9.26.0",
+    "@types/node": "^22.15.3",
+    "@vitest/coverage-v8": "^3.1.2",
+    "@vitest/ui": "^3.1.2",
+    "eslint": "^9.26.0",
+    "eslint-import-resolver-typescript": "^4.3.4",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^16.0.0",
+    "prettier": "3.5.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.31.1",
+    "vitest": "^3.1.2"
   }
 }

@@ -7,14 +7,9 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import {
-  parse,
-  ParseOptions,
-  compile,
-  CompileOptions,
-  PathFunction,
-} from 'path-to-regexp'
-import UniversalRouter, { Route, Routes } from './UniversalRouter'
+import type { ParseOptions, CompileOptions } from './path-to-regexp.js'
+import { parse, compile, stringify, TokenData } from './path-to-regexp.js'
+import UniversalRouter, { Route, Routes } from './universal-router.js'
 
 export interface UrlParams {
   [paramName: string]: string | string[]
@@ -34,9 +29,7 @@ export interface GenerateUrlsOptions extends ParseOptions, CompileOptions {
 /**
  * Create a url by route name from route path.
  */
-declare const generateUrl: (routeName: string, params?: UrlParams) => string
-
-type GenerateUrl = typeof generateUrl
+type GenerateUrl = (routeName: string, params?: UrlParams) => string
 
 type Keys = { [key: string]: boolean }
 
@@ -74,13 +67,19 @@ function cacheRoutes(
 /**
  * Create a function to generate urls by route names.
  */
-function generateUrls(router: UniversalRouter, options?: GenerateUrlsOptions): GenerateUrl {
+function generateUrls(
+  router: UniversalRouter,
+  options?: GenerateUrlsOptions,
+): GenerateUrl {
   if (!router) {
     throw new ReferenceError('Router is not defined')
   }
 
   const routesByName = new Map<string, Route>()
-  const regexpByRoute = new Map<Route, { toPath: PathFunction<UrlParams>; keys: Keys }>()
+  const regexpByRoute = new Map<
+    Route,
+    { toPath: (params?: UrlParams) => string | undefined; keys: Keys }
+  >()
   const opts: GenerateUrlsOptions = { encode: encodeURIComponent, ...options }
   return (routeName: string, params?: UrlParams): string => {
     let route = routesByName.get(routeName)
@@ -108,7 +107,8 @@ function generateUrls(router: UniversalRouter, options?: GenerateUrlsOptions): G
       while (rt) {
         const path = Array.isArray(rt.path) ? rt.path[0] : rt.path
         if (path) {
-          fullPath = path + fullPath
+          fullPath =
+            (path instanceof TokenData ? stringify(path) : path) + fullPath
         }
         rt = rt.parent
       }
@@ -136,8 +136,8 @@ function generateUrls(router: UniversalRouter, options?: GenerateUrlsOptions): G
       const keys = Object.keys(params)
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i]
-        if (key && !regexp.keys[key]) {
-          queryParams[key] = params[key] ?? ''
+        if (key && !regexp.keys[key] && params[key] != null) {
+          queryParams[key] = params[key]
         }
       }
       const query = opts.stringifyQueryParams(queryParams)
