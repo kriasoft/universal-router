@@ -346,9 +346,8 @@
           var _keys = Object.keys(params);
           for (var _i = 0; _i < _keys.length; _i++) {
             var _key = _keys[_i];
-            if (_key && !regexp.keys[_key]) {
-              var _params$_key;
-              queryParams[_key] = (_params$_key = params[_key]) != null ? _params$_key : '';
+            if (_key && !regexp.keys[_key] && params[_key] != null) {
+              queryParams[_key] = params[_key];
             }
           }
           var query = opts.stringifyQueryParams(queryParams);
