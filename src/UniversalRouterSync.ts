@@ -186,7 +186,8 @@ function matchRoute<R, C extends RouterContext>(
 
         if (matchResult) {
           const { path } = matchResult
-          matchResult.path = !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path
+          matchResult.path =
+            !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path
           matchResult.params = { ...parentParams, ...matchResult.params }
           return {
             done: false,
