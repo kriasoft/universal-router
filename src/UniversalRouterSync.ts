@@ -96,7 +96,10 @@ export interface Route<R = any, C extends RouterContext = RouterContext> {
    * Action method should return anything except `null` or `undefined` to be resolved by router
    * otherwise router will throw `Page not found` error if all matched routes returned nothing.
    */
-  action?: (context: RouteContext<R, C>, params: RouteParams) => RouteResultSync<R>
+  action?: (
+    context: RouteContext<R, C>,
+    params: RouteParams,
+  ) => RouteResultSync<R>
   /**
    * The route path match function. Used for internal caching.
    */
@@ -108,7 +111,10 @@ export interface Route<R = any, C extends RouterContext = RouterContext> {
  * @template C User context that is made union with RouterContext.
  * @template R Result that every action function resolves to.
  */
-export type Routes<R = any, C extends RouterContext = RouterContext> = Array<Route<R, C>>
+export type Routes<R = any, C extends RouterContext = RouterContext> = Route<
+  R,
+  C
+>[]
 
 export type ResolveRoute<R = any, C extends RouterContext = RouterContext> = (
   context: RouteContext<R, C>,
@@ -142,7 +148,7 @@ export interface RouteMatch<R = any, C extends RouterContext = RouterContext> {
 function decode(val: string): string {
   try {
     return decodeURIComponent(val)
-  } catch (err) {
+  } catch {
     return val
   }
 }
@@ -155,11 +161,17 @@ function matchRoute<R, C extends RouterContext>(
   parentParams?: RouteParams,
 ): Iterator<RouteMatch<R, C>, false, Route<R, C> | false> {
   let matchResult: Match<RouteParams>
-  let childMatches: Iterator<RouteMatch<R, C>, false, Route<R, C> | false> | null
+  let childMatches: Iterator<
+    RouteMatch<R, C>,
+    false,
+    Route<R, C> | false
+  > | null
   let childIndex = 0
 
   return {
-    next(routeToSkip: Route<R, C> | false): IteratorResult<RouteMatch<R, C>, false> {
+    next(
+      routeToSkip: Route<R, C> | false,
+    ): IteratorResult<RouteMatch<R, C>, false> {
       if (route === routeToSkip) {
         return { done: true, value: false }
       }
@@ -174,7 +186,8 @@ function matchRoute<R, C extends RouterContext>(
 
         if (matchResult) {
           const { path } = matchResult
-          matchResult.path = !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path
+          matchResult.path =
+            !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path
           matchResult.params = { ...parentParams, ...matchResult.params }
           return {
             done: false,
@@ -252,14 +265,19 @@ class UniversalRouterSync<R = any, C extends RouterContext = RouterContext> {
 
   options: RouterOptions<R, C>
 
-  constructor(routes: Routes<R, C> | Route<R, C>, options?: RouterOptions<R, C>) {
+  constructor(
+    routes: Routes<R, C> | Route<R, C>,
+    options?: RouterOptions<R, C>,
+  ) {
     if (!routes || typeof routes !== 'object') {
       throw new TypeError('Invalid routes')
     }
 
     this.options = { decode, ...options }
     this.baseUrl = this.options.baseUrl || ''
-    this.root = Array.isArray(routes) ? { path: '', children: routes, parent: null } : routes
+    this.root = Array.isArray(routes)
+      ? { path: '', children: routes, parent: null }
+      : routes
     this.root.parent = null
   }
 
@@ -292,7 +310,8 @@ class UniversalRouterSync<R = any, C extends RouterContext = RouterContext> {
       parent: Route<R, C> | false = !matches.done && matches.value.route,
       prevResult?: RouteResultSync<R>,
     ): RouteResultSync<R> {
-      const routeToSkip = prevResult === null && !matches.done && matches.value.route
+      const routeToSkip =
+        prevResult === null && !matches.done && matches.value.route
       matches = nextMatches || matchResult.next(routeToSkip)
       nextMatches = null
 
@@ -311,7 +330,10 @@ class UniversalRouterSync<R = any, C extends RouterContext = RouterContext> {
 
       currentContext = { ...context, ...matches.value }
 
-      const result = resolve(currentContext as RouteContext<R, C>, matches.value.params)
+      const result = resolve(
+        currentContext as RouteContext<R, C>,
+        matches.value.params,
+      )
       if (result !== null && result !== undefined) {
         return result
       }

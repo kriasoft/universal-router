@@ -7,6 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
+import { test, expect, vi, type Mock } from 'vitest'
 import UniversalRouter, { Route } from './UniversalRouterSync'
 import type { RouteError } from './UniversalRouterSync'
 
@@ -20,8 +21,8 @@ test('requires routes', () => {
 })
 
 test('supports custom route resolver', () => {
-  const resolveRoute: jest.Mock = jest.fn((context) => context.route.component)
-  const action: jest.Mock = jest.fn()
+  const resolveRoute: Mock = vi.fn((context) => context.route.component)
+  const action: Mock = vi.fn()
   const router = new UniversalRouter(
     {
       path: '/a',
@@ -40,12 +41,12 @@ test('supports custom route resolver', () => {
 })
 
 test('supports custom error handler', () => {
-  const errorHandler: jest.Mock = jest.fn(() => 'result')
+  const errorHandler: Mock = vi.fn(() => 'result')
   const router = new UniversalRouter([], { errorHandler })
   expect(router.resolve('/')).toBe('result')
   expect(errorHandler.mock.calls.length).toBe(1)
-  const error = errorHandler.mock.calls[0][0]
-  const context = errorHandler.mock.calls[0][1]
+  const error = errorHandler.mock.calls[0]?.[0]
+  const context = errorHandler.mock.calls[0]?.[1]
   expect(error).toBeInstanceOf(Error)
   expect(error.message).toBe('Route not found')
   expect(error.status).toBe(404)
@@ -54,7 +55,7 @@ test('supports custom error handler', () => {
 })
 
 test('handles route errors', () => {
-  const errorHandler: jest.Mock = jest.fn(() => 'result')
+  const errorHandler: Mock = vi.fn(() => 'result')
   const route = {
     path: '/',
     action: (): never => {
@@ -64,8 +65,8 @@ test('handles route errors', () => {
   const router = new UniversalRouter(route, { errorHandler })
   expect(router.resolve('/')).toBe('result')
   expect(errorHandler.mock.calls.length).toBe(1)
-  const error = errorHandler.mock.calls[0][0]
-  const context = errorHandler.mock.calls[0][1]
+  const error = errorHandler.mock.calls[0]?.[0]
+  const context = errorHandler.mock.calls[0]?.[1]
   expect(error).toBeInstanceOf(Error)
   expect(error.message).toBe('custom')
   expect(context.pathname).toBe('/')
@@ -88,18 +89,18 @@ test('throws when route not found', () => {
 })
 
 test("executes the matching route's action method and return its result", () => {
-  const action: jest.Mock = jest.fn(() => 'b')
+  const action: Mock = vi.fn(() => 'b')
   const router = new UniversalRouter({ path: '/a', action })
   expect(router.resolve('/a')).toBe('b')
   expect(action.mock.calls.length).toBe(1)
-  expect(action.mock.calls[0][0]).toHaveProperty('path', '/a')
+  expect(action.mock.calls[0]?.[0]).toHaveProperty('path', '/a')
 })
 
 test('finds the first route whose action method !== undefined or null', () => {
-  const action1: jest.Mock = jest.fn(() => undefined)
-  const action2: jest.Mock = jest.fn(() => null)
-  const action3: jest.Mock = jest.fn(() => 'c')
-  const action4: jest.Mock = jest.fn(() => 'd')
+  const action1: Mock = vi.fn(() => undefined)
+  const action2: Mock = vi.fn(() => null)
+  const action3: Mock = vi.fn(() => 'c')
+  const action4: Mock = vi.fn(() => 'd')
   const router = new UniversalRouter([
     { path: '/a', action: action1 },
     { path: '/a', action: action2 },
@@ -114,16 +115,16 @@ test('finds the first route whose action method !== undefined or null', () => {
 })
 
 test('allows to pass context variables to action methods', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const router = new UniversalRouter([{ path: '/a', action }])
   expect(router.resolve({ pathname: '/a', test: 'b' })).toBe(true)
   expect(action.mock.calls.length).toBe(1)
-  expect(action.mock.calls[0][0]).toHaveProperty('path', '/a')
-  expect(action.mock.calls[0][0]).toHaveProperty('test', 'b')
+  expect(action.mock.calls[0]?.[0]).toHaveProperty('path', '/a')
+  expect(action.mock.calls[0]?.[0]).toHaveProperty('test', 'b')
 })
 
 test('skips action methods of routes that do not match the URL path', () => {
-  const action: jest.Mock = jest.fn()
+  const action: Mock = vi.fn()
   const router = new UniversalRouter([{ path: '/a', action }])
   let err
   try {
@@ -138,21 +139,26 @@ test('skips action methods of routes that do not match the URL path', () => {
 })
 
 test('supports asynchronous route actions', async () => {
-  const router = new UniversalRouter([{ path: '/a', action: async (): Promise<string> => 'b' }])
+  const router = new UniversalRouter([
+    { path: '/a', action: () => Promise.resolve('b') },
+  ])
   await expect(router.resolve('/a')).resolves.toBe('b')
 })
 
 test('captures URL parameters to context.params', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const router = new UniversalRouter([{ path: '/:one/:two', action }])
   expect(router.resolve({ pathname: '/a/b' })).toBe(true)
   expect(action.mock.calls.length).toBe(1)
-  expect(action.mock.calls[0][0]).toHaveProperty('params', { one: 'a', two: 'b' })
+  expect(action.mock.calls[0]?.[0]).toHaveProperty('params', {
+    one: 'a',
+    two: 'b',
+  })
 })
 
 test('provides all URL parameters to each route', () => {
-  const action1: jest.Mock = jest.fn()
-  const action2: jest.Mock = jest.fn(() => true)
+  const action1: Mock = vi.fn()
+  const action2: Mock = vi.fn(() => true)
   const router = new UniversalRouter([
     {
       path: '/:one',
@@ -167,14 +173,17 @@ test('provides all URL parameters to each route', () => {
   ])
   expect(router.resolve({ pathname: '/a/b' })).toBe(true)
   expect(action1.mock.calls.length).toBe(1)
-  expect(action1.mock.calls[0][0]).toHaveProperty('params', { one: 'a' })
+  expect(action1.mock.calls[0]?.[0]).toHaveProperty('params', { one: 'a' })
   expect(action2.mock.calls.length).toBe(1)
-  expect(action2.mock.calls[0][0]).toHaveProperty('params', { one: 'a', two: 'b' })
+  expect(action2.mock.calls[0]?.[0]).toHaveProperty('params', {
+    one: 'a',
+    two: 'b',
+  })
 })
 
 test('overrides URL parameters with same name in child routes', () => {
-  const action1: jest.Mock = jest.fn()
-  const action2: jest.Mock = jest.fn(() => true)
+  const action1: Mock = vi.fn()
+  const action2: Mock = vi.fn(() => true)
   const router = new UniversalRouter([
     {
       path: '/:one',
@@ -193,16 +202,19 @@ test('overrides URL parameters with same name in child routes', () => {
   ])
   expect(router.resolve({ pathname: '/a/b' })).toBe(true)
   expect(action1.mock.calls.length).toBe(2)
-  expect(action1.mock.calls[0][0]).toHaveProperty('params', { one: 'a' })
-  expect(action1.mock.calls[1][0]).toHaveProperty('params', { one: 'b' })
+  expect(action1.mock.calls[0]?.[0]).toHaveProperty('params', { one: 'a' })
+  expect(action1.mock.calls[1]?.[0]).toHaveProperty('params', { one: 'b' })
   expect(action2.mock.calls.length).toBe(1)
-  expect(action2.mock.calls[0][0]).toHaveProperty('params', { one: 'a', two: 'b' })
+  expect(action2.mock.calls[0]?.[0]).toHaveProperty('params', {
+    one: 'a',
+    two: 'b',
+  })
 })
 
 test('does not collect parameters from previous routes', () => {
-  const action1: jest.Mock = jest.fn(() => undefined)
-  const action2: jest.Mock = jest.fn(() => undefined)
-  const action3: jest.Mock = jest.fn(() => true)
+  const action1: Mock = vi.fn(() => undefined)
+  const action2: Mock = vi.fn(() => undefined)
+  const action3: Mock = vi.fn(() => true)
   const router = new UniversalRouter([
     {
       path: '/:one',
@@ -231,13 +243,22 @@ test('does not collect parameters from previous routes', () => {
   ])
   expect(router.resolve({ pathname: '/a/b' })).toBe(true)
   expect(action1.mock.calls.length).toBe(2)
-  expect(action1.mock.calls[0][0]).toHaveProperty('params', { one: 'a' })
-  expect(action1.mock.calls[1][0]).toHaveProperty('params', { one: 'a', two: 'b' })
+  expect(action1.mock.calls[0]?.[0]).toHaveProperty('params', { one: 'a' })
+  expect(action1.mock.calls[1]?.[0]).toHaveProperty('params', {
+    one: 'a',
+    two: 'b',
+  })
   expect(action2.mock.calls.length).toBe(2)
-  expect(action2.mock.calls[0][0]).toHaveProperty('params', { three: 'a' })
-  expect(action2.mock.calls[1][0]).toHaveProperty('params', { three: 'a', four: 'b' })
+  expect(action2.mock.calls[0]?.[0]).toHaveProperty('params', { three: 'a' })
+  expect(action2.mock.calls[1]?.[0]).toHaveProperty('params', {
+    three: 'a',
+    four: 'b',
+  })
   expect(action3.mock.calls.length).toBe(1)
-  expect(action3.mock.calls[0][0]).toHaveProperty('params', { three: 'a', five: 'b' })
+  expect(action3.mock.calls[0]?.[0]).toHaveProperty('params', {
+    three: 'a',
+    five: 'b',
+  })
 })
 
 test('supports next() across multiple routes', () => {
@@ -386,19 +407,19 @@ test('supports next(true) across multiple routes', () => {
 })
 
 test('supports parametrized routes', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const router = new UniversalRouter([{ path: '/path/:a/other/:b', action }])
   expect(router.resolve('/path/1/other/2')).toBe(true)
   expect(action.mock.calls.length).toBe(1)
-  expect(action.mock.calls[0][0]).toHaveProperty('params.a', '1')
-  expect(action.mock.calls[0][0]).toHaveProperty('params.b', '2')
-  expect(action.mock.calls[0][1]).toHaveProperty('a', '1')
-  expect(action.mock.calls[0][1]).toHaveProperty('b', '2')
+  expect(action.mock.calls[0]?.[0]).toHaveProperty('params.a', '1')
+  expect(action.mock.calls[0]?.[0]).toHaveProperty('params.b', '2')
+  expect(action.mock.calls[0]?.[1]).toHaveProperty('a', '1')
+  expect(action.mock.calls[0]?.[1]).toHaveProperty('b', '2')
 })
 
 test('supports nested routes (1)', () => {
-  const action1: jest.Mock = jest.fn()
-  const action2: jest.Mock = jest.fn(() => true)
+  const action1: Mock = vi.fn()
+  const action2: Mock = vi.fn(() => true)
   const router = new UniversalRouter([
     {
       path: '',
@@ -414,14 +435,14 @@ test('supports nested routes (1)', () => {
 
   expect(router.resolve('/a')).toBe(true)
   expect(action1.mock.calls.length).toBe(1)
-  expect(action1.mock.calls[0][0]).toHaveProperty('path', '')
+  expect(action1.mock.calls[0]?.[0]).toHaveProperty('path', '')
   expect(action2.mock.calls.length).toBe(1)
-  expect(action2.mock.calls[0][0]).toHaveProperty('path', '/a')
+  expect(action2.mock.calls[0]?.[0]).toHaveProperty('path', '/a')
 })
 
 test('supports nested routes (2)', () => {
-  const action1: jest.Mock = jest.fn()
-  const action2: jest.Mock = jest.fn(() => true)
+  const action1: Mock = vi.fn()
+  const action2: Mock = vi.fn(() => true)
   const router = new UniversalRouter([
     {
       path: '/a',
@@ -437,15 +458,15 @@ test('supports nested routes (2)', () => {
 
   expect(router.resolve('/a/b')).toBe(true)
   expect(action1.mock.calls.length).toBe(1)
-  expect(action1.mock.calls[0][0]).toHaveProperty('path', '/a')
+  expect(action1.mock.calls[0]?.[0]).toHaveProperty('path', '/a')
   expect(action2.mock.calls.length).toBe(1)
-  expect(action2.mock.calls[0][0]).toHaveProperty('path', '/b')
+  expect(action2.mock.calls[0]?.[0]).toHaveProperty('path', '/b')
 })
 
 test('supports nested routes (3)', () => {
-  const action1: jest.Mock = jest.fn(() => undefined)
-  const action2: jest.Mock = jest.fn(() => null)
-  const action3: jest.Mock = jest.fn(() => true)
+  const action1: Mock = vi.fn(() => undefined)
+  const action2: Mock = vi.fn(() => null)
+  const action3: Mock = vi.fn(() => true)
   const router = new UniversalRouter([
     {
       path: '/a',
@@ -465,14 +486,14 @@ test('supports nested routes (3)', () => {
 
   expect(router.resolve('/a/b')).toBe(true)
   expect(action1.mock.calls.length).toBe(1)
-  expect(action1.mock.calls[0][0]).toHaveProperty('baseUrl', '')
-  expect(action1.mock.calls[0][0]).toHaveProperty('path', '/a')
+  expect(action1.mock.calls[0]?.[0]).toHaveProperty('baseUrl', '')
+  expect(action1.mock.calls[0]?.[0]).toHaveProperty('path', '/a')
   expect(action2.mock.calls.length).toBe(1)
-  expect(action2.mock.calls[0][0]).toHaveProperty('baseUrl', '/a')
-  expect(action2.mock.calls[0][0]).toHaveProperty('path', '/b')
+  expect(action2.mock.calls[0]?.[0]).toHaveProperty('baseUrl', '/a')
+  expect(action2.mock.calls[0]?.[0]).toHaveProperty('path', '/b')
   expect(action3.mock.calls.length).toBe(1)
-  expect(action3.mock.calls[0][0]).toHaveProperty('baseUrl', '')
-  expect(action3.mock.calls[0][0]).toHaveProperty('path', '/a/b')
+  expect(action3.mock.calls[0]?.[0]).toHaveProperty('baseUrl', '')
+  expect(action3.mock.calls[0]?.[0]).toHaveProperty('path', '/a/b')
 })
 
 test('re-throws an error', () => {
@@ -495,7 +516,7 @@ test('re-throws an error', () => {
 })
 
 test('respects baseUrl', () => {
-  const action: jest.Mock = jest.fn(() => 17)
+  const action: Mock = vi.fn(() => 17)
   const routes = {
     path: '/a',
     children: [
@@ -508,11 +529,14 @@ test('respects baseUrl', () => {
   const router = new UniversalRouter(routes, { baseUrl: '/base' })
   expect(router.resolve('/base/a/b/c')).toBe(17)
   expect(action.mock.calls.length).toBe(1)
-  expect(action.mock.calls[0][0]).toHaveProperty('pathname', '/base/a/b/c')
-  expect(action.mock.calls[0][0]).toHaveProperty('path', '/c')
-  expect(action.mock.calls[0][0]).toHaveProperty('baseUrl', '/base/a/b')
-  expect(action.mock.calls[0][0]).toHaveProperty('route', routes.children[0]?.children[0])
-  expect(action.mock.calls[0][0]).toHaveProperty('router', router)
+  expect(action.mock.calls[0]?.[0]).toHaveProperty('pathname', '/base/a/b/c')
+  expect(action.mock.calls[0]?.[0]).toHaveProperty('path', '/c')
+  expect(action.mock.calls[0]?.[0]).toHaveProperty('baseUrl', '/base/a/b')
+  expect(action.mock.calls[0]?.[0]).toHaveProperty(
+    'route',
+    routes.children[0]?.children[0],
+  )
+  expect(action.mock.calls[0]?.[0]).toHaveProperty('router', router)
 
   let err
   try {
@@ -545,8 +569,8 @@ test('matches routes with trailing slashes', () => {
 })
 
 test('skips nested routes when middleware route returns null', () => {
-  const middleware: jest.Mock = jest.fn(() => null)
-  const action: jest.Mock = jest.fn(() => 'skipped')
+  const middleware: Mock = vi.fn(() => null)
+  const action: Mock = vi.fn(() => 'skipped')
   const router = new UniversalRouter([
     {
       path: '/match',
@@ -565,8 +589,8 @@ test('skips nested routes when middleware route returns null', () => {
 })
 
 test('matches nested routes when middleware route returns undefined', () => {
-  const middleware: jest.Mock = jest.fn(() => undefined)
-  const action: jest.Mock = jest.fn(() => null)
+  const middleware: Mock = vi.fn(() => undefined)
+  const action: Mock = vi.fn(() => null)
   const router = new UniversalRouter([
     {
       path: '/match',
@@ -605,12 +629,18 @@ test('handles route not found error correctly', () => {
 })
 
 test('handles malformed URI params', () => {
-  const router = new UniversalRouter({ path: '/:a', action: (ctx): object => ctx.params })
+  const router = new UniversalRouter({
+    path: '/:a',
+    action: (ctx): object => ctx.params,
+  })
   expect(router.resolve('/%AF')).toStrictEqual({ a: '%AF' })
 })
 
 test('decodes params correctly', () => {
-  const router = new UniversalRouter({ path: '/:a/:b/:c', action: (ctx): object => ctx.params })
+  const router = new UniversalRouter({
+    path: '/:a/:b/:c',
+    action: (ctx): object => ctx.params,
+  })
   expect(router.resolve('/%2F/%3A/caf%C3%A9')).toStrictEqual({
     a: '/',
     b: ':',
@@ -619,91 +649,108 @@ test('decodes params correctly', () => {
 })
 
 test('decodes repeated parameters correctly', () => {
-  const router = new UniversalRouter({ path: '/:a+', action: (ctx): object => ctx.params })
+  const router = new UniversalRouter({
+    path: '/:a+',
+    action: (ctx): object => ctx.params,
+  })
   expect(router.resolve('/x%2Fy/z/%20/%AF')).toStrictEqual({
     a: ['x/y', 'z', ' ', '%AF'],
   })
 })
 
 test('matches 0 routes (1)', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const route = { path: '/', action }
-  expect(() => new UniversalRouter(route).resolve('/a')).toThrow(/Route not found/)
+  expect(() => new UniversalRouter(route).resolve('/a')).toThrow(
+    /Route not found/,
+  )
   expect(action.mock.calls.length).toBe(0)
 })
 
 test('matches 0 routes (2)', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const route = { path: '/a', action }
-  expect(() => new UniversalRouter(route).resolve('/')).toThrow(/Route not found/)
+  expect(() => new UniversalRouter(route).resolve('/')).toThrow(
+    /Route not found/,
+  )
   expect(action.mock.calls.length).toBe(0)
 })
 
 test('matches 0 routes (3)', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const route = { path: '/a', action, children: [{ path: '/b', action }] }
-  expect(() => new UniversalRouter(route).resolve('/b')).toThrow(/Route not found/)
+  expect(() => new UniversalRouter(route).resolve('/b')).toThrow(
+    /Route not found/,
+  )
   expect(action.mock.calls.length).toBe(0)
 })
 
 test('matches 0 routes (4)', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const route = { path: 'a', action, children: [{ path: 'b', action }] }
-  expect(() => new UniversalRouter(route).resolve('ab')).toThrow(/Route not found/)
+  expect(() => new UniversalRouter(route).resolve('ab')).toThrow(
+    /Route not found/,
+  )
   expect(action.mock.calls.length).toBe(0)
 })
 
 test('matches 0 routes (5)', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const route = { action }
-  expect(() => new UniversalRouter(route).resolve('/a')).toThrow(/Route not found/)
+  expect(() => new UniversalRouter(route).resolve('/a')).toThrow(
+    /Route not found/,
+  )
   expect(action.mock.calls.length).toBe(0)
 })
 
 test('matches 0 routes (6)', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const route = { path: '/', action }
-  expect(() => new UniversalRouter(route).resolve('')).toThrow(/Route not found/)
+  expect(() => new UniversalRouter(route).resolve('')).toThrow(
+    /Route not found/,
+  )
   expect(action.mock.calls.length).toBe(0)
 })
 
 test('matches 0 routes (7)', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const route = { path: '/:a+', action, children: [] }
-  expect(() => new UniversalRouter(route).resolve('')).toThrow(/Route not found/)
+  expect(() => new UniversalRouter(route).resolve('')).toThrow(
+    /Route not found/,
+  )
   expect(action.mock.calls.length).toBe(0)
 })
 
 test('matches 1 route (1)', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const route = {
     path: '/',
     action,
   }
   expect(new UniversalRouter(route).resolve('/')).toBe(true)
   expect(action.mock.calls.length).toBe(1)
-  const context = action.mock.calls[0][0]
+  const context = action.mock.calls[0]?.[0]
   expect(context).toHaveProperty('baseUrl', '')
   expect(context).toHaveProperty('path', '/')
   expect(context).toHaveProperty('route.path', '/')
 })
 
 test('matches 1 route (2)', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const route = {
     path: '/a',
     action,
   }
   expect(new UniversalRouter(route).resolve('/a')).toBe(true)
   expect(action.mock.calls.length).toBe(1)
-  const context = action.mock.calls[0][0]
+  const context = action.mock.calls[0]?.[0]
   expect(context).toHaveProperty('baseUrl', '')
   expect(context).toHaveProperty('path', '/a')
   expect(context).toHaveProperty('route.path', '/a')
 })
 
 test('matches 2 routes (1)', () => {
-  const action: jest.Mock = jest.fn(() => undefined)
+  const action: Mock = vi.fn(() => undefined)
   const route = {
     path: '',
     action,
@@ -714,20 +761,22 @@ test('matches 2 routes (1)', () => {
       },
     ],
   }
-  expect(() => new UniversalRouter(route).resolve('/a')).toThrow(/Route not found/)
+  expect(() => new UniversalRouter(route).resolve('/a')).toThrow(
+    /Route not found/,
+  )
   expect(action.mock.calls.length).toBe(2)
-  const context1 = action.mock.calls[0][0]
+  const context1 = action.mock.calls[0]?.[0]
   expect(context1).toHaveProperty('baseUrl', '')
   expect(context1).toHaveProperty('path', '')
   expect(context1).toHaveProperty('route.path', '')
-  const context2 = action.mock.calls[1][0]
+  const context2 = action.mock.calls[1]?.[0]
   expect(context2).toHaveProperty('baseUrl', '')
   expect(context2).toHaveProperty('path', '/a')
   expect(context2).toHaveProperty('route.path', '/a')
 })
 
 test('matches 2 routes (2)', () => {
-  const action: jest.Mock = jest.fn(() => undefined)
+  const action: Mock = vi.fn(() => undefined)
   const route = {
     path: '/a',
     action,
@@ -744,21 +793,23 @@ test('matches 2 routes (2)', () => {
       },
     ],
   }
-  expect(() => new UniversalRouter(route).resolve('/a/b/c')).toThrow(/Route not found/)
+  expect(() => new UniversalRouter(route).resolve('/a/b/c')).toThrow(
+    /Route not found/,
+  )
   expect(action.mock.calls.length).toBe(3)
-  const context1 = action.mock.calls[0][0]
+  const context1 = action.mock.calls[0]?.[0]
   expect(context1).toHaveProperty('baseUrl', '')
   expect(context1).toHaveProperty('route.path', '/a')
-  const context2 = action.mock.calls[1][0]
+  const context2 = action.mock.calls[1]?.[0]
   expect(context2).toHaveProperty('baseUrl', '/a')
   expect(context2).toHaveProperty('route.path', '/b')
-  const context3 = action.mock.calls[2][0]
+  const context3 = action.mock.calls[2]?.[0]
   expect(context3).toHaveProperty('baseUrl', '/a/b')
   expect(context3).toHaveProperty('route.path', '/c')
 })
 
 test('matches 2 routes (3)', () => {
-  const action: jest.Mock = jest.fn(() => undefined)
+  const action: Mock = vi.fn(() => undefined)
   const route = {
     path: '',
     action,
@@ -769,22 +820,24 @@ test('matches 2 routes (3)', () => {
       },
     ],
   }
-  expect(() => new UniversalRouter(route).resolve('/')).toThrow(/Route not found/)
+  expect(() => new UniversalRouter(route).resolve('/')).toThrow(
+    /Route not found/,
+  )
   expect(action.mock.calls.length).toBe(2)
-  const context1 = action.mock.calls[0][0]
+  const context1 = action.mock.calls[0]?.[0]
   expect(context1).toHaveProperty('baseUrl', '')
   expect(context1).toHaveProperty('route.path', '')
-  const context2 = action.mock.calls[1][0]
+  const context2 = action.mock.calls[1]?.[0]
   expect(context2).toHaveProperty('baseUrl', '')
   expect(context2).toHaveProperty('route.path', '')
 })
 
 test('matches an array of paths', () => {
-  const action: jest.Mock = jest.fn(() => true)
+  const action: Mock = vi.fn(() => true)
   const route = { path: ['/e', '/f'], action }
   expect(new UniversalRouter(route).resolve('/f')).toBe(true)
   expect(action.mock.calls.length).toBe(1)
-  const context = action.mock.calls[0][0]
+  const context = action.mock.calls[0]?.[0]
   expect(context).toHaveProperty('baseUrl', '')
   expect(context).toHaveProperty('route.path', ['/e', '/f'])
 })

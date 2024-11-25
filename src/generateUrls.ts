@@ -20,7 +20,9 @@ export interface UrlParams {
   [paramName: string]: string | number | (string | number)[]
 }
 
-export interface GenerateUrlsOptions extends ParseOptions, TokensToFunctionOptions {
+export interface GenerateUrlsOptions
+  extends ParseOptions,
+    TokensToFunctionOptions {
   /**
    * Add a query string to generated url based on unknown route params.
    */
@@ -34,9 +36,7 @@ export interface GenerateUrlsOptions extends ParseOptions, TokensToFunctionOptio
 /**
  * Create a url by route name from route path.
  */
-declare const generateUrl: (routeName: string, params?: UrlParams) => string
-
-type GenerateUrl = typeof generateUrl
+type GenerateUrl = (routeName: string, params?: UrlParams) => string
 
 type Keys = { [key: string]: boolean }
 
@@ -74,13 +74,19 @@ function cacheRoutes(
 /**
  * Create a function to generate urls by route names.
  */
-function generateUrls(router: UniversalRouter, options?: GenerateUrlsOptions): GenerateUrl {
+function generateUrls(
+  router: UniversalRouter,
+  options?: GenerateUrlsOptions,
+): GenerateUrl {
   if (!router) {
     throw new ReferenceError('Router is not defined')
   }
 
   const routesByName = new Map<string, Route>()
-  const regexpByRoute = new Map<Route, { toPath: PathFunction<UrlParams>; keys: Keys }>()
+  const regexpByRoute = new Map<
+    Route,
+    { toPath: PathFunction<UrlParams>; keys: Keys }
+  >()
   const opts: GenerateUrlsOptions = { encode: encodeURIComponent, ...options }
   return (routeName: string, params?: UrlParams): string => {
     let route = routesByName.get(routeName)
@@ -132,8 +138,8 @@ function generateUrls(router: UniversalRouter, options?: GenerateUrlsOptions): G
       const keys = Object.keys(params)
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i]
-        if (key && !regexp.keys[key]) {
-          queryParams[key] = params[key] ?? ''
+        if (key && !regexp.keys[key] && params[key] != null) {
+          queryParams[key] = params[key]
         }
       }
       const query = opts.stringifyQueryParams(queryParams)

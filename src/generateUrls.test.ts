@@ -7,6 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
+import { test, expect, vi, type Mock } from 'vitest'
 import UniversalRouter from './UniversalRouter'
 import UniversalRouterSync from './UniversalRouterSync'
 import generateUrls from './generateUrls'
@@ -51,11 +52,17 @@ test('generates url for named routes', () => {
 })
 
 test('generates url for routes with array of paths', () => {
-  const router1 = new UniversalRouter({ path: ['/:name', '/user/:name'], name: 'user' })
+  const router1 = new UniversalRouter({
+    path: ['/:name', '/user/:name'],
+    name: 'user',
+  })
   const url1 = generateUrls(router1)
   expect(url1('user', { name: 'koistya' })).toBe('/koistya')
 
-  const router2 = new UniversalRouter({ path: ['/user/:id', /\/user\/(\d+)/i], name: 'user' })
+  const router2 = new UniversalRouter({
+    path: ['/user/:id', /\/user\/(\d+)/i],
+    name: 'user',
+  })
   const url2 = generateUrls(router2)
   expect(url2('user', { id: 123 })).toBe('/user/123')
 
@@ -101,7 +108,10 @@ test('respects baseUrl', () => {
   const url1 = generateUrls(router1)
   expect(url1('home')).toBe('/base')
 
-  const router2 = new UniversalRouter({ path: '/post/:id', name: 'post' }, options)
+  const router2 = new UniversalRouter(
+    { path: '/post/:id', name: 'post' },
+    options,
+  )
   const url2 = generateUrls(router2)
   expect(url2('post', { id: 12, x: 'y' })).toBe('/base/post/12')
 
@@ -178,41 +188,47 @@ test('encodes params', () => {
     },
   })
 
-  expect(url('user', { user: '#$&+,/:;=?@' })).toBe('/%23%24%26%2B%2C%2F%3A%3B%3D%3F%40')
+  expect(url('user', { user: '#$&+,/:;=?@' })).toBe(
+    '/%23%24%26%2B%2C%2F%3A%3B%3D%3F%40',
+  )
   expect(prettyUrl('user', { user: '#$&+,/:;=?@' })).toBe('/%23$&+,%2F:;=%3F@')
 })
 
 test('stringify query params (1)', () => {
   const router = new UniversalRouter({ path: '/:user', name: 'user' })
-  const stringifyQueryParams: jest.Mock = jest.fn(() => 'qs')
+  const stringifyQueryParams: Mock = vi.fn(() => 'qs')
 
   const url = generateUrls(router, { stringifyQueryParams })
 
   expect(url('user', { user: 'tj', busy: 1 })).toBe('/tj?qs')
   expect(stringifyQueryParams.mock.calls.length).toBe(1)
-  expect(stringifyQueryParams.mock.calls[0][0]).toEqual({ busy: 1 })
+  expect(stringifyQueryParams.mock.calls[0]?.[0]).toEqual({ busy: 1 })
 })
 
 test('stringify query params (2)', () => {
   const router = new UniversalRouter({ path: '/user/:username', name: 'user' })
-  const stringifyQueryParams: jest.Mock = jest.fn(() => '')
+  const stringifyQueryParams: Mock = vi.fn(() => '')
 
   const url = generateUrls(router, { stringifyQueryParams })
 
   expect(url('user', { username: 'tj', busy: 1 })).toBe('/user/tj')
   expect(stringifyQueryParams.mock.calls.length).toBe(1)
-  expect(stringifyQueryParams.mock.calls[0][0]).toEqual({ busy: 1 })
+  expect(stringifyQueryParams.mock.calls[0]?.[0]).toEqual({ busy: 1 })
 })
 
 test('stringify query params (3)', () => {
   const router = new UniversalRouter({ path: '/me', name: 'me' })
-  const stringifyQueryParams: jest.Mock = jest.fn(() => '?x=i&y=j&z=k')
+  const stringifyQueryParams: Mock = vi.fn(() => '?x=i&y=j&z=k')
 
   const url = generateUrls(router, { stringifyQueryParams })
 
   expect(url('me', { x: 'i', y: 'j', z: 'k' })).toBe('/me?x=i&y=j&z=k')
   expect(stringifyQueryParams.mock.calls.length).toBe(1)
-  expect(stringifyQueryParams.mock.calls[0][0]).toEqual({ x: 'i', y: 'j', z: 'k' })
+  expect(stringifyQueryParams.mock.calls[0]?.[0]).toEqual({
+    x: 'i',
+    y: 'j',
+    z: 'k',
+  })
 })
 
 test('compatible with UniversalRouterSync', () => {

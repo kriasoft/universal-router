@@ -5,9 +5,7 @@
   "[typescript]": { "editor.formatOnSave": false },
   "tslint.enable": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
-  "cSpell.words": [
-    "Kriasoft"
-  ]
+  "cSpell.words": ["Kriasoft"]
 }
