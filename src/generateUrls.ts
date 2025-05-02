@@ -10,17 +10,17 @@
 import {
   parse,
   ParseOptions,
-  tokensToFunction,
-  TokensToFunctionOptions,
+  compile,
+  CompileOptions,
   PathFunction,
 } from 'path-to-regexp'
 import UniversalRouter, { Route, Routes } from './UniversalRouter'
 
 export interface UrlParams {
-  [paramName: string]: string | number | (string | number)[]
+  [paramName: string]: string | string[]
 }
 
-export interface GenerateUrlsOptions extends ParseOptions, TokensToFunctionOptions {
+export interface GenerateUrlsOptions extends ParseOptions, CompileOptions {
   /**
    * Add a query string to generated url based on unknown route params.
    */
@@ -113,12 +113,16 @@ function generateUrls(router: UniversalRouter, options?: GenerateUrlsOptions): G
         rt = rt.parent
       }
       const tokens = parse(fullPath, opts)
-      const toPath = tokensToFunction(tokens, opts)
+      const toPath = compile(fullPath, opts)
       const keys: Keys = Object.create(null)
-      for (let i = 0; i < tokens.length; i++) {
-        const token = tokens[i]
-        if (token && typeof token !== 'string') {
-          keys[token.name] = true
+      for (let i = 0; i < tokens.tokens.length; i++) {
+        const token = tokens.tokens[i]
+        if (token && token.type !== 'text') {
+          if (token.type === 'group') {
+            keys[String(i)] = true
+          } else {
+            keys[token.name] = true
+          }
         }
       }
       regexp = { toPath, keys }

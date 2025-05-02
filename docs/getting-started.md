@@ -22,7 +22,7 @@ import UniversalRouter from 'universal-router'
 const routes = [
   { path: '/one', action: () => '<h1>Page One</h1>' },
   { path: '/two', action: () => '<h1>Page Two</h1>' },
-  { path: '(.*)', action: () => '<h1>Not Found</h1>' }
+  { path: '/*all', action: () => '<h1>Not Found</h1>' }
 ]
 
 const router = new UniversalRouter(routes)
@@ -61,7 +61,7 @@ import UniversalRouter from 'universal-router'
 const routes = [
   { path: '/one', action: () => <h1>Page One</h1> },
   { path: '/two', action: () => <h1>Page Two</h1> },
-  { path: '(.*)', action: () => <h1>Not Found</h1> }
+  { path: '/*all', action: () => <h1>Not Found</h1> }
 ]
 
 const router = new UniversalRouter(routes)

@@ -38,12 +38,12 @@ test('generates url for named routes', () => {
   const router1 = new UniversalRouter({ path: '/:name', name: 'user' })
   const url1 = generateUrls(router1)
   expect(url1('user', { name: 'koistya' })).toBe('/koistya')
-  expect(() => url1('user')).toThrow(/Expected "name" to be a string/)
+  expect(() => url1('user')).toThrow(/Missing parameters: name/)
 
   const router2 = new UniversalRouter({ path: '/user/:id', name: 'user' })
   const url2 = generateUrls(router2)
-  expect(url2('user', { id: 123 })).toBe('/user/123')
-  expect(() => url2('user')).toThrow(/Expected "id" to be a string/)
+  expect(url2('user', { id: '123' })).toBe('/user/123')
+  expect(() => url2('user')).toThrow(/Missing parameters: id/)
 
   const router3 = new UniversalRouter({ path: '/user/:id' })
   const url3 = generateUrls(router3)
@@ -55,9 +55,9 @@ test('generates url for routes with array of paths', () => {
   const url1 = generateUrls(router1)
   expect(url1('user', { name: 'koistya' })).toBe('/koistya')
 
-  const router2 = new UniversalRouter({ path: ['/user/:id', /\/user\/(\d+)/i], name: 'user' })
+  const router2 = new UniversalRouter({ path: ['/user/:id', '/user/(\\d+)'], name: 'user' })
   const url2 = generateUrls(router2)
-  expect(url2('user', { id: 123 })).toBe('/user/123')
+  expect(url2('user', { id: '123' })).toBe('/user/123')
 
   const router3 = new UniversalRouter({ path: [], name: 'user' })
   const url3 = generateUrls(router3)
@@ -85,7 +85,7 @@ test('generates url for nested routes', () => {
   })
   const url = generateUrls(router)
   expect(url('a')).toBe('/')
-  expect(url('b', { x: 123 })).toBe('/b/123')
+  expect(url('b', { x: '123' })).toBe('/b/123')
   expect(url('c', { x: 'i', y: 'j' })).toBe('/b/i/c/j')
 
   if (Array.isArray(router.root.children)) {
@@ -103,7 +103,7 @@ test('respects baseUrl', () => {
 
   const router2 = new UniversalRouter({ path: '/post/:id', name: 'post' }, options)
   const url2 = generateUrls(router2)
-  expect(url2('post', { id: 12, x: 'y' })).toBe('/base/post/12')
+  expect(url2('post', { id: '12', x: 'y' })).toBe('/base/post/12')
 
   const router3 = new UniversalRouter(
     {
@@ -169,8 +169,7 @@ test('encodes params', () => {
 
   const url = generateUrls(router)
   const prettyUrl = generateUrls(router, {
-    encode(str, token) {
-      expect(token.name).toBe('user')
+    encode(str) {
       return encodeURI(str).replace(
         /[/?#]/g,
         (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`,
@@ -188,9 +187,9 @@ test('stringify query params (1)', () => {
 
   const url = generateUrls(router, { stringifyQueryParams })
 
-  expect(url('user', { user: 'tj', busy: 1 })).toBe('/tj?qs')
+  expect(url('user', { user: 'tj', busy: '1' })).toBe('/tj?qs')
   expect(stringifyQueryParams.mock.calls.length).toBe(1)
-  expect(stringifyQueryParams.mock.calls[0][0]).toEqual({ busy: 1 })
+  expect(stringifyQueryParams.mock.calls[0][0]).toEqual({ busy: '1' })
 })
 
 test('stringify query params (2)', () => {
@@ -199,9 +198,9 @@ test('stringify query params (2)', () => {
 
   const url = generateUrls(router, { stringifyQueryParams })
 
-  expect(url('user', { username: 'tj', busy: 1 })).toBe('/user/tj')
+  expect(url('user', { username: 'tj', busy: '1' })).toBe('/user/tj')
   expect(stringifyQueryParams.mock.calls.length).toBe(1)
-  expect(stringifyQueryParams.mock.calls[0][0]).toEqual({ busy: 1 })
+  expect(stringifyQueryParams.mock.calls[0][0]).toEqual({ busy: '1' })
 })
 
 test('stringify query params (3)', () => {

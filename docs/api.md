@@ -386,7 +386,7 @@ const urlWithQueryString = generateUrls(router, {
   stringifyQueryParams: (params) => new URLSearchParams(params).toString()
 })
 
-const params = { username: 'John', busy: 1 }
+const params = { username: 'John', busy: '1' }
 url('user', params)                   // => /base/user/John
 urlWithQueryString('user', params)    // => /base/user/John?busy=1
 ```
