@@ -1,579 +1,866 @@
 /*! Universal Router | MIT License | https://www.kriasoft.com/universal-router/ */
 
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.UniversalRouterSync = factory());
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.UniversalRouterSync = factory());
 }(this, (function () { 'use strict';
 
-    function lexer(str) {
-      var tokens = [];
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+
+  function _createForOfIteratorHelperLoose(o, allowArrayLike) {
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
+    if (it) return (it = it.call(o)).next.bind(it);
+
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
       var i = 0;
-
-      while (i < str.length) {
-        var _char = str[i];
-
-        if (_char === "*" || _char === "+" || _char === "?") {
-          tokens.push({
-            type: "MODIFIER",
-            index: i,
-            value: str[i++]
-          });
-          continue;
-        }
-
-        if (_char === "\\") {
-          tokens.push({
-            type: "ESCAPED_CHAR",
-            index: i++,
-            value: str[i++]
-          });
-          continue;
-        }
-
-        if (_char === "{") {
-          tokens.push({
-            type: "OPEN",
-            index: i,
-            value: str[i++]
-          });
-          continue;
-        }
-
-        if (_char === "}") {
-          tokens.push({
-            type: "CLOSE",
-            index: i,
-            value: str[i++]
-          });
-          continue;
-        }
-
-        if (_char === ":") {
-          var name = "";
-          var j = i + 1;
-
-          while (j < str.length) {
-            var code = str.charCodeAt(j);
-
-            if (code >= 48 && code <= 57 || code >= 65 && code <= 90 || code >= 97 && code <= 122 || code === 95) {
-              name += str[j++];
-              continue;
-            }
-
-            break;
-          }
-
-          if (!name) throw new TypeError("Missing parameter name at " + i);
-          tokens.push({
-            type: "NAME",
-            index: i,
-            value: name
-          });
-          i = j;
-          continue;
-        }
-
-        if (_char === "(") {
-          var count = 1;
-          var pattern = "";
-          var j = i + 1;
-
-          if (str[j] === "?") {
-            throw new TypeError("Pattern cannot start with \"?\" at " + j);
-          }
-
-          while (j < str.length) {
-            if (str[j] === "\\") {
-              pattern += str[j++] + str[j++];
-              continue;
-            }
-
-            if (str[j] === ")") {
-              count--;
-
-              if (count === 0) {
-                j++;
-                break;
-              }
-            } else if (str[j] === "(") {
-              count++;
-
-              if (str[j + 1] !== "?") {
-                throw new TypeError("Capturing groups are not allowed at " + j);
-              }
-            }
-
-            pattern += str[j++];
-          }
-
-          if (count) throw new TypeError("Unbalanced pattern at " + i);
-          if (!pattern) throw new TypeError("Missing pattern at " + i);
-          tokens.push({
-            type: "PATTERN",
-            index: i,
-            value: pattern
-          });
-          i = j;
-          continue;
-        }
-
-        tokens.push({
-          type: "CHAR",
-          index: i,
-          value: str[i++]
-        });
-      }
-
-      tokens.push({
-        type: "END",
-        index: i,
-        value: ""
-      });
-      return tokens;
+      return function () {
+        if (i >= o.length) return {
+          done: true
+        };
+        return {
+          done: false,
+          value: o[i++]
+        };
+      };
     }
 
-    function parse(str, options) {
-      if (options === void 0) {
-        options = {};
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  var dist = {};
+
+  var _marked = regeneratorRuntime.mark(lexer),
+      _marked2 = regeneratorRuntime.mark(flatten);
+
+  Object.defineProperty(dist, "__esModule", {
+    value: true
+  });
+  dist.TokenData = void 0;
+  dist.parse = parse;
+  dist.compile = compile;
+  var match_1 = dist.match = match;
+  dist.pathToRegexp = pathToRegexp;
+  dist.stringify = stringify;
+  var DEFAULT_DELIMITER = "/";
+
+  var NOOP_VALUE = function NOOP_VALUE(value) {
+    return value;
+  };
+
+  var ID_START = /^(?:[\$A-Z_a-z\xAA\xB5\xBA\xC0-\xD6\xD8-\xF6\xF8-\u02C1\u02C6-\u02D1\u02E0-\u02E4\u02EC\u02EE\u0370-\u0374\u0376\u0377\u037A-\u037D\u037F\u0386\u0388-\u038A\u038C\u038E-\u03A1\u03A3-\u03F5\u03F7-\u0481\u048A-\u052F\u0531-\u0556\u0559\u0560-\u0588\u05D0-\u05EA\u05EF-\u05F2\u0620-\u064A\u066E\u066F\u0671-\u06D3\u06D5\u06E5\u06E6\u06EE\u06EF\u06FA-\u06FC\u06FF\u0710\u0712-\u072F\u074D-\u07A5\u07B1\u07CA-\u07EA\u07F4\u07F5\u07FA\u0800-\u0815\u081A\u0824\u0828\u0840-\u0858\u0860-\u086A\u08A0-\u08B4\u08B6-\u08C7\u0904-\u0939\u093D\u0950\u0958-\u0961\u0971-\u0980\u0985-\u098C\u098F\u0990\u0993-\u09A8\u09AA-\u09B0\u09B2\u09B6-\u09B9\u09BD\u09CE\u09DC\u09DD\u09DF-\u09E1\u09F0\u09F1\u09FC\u0A05-\u0A0A\u0A0F\u0A10\u0A13-\u0A28\u0A2A-\u0A30\u0A32\u0A33\u0A35\u0A36\u0A38\u0A39\u0A59-\u0A5C\u0A5E\u0A72-\u0A74\u0A85-\u0A8D\u0A8F-\u0A91\u0A93-\u0AA8\u0AAA-\u0AB0\u0AB2\u0AB3\u0AB5-\u0AB9\u0ABD\u0AD0\u0AE0\u0AE1\u0AF9\u0B05-\u0B0C\u0B0F\u0B10\u0B13-\u0B28\u0B2A-\u0B30\u0B32\u0B33\u0B35-\u0B39\u0B3D\u0B5C\u0B5D\u0B5F-\u0B61\u0B71\u0B83\u0B85-\u0B8A\u0B8E-\u0B90\u0B92-\u0B95\u0B99\u0B9A\u0B9C\u0B9E\u0B9F\u0BA3\u0BA4\u0BA8-\u0BAA\u0BAE-\u0BB9\u0BD0\u0C05-\u0C0C\u0C0E-\u0C10\u0C12-\u0C28\u0C2A-\u0C39\u0C3D\u0C58-\u0C5A\u0C60\u0C61\u0C80\u0C85-\u0C8C\u0C8E-\u0C90\u0C92-\u0CA8\u0CAA-\u0CB3\u0CB5-\u0CB9\u0CBD\u0CDE\u0CE0\u0CE1\u0CF1\u0CF2\u0D04-\u0D0C\u0D0E-\u0D10\u0D12-\u0D3A\u0D3D\u0D4E\u0D54-\u0D56\u0D5F-\u0D61\u0D7A-\u0D7F\u0D85-\u0D96\u0D9A-\u0DB1\u0DB3-\u0DBB\u0DBD\u0DC0-\u0DC6\u0E01-\u0E30\u0E32\u0E33\u0E40-\u0E46\u0E81\u0E82\u0E84\u0E86-\u0E8A\u0E8C-\u0EA3\u0EA5\u0EA7-\u0EB0\u0EB2\u0EB3\u0EBD\u0EC0-\u0EC4\u0EC6\u0EDC-\u0EDF\u0F00\u0F40-\u0F47\u0F49-\u0F6C\u0F88-\u0F8C\u1000-\u102A\u103F\u1050-\u1055\u105A-\u105D\u1061\u1065\u1066\u106E-\u1070\u1075-\u1081\u108E\u10A0-\u10C5\u10C7\u10CD\u10D0-\u10FA\u10FC-\u1248\u124A-\u124D\u1250-\u1256\u1258\u125A-\u125D\u1260-\u1288\u128A-\u128D\u1290-\u12B0\u12B2-\u12B5\u12B8-\u12BE\u12C0\u12C2-\u12C5\u12C8-\u12D6\u12D8-\u1310\u1312-\u1315\u1318-\u135A\u1380-\u138F\u13A0-\u13F5\u13F8-\u13FD\u1401-\u166C\u166F-\u167F\u1681-\u169A\u16A0-\u16EA\u16EE-\u16F8\u1700-\u170C\u170E-\u1711\u1720-\u1731\u1740-\u1751\u1760-\u176C\u176E-\u1770\u1780-\u17B3\u17D7\u17DC\u1820-\u1878\u1880-\u18A8\u18AA\u18B0-\u18F5\u1900-\u191E\u1950-\u196D\u1970-\u1974\u1980-\u19AB\u19B0-\u19C9\u1A00-\u1A16\u1A20-\u1A54\u1AA7\u1B05-\u1B33\u1B45-\u1B4B\u1B83-\u1BA0\u1BAE\u1BAF\u1BBA-\u1BE5\u1C00-\u1C23\u1C4D-\u1C4F\u1C5A-\u1C7D\u1C80-\u1C88\u1C90-\u1CBA\u1CBD-\u1CBF\u1CE9-\u1CEC\u1CEE-\u1CF3\u1CF5\u1CF6\u1CFA\u1D00-\u1DBF\u1E00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2071\u207F\u2090-\u209C\u2102\u2107\u210A-\u2113\u2115\u2118-\u211D\u2124\u2126\u2128\u212A-\u2139\u213C-\u213F\u2145-\u2149\u214E\u2160-\u2188\u2C00-\u2C2E\u2C30-\u2C5E\u2C60-\u2CE4\u2CEB-\u2CEE\u2CF2\u2CF3\u2D00-\u2D25\u2D27\u2D2D\u2D30-\u2D67\u2D6F\u2D80-\u2D96\u2DA0-\u2DA6\u2DA8-\u2DAE\u2DB0-\u2DB6\u2DB8-\u2DBE\u2DC0-\u2DC6\u2DC8-\u2DCE\u2DD0-\u2DD6\u2DD8-\u2DDE\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303C\u3041-\u3096\u309B-\u309F\u30A1-\u30FA\u30FC-\u30FF\u3105-\u312F\u3131-\u318E\u31A0-\u31BF\u31F0-\u31FF\u3400-\u4DBF\u4E00-\u9FFC\uA000-\uA48C\uA4D0-\uA4FD\uA500-\uA60C\uA610-\uA61F\uA62A\uA62B\uA640-\uA66E\uA67F-\uA69D\uA6A0-\uA6EF\uA717-\uA71F\uA722-\uA788\uA78B-\uA7BF\uA7C2-\uA7CA\uA7F5-\uA801\uA803-\uA805\uA807-\uA80A\uA80C-\uA822\uA840-\uA873\uA882-\uA8B3\uA8F2-\uA8F7\uA8FB\uA8FD\uA8FE\uA90A-\uA925\uA930-\uA946\uA960-\uA97C\uA984-\uA9B2\uA9CF\uA9E0-\uA9E4\uA9E6-\uA9EF\uA9FA-\uA9FE\uAA00-\uAA28\uAA40-\uAA42\uAA44-\uAA4B\uAA60-\uAA76\uAA7A\uAA7E-\uAAAF\uAAB1\uAAB5\uAAB6\uAAB9-\uAABD\uAAC0\uAAC2\uAADB-\uAADD\uAAE0-\uAAEA\uAAF2-\uAAF4\uAB01-\uAB06\uAB09-\uAB0E\uAB11-\uAB16\uAB20-\uAB26\uAB28-\uAB2E\uAB30-\uAB5A\uAB5C-\uAB69\uAB70-\uABE2\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uF900-\uFA6D\uFA70-\uFAD9\uFB00-\uFB06\uFB13-\uFB17\uFB1D\uFB1F-\uFB28\uFB2A-\uFB36\uFB38-\uFB3C\uFB3E\uFB40\uFB41\uFB43\uFB44\uFB46-\uFBB1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFB\uFE70-\uFE74\uFE76-\uFEFC\uFF21-\uFF3A\uFF41-\uFF5A\uFF66-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]|\uD800[\uDC00-\uDC0B\uDC0D-\uDC26\uDC28-\uDC3A\uDC3C\uDC3D\uDC3F-\uDC4D\uDC50-\uDC5D\uDC80-\uDCFA\uDD40-\uDD74\uDE80-\uDE9C\uDEA0-\uDED0\uDF00-\uDF1F\uDF2D-\uDF4A\uDF50-\uDF75\uDF80-\uDF9D\uDFA0-\uDFC3\uDFC8-\uDFCF\uDFD1-\uDFD5]|\uD801[\uDC00-\uDC9D\uDCB0-\uDCD3\uDCD8-\uDCFB\uDD00-\uDD27\uDD30-\uDD63\uDE00-\uDF36\uDF40-\uDF55\uDF60-\uDF67]|\uD802[\uDC00-\uDC05\uDC08\uDC0A-\uDC35\uDC37\uDC38\uDC3C\uDC3F-\uDC55\uDC60-\uDC76\uDC80-\uDC9E\uDCE0-\uDCF2\uDCF4\uDCF5\uDD00-\uDD15\uDD20-\uDD39\uDD80-\uDDB7\uDDBE\uDDBF\uDE00\uDE10-\uDE13\uDE15-\uDE17\uDE19-\uDE35\uDE60-\uDE7C\uDE80-\uDE9C\uDEC0-\uDEC7\uDEC9-\uDEE4\uDF00-\uDF35\uDF40-\uDF55\uDF60-\uDF72\uDF80-\uDF91]|\uD803[\uDC00-\uDC48\uDC80-\uDCB2\uDCC0-\uDCF2\uDD00-\uDD23\uDE80-\uDEA9\uDEB0\uDEB1\uDF00-\uDF1C\uDF27\uDF30-\uDF45\uDFB0-\uDFC4\uDFE0-\uDFF6]|\uD804[\uDC03-\uDC37\uDC83-\uDCAF\uDCD0-\uDCE8\uDD03-\uDD26\uDD44\uDD47\uDD50-\uDD72\uDD76\uDD83-\uDDB2\uDDC1-\uDDC4\uDDDA\uDDDC\uDE00-\uDE11\uDE13-\uDE2B\uDE80-\uDE86\uDE88\uDE8A-\uDE8D\uDE8F-\uDE9D\uDE9F-\uDEA8\uDEB0-\uDEDE\uDF05-\uDF0C\uDF0F\uDF10\uDF13-\uDF28\uDF2A-\uDF30\uDF32\uDF33\uDF35-\uDF39\uDF3D\uDF50\uDF5D-\uDF61]|\uD805[\uDC00-\uDC34\uDC47-\uDC4A\uDC5F-\uDC61\uDC80-\uDCAF\uDCC4\uDCC5\uDCC7\uDD80-\uDDAE\uDDD8-\uDDDB\uDE00-\uDE2F\uDE44\uDE80-\uDEAA\uDEB8\uDF00-\uDF1A]|\uD806[\uDC00-\uDC2B\uDCA0-\uDCDF\uDCFF-\uDD06\uDD09\uDD0C-\uDD13\uDD15\uDD16\uDD18-\uDD2F\uDD3F\uDD41\uDDA0-\uDDA7\uDDAA-\uDDD0\uDDE1\uDDE3\uDE00\uDE0B-\uDE32\uDE3A\uDE50\uDE5C-\uDE89\uDE9D\uDEC0-\uDEF8]|\uD807[\uDC00-\uDC08\uDC0A-\uDC2E\uDC40\uDC72-\uDC8F\uDD00-\uDD06\uDD08\uDD09\uDD0B-\uDD30\uDD46\uDD60-\uDD65\uDD67\uDD68\uDD6A-\uDD89\uDD98\uDEE0-\uDEF2\uDFB0]|\uD808[\uDC00-\uDF99]|\uD809[\uDC00-\uDC6E\uDC80-\uDD43]|[\uD80C\uD81C-\uD820\uD822\uD840-\uD868\uD86A-\uD86C\uD86F-\uD872\uD874-\uD879\uD880-\uD883][\uDC00-\uDFFF]|\uD80D[\uDC00-\uDC2E]|\uD811[\uDC00-\uDE46]|\uD81A[\uDC00-\uDE38\uDE40-\uDE5E\uDED0-\uDEED\uDF00-\uDF2F\uDF40-\uDF43\uDF63-\uDF77\uDF7D-\uDF8F]|\uD81B[\uDE40-\uDE7F\uDF00-\uDF4A\uDF50\uDF93-\uDF9F\uDFE0\uDFE1\uDFE3]|\uD821[\uDC00-\uDFF7]|\uD823[\uDC00-\uDCD5\uDD00-\uDD08]|\uD82C[\uDC00-\uDD1E\uDD50-\uDD52\uDD64-\uDD67\uDD70-\uDEFB]|\uD82F[\uDC00-\uDC6A\uDC70-\uDC7C\uDC80-\uDC88\uDC90-\uDC99]|\uD835[\uDC00-\uDC54\uDC56-\uDC9C\uDC9E\uDC9F\uDCA2\uDCA5\uDCA6\uDCA9-\uDCAC\uDCAE-\uDCB9\uDCBB\uDCBD-\uDCC3\uDCC5-\uDD05\uDD07-\uDD0A\uDD0D-\uDD14\uDD16-\uDD1C\uDD1E-\uDD39\uDD3B-\uDD3E\uDD40-\uDD44\uDD46\uDD4A-\uDD50\uDD52-\uDEA5\uDEA8-\uDEC0\uDEC2-\uDEDA\uDEDC-\uDEFA\uDEFC-\uDF14\uDF16-\uDF34\uDF36-\uDF4E\uDF50-\uDF6E\uDF70-\uDF88\uDF8A-\uDFA8\uDFAA-\uDFC2\uDFC4-\uDFCB]|\uD838[\uDD00-\uDD2C\uDD37-\uDD3D\uDD4E\uDEC0-\uDEEB]|\uD83A[\uDC00-\uDCC4\uDD00-\uDD43\uDD4B]|\uD83B[\uDE00-\uDE03\uDE05-\uDE1F\uDE21\uDE22\uDE24\uDE27\uDE29-\uDE32\uDE34-\uDE37\uDE39\uDE3B\uDE42\uDE47\uDE49\uDE4B\uDE4D-\uDE4F\uDE51\uDE52\uDE54\uDE57\uDE59\uDE5B\uDE5D\uDE5F\uDE61\uDE62\uDE64\uDE67-\uDE6A\uDE6C-\uDE72\uDE74-\uDE77\uDE79-\uDE7C\uDE7E\uDE80-\uDE89\uDE8B-\uDE9B\uDEA1-\uDEA3\uDEA5-\uDEA9\uDEAB-\uDEBB]|\uD869[\uDC00-\uDEDD\uDF00-\uDFFF]|\uD86D[\uDC00-\uDF34\uDF40-\uDFFF]|\uD86E[\uDC00-\uDC1D\uDC20-\uDFFF]|\uD873[\uDC00-\uDEA1\uDEB0-\uDFFF]|\uD87A[\uDC00-\uDFE0]|\uD87E[\uDC00-\uDE1D]|\uD884[\uDC00-\uDF4A])$/;
+  var ID_CONTINUE = /^(?:[\$0-9A-Z_a-z\xAA\xB5\xB7\xBA\xC0-\xD6\xD8-\xF6\xF8-\u02C1\u02C6-\u02D1\u02E0-\u02E4\u02EC\u02EE\u0300-\u0374\u0376\u0377\u037A-\u037D\u037F\u0386-\u038A\u038C\u038E-\u03A1\u03A3-\u03F5\u03F7-\u0481\u0483-\u0487\u048A-\u052F\u0531-\u0556\u0559\u0560-\u0588\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7\u05D0-\u05EA\u05EF-\u05F2\u0610-\u061A\u0620-\u0669\u066E-\u06D3\u06D5-\u06DC\u06DF-\u06E8\u06EA-\u06FC\u06FF\u0710-\u074A\u074D-\u07B1\u07C0-\u07F5\u07FA\u07FD\u0800-\u082D\u0840-\u085B\u0860-\u086A\u08A0-\u08B4\u08B6-\u08C7\u08D3-\u08E1\u08E3-\u0963\u0966-\u096F\u0971-\u0983\u0985-\u098C\u098F\u0990\u0993-\u09A8\u09AA-\u09B0\u09B2\u09B6-\u09B9\u09BC-\u09C4\u09C7\u09C8\u09CB-\u09CE\u09D7\u09DC\u09DD\u09DF-\u09E3\u09E6-\u09F1\u09FC\u09FE\u0A01-\u0A03\u0A05-\u0A0A\u0A0F\u0A10\u0A13-\u0A28\u0A2A-\u0A30\u0A32\u0A33\u0A35\u0A36\u0A38\u0A39\u0A3C\u0A3E-\u0A42\u0A47\u0A48\u0A4B-\u0A4D\u0A51\u0A59-\u0A5C\u0A5E\u0A66-\u0A75\u0A81-\u0A83\u0A85-\u0A8D\u0A8F-\u0A91\u0A93-\u0AA8\u0AAA-\u0AB0\u0AB2\u0AB3\u0AB5-\u0AB9\u0ABC-\u0AC5\u0AC7-\u0AC9\u0ACB-\u0ACD\u0AD0\u0AE0-\u0AE3\u0AE6-\u0AEF\u0AF9-\u0AFF\u0B01-\u0B03\u0B05-\u0B0C\u0B0F\u0B10\u0B13-\u0B28\u0B2A-\u0B30\u0B32\u0B33\u0B35-\u0B39\u0B3C-\u0B44\u0B47\u0B48\u0B4B-\u0B4D\u0B55-\u0B57\u0B5C\u0B5D\u0B5F-\u0B63\u0B66-\u0B6F\u0B71\u0B82\u0B83\u0B85-\u0B8A\u0B8E-\u0B90\u0B92-\u0B95\u0B99\u0B9A\u0B9C\u0B9E\u0B9F\u0BA3\u0BA4\u0BA8-\u0BAA\u0BAE-\u0BB9\u0BBE-\u0BC2\u0BC6-\u0BC8\u0BCA-\u0BCD\u0BD0\u0BD7\u0BE6-\u0BEF\u0C00-\u0C0C\u0C0E-\u0C10\u0C12-\u0C28\u0C2A-\u0C39\u0C3D-\u0C44\u0C46-\u0C48\u0C4A-\u0C4D\u0C55\u0C56\u0C58-\u0C5A\u0C60-\u0C63\u0C66-\u0C6F\u0C80-\u0C83\u0C85-\u0C8C\u0C8E-\u0C90\u0C92-\u0CA8\u0CAA-\u0CB3\u0CB5-\u0CB9\u0CBC-\u0CC4\u0CC6-\u0CC8\u0CCA-\u0CCD\u0CD5\u0CD6\u0CDE\u0CE0-\u0CE3\u0CE6-\u0CEF\u0CF1\u0CF2\u0D00-\u0D0C\u0D0E-\u0D10\u0D12-\u0D44\u0D46-\u0D48\u0D4A-\u0D4E\u0D54-\u0D57\u0D5F-\u0D63\u0D66-\u0D6F\u0D7A-\u0D7F\u0D81-\u0D83\u0D85-\u0D96\u0D9A-\u0DB1\u0DB3-\u0DBB\u0DBD\u0DC0-\u0DC6\u0DCA\u0DCF-\u0DD4\u0DD6\u0DD8-\u0DDF\u0DE6-\u0DEF\u0DF2\u0DF3\u0E01-\u0E3A\u0E40-\u0E4E\u0E50-\u0E59\u0E81\u0E82\u0E84\u0E86-\u0E8A\u0E8C-\u0EA3\u0EA5\u0EA7-\u0EBD\u0EC0-\u0EC4\u0EC6\u0EC8-\u0ECD\u0ED0-\u0ED9\u0EDC-\u0EDF\u0F00\u0F18\u0F19\u0F20-\u0F29\u0F35\u0F37\u0F39\u0F3E-\u0F47\u0F49-\u0F6C\u0F71-\u0F84\u0F86-\u0F97\u0F99-\u0FBC\u0FC6\u1000-\u1049\u1050-\u109D\u10A0-\u10C5\u10C7\u10CD\u10D0-\u10FA\u10FC-\u1248\u124A-\u124D\u1250-\u1256\u1258\u125A-\u125D\u1260-\u1288\u128A-\u128D\u1290-\u12B0\u12B2-\u12B5\u12B8-\u12BE\u12C0\u12C2-\u12C5\u12C8-\u12D6\u12D8-\u1310\u1312-\u1315\u1318-\u135A\u135D-\u135F\u1369-\u1371\u1380-\u138F\u13A0-\u13F5\u13F8-\u13FD\u1401-\u166C\u166F-\u167F\u1681-\u169A\u16A0-\u16EA\u16EE-\u16F8\u1700-\u170C\u170E-\u1714\u1720-\u1734\u1740-\u1753\u1760-\u176C\u176E-\u1770\u1772\u1773\u1780-\u17D3\u17D7\u17DC\u17DD\u17E0-\u17E9\u180B-\u180D\u1810-\u1819\u1820-\u1878\u1880-\u18AA\u18B0-\u18F5\u1900-\u191E\u1920-\u192B\u1930-\u193B\u1946-\u196D\u1970-\u1974\u1980-\u19AB\u19B0-\u19C9\u19D0-\u19DA\u1A00-\u1A1B\u1A20-\u1A5E\u1A60-\u1A7C\u1A7F-\u1A89\u1A90-\u1A99\u1AA7\u1AB0-\u1ABD\u1ABF\u1AC0\u1B00-\u1B4B\u1B50-\u1B59\u1B6B-\u1B73\u1B80-\u1BF3\u1C00-\u1C37\u1C40-\u1C49\u1C4D-\u1C7D\u1C80-\u1C88\u1C90-\u1CBA\u1CBD-\u1CBF\u1CD0-\u1CD2\u1CD4-\u1CFA\u1D00-\u1DF9\u1DFB-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u200C\u200D\u203F\u2040\u2054\u2071\u207F\u2090-\u209C\u20D0-\u20DC\u20E1\u20E5-\u20F0\u2102\u2107\u210A-\u2113\u2115\u2118-\u211D\u2124\u2126\u2128\u212A-\u2139\u213C-\u213F\u2145-\u2149\u214E\u2160-\u2188\u2C00-\u2C2E\u2C30-\u2C5E\u2C60-\u2CE4\u2CEB-\u2CF3\u2D00-\u2D25\u2D27\u2D2D\u2D30-\u2D67\u2D6F\u2D7F-\u2D96\u2DA0-\u2DA6\u2DA8-\u2DAE\u2DB0-\u2DB6\u2DB8-\u2DBE\u2DC0-\u2DC6\u2DC8-\u2DCE\u2DD0-\u2DD6\u2DD8-\u2DDE\u2DE0-\u2DFF\u3005-\u3007\u3021-\u302F\u3031-\u3035\u3038-\u303C\u3041-\u3096\u3099-\u309F\u30A1-\u30FA\u30FC-\u30FF\u3105-\u312F\u3131-\u318E\u31A0-\u31BF\u31F0-\u31FF\u3400-\u4DBF\u4E00-\u9FFC\uA000-\uA48C\uA4D0-\uA4FD\uA500-\uA60C\uA610-\uA62B\uA640-\uA66F\uA674-\uA67D\uA67F-\uA6F1\uA717-\uA71F\uA722-\uA788\uA78B-\uA7BF\uA7C2-\uA7CA\uA7F5-\uA827\uA82C\uA840-\uA873\uA880-\uA8C5\uA8D0-\uA8D9\uA8E0-\uA8F7\uA8FB\uA8FD-\uA92D\uA930-\uA953\uA960-\uA97C\uA980-\uA9C0\uA9CF-\uA9D9\uA9E0-\uA9FE\uAA00-\uAA36\uAA40-\uAA4D\uAA50-\uAA59\uAA60-\uAA76\uAA7A-\uAAC2\uAADB-\uAADD\uAAE0-\uAAEF\uAAF2-\uAAF6\uAB01-\uAB06\uAB09-\uAB0E\uAB11-\uAB16\uAB20-\uAB26\uAB28-\uAB2E\uAB30-\uAB5A\uAB5C-\uAB69\uAB70-\uABEA\uABEC\uABED\uABF0-\uABF9\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uF900-\uFA6D\uFA70-\uFAD9\uFB00-\uFB06\uFB13-\uFB17\uFB1D-\uFB28\uFB2A-\uFB36\uFB38-\uFB3C\uFB3E\uFB40\uFB41\uFB43\uFB44\uFB46-\uFBB1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFB\uFE00-\uFE0F\uFE20-\uFE2F\uFE33\uFE34\uFE4D-\uFE4F\uFE70-\uFE74\uFE76-\uFEFC\uFF10-\uFF19\uFF21-\uFF3A\uFF3F\uFF41-\uFF5A\uFF66-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]|\uD800[\uDC00-\uDC0B\uDC0D-\uDC26\uDC28-\uDC3A\uDC3C\uDC3D\uDC3F-\uDC4D\uDC50-\uDC5D\uDC80-\uDCFA\uDD40-\uDD74\uDDFD\uDE80-\uDE9C\uDEA0-\uDED0\uDEE0\uDF00-\uDF1F\uDF2D-\uDF4A\uDF50-\uDF7A\uDF80-\uDF9D\uDFA0-\uDFC3\uDFC8-\uDFCF\uDFD1-\uDFD5]|\uD801[\uDC00-\uDC9D\uDCA0-\uDCA9\uDCB0-\uDCD3\uDCD8-\uDCFB\uDD00-\uDD27\uDD30-\uDD63\uDE00-\uDF36\uDF40-\uDF55\uDF60-\uDF67]|\uD802[\uDC00-\uDC05\uDC08\uDC0A-\uDC35\uDC37\uDC38\uDC3C\uDC3F-\uDC55\uDC60-\uDC76\uDC80-\uDC9E\uDCE0-\uDCF2\uDCF4\uDCF5\uDD00-\uDD15\uDD20-\uDD39\uDD80-\uDDB7\uDDBE\uDDBF\uDE00-\uDE03\uDE05\uDE06\uDE0C-\uDE13\uDE15-\uDE17\uDE19-\uDE35\uDE38-\uDE3A\uDE3F\uDE60-\uDE7C\uDE80-\uDE9C\uDEC0-\uDEC7\uDEC9-\uDEE6\uDF00-\uDF35\uDF40-\uDF55\uDF60-\uDF72\uDF80-\uDF91]|\uD803[\uDC00-\uDC48\uDC80-\uDCB2\uDCC0-\uDCF2\uDD00-\uDD27\uDD30-\uDD39\uDE80-\uDEA9\uDEAB\uDEAC\uDEB0\uDEB1\uDF00-\uDF1C\uDF27\uDF30-\uDF50\uDFB0-\uDFC4\uDFE0-\uDFF6]|\uD804[\uDC00-\uDC46\uDC66-\uDC6F\uDC7F-\uDCBA\uDCD0-\uDCE8\uDCF0-\uDCF9\uDD00-\uDD34\uDD36-\uDD3F\uDD44-\uDD47\uDD50-\uDD73\uDD76\uDD80-\uDDC4\uDDC9-\uDDCC\uDDCE-\uDDDA\uDDDC\uDE00-\uDE11\uDE13-\uDE37\uDE3E\uDE80-\uDE86\uDE88\uDE8A-\uDE8D\uDE8F-\uDE9D\uDE9F-\uDEA8\uDEB0-\uDEEA\uDEF0-\uDEF9\uDF00-\uDF03\uDF05-\uDF0C\uDF0F\uDF10\uDF13-\uDF28\uDF2A-\uDF30\uDF32\uDF33\uDF35-\uDF39\uDF3B-\uDF44\uDF47\uDF48\uDF4B-\uDF4D\uDF50\uDF57\uDF5D-\uDF63\uDF66-\uDF6C\uDF70-\uDF74]|\uD805[\uDC00-\uDC4A\uDC50-\uDC59\uDC5E-\uDC61\uDC80-\uDCC5\uDCC7\uDCD0-\uDCD9\uDD80-\uDDB5\uDDB8-\uDDC0\uDDD8-\uDDDD\uDE00-\uDE40\uDE44\uDE50-\uDE59\uDE80-\uDEB8\uDEC0-\uDEC9\uDF00-\uDF1A\uDF1D-\uDF2B\uDF30-\uDF39]|\uD806[\uDC00-\uDC3A\uDCA0-\uDCE9\uDCFF-\uDD06\uDD09\uDD0C-\uDD13\uDD15\uDD16\uDD18-\uDD35\uDD37\uDD38\uDD3B-\uDD43\uDD50-\uDD59\uDDA0-\uDDA7\uDDAA-\uDDD7\uDDDA-\uDDE1\uDDE3\uDDE4\uDE00-\uDE3E\uDE47\uDE50-\uDE99\uDE9D\uDEC0-\uDEF8]|\uD807[\uDC00-\uDC08\uDC0A-\uDC36\uDC38-\uDC40\uDC50-\uDC59\uDC72-\uDC8F\uDC92-\uDCA7\uDCA9-\uDCB6\uDD00-\uDD06\uDD08\uDD09\uDD0B-\uDD36\uDD3A\uDD3C\uDD3D\uDD3F-\uDD47\uDD50-\uDD59\uDD60-\uDD65\uDD67\uDD68\uDD6A-\uDD8E\uDD90\uDD91\uDD93-\uDD98\uDDA0-\uDDA9\uDEE0-\uDEF6\uDFB0]|\uD808[\uDC00-\uDF99]|\uD809[\uDC00-\uDC6E\uDC80-\uDD43]|[\uD80C\uD81C-\uD820\uD822\uD840-\uD868\uD86A-\uD86C\uD86F-\uD872\uD874-\uD879\uD880-\uD883][\uDC00-\uDFFF]|\uD80D[\uDC00-\uDC2E]|\uD811[\uDC00-\uDE46]|\uD81A[\uDC00-\uDE38\uDE40-\uDE5E\uDE60-\uDE69\uDED0-\uDEED\uDEF0-\uDEF4\uDF00-\uDF36\uDF40-\uDF43\uDF50-\uDF59\uDF63-\uDF77\uDF7D-\uDF8F]|\uD81B[\uDE40-\uDE7F\uDF00-\uDF4A\uDF4F-\uDF87\uDF8F-\uDF9F\uDFE0\uDFE1\uDFE3\uDFE4\uDFF0\uDFF1]|\uD821[\uDC00-\uDFF7]|\uD823[\uDC00-\uDCD5\uDD00-\uDD08]|\uD82C[\uDC00-\uDD1E\uDD50-\uDD52\uDD64-\uDD67\uDD70-\uDEFB]|\uD82F[\uDC00-\uDC6A\uDC70-\uDC7C\uDC80-\uDC88\uDC90-\uDC99\uDC9D\uDC9E]|\uD834[\uDD65-\uDD69\uDD6D-\uDD72\uDD7B-\uDD82\uDD85-\uDD8B\uDDAA-\uDDAD\uDE42-\uDE44]|\uD835[\uDC00-\uDC54\uDC56-\uDC9C\uDC9E\uDC9F\uDCA2\uDCA5\uDCA6\uDCA9-\uDCAC\uDCAE-\uDCB9\uDCBB\uDCBD-\uDCC3\uDCC5-\uDD05\uDD07-\uDD0A\uDD0D-\uDD14\uDD16-\uDD1C\uDD1E-\uDD39\uDD3B-\uDD3E\uDD40-\uDD44\uDD46\uDD4A-\uDD50\uDD52-\uDEA5\uDEA8-\uDEC0\uDEC2-\uDEDA\uDEDC-\uDEFA\uDEFC-\uDF14\uDF16-\uDF34\uDF36-\uDF4E\uDF50-\uDF6E\uDF70-\uDF88\uDF8A-\uDFA8\uDFAA-\uDFC2\uDFC4-\uDFCB\uDFCE-\uDFFF]|\uD836[\uDE00-\uDE36\uDE3B-\uDE6C\uDE75\uDE84\uDE9B-\uDE9F\uDEA1-\uDEAF]|\uD838[\uDC00-\uDC06\uDC08-\uDC18\uDC1B-\uDC21\uDC23\uDC24\uDC26-\uDC2A\uDD00-\uDD2C\uDD30-\uDD3D\uDD40-\uDD49\uDD4E\uDEC0-\uDEF9]|\uD83A[\uDC00-\uDCC4\uDCD0-\uDCD6\uDD00-\uDD4B\uDD50-\uDD59]|\uD83B[\uDE00-\uDE03\uDE05-\uDE1F\uDE21\uDE22\uDE24\uDE27\uDE29-\uDE32\uDE34-\uDE37\uDE39\uDE3B\uDE42\uDE47\uDE49\uDE4B\uDE4D-\uDE4F\uDE51\uDE52\uDE54\uDE57\uDE59\uDE5B\uDE5D\uDE5F\uDE61\uDE62\uDE64\uDE67-\uDE6A\uDE6C-\uDE72\uDE74-\uDE77\uDE79-\uDE7C\uDE7E\uDE80-\uDE89\uDE8B-\uDE9B\uDEA1-\uDEA3\uDEA5-\uDEA9\uDEAB-\uDEBB]|\uD83E[\uDFF0-\uDFF9]|\uD869[\uDC00-\uDEDD\uDF00-\uDFFF]|\uD86D[\uDC00-\uDF34\uDF40-\uDFFF]|\uD86E[\uDC00-\uDC1D\uDC20-\uDFFF]|\uD873[\uDC00-\uDEA1\uDEB0-\uDFFF]|\uD87A[\uDC00-\uDFE0]|\uD87E[\uDC00-\uDE1D]|\uD884[\uDC00-\uDF4A]|\uDB40[\uDD00-\uDDEF])$/;
+  var DEBUG_URL = "https://git.new/pathToRegexpError";
+  var SIMPLE_TOKENS = {
+    "{": "{",
+    "}": "}",
+    "(": "(",
+    ")": ")",
+    "[": "[",
+    "]": "]",
+    "+": "+",
+    "?": "?",
+    "!": "!"
+  };
+
+  function escapeText(str) {
+    return str.replace(/[{}()\[\]+?!:*]/g, "\\$&");
+  }
+
+  function escape(str) {
+    return str.replace(/[.+*?^${}()[\]|/\\]/g, "\\$&");
+  }
+
+  function lexer(str) {
+    var chars, i, name, value, type, _value, _value2;
+
+    return regeneratorRuntime.wrap(function lexer$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            name = function _name() {
+              var value = "";
+
+              if (ID_START.test(chars[++i])) {
+                value += chars[i];
+
+                while (ID_CONTINUE.test(chars[++i])) {
+                  value += chars[i];
+                }
+              } else if (chars[i] === '"') {
+                var pos = i;
+
+                while (i < chars.length) {
+                  if (chars[++i] === '"') {
+                    i++;
+                    pos = 0;
+                    break;
+                  }
+
+                  if (chars[i] === "\\") {
+                    value += chars[++i];
+                  } else {
+                    value += chars[i];
+                  }
+                }
+
+                if (pos) {
+                  throw new TypeError("Unterminated quote at " + pos + ": " + DEBUG_URL);
+                }
+              }
+
+              if (!value) {
+                throw new TypeError("Missing parameter name at " + i + ": " + DEBUG_URL);
+              }
+
+              return value;
+            };
+
+            chars = [].concat(str);
+            i = 0;
+
+          case 3:
+            if (!(i < chars.length)) {
+              _context.next = 32;
+              break;
+            }
+
+            value = chars[i];
+            type = SIMPLE_TOKENS[value];
+
+            if (!type) {
+              _context.next = 11;
+              break;
+            }
+
+            _context.next = 9;
+            return {
+              type: type,
+              index: i++,
+              value: value
+            };
+
+          case 9:
+            _context.next = 30;
+            break;
+
+          case 11:
+            if (!(value === "\\")) {
+              _context.next = 16;
+              break;
+            }
+
+            _context.next = 14;
+            return {
+              type: "ESCAPED",
+              index: i++,
+              value: chars[i++]
+            };
+
+          case 14:
+            _context.next = 30;
+            break;
+
+          case 16:
+            if (!(value === ":")) {
+              _context.next = 22;
+              break;
+            }
+
+            _value = name();
+            _context.next = 20;
+            return {
+              type: "PARAM",
+              index: i,
+              value: _value
+            };
+
+          case 20:
+            _context.next = 30;
+            break;
+
+          case 22:
+            if (!(value === "*")) {
+              _context.next = 28;
+              break;
+            }
+
+            _value2 = name();
+            _context.next = 26;
+            return {
+              type: "WILDCARD",
+              index: i,
+              value: _value2
+            };
+
+          case 26:
+            _context.next = 30;
+            break;
+
+          case 28:
+            _context.next = 30;
+            return {
+              type: "CHAR",
+              index: i,
+              value: chars[i++]
+            };
+
+          case 30:
+            _context.next = 3;
+            break;
+
+          case 32:
+            return _context.abrupt("return", {
+              type: "END",
+              index: i,
+              value: ""
+            });
+
+          case 33:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _marked);
+  }
+
+  var Iter = function () {
+    function Iter(tokens) {
+      this.tokens = tokens;
+    }
+
+    var _proto = Iter.prototype;
+
+    _proto.peek = function peek() {
+      if (!this._peek) {
+        var next = this.tokens.next();
+        this._peek = next.value;
       }
 
-      var tokens = lexer(str);
-      var _a = options.prefixes,
-          prefixes = _a === void 0 ? "./" : _a;
-      var defaultPattern = "[^" + escapeString(options.delimiter || "/#?") + "]+?";
-      var result = [];
-      var key = 0;
-      var i = 0;
-      var path = "";
+      return this._peek;
+    };
 
-      var tryConsume = function tryConsume(type) {
-        if (i < tokens.length && tokens[i].type === type) return tokens[i++].value;
-      };
+    _proto.tryConsume = function tryConsume(type) {
+      var token = this.peek();
+      if (token.type !== type) return;
+      this._peek = undefined;
+      return token.value;
+    };
 
-      var mustConsume = function mustConsume(type) {
-        var value = tryConsume(type);
-        if (value !== undefined) return value;
-        var _a = tokens[i],
-            nextType = _a.type,
-            index = _a.index;
-        throw new TypeError("Unexpected " + nextType + " at " + index + ", expected " + type);
-      };
+    _proto.consume = function consume(type) {
+      var value = this.tryConsume(type);
+      if (value !== undefined) return value;
 
-      var consumeText = function consumeText() {
-        var result = "";
-        var value;
+      var _this$peek = this.peek(),
+          nextType = _this$peek.type,
+          index = _this$peek.index;
 
-        while (value = tryConsume("CHAR") || tryConsume("ESCAPED_CHAR")) {
-          result += value;
-        }
+      throw new TypeError("Unexpected " + nextType + " at " + index + ", expected " + type + ": " + DEBUG_URL);
+    };
 
-        return result;
-      };
+    _proto.text = function text() {
+      var result = "";
+      var value;
 
-      while (i < tokens.length) {
-        var _char2 = tryConsume("CHAR");
-
-        var name = tryConsume("NAME");
-        var pattern = tryConsume("PATTERN");
-
-        if (name || pattern) {
-          var prefix = _char2 || "";
-
-          if (prefixes.indexOf(prefix) === -1) {
-            path += prefix;
-            prefix = "";
-          }
-
-          if (path) {
-            result.push(path);
-            path = "";
-          }
-
-          result.push({
-            name: name || key++,
-            prefix: prefix,
-            suffix: "",
-            pattern: pattern || defaultPattern,
-            modifier: tryConsume("MODIFIER") || ""
-          });
-          continue;
-        }
-
-        var value = _char2 || tryConsume("ESCAPED_CHAR");
-
-        if (value) {
-          path += value;
-          continue;
-        }
-
-        if (path) {
-          result.push(path);
-          path = "";
-        }
-
-        var open = tryConsume("OPEN");
-
-        if (open) {
-          var prefix = consumeText();
-          var name_1 = tryConsume("NAME") || "";
-          var pattern_1 = tryConsume("PATTERN") || "";
-          var suffix = consumeText();
-          mustConsume("CLOSE");
-          result.push({
-            name: name_1 || (pattern_1 ? key++ : ""),
-            pattern: name_1 && !pattern_1 ? defaultPattern : pattern_1,
-            prefix: prefix,
-            suffix: suffix,
-            modifier: tryConsume("MODIFIER") || ""
-          });
-          continue;
-        }
-
-        mustConsume("END");
+      while (value = this.tryConsume("CHAR") || this.tryConsume("ESCAPED")) {
+        result += value;
       }
 
       return result;
+    };
+
+    return Iter;
+  }();
+
+  var TokenData = function TokenData(tokens) {
+    this.tokens = tokens;
+  };
+
+  dist.TokenData = TokenData;
+
+  function parse(str, options) {
+    if (options === void 0) {
+      options = {};
     }
-    function match(str, options) {
-      var keys = [];
-      var re = pathToRegexp(str, keys, options);
-      return regexpToFunction(re, keys, options);
-    }
-    function regexpToFunction(re, keys, options) {
-      if (options === void 0) {
-        options = {};
-      }
 
-      var _a = options.decode,
-          decode = _a === void 0 ? function (x) {
-        return x;
-      } : _a;
-      return function (pathname) {
-        var m = re.exec(pathname);
-        if (!m) return false;
-        var path = m[0],
-            index = m.index;
-        var params = Object.create(null);
+    var _options = options,
+        _options$encodePath = _options.encodePath,
+        encodePath = _options$encodePath === void 0 ? NOOP_VALUE : _options$encodePath;
+    var it = new Iter(lexer(str));
 
-        var _loop_1 = function _loop_1(i) {
-          if (m[i] === undefined) return "continue";
-          var key = keys[i - 1];
+    function consume(endType) {
+      var tokens = [];
 
-          if (key.modifier === "*" || key.modifier === "+") {
-            params[key.name] = m[i].split(key.prefix + key.suffix).map(function (value) {
-              return decode(value, key);
-            });
-          } else {
-            params[key.name] = decode(m[i], key);
-          }
-        };
+      while (true) {
+        var path = it.text();
+        if (path) tokens.push({
+          type: "text",
+          value: encodePath(path)
+        });
+        var param = it.tryConsume("PARAM");
 
-        for (var i = 1; i < m.length; i++) {
-          _loop_1(i);
+        if (param) {
+          tokens.push({
+            type: "param",
+            name: param
+          });
+          continue;
         }
 
-        return {
-          path: path,
-          index: index,
-          params: params
-        };
-      };
+        var wildcard = it.tryConsume("WILDCARD");
+
+        if (wildcard) {
+          tokens.push({
+            type: "wildcard",
+            name: wildcard
+          });
+          continue;
+        }
+
+        var open = it.tryConsume("{");
+
+        if (open) {
+          tokens.push({
+            type: "group",
+            tokens: consume("}")
+          });
+          continue;
+        }
+
+        it.consume(endType);
+        return tokens;
+      }
     }
 
-    function escapeString(str) {
-      return str.replace(/([.+*?=^!:${}()[\]|/\\])/g, "\\$1");
+    var tokens = consume("END");
+    return new TokenData(tokens);
+  }
+
+  function compile(path, options) {
+    if (options === void 0) {
+      options = {};
     }
 
-    function flags(options) {
-      return options && options.sensitive ? "" : "i";
-    }
+    var _options2 = options,
+        _options2$encode = _options2.encode,
+        encode = _options2$encode === void 0 ? encodeURIComponent : _options2$encode,
+        _options2$delimiter = _options2.delimiter,
+        delimiter = _options2$delimiter === void 0 ? DEFAULT_DELIMITER : _options2$delimiter;
+    var data = path instanceof TokenData ? path : parse(path, options);
+    var fn = tokensToFunction(data.tokens, delimiter, encode);
+    return function path(data) {
+      if (data === void 0) {
+        data = {};
+      }
 
-    function regexpToRegexp(path, keys) {
-      if (!keys) return path;
-      var groupsRegex = /\((?:\?<(.*?)>)?(?!\?)/g;
-      var index = 0;
-      var execResult = groupsRegex.exec(path.source);
+      var _fn = fn(data),
+          path = _fn[0],
+          missing = _fn.slice(1);
 
-      while (execResult) {
-        keys.push({
-          name: execResult[1] || index++,
-          prefix: "",
-          suffix: "",
-          modifier: "",
-          pattern: ""
-        });
-        execResult = groupsRegex.exec(path.source);
+      if (missing.length) {
+        throw new TypeError("Missing parameters: " + missing.join(", "));
       }
 
       return path;
-    }
+    };
+  }
 
-    function arrayToRegexp(paths, keys, options) {
-      var parts = paths.map(function (path) {
-        return pathToRegexp(path, keys, options).source;
-      });
-      return new RegExp("(?:" + parts.join("|") + ")", flags(options));
-    }
+  function tokensToFunction(tokens, delimiter, encode) {
+    var encoders = tokens.map(function (token) {
+      return tokenToFunction(token, delimiter, encode);
+    });
+    return function (data) {
+      var result = [""];
 
-    function stringToRegexp(path, keys, options) {
-      return tokensToRegexp(parse(path, options), keys, options);
-    }
+      for (var _iterator = _createForOfIteratorHelperLoose(encoders), _step; !(_step = _iterator()).done;) {
+        var encoder = _step.value;
 
-    function tokensToRegexp(tokens, keys, options) {
-      if (options === void 0) {
-        options = {};
+        var _encoder = encoder(data),
+            value = _encoder[0],
+            extras = _encoder.slice(1);
+
+        result[0] += value;
+        result.push.apply(result, extras);
       }
 
-      var _a = options.strict,
-          strict = _a === void 0 ? false : _a,
-          _b = options.start,
-          start = _b === void 0 ? true : _b,
-          _c = options.end,
-          end = _c === void 0 ? true : _c,
-          _d = options.encode,
-          encode = _d === void 0 ? function (x) {
-        return x;
-      } : _d;
-      var endsWith = "[" + escapeString(options.endsWith || "") + "]|$";
-      var delimiter = "[" + escapeString(options.delimiter || "/#?") + "]";
-      var route = start ? "^" : "";
+      return result;
+    };
+  }
 
-      for (var _i = 0, tokens_1 = tokens; _i < tokens_1.length; _i++) {
-        var token = tokens_1[_i];
+  function tokenToFunction(token, delimiter, encode) {
+    if (token.type === "text") return function () {
+      return [token.value];
+    };
 
-        if (typeof token === "string") {
-          route += escapeString(encode(token));
-        } else {
-          var prefix = escapeString(encode(token.prefix));
-          var suffix = escapeString(encode(token.suffix));
+    if (token.type === "group") {
+      var fn = tokensToFunction(token.tokens, delimiter, encode);
+      return function (data) {
+        var _fn2 = fn(data),
+            value = _fn2[0],
+            missing = _fn2.slice(1);
 
-          if (token.pattern) {
-            if (keys) keys.push(token);
+        if (!missing.length) return [value];
+        return [""];
+      };
+    }
 
-            if (prefix || suffix) {
-              if (token.modifier === "+" || token.modifier === "*") {
-                var mod = token.modifier === "*" ? "?" : "";
-                route += "(?:" + prefix + "((?:" + token.pattern + ")(?:" + suffix + prefix + "(?:" + token.pattern + "))*)" + suffix + ")" + mod;
-              } else {
-                route += "(?:" + prefix + "(" + token.pattern + ")" + suffix + ")" + token.modifier;
-              }
-            } else {
-              route += "(" + token.pattern + ")" + token.modifier;
-            }
-          } else {
-            route += "(?:" + prefix + suffix + ")" + token.modifier;
+    var encodeValue = encode || NOOP_VALUE;
+
+    if (token.type === "wildcard" && encode !== false) {
+      return function (data) {
+        var value = data[token.name];
+        if (value == null) return ["", token.name];
+
+        if (!Array.isArray(value) || value.length === 0) {
+          throw new TypeError("Expected \"" + token.name + "\" to be a non-empty array");
+        }
+
+        return [value.map(function (value, index) {
+          if (typeof value !== "string") {
+            throw new TypeError("Expected \"" + token.name + "/" + index + "\" to be a string");
           }
-        }
-      }
 
-      if (end) {
-        if (!strict) route += delimiter + "?";
-        route += !options.endsWith ? "$" : "(?=" + endsWith + ")";
-      } else {
-        var endToken = tokens[tokens.length - 1];
-        var isEndDelimited = typeof endToken === "string" ? delimiter.indexOf(endToken[endToken.length - 1]) > -1 : endToken === undefined;
-
-        if (!strict) {
-          route += "(?:" + delimiter + "(?=" + endsWith + "))?";
-        }
-
-        if (!isEndDelimited) {
-          route += "(?=" + delimiter + "|" + endsWith + ")";
-        }
-      }
-
-      return new RegExp(route, flags(options));
-    }
-    function pathToRegexp(path, keys, options) {
-      if (path instanceof RegExp) return regexpToRegexp(path, keys);
-      if (Array.isArray(path)) return arrayToRegexp(path, keys, options);
-      return stringToRegexp(path, keys, options);
+          return encodeValue(value);
+        }).join(delimiter)];
+      };
     }
 
-    function decode(val) {
-      try {
-        return decodeURIComponent(val);
-      } catch (err) {
-        return val;
+    return function (data) {
+      var value = data[token.name];
+      if (value == null) return ["", token.name];
+
+      if (typeof value !== "string") {
+        throw new TypeError("Expected \"" + token.name + "\" to be a string");
       }
+
+      return [encodeValue(value)];
+    };
+  }
+
+  function match(path, options) {
+    if (options === void 0) {
+      options = {};
     }
 
-    function matchRoute(route, baseUrl, options, pathname, parentParams) {
-      var matchResult;
-      var childMatches;
-      var childIndex = 0;
+    var _options3 = options,
+        _options3$decode = _options3.decode,
+        decode = _options3$decode === void 0 ? decodeURIComponent : _options3$decode,
+        _options3$delimiter = _options3.delimiter,
+        delimiter = _options3$delimiter === void 0 ? DEFAULT_DELIMITER : _options3$delimiter;
+
+    var _pathToRegexp = pathToRegexp(path, options),
+        regexp = _pathToRegexp.regexp,
+        keys = _pathToRegexp.keys;
+
+    var decoders = keys.map(function (key) {
+      if (decode === false) return NOOP_VALUE;
+      if (key.type === "param") return decode;
+      return function (value) {
+        return value.split(delimiter).map(decode);
+      };
+    });
+    return function match(input) {
+      var m = regexp.exec(input);
+      if (!m) return false;
+      var path = m[0];
+      var params = Object.create(null);
+
+      for (var _i = 1; _i < m.length; _i++) {
+        if (m[_i] === undefined) continue;
+        var key = keys[_i - 1];
+        var decoder = decoders[_i - 1];
+        params[key.name] = decoder(m[_i]);
+      }
+
       return {
-        next: function next(routeToSkip) {
-          if (route === routeToSkip) {
-            return {
-              done: true,
-              value: false
-            };
-          }
+        path: path,
+        params: params
+      };
+    };
+  }
 
-          if (!matchResult) {
-            var rt = route;
-            var end = !rt.children;
+  function pathToRegexp(path, options) {
+    if (options === void 0) {
+      options = {};
+    }
 
-            if (!rt.match) {
-              rt.match = match(rt.path || '', Object.assign({
-                end: end
-              }, options));
+    var _options4 = options,
+        _options4$delimiter = _options4.delimiter,
+        delimiter = _options4$delimiter === void 0 ? DEFAULT_DELIMITER : _options4$delimiter,
+        _options4$end = _options4.end,
+        end = _options4$end === void 0 ? true : _options4$end,
+        _options4$sensitive = _options4.sensitive,
+        sensitive = _options4$sensitive === void 0 ? false : _options4$sensitive,
+        _options4$trailing = _options4.trailing,
+        trailing = _options4$trailing === void 0 ? true : _options4$trailing;
+    var keys = [];
+    var sources = [];
+    var flags = sensitive ? "" : "i";
+    var paths = Array.isArray(path) ? path : [path];
+    var items = paths.map(function (path) {
+      return path instanceof TokenData ? path : parse(path, options);
+    });
+
+    for (var _iterator2 = _createForOfIteratorHelperLoose(items), _step2; !(_step2 = _iterator2()).done;) {
+      var tokens = _step2.value.tokens;
+
+      for (var _iterator3 = _createForOfIteratorHelperLoose(flatten(tokens, 0, [])), _step3; !(_step3 = _iterator3()).done;) {
+        var seq = _step3.value;
+
+        var _regexp = sequenceToRegExp(seq, delimiter, keys);
+
+        sources.push(_regexp);
+      }
+    }
+
+    var pattern = "^(?:" + sources.join("|") + ")";
+    if (trailing) pattern += "(?:" + escape(delimiter) + "$)?";
+    pattern += end ? "$" : "(?=" + escape(delimiter) + "|$)";
+    var regexp = new RegExp(pattern, flags);
+    return {
+      regexp: regexp,
+      keys: keys
+    };
+  }
+
+  function flatten(tokens, index, init) {
+    var token, fork, _iterator4, _step4, seq;
+
+    return regeneratorRuntime.wrap(function flatten$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            if (!(index === tokens.length)) {
+              _context2.next = 4;
+              break;
             }
 
-            matchResult = rt.match(pathname);
+            _context2.next = 3;
+            return init;
 
-            if (matchResult) {
-              var _matchResult = matchResult,
-                  path = _matchResult.path;
-              matchResult.path = !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path;
-              matchResult.params = Object.assign({}, parentParams, matchResult.params);
-              return {
-                done: false,
-                value: {
-                  route: route,
-                  baseUrl: baseUrl,
-                  path: matchResult.path,
-                  params: matchResult.params
-                }
-              };
+          case 3:
+            return _context2.abrupt("return", _context2.sent);
+
+          case 4:
+            token = tokens[index];
+
+            if (!(token.type === "group")) {
+              _context2.next = 15;
+              break;
             }
-          }
 
-          if (matchResult && route.children) {
-            while (childIndex < route.children.length) {
-              if (!childMatches) {
-                var childRoute = route.children[childIndex];
-                childRoute.parent = route;
-                childMatches = matchRoute(childRoute, baseUrl + matchResult.path, options, pathname.substr(matchResult.path.length), matchResult.params);
-              }
+            fork = init.slice();
+            _iterator4 = _createForOfIteratorHelperLoose(flatten(token.tokens, 0, fork));
 
-              var childMatch = childMatches.next(routeToSkip);
-
-              if (!childMatch.done) {
-                return {
-                  done: false,
-                  value: childMatch.value
-                };
-              }
-
-              childMatches = null;
-              childIndex++;
+          case 8:
+            if ((_step4 = _iterator4()).done) {
+              _context2.next = 13;
+              break;
             }
-          }
 
+            seq = _step4.value;
+            return _context2.delegateYield(flatten(tokens, index + 1, seq), "t0", 11);
+
+          case 11:
+            _context2.next = 8;
+            break;
+
+          case 13:
+            _context2.next = 16;
+            break;
+
+          case 15:
+            init.push(token);
+
+          case 16:
+            return _context2.delegateYield(flatten(tokens, index + 1, init), "t1", 17);
+
+          case 17:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _marked2);
+  }
+
+  function sequenceToRegExp(tokens, delimiter, keys) {
+    var result = "";
+    var backtrack = "";
+    var isSafeSegmentParam = true;
+
+    for (var _i2 = 0; _i2 < tokens.length; _i2++) {
+      var token = tokens[_i2];
+
+      if (token.type === "text") {
+        result += escape(token.value);
+        backtrack += token.value;
+        isSafeSegmentParam || (isSafeSegmentParam = token.value.includes(delimiter));
+        continue;
+      }
+
+      if (token.type === "param" || token.type === "wildcard") {
+        if (!isSafeSegmentParam && !backtrack) {
+          throw new TypeError("Missing text after \"" + token.name + "\": " + DEBUG_URL);
+        }
+
+        if (token.type === "param") {
+          result += "(" + negate(delimiter, isSafeSegmentParam ? "" : backtrack) + "+)";
+        } else {
+          result += "([\\s\\S]+)";
+        }
+
+        keys.push(token);
+        backtrack = "";
+        isSafeSegmentParam = false;
+        continue;
+      }
+    }
+
+    return result;
+  }
+
+  function negate(delimiter, backtrack) {
+    if (backtrack.length < 2) {
+      if (delimiter.length < 2) return "[^" + escape(delimiter + backtrack) + "]";
+      return "(?:(?!" + escape(delimiter) + ")[^" + escape(backtrack) + "])";
+    }
+
+    if (delimiter.length < 2) {
+      return "(?:(?!" + escape(backtrack) + ")[^" + escape(delimiter) + "])";
+    }
+
+    return "(?:(?!" + escape(backtrack) + "|" + escape(delimiter) + ")[\\s\\S])";
+  }
+
+  function stringify(data) {
+    return data.tokens.map(function stringifyToken(token, index, tokens) {
+      if (token.type === "text") return escapeText(token.value);
+
+      if (token.type === "group") {
+        return "{" + token.tokens.map(stringifyToken).join("") + "}";
+      }
+
+      var isSafe = isNameSafe(token.name) && isNextNameSafe(tokens[index + 1]);
+      var key = isSafe ? token.name : JSON.stringify(token.name);
+      if (token.type === "param") return ":" + key;
+      if (token.type === "wildcard") return "*" + key;
+      throw new TypeError("Unexpected token: " + token);
+    }).join("");
+  }
+
+  function isNameSafe(name) {
+    var first = name[0],
+        rest = name.slice(1);
+    if (!ID_START.test(first)) return false;
+    return rest.every(function (_char) {
+      return ID_CONTINUE.test(_char);
+    });
+  }
+
+  function isNextNameSafe(token) {
+    if ((token === null || token === void 0 ? void 0 : token.type) !== "text") return true;
+    return !ID_CONTINUE.test(token.value[0]);
+  }
+
+  function decode(val) {
+    try {
+      return decodeURIComponent(val);
+    } catch (err) {
+      return val;
+    }
+  }
+
+  function matchRoute(route, baseUrl, options, pathname, parentParams) {
+    var matchResult;
+    var childMatches;
+    var childIndex = 0;
+    return {
+      next: function next(routeToSkip) {
+        if (route === routeToSkip) {
           return {
             done: true,
             value: false
           };
         }
-      };
-    }
 
-    function resolveRoute(context, params) {
-      if (typeof context.route.action === 'function') {
-        return context.route.action(context, params);
-      }
+        if (!matchResult) {
+          var rt = route;
+          var end = !rt.children;
 
-      return undefined;
-    }
-
-    function isChildRoute(parentRoute, childRoute) {
-      var route = childRoute;
-
-      while (route) {
-        route = route.parent;
-
-        if (route === parentRoute) {
-          return true;
-        }
-      }
-
-      return false;
-    }
-
-    var UniversalRouterSync = function () {
-      function UniversalRouterSync(routes, options) {
-        if (!routes || typeof routes !== 'object') {
-          throw new TypeError('Invalid routes');
-        }
-
-        this.options = Object.assign({
-          decode: decode
-        }, options);
-        this.baseUrl = this.options.baseUrl || '';
-        this.root = Array.isArray(routes) ? {
-          path: '',
-          children: routes,
-          parent: null
-        } : routes;
-        this.root.parent = null;
-      }
-
-      var _proto = UniversalRouterSync.prototype;
-
-      _proto.resolve = function resolve(pathnameOrContext) {
-        var context = Object.assign({
-          router: this
-        }, this.options.context, typeof pathnameOrContext === 'string' ? {
-          pathname: pathnameOrContext
-        } : pathnameOrContext);
-        var matchResult = matchRoute(this.root, this.baseUrl, this.options, context.pathname.substr(this.baseUrl.length));
-        var resolve = this.options.resolveRoute || resolveRoute;
-        var matches;
-        var nextMatches;
-        var currentContext = context;
-
-        function next(resume, parent, prevResult) {
-          if (parent === void 0) {
-            parent = !matches.done && matches.value.route;
+          if (!rt.match) {
+            rt.match = match_1(rt.path || '', Object.assign({
+              end: end
+            }, options));
           }
 
-          var routeToSkip = prevResult === null && !matches.done && matches.value.route;
-          matches = nextMatches || matchResult.next(routeToSkip);
-          nextMatches = null;
+          matchResult = rt.match(pathname);
 
-          if (!resume) {
-            if (matches.done || !isChildRoute(parent, matches.value.route)) {
-              nextMatches = matches;
-              return null;
+          if (matchResult) {
+            var _matchResult = matchResult,
+                path = _matchResult.path;
+            matchResult.path = !end && path.charAt(path.length - 1) === '/' ? path.substr(1) : path;
+            matchResult.params = Object.assign({}, parentParams, matchResult.params);
+            return {
+              done: false,
+              value: {
+                route: route,
+                baseUrl: baseUrl,
+                path: matchResult.path,
+                params: matchResult.params
+              }
+            };
+          }
+        }
+
+        if (matchResult && route.children) {
+          while (childIndex < route.children.length) {
+            if (!childMatches) {
+              var childRoute = route.children[childIndex];
+              childRoute.parent = route;
+              childMatches = matchRoute(childRoute, baseUrl + matchResult.path, options, pathname.substr(matchResult.path.length), matchResult.params);
             }
+
+            var childMatch = childMatches.next(routeToSkip);
+
+            if (!childMatch.done) {
+              return {
+                done: false,
+                value: childMatch.value
+              };
+            }
+
+            childMatches = null;
+            childIndex++;
           }
-
-          if (matches.done) {
-            var error = new Error('Route not found');
-            error.status = 404;
-            throw error;
-          }
-
-          currentContext = Object.assign({}, context, matches.value);
-          var result = resolve(currentContext, matches.value.params);
-
-          if (result !== null && result !== undefined) {
-            return result;
-          }
-
-          return next(resume, parent, result);
         }
 
-        context.next = next;
+        return {
+          done: true,
+          value: false
+        };
+      }
+    };
+  }
 
-        try {
-          return next(true, this.root);
-        } catch (error) {
-          if (this.options.errorHandler) {
-            return this.options.errorHandler(error, currentContext);
+  function resolveRoute(context, params) {
+    if (typeof context.route.action === 'function') {
+      return context.route.action(context, params);
+    }
+
+    return undefined;
+  }
+
+  function isChildRoute(parentRoute, childRoute) {
+    var route = childRoute;
+
+    while (route) {
+      route = route.parent;
+
+      if (route === parentRoute) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  var UniversalRouterSync = function () {
+    function UniversalRouterSync(routes, options) {
+      if (!routes || typeof routes !== 'object') {
+        throw new TypeError('Invalid routes');
+      }
+
+      this.options = Object.assign({
+        decode: decode
+      }, options);
+      this.baseUrl = this.options.baseUrl || '';
+      this.root = Array.isArray(routes) ? {
+        path: '',
+        children: routes,
+        parent: null
+      } : routes;
+      this.root.parent = null;
+    }
+
+    var _proto = UniversalRouterSync.prototype;
+
+    _proto.resolve = function resolve(pathnameOrContext) {
+      var context = Object.assign({
+        router: this
+      }, this.options.context, typeof pathnameOrContext === 'string' ? {
+        pathname: pathnameOrContext
+      } : pathnameOrContext);
+      var matchResult = matchRoute(this.root, this.baseUrl, this.options, context.pathname.substr(this.baseUrl.length));
+      var resolve = this.options.resolveRoute || resolveRoute;
+      var matches;
+      var nextMatches;
+      var currentContext = context;
+
+      function next(resume, parent, prevResult) {
+        if (parent === void 0) {
+          parent = !matches.done && matches.value.route;
+        }
+
+        var routeToSkip = prevResult === null && !matches.done && matches.value.route;
+        matches = nextMatches || matchResult.next(routeToSkip);
+        nextMatches = null;
+
+        if (!resume) {
+          if (matches.done || !isChildRoute(parent, matches.value.route)) {
+            nextMatches = matches;
+            return null;
           }
+        }
 
+        if (matches.done) {
+          var error = new Error('Route not found');
+          error.status = 404;
           throw error;
         }
-      };
 
-      return UniversalRouterSync;
-    }();
+        currentContext = Object.assign({}, context, matches.value);
+        var result = resolve(currentContext, matches.value.params);
+
+        if (result !== null && result !== undefined) {
+          return result;
+        }
+
+        return next(resume, parent, result);
+      }
+
+      context['next'] = next;
+
+      try {
+        return next(true, this.root);
+      } catch (error) {
+        if (this.options.errorHandler) {
+          return this.options.errorHandler(error, currentContext);
+        }
+
+        throw error;
+      }
+    };
 
     return UniversalRouterSync;
+  }();
+
+  return UniversalRouterSync;
 
 })));
 //# sourceMappingURL=universal-router-sync.js.map
