@@ -13,8 +13,9 @@ import {
   Match,
   MatchFunction,
   ParseOptions,
-  TokensToRegexpOptions,
-  RegexpToFunctionOptions,
+  MatchOptions,
+  PathToRegexpOptions,
+  CompileOptions
 } from 'path-to-regexp'
 
 /**
@@ -79,7 +80,7 @@ export interface Route<R = any, C extends RouterContext = RouterContext> {
   /**
    * A string, array of strings, or a regular expression. Defaults to an empty string.
    */
-  path?: Path
+  path?: Path | Path[]
   /**
    * A unique string that can be used to generate the route URL.
    */
@@ -124,8 +125,9 @@ export type ErrorHandler<R = any> = (
 
 export interface RouterOptions<R = any, C extends RouterContext = RouterContext>
   extends ParseOptions,
-    TokensToRegexpOptions,
-    RegexpToFunctionOptions {
+    MatchOptions,
+    PathToRegexpOptions,
+    CompileOptions {
   context?: C
   baseUrl?: string
   resolveRoute?: ResolveRoute<R, C>

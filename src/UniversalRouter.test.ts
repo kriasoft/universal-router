@@ -287,7 +287,7 @@ test('supports next() across multiple routes', async () => {
               },
             },
             {
-              path: '(.*)',
+              path: '',
               action(): void {
                 log.push(9)
               },
@@ -316,7 +316,7 @@ test('supports next() across multiple routes', async () => {
       },
     },
     {
-      path: '/*',
+      path: '/*all',
       action(): void {
         log.push(13)
       },
@@ -622,7 +622,7 @@ test('decodes params correctly', async () => {
 })
 
 test('decodes repeated parameters correctly', async () => {
-  const router = new UniversalRouter({ path: '/:a+', action: (ctx): object => ctx.params })
+  const router = new UniversalRouter({ path: '/*a', action: (ctx): object => ctx.params })
   await expect(router.resolve('/x%2Fy/z/%20/%AF')).resolves.toStrictEqual({
     a: ['x/y', 'z', ' ', '%AF'],
   })
@@ -672,7 +672,7 @@ test('matches 0 routes (6)', async () => {
 
 test('matches 0 routes (7)', async () => {
   const action: jest.Mock = jest.fn(() => true)
-  const route = { path: '/:a+', action, children: [] }
+  const route = { path: '/*a', action, children: [] }
   await expect(new UniversalRouter(route).resolve('')).rejects.toThrow(/Route not found/)
   expect(action.mock.calls.length).toBe(0)
 })
