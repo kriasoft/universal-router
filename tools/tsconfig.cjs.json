@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "declaration": false,
+    "sourceMap": false,
+    "inlineSources": false,
+    "outDir": "../dist/cjs"
+  },
+  "exclude": ["../src/**/*.test.ts"]
+}

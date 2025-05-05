@@ -1,8 +1,7 @@
 # Build Automation Tools
 
-[![Build Status](https://img.shields.io/travis/kriasoft/universal-router/master.svg)](https://travis-ci.org/kriasoft/universal-router)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/kriasoft/universal-router/ci.yml)](https://github.com/kriasoft/universal-router/actions/workflows/ci.yml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/kriasoft/universal-router.svg)](https://codecov.io/gh/kriasoft/universal-router)
-[![Dependency Status](https://img.shields.io/david/kriasoft/universal-router.svg)](https://david-dm.org/kriasoft/universal-router)
 
 Compile the lib into the **./dist** folder:
 
@@ -10,16 +9,19 @@ Compile the lib into the **./dist** folder:
 npm run build
 ```
 
-Find problematic patterns in code
-using [ESLint](https://eslint.org/)
-and [Prettier](https://prettier.io/)
-by following [Airbnb Style Guide](https://github.com/airbnb/javascript):
+Find problematic patterns in code using [ESLint](https://eslint.org/):
 
 ```bash
 npm run lint
 ```
 
-Run unit tests using [Jest](https://jestjs.io/):
+Format the code using [Prettier](https://prettier.io/):
+
+```bash
+npm run format
+```
+
+Run unit tests using [Vitest](https://vitest.dev/):
 
 ```bash
 npm run test

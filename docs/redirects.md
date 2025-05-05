@@ -21,7 +21,7 @@ const router = new UniversalRouter([
   },
 ])
 
-router.resolve('/redirect').then(page => {
+router.resolve('/redirect').then((page) => {
   if (page.redirect) {
     window.location = page.redirect // <== actual redirect here
   } else {
@@ -56,7 +56,7 @@ router
     pathname: '/admin',
     user: null, // <== is the user logged in?
   })
-  .then(page => {
+  .then((page) => {
     if (page.redirect) {
       window.location = page.redirect
     } else {
@@ -78,7 +78,7 @@ const adminRoutes = {
     return context.next() // go to children
   },
   children: [
-    { path: '',       action: () => ({ content: '<h1>Admin: Home</h1>'  }) },
+    { path: '', action: () => ({ content: '<h1>Admin: Home</h1>' }) },
     { path: '/users', action: () => ({ content: '<h1>Admin: Users</h1>' }) },
     { path: '/posts', action: () => ({ content: '<h1>Admin: Posts</h1>' }) },
   ],
@@ -94,7 +94,7 @@ const routes = [
     path: '/admin',
     protected: true, // <== protect current and all child routes
     children: [
-      { path: '',       content: '<h1>Admin: Home</h1>'  },
+      { path: '', content: '<h1>Admin: Home</h1>' },
       { path: '/users', content: '<h1>Admin: Users</h1>' },
       { path: '/posts', content: '<h1>Admin: Posts</h1>' },
     ],
@@ -113,7 +113,7 @@ const router = new UniversalRouter(routes, {
   },
 })
 
-router.resolve({ pathname: '/admin/users', user: null }).then(page => {
+router.resolve({ pathname: '/admin/users', user: null }).then((page) => {
   if (page.redirect) {
     console.log(`Redirect from ${page.from} to ${page.redirect}`)
     window.location = page.redirect
@@ -128,7 +128,7 @@ For client side redirects without a full page reload you may use the browser
 (or libraries like [history](https://github.com/ReactTraining/history)):
 
 ```js
-router.resolve('/redirect').then(page => {
+router.resolve('/redirect').then((page) => {
   if (page.redirect) {
     const state = { from: page.from }
     window.history.pushState(state, '', page.redirect)

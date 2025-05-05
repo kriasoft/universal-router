@@ -147,7 +147,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   ```js
   const router = new UniversalRouter({
     path: ['/one/:parameter', '/two/:parameter'],
-    action: context => context.params,
+    action: (context) => context.params,
   })
 
   router.resolve('/one/a') // => { parameter: 'a' }

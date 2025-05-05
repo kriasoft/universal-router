@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "es2020",
     "rootDir": "src",
-    "outDir": "dist/src",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "outDir": "dist",
+    "module": "Preserve",
+    "moduleResolution": "bundler",
     "strict": true,
     "declaration": true,
     "noEmitOnError": true,

@@ -3,7 +3,7 @@
 [![NPM version](https://img.shields.io/npm/v/universal-router.svg)](https://www.npmjs.com/package/universal-router)
 [![NPM downloads](https://img.shields.io/npm/dw/universal-router.svg)](https://www.npmjs.com/package/universal-router)
 [![Library Size](https://img.shields.io/bundlephobia/minzip/universal-router.svg)](https://bundlephobia.com/result?p=universal-router)
-[![Online Chat](https://badges.gitter.im/kriasoft/universal-router.svg)](https://gitter.im/kriasoft/universal-router)
+[![Online Chat](https://img.shields.io/discord/643523529131950086?label=Chat)](https://discord.gg/2nKEnKq)
 
 <a href="https://www.kriasoft.com/universal-router/" target="_blank">
   <img width="64" height="64" align="right" alt="Visit Universal Router Website"
@@ -70,7 +70,7 @@ import UniversalRouter from 'universal-router'
 const routes = [
   {
     path: '', // optional
-    action: () => `<h1>Home</h1>`
+    action: () => `<h1>Home</h1>`,
   },
   {
     path: '/posts',
@@ -78,19 +78,19 @@ const routes = [
     children: [
       {
         path: '', // optional, matches both "/posts" and "/posts/"
-        action: () => `<h1>Posts</h1>`
+        action: () => `<h1>Posts</h1>`,
       },
       {
         path: '/:id',
-        action: (context) => `<h1>Post #${context.params.id}</h1>`
-      }
-    ]
-  }
+        action: (context) => `<h1>Post #${context.params.id}</h1>`,
+      },
+    ],
+  },
 ]
 
 const router = new UniversalRouter(routes)
 
-router.resolve('/posts').then(html => {
+router.resolve('/posts').then((html) => {
   document.body.innerHTML = html // renders: <h1>Posts</h1>
 })
 ```
