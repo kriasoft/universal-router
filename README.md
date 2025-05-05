@@ -51,21 +51,10 @@ Using [npm](https://www.npmjs.com/package/universal-router):
 npm install universal-router --save
 ```
 
-Or using a [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) like
-[unpkg.com](https://unpkg.com/universal-router/universal-router.min.js) or
-[jsDelivr](https://cdn.jsdelivr.net/npm/universal-router/universal-router.min.js)
-with the following script tag:
-
-```html
-<script src="https://unpkg.com/universal-router/universal-router.min.js"></script>
-```
-
-You can find the library in `window.UniversalRouter`.
-
 ## How does it look like?
 
 ```js
-import UniversalRouter from 'universal-router'
+import UniversalRouter from 'https://esm.sh/universal-router'
 
 const routes = [
   {

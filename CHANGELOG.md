@@ -5,10 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [10.0.0] - 2025-05-02
+## [10.0.0] - 2025-05-05
 
-- Update dependency [path-to-regexp](https://www.npmjs.com/package/path-to-regexp) to version 8.2.0 from 6.2.0.
-  - Primarily inlcluds [major changes from 7.0](https://github.com/pillarjs/path-to-regexp/releases/tag/v7.0.0)
+- Updated [path-to-regexp](https://www.npmjs.com/package/path-to-regexp) from v6.2.0 to v8.2.0.
+  See [changelog](https://github.com/pillarjs/path-to-regexp/releases)
+  (BREAKING CHANGE [#218](https://github.com/kriasoft/universal-router/pull/218))
+- Since [Path To RegExp does not provide an ESM version](https://github.com/pillarjs/path-to-regexp/issues/346),
+  it is now bundled into the Universal Router package:
+  ```diff
+  - const pathToRegexp = require('path-to-regexp')
+  + import * as pathToRegexp from 'universal-router/path-to-regexp'
+  ```
+- The import path for generating URLs has changed:
+  ```diff
+  - import generateUrls from 'universal-router/generateUrls'
+  + import generateUrls from 'universal-router/generate-urls'
+  ```
 
 ## [9.2.1] - 2024-11-22
 
@@ -310,7 +322,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Small bug fixes and improvements
 
-[unreleased]: https://github.com/kriasoft/universal-router/compare/v9.2.1...HEAD
+[unreleased]: https://github.com/kriasoft/universal-router/compare/v10.0.0...HEAD
+[10.0.0]: https://github.com/kriasoft/universal-router/compare/v9.2.1...v10.0.0
 [9.2.1]: https://github.com/kriasoft/universal-router/compare/v9.2.0...v9.2.1
 [9.2.0]: https://github.com/kriasoft/universal-router/compare/v9.1.0...v9.2.0
 [9.1.0]: https://github.com/kriasoft/universal-router/compare/v9.0.1...v9.1.0
