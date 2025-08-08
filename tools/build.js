@@ -28,19 +28,22 @@ async function build() {
 
     // Create package.json file
     const pkg = await fs.readFile('package.json', 'utf8')
-    await fs.writeFile(
-      'dist/package.json',
-      JSON.stringify(
-        {
-          ...JSON.parse(pkg),
-          private: undefined,
-          scripts: undefined,
-          devDependencies: undefined,
-        },
-        null,
-        2,
+    await Promise.all([
+      fs.writeFile(
+        'dist/package.json',
+        JSON.stringify(
+          {
+            ...JSON.parse(pkg),
+            private: undefined,
+            scripts: undefined,
+            devDependencies: undefined,
+          },
+          null,
+          2,
+        ),
       ),
-    )
+      fs.copyFile('cjs/package.json', 'dist/cjs/package.json'),
+    ])
   } catch (error) {
     console.error('Build failed:', error)
     process.exit(1)
