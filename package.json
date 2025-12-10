@@ -32,7 +32,7 @@
       "import": "./universal-router-sync.js",
       "require": "./cjs/universal-router-sync.js"
     },
-    "./generateUrls": {
+    "./generate-urls": {
       "types": "./generate-urls.d.ts",
       "import": "./generate-urls.js",
       "require": "./cjs/generate-urls.js"
