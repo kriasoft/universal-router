@@ -7,7 +7,7 @@
 
 <a href="https://www.kriasoft.com/universal-router/" target="_blank">
   <img width="64" height="64" align="right" alt="Visit Universal Router Website"
-  src="https://rawgit.com/kriasoft/universal-router/master/logo.svg" />
+  src="https://raw.githubusercontent.com/kriasoft/universal-router/refs/heads/main/logo.svg" />
 </a>
 
 A simple middleware-style router that can be used in both client-side and server-side applications.
