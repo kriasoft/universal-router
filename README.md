@@ -28,6 +28,8 @@ Join **[#universal-router](https://gitter.im/kriasoft/universal-router)** on Git
 - Routes are plain JavaScript
   [objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer)
   with which you can interact as you like.
+- It provides [type-safe route definitions](https://github.com/kriasoft/universal-router/blob/master/docs/api.md#type-safe-routes)
+  with automatic path parameter inference for TypeScript users.
 
 ## What users say about Universal Router
 

@@ -430,6 +430,62 @@ url('users.list') // => /users/list
 url('pages.list') // => /pages/list
 ```
 
+## Type-Safe Routes
+
+Type-safe URL generation catches errors at compile time. Use `as const` on your route
+definitions to enable automatic type inference.
+
+```ts
+import UniversalRouter from 'universal-router'
+import generateUrls from 'universal-router/generate-urls'
+
+// Define routes with `as const` for type inference
+const routes = [
+  { path: '/users/:userId', name: 'user' },
+  { path: '/posts/:postId', name: 'post' },
+] as const
+
+const router = new UniversalRouter(routes)
+const url = generateUrls(router)
+
+// Type-safe: autocomplete for names, validated params
+url('user', { userId: '123' }) // OK: '/users/123'
+url('user', {}) // Error: missing userId
+url('typo', {}) // Error: invalid route name
+```
+
+### Optional: `defineRoute` for Typed Actions
+
+Use `defineRoute` when you need typed params in action functions:
+
+```ts
+import UniversalRouter, { defineRoute } from 'universal-router'
+
+const route = defineRoute({
+  path: '/users/:userId',
+  name: 'user',
+  action: (ctx, params) => {
+    // params.userId is typed as string
+    return fetchUser(params.userId)
+  },
+})
+```
+
+### Extract Params from Any Path
+
+```ts
+import type { ExtractParams } from 'universal-router'
+
+type Params = ExtractParams<'/api/:version/*rest'>
+// { version: string; rest: string[] }
+```
+
+### Notes
+
+- Use `as const` on route arrays for type inference
+- Dynamic routes added at runtime are not type-checked
+- TypeScript 5.0+ recommended
+
 ## Recipes
 
 - [Redirects](https://github.com/kriasoft/universal-router/blob/master/docs/redirects.md)

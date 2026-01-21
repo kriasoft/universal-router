@@ -8,7 +8,7 @@
  */
 
 import { describe, test, expect, vi, type Mock } from 'vitest'
-import UniversalRouter, { Route } from './universal-router-sync'
+import UniversalRouter, { Route, defineRoute } from './universal-router-sync'
 import type { RouteError } from './universal-router-sync'
 
 describe('UniversalRouterSync', () => {
@@ -841,5 +841,28 @@ describe('UniversalRouterSync', () => {
     const context = action.mock.calls[0]?.[0]
     expect(context).toHaveProperty('baseUrl', '')
     expect(context).toHaveProperty('route.path', ['/e', '/f'])
+  })
+
+  test('defineRoute factory pattern returns a function when called without arguments', () => {
+    const route = defineRoute<string>()
+    expect(typeof route).toBe('function')
+
+    const routeConfig = route({
+      path: '/users/:id',
+      action: (_ctx, params) => `User ${params.id}`,
+    })
+
+    expect(routeConfig.path).toBe('/users/:id')
+    expect(typeof routeConfig.action).toBe('function')
+  })
+
+  test('defineRoute returns the route when called with a route argument', () => {
+    const routeConfig = defineRoute({
+      path: '/users/:id',
+      action: (_ctx, params) => `User ${params.id}`,
+    })
+
+    expect(routeConfig.path).toBe('/users/:id')
+    expect(typeof routeConfig.action).toBe('function')
   })
 })

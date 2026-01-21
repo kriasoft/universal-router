@@ -7,10 +7,13 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import { describe, test, expect, vi, type Mock } from 'vitest'
+import { describe, test, expect, vi, expectTypeOf, type Mock } from 'vitest'
 import UniversalRouter from './universal-router'
 import UniversalRouterSync from './universal-router-sync'
-import generateUrls from './generate-urls'
+import generateUrls, {
+  type ExtractRouteNames,
+  type ExtractRoutePaths,
+} from './generate-urls'
 import { parse } from './path-to-regexp'
 
 describe('generateUrls', () => {
@@ -278,5 +281,125 @@ describe('generateUrls', () => {
     const router = new UniversalRouter({ path: '/{foo}', name: 'group' })
     const url = generateUrls(router)
     expect(url('group')).toBe('/foo')
+  })
+})
+
+describe('Type-Safe URL Generation', () => {
+  describe('generateUrls infers types from router', () => {
+    test('infers route names from router with as const routes', () => {
+      const routes = [
+        { path: '/users/:userId', name: 'user' },
+        { path: '/posts/:postId', name: 'post' },
+      ] as const
+
+      const router = new UniversalRouter(routes)
+      const url = generateUrls(router)
+
+      expect(url('user', { userId: '123' })).toBe('/users/123')
+      expect(url('post', { postId: '456' })).toBe('/posts/456')
+    })
+
+    test('infers params requirements from router', () => {
+      const routes = [
+        { path: '/users/:userId', name: 'user' },
+        { path: '/about', name: 'about' },
+      ] as const
+
+      const router = new UniversalRouter(routes)
+      const url = generateUrls(router)
+
+      const userUrl: string = url('user', { userId: '123' })
+      expect(userUrl).toBe('/users/123')
+
+      const aboutUrl: string = url('about')
+      expect(aboutUrl).toBe('/about')
+    })
+
+    test('works with nested routes and separator', () => {
+      const routes = [
+        {
+          path: '/api',
+          name: 'api',
+          children: [
+            { path: '/users/:userId', name: 'users' },
+            { path: '/posts/:postId', name: 'posts' },
+          ],
+        },
+      ]
+
+      const router = new UniversalRouter(routes)
+      const url = generateUrls(router, { uniqueRouteNameSep: '.' })
+
+      expect(url('api.users', { userId: '123' })).toBe('/api/users/123')
+      expect(url('api.posts', { postId: '456' })).toBe('/api/posts/456')
+    })
+
+    test('works with wildcard params', () => {
+      const routes = [{ path: '/files/*path', name: 'files' }] as const
+
+      const router = new UniversalRouter(routes)
+      const url = generateUrls(router)
+
+      expect(url('files', { path: ['docs', 'readme.md'] })).toBe(
+        '/files/docs/readme.md',
+      )
+    })
+
+    test('works with baseUrl option', () => {
+      const routes = [{ path: '/users/:userId', name: 'user' }] as const
+
+      const router = new UniversalRouter(routes, { baseUrl: '/app' })
+      const url = generateUrls(router)
+
+      expect(url('user', { userId: '123' })).toBe('/app/users/123')
+    })
+
+    test('type checking validates route names', () => {
+      const routes = [
+        { path: '/users', name: 'users' },
+        { path: '/posts', name: 'posts' },
+      ] as const
+
+      const router = new UniversalRouter(routes)
+      const url = generateUrls(router)
+
+      const usersUrl: string = url('users')
+      const postsUrl: string = url('posts')
+      expectTypeOf(usersUrl).toBeString()
+      expectTypeOf(postsUrl).toBeString()
+
+      type RouteNames = ExtractRouteNames<typeof routes>
+      expectTypeOf<'users'>().toExtend<RouteNames>()
+      expectTypeOf<'posts'>().toExtend<RouteNames>()
+
+      type RoutePaths = ExtractRoutePaths<typeof routes>
+      expectTypeOf<'/users'>().toExtend<RoutePaths>()
+      expectTypeOf<'/posts'>().toExtend<RoutePaths>()
+    })
+
+    test('type checking validates params', () => {
+      const routes = [{ path: '/users/:userId', name: 'user' }] as const
+
+      const router = new UniversalRouter(routes)
+      const url = generateUrls(router)
+
+      const result: string = url('user', { userId: '123' })
+      expectTypeOf(result).toBeString()
+    })
+  })
+
+  describe('backwards compatibility', () => {
+    test('untyped routes still work (no as const)', () => {
+      const routes = [
+        { path: '/users/:userId', name: 'user' },
+        { path: '/posts/:postId', name: 'post' },
+      ]
+
+      const router = new UniversalRouter(routes)
+      const url = generateUrls(router)
+
+      expect(url('user', { userId: '123' })).toBe('/users/123')
+      expect(url('post', { postId: '456' })).toBe('/posts/456')
+    })
   })
 })
