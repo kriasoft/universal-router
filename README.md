@@ -91,8 +91,8 @@ Play with an example on [JSFiddle](https://jsfiddle.net/frenzzy/b0w9mjck/102/),
 
 ## Documentation
 
-- [Getting Started](https://github.com/kriasoft/universal-router/blob/master/docs/getting-started.md)
-- [Universal Router API](https://github.com/kriasoft/universal-router/blob/master/docs/api.md)
+- [Getting Started](https://github.com/kriasoft/universal-router/blob/main/docs/getting-started.md)
+- [Universal Router API](https://github.com/kriasoft/universal-router/blob/main/docs/api.md)
 
 ## Books and Tutorials
 
@@ -124,12 +124,12 @@ and [`Object.create`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Re
 ## Contributing
 
 Anyone and everyone is welcome to
-[contribute](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md) to this project.
+[contribute](https://github.com/kriasoft/universal-router/blob/main/.github/CONTRIBUTING.md) to this project.
 The best way to start is by checking our [open issues](https://github.com/kriasoft/universal-router/issues),
-submit a [bug report](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md#bugs) or
-[feature request](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md#features),
+submit a [bug report](https://github.com/kriasoft/universal-router/blob/main/.github/CONTRIBUTING.md#bugs) or
+[feature request](https://github.com/kriasoft/universal-router/blob/main/.github/CONTRIBUTING.md#features),
 participate in discussions, upvote or downvote the issues you like or dislike, send [pull
-requests](https://github.com/kriasoft/universal-router/blob/master/.github/CONTRIBUTING.md#pull-requests).
+requests](https://github.com/kriasoft/universal-router/blob/main/.github/CONTRIBUTING.md#pull-requests).
 
 ## Support
 
@@ -236,7 +236,7 @@ Support us with a monthly donation and help us continue our activities.
 
 Copyright © 2015-present Kriasoft.
 This source code is licensed under the MIT license found in the
-[LICENSE.txt](https://github.com/kriasoft/universal-router/blob/master/LICENSE.txt) file.
+[LICENSE.txt](https://github.com/kriasoft/universal-router/blob/main/LICENSE.txt) file.
 The documentation to the project is licensed under the
 [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/) license.
 
